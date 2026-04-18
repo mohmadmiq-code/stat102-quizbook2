@@ -1,0 +1,20 @@
+{
+  "intercept": -0.4,
+  "feature_order": [
+    "difficulty_num",
+    "attempts_count",
+    "used_help",
+    "time_spent_sec",
+    "showed_solution",
+    "bkt_mastery"
+  ],
+  "coefficients": [
+    0.75,
+    -0.35,
+    -0.45,
+    -0.015,
+    -0.5,
+    2.0
+  ],
+  "threshold": 0.6
+}
