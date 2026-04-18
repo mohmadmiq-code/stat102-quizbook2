@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فحص وظائف الذكاء — AI Self Test</title>
+<style>
+body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px;max-width:900px;margin:auto;line-height:1.7}
+h1{color:#93c5fd;margin-bottom:6px}
+.sub{color:#94a3b8;margin-bottom:18px;font-size:14px}
+.row{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px 16px;margin:10px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ok{color:#4ade80;font-weight:700}
+.bad{color:#f87171;font-weight:700}
+.mut{color:#94a3b8;font-size:13px}
+pre{background:#0b1220;color:#bae6fd;padding:10px;border-radius:8px;overflow:auto;font-size:12px;max-height:220px}
+button{background:#2563eb;color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer;font-weight:700}
+button:hover{background:#1d4ed8}
+code{background:#0b1220;padding:2px 6px;border-radius:4px;color:#fde68a}
+.footer{margin-top:20px;color:#94a3b8;font-size:13px}
+</style>
+</head>
+<body>
+<h1>فحص وظائف الذكاء الداخلي</h1>
+<div class="sub">يفحص هذا الملف: تحميل الطبقة، تهيئة الطالب، تسجيل حدث، تحديث BKT، التنبؤ LR، التصدير. لا يغيّر أي ملف اختبار.</div>
+
+<div id="report"></div>
+
+<button onclick="runTests()">إعادة الفحص</button>
+<button onclick="showLog()">إظهار السجل المحفوظ في المتصفح</button>
+<button onclick="clearLog()" style="background:#7c2d12">مسح سجل هذا المتصفح</button>
+
+<pre id="log" style="display:none"></pre>
+
+<div class="footer mut">
+  ملاحظة: يعمل هذا الملف محليًا بدون إنترنت. يحاول تحميل
+  <code>assets/js/adaptive_learning.js</code> تلقائيًا.
+</div>
+
+<script>
+const report = document.getElementById("report");
+function row(label, ok, detail){
+  const d = document.createElement("div");
+  d.className = "row";
+  d.innerHTML = `<div><div>${label}</div><div class="mut">${detail||""}</div></div><div class="${ok?'ok':'bad'}">${ok?'PASS':'FAIL'}</div>`;
+  report.appendChild(d);
+}
+function ensureLib(){
+  return new Promise((resolve,reject)=>{
+    if(window.AdaptiveLearning) return resolve();
+    const s = document.createElement("script");
+    s.src = "assets/js/adaptive_learning.js";
+    s.onload = ()=> resolve();
+    s.onerror = ()=> reject(new Error("cannot load adaptive_learning.js"));
+    document.head.appendChild(s);
+  });
+}
+async function runTests(){
+  report.innerHTML = "";
+  try{
+    await ensureLib();
+    row("1) تحميل طبقة AdaptiveLearning", !!window.AdaptiveLearning, "assets/js/adaptive_learning.js");
+  }catch(e){
+    row("1) تحميل طبقة AdaptiveLearning", false, e.message);
+    return;
+  }
+
+  const AL = window.AdaptiveLearning;
+  const fns = ["collectStudentEvent","updateBKT","predictMastery","exportTrainingData","loadModelWeights","setStudentId","getStudentId","ensureStudentIdentity"];
+  const missing = fns.filter(f => typeof AL[f] !== "function");
+  row("2) توفر جميع الدوال المطلوبة", missing.length===0, missing.length? ("مفقود: "+missing.join(", ")) : fns.join(" · "));
+
+  try{
+    AL.setStudentId("selftest_user");
+    const sid = AL.getStudentId();
+    row("3) تعيين/قراءة الرقم الجامعي", sid==="selftest_user", "student_id = "+sid);
+  }catch(e){ row("3) تعيين/قراءة الرقم الجامعي", false, e.message); }
+
+  try{
+    const before = JSON.parse(localStorage.getItem("student_training_log_v1")||"[]").length;
+    AL.collectStudentEvent({
+      student_id:"selftest_user", question_id:"selftest_q1", skill_id:"selftest_skill",
+      difficulty:"medium", is_correct:true, attempts_count:1, used_help:false,
+      time_spent_sec:20, showed_solution:false
+    });
+    const after = JSON.parse(localStorage.getItem("student_training_log_v1")||"[]").length;
+    row("4) تسجيل حدث طالب", after===before+1, `قبل=${before} بعد=${after}`);
+  }catch(e){ row("4) تسجيل حدث طالب", false, e.message); }
+
+  try{
+    const r1 = AL.updateBKT("selftest_skill", true);
+    const r2 = AL.updateBKT("selftest_skill", true);
+    const r3 = AL.updateBKT("selftest_skill", false);
+    const ok = (r1&&r2&&r3) && (typeof r1.mastery==="number") && (r2.mastery>=r1.mastery) && (r3.mastery<=r2.mastery+0.01);
+    row("5) تحديث BKT يتفاعل مع الإجابات", !!ok, `mastery: ${r1.mastery.toFixed(3)} → ${r2.mastery.toFixed(3)} → ${r3.mastery.toFixed(3)}`);
+  }catch(e){ row("5) تحديث BKT يتفاعل مع الإجابات", false, e.message); }
+
+  try{
+    const easyHigh = AL.predictMastery({difficulty:"easy",attempts_count:1,used_help:false,time_spent_sec:20,showed_solution:false,bkt_mastery:0.9});
+    const hardLow = AL.predictMastery({difficulty:"hard",attempts_count:3,used_help:true,time_spent_sec:180,showed_solution:true,bkt_mastery:0.1});
+    const monotone = easyHigh.probability_mastered > hardLow.probability_mastered;
+    const fmt = p => `p=${p.probability_mastered.toFixed(3)} · ${p.recommended_support}`;
+    row("6) تنبؤ Logistic Regression منطقي", monotone, `جيّد: ${fmt(easyHigh)} | ضعيف: ${fmt(hardLow)}`);
+  }catch(e){ row("6) تنبؤ Logistic Regression منطقي", false, e.message); }
+
+  try{
+    let ok=false;
+    try{
+      await AL.loadModelWeights({bktPath:"models/bkt_model.json", lrPath:"models/lr_model.json"});
+      ok=true;
+    }catch(e){}
+    row("7) تحميل أوزان النموذج (اختياري)", true, ok? "models/bkt_model.json + lr_model.json حُمِّلت" : "تعذّر التحميل — لا تأثير، النموذج يعمل بالقيم الافتراضية");
+  }catch(e){ row("7) تحميل أوزان النموذج (اختياري)", false, e.message); }
+
+  try{
+    const data = AL.exportTrainingData("selftest_export.json");
+    row("8) تصدير بيانات التدريب", Array.isArray(data), `عدد السجلات المُصدَّرة = ${Array.isArray(data)?data.length:"?"}`);
+  }catch(e){ row("8) تصدير بيانات التدريب", false, e.message); }
+
+  const all = report.querySelectorAll(".ok").length;
+  const bad = report.querySelectorAll(".bad").length;
+  const s = document.createElement("div");
+  s.className = "row";
+  s.style.background = bad? "#431212" : "#052e16";
+  s.innerHTML = `<div><strong>${bad? 'فشل في بعض الفحوصات' : 'جميع الفحوصات ناجحة'}</strong><div class="mut">ناجح=${all} · فاشل=${bad}</div></div><div class="${bad?'bad':'ok'}">${bad? 'CHECK' : 'OK'}</div>`;
+  report.appendChild(s);
+}
+function showLog(){
+  const pre = document.getElementById("log");
+  pre.style.display = "block";
+  pre.textContent = localStorage.getItem("student_training_log_v1") || "[]";
+}
+function clearLog(){
+  localStorage.removeItem("student_training_log_v1");
+  localStorage.removeItem("adaptive_model_state_v1");
+  localStorage.removeItem("adaptive_current_student_id_v1");
+  showLog();
+  alert("تم مسح السجل المحفوظ في هذا المتصفح فقط.");
+}
+runTests();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.5 مقاييس الشكل للتوزيعات</title>
+  <title>ط¬ط§ظ…ط¹ط© ط§ظ„ظ…ظ„ظƒ ط³ط¹ظˆط¯ â€” ط§ظ„ط³ظ†ط© ط§ظ„ط£ظˆظ„ظ‰ ط§ظ„ظ…ط´طھط±ظƒط© â€” STAT 102 | 3.2 ظ…ظ‚ط§ظٹظٹط³ ط§ظ„ظ…ظˆط¶ط¹</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -107,7 +107,6 @@
     }
     .logoWrap:hover{background:rgba(255,255,255,.25);transform:translateY(-50%) scale(1.02)}
     .logoWrap img{height:52px;width:auto;display:block;}
-    .logoWrap .textLogo{height:52px;min-width:52px;padding:0 10px;border-radius:12px;display:grid;place-items:center;font-size:18px;font-weight:900;letter-spacing:.06em;color:#fff;}
 
     .wrap{
       max-width:900px;
@@ -119,7 +118,7 @@
       .wrap{ max-width:calc(66.666vw); }
     }
     @media (max-width: 820px){ .wrap{ max-width:100%; padding:0 12px; } }
-    /* إخفاء اللوحات الجانبية من الشبكة – ستُعرض كدرج عائم */
+    /* ط¥ط®ظپط§ط، ط§ظ„ظ„ظˆط­ط§طھ ط§ظ„ط¬ط§ظ†ط¨ظٹط© ظ…ظ† ط§ظ„ط´ط¨ظƒط© â€“ ط³طھظڈط¹ط±ط¶ ظƒط¯ط±ط¬ ط¹ط§ط¦ظ… */
     .side, .aiResultsRail { display:none !important; }
 
     .card{
@@ -596,7 +595,7 @@
       font-family:var(--font);
     }
 
-    /* --- 3.1 specific: Math, method panel, niceTable, inline inputs, feedback --- */
+    /* --- 3.2 specific: Math, method panel, niceTable, radio, feedback --- */
 .mathInline{direction:ltr; unicode-bidi:embed; display:inline-block;}
 .mathBlock{direction:ltr; unicode-bidi:embed;}
 .katex,.katex-display{direction:ltr; unicode-bidi:embed;}
@@ -642,6 +641,32 @@ input.is-right, textarea.is-right, select.is-right{
   border-color:var(--good) !important;
   box-shadow:0 0 0 4px rgba(5,150,105,.15) !important;
 }
+
+.radioGroup{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+}
+.radioOpt{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  user-select:none;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid transparent;
+}
+.radioOpt:hover{ background:var(--line-soft); border-color:var(--line); }
+.radioOpt input[type="radio"]{ transform:scale(1.05); accent-color:var(--brand); }
+.radioText{ font-weight:700; color:var(--ink-soft); line-height:1.6; }
+.radioGroup.is-right{ border-color:var(--good); box-shadow:0 0 0 3px rgba(5,150,105,.15); }
+.radioGroup.is-wrong1{ border-color:var(--bad); box-shadow:0 0 0 3px rgba(220,38,38,.12); }
+.radioGroup.is-wrong2{ border-color:var(--bad); box-shadow:0 0 0 3px rgba(220,38,38,.18); }
 
 .katex,.katex-display,.mathInline,.mathBlock{direction:ltr;unicode-bidi:embed;}
 .mathInline{display:inline-block;}
@@ -1166,10 +1191,10 @@ input.is-right, textarea.is-right, select.is-right{
 
 /* Codex Adaptive Mastery Start */
     .mainhead div:first-child{font-size:0;}
-    .mainhead div:first-child::after{content:"سؤال تكيفي";font-size:14px;font-weight:900;color:#0f2a3b;}
+    .mainhead div:first-child::after{content:"ط³ط¤ط§ظ„ طھظƒظٹظپظٹ";font-size:14px;font-weight:900;color:#0f2a3b;}
     .side .head{justify-content:space-between;}
     .side .head h3{font-size:0;}
-    .side .head h3::after{content:"لوحة الإتقان";font-size:18px;font-weight:900;color:var(--ink);}
+    .side .head h3::after{content:"ظ„ظˆط­ط© ط§ظ„ط¥طھظ‚ط§ظ†";font-size:18px;font-weight:900;color:var(--ink);}
     .sidebar-filter,
     .qList{display:none !important;}
     .branchBody{overflow-x:auto;}
@@ -1524,9 +1549,9 @@ input.is-right, textarea.is-right, select.is-right{
 
 
 
-/* ═══════════════════════════════════════════════
-   تصميم جامعي — نظام ألوان رسمي
-═══════════════════════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   طھطµظ…ظٹظ… ط¬ط§ظ…ط¹ظٹ â€” ظ†ط¸ط§ظ… ط£ظ„ظˆط§ظ† ط±ط³ظ…ظٹ
+â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 :root{
   --uni-gold: #C8972A;
   --uni-gold-light: #FDF6E3;
@@ -1534,7 +1559,7 @@ input.is-right, textarea.is-right, select.is-right{
   --uni-green: #1a6b3c;
 }
 
-/* شريط علوي — هوية أكاديمية */
+/* ط´ط±ظٹط· ط¹ظ„ظˆظٹ â€” ظ‡ظˆظٹط© ط£ظƒط§ط¯ظٹظ…ظٹط© */
 .topbar{
   background:linear-gradient(135deg,#0b3c5d 0%,#154360 40%,#0d3349 100%) !important;
   border-bottom:3px solid var(--uni-gold);
@@ -1543,7 +1568,7 @@ input.is-right, textarea.is-right, select.is-right{
   box-shadow:0 4px 30px rgba(11,60,93,.45) !important;
 }
 
-/* شريط ذهبي دقيق تحت الـ topbar */
+/* ط´ط±ظٹط· ط°ظ‡ط¨ظٹ ط¯ظ‚ظٹظ‚ طھط­طھ ط§ظ„ظ€ topbar */
 .topbar::after{
   content:"";
   position:absolute;
@@ -1553,13 +1578,13 @@ input.is-right, textarea.is-right, select.is-right{
   opacity:.6;
 }
 
-/* Cards — حدود أكاديمية */
+/* Cards â€” ط­ط¯ظˆط¯ ط£ظƒط§ط¯ظٹظ…ظٹط© */
 .card{
   border-top:3px solid var(--brand) !important;
   border-radius:18px;
 }
 
-/* Section titles — طراز أكاديمي */
+/* Section titles â€” ط·ط±ط§ط² ط£ظƒط§ط¯ظٹظ…ظٹ */
 .mainhead{
   background:linear-gradient(180deg,#f0f7ff 0%,#ffffff 100%);
   border-bottom:2px solid var(--uni-gold-border);
@@ -1575,7 +1600,7 @@ input.is-right, textarea.is-right, select.is-right{
 }
 .mainhead{ position:relative; }
 
-/* شارة الجامعة على السؤال */
+/* ط´ط§ط±ط© ط§ظ„ط¬ط§ظ…ط¹ط© ط¹ظ„ظ‰ ط§ظ„ط³ط¤ط§ظ„ */
 .pill{
   background:linear-gradient(135deg,var(--uni-gold-light),#fff8e7);
   color:#8B6914;
@@ -1583,9 +1608,9 @@ input.is-right, textarea.is-right, select.is-right{
   font-weight:900;
 }
 
-/* ═══════════════════════════════════════════════
-   تحسين شاشة الإجابة الصحيحة
-═══════════════════════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   طھط­ط³ظٹظ† ط´ط§ط´ط© ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©
+â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 .choice.goodField{
   background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%) !important;
   border-color:#16a34a !important;
@@ -1595,7 +1620,7 @@ input.is-right, textarea.is-right, select.is-right{
   position:relative;
 }
 .choice.goodField::after{
-  content:"✓ صحيح";
+  content:"âœ“ طµط­ظٹط­";
   position:absolute;
   left:14px; top:50%;
   transform:translateY(-50%);
@@ -1614,7 +1639,7 @@ input.is-right, textarea.is-right, select.is-right{
   position:relative;
 }
 .choice.badField::after{
-  content:"✗ خطأ";
+  content:"âœ— ط®ط·ط£";
   position:absolute;
   left:14px; top:50%;
   transform:translateY(-50%);
@@ -1635,9 +1660,9 @@ input.badField, textarea.badField{
   box-shadow:0 0 0 3px rgba(220,38,38,.12) !important;
 }
 
-/* ═══════════════════════════════════════════════
-   تطوير صفحة النتائج
-═══════════════════════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   طھط·ظˆظٹط± طµظپط­ط© ط§ظ„ظ†طھط§ط¦ط¬
+â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 .scoreCard{
   border-radius:20px !important;
   background:linear-gradient(135deg,#0b3c5d 0%,#154360 60%,#1a6b3c 100%) !important;
@@ -1679,7 +1704,7 @@ input.badField, textarea.badField{
   background:linear-gradient(90deg,#34d399,#a7f3d0) !important;
 }
 
-/* بطاقات النتائج */
+/* ط¨ط·ط§ظ‚ط§طھ ط§ظ„ظ†طھط§ط¦ط¬ */
 .resultCard{
   border-radius:16px !important;
   border:1px solid var(--line) !important;
@@ -1692,7 +1717,7 @@ input.badField, textarea.badField{
   box-shadow:0 8px 24px rgba(3,105,161,.1) !important;
   transform:translateY(-1px);
 }
-/* رأس بطاقة النتيجة */
+/* ط±ط£ط³ ط¨ط·ط§ظ‚ط© ط§ظ„ظ†طھظٹط¬ط© */
 .resultCard > div:first-child{
   background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
   padding:14px 16px 12px !important;
@@ -1715,7 +1740,7 @@ input.badField, textarea.badField{
   padding:6px 14px;
 }
 
-/* صفوف الأجزاء */
+/* طµظپظˆظپ ط§ظ„ط£ط¬ط²ط§ط، */
 .partRow{
   border-radius:10px !important;
   border:1px solid var(--line) !important;
@@ -1726,7 +1751,7 @@ input.badField, textarea.badField{
 }
 .partRow:hover{ background:#eef6ff !important; border-color:rgba(3,105,161,.2) !important; }
 
-/* أزرار النتيجة */
+/* ط£ط²ط±ط§ط± ط§ظ„ظ†طھظٹط¬ط© */
 .scoreCard .btn.primary{
   background:linear-gradient(135deg,var(--uni-gold),#b07d20) !important;
   border:none !important;
@@ -1744,20 +1769,20 @@ input.badField, textarea.badField{
   --shadow:    0 4px 6px rgba(15,23,42,.04), 0 10px 28px rgba(15,23,42,.08);
   --shadow-lg: 0 20px 25px rgba(15,23,42,.08), 0 40px 60px rgba(15,23,42,.12);
 }
-/* Topbar — Glass أقوى */
+/* Topbar â€” Glass ط£ظ‚ظˆظ‰ */
 .topbar{
   backdrop-filter:blur(20px) saturate(180%);
   -webkit-backdrop-filter:blur(20px) saturate(180%);
   border-bottom:1px solid rgba(255,255,255,.1);
 }
-/* Scroll-linked shadow على الـ topbar */
+/* Scroll-linked shadow ط¹ظ„ظ‰ ط§ظ„ظ€ topbar */
 .topbar.scrolled{ box-shadow:0 4px 30px rgba(15,23,42,.3); }
 
-/* Cards — ضلع علوي ملون + hover أجمل */
+/* Cards â€” ط¶ظ„ط¹ ط¹ظ„ظˆظٹ ظ…ظ„ظˆظ† + hover ط£ط¬ظ…ظ„ */
 .card{ border-top:3px solid var(--brand); }
 .card:hover{ box-shadow:0 12px 36px rgba(15,23,42,.11); transform:translateY(-1px); }
 
-/* Progress bar — shimmer متحرك */
+/* Progress bar â€” shimmer ظ…طھط­ط±ظƒ */
 .progress{
   height:8px;
   box-shadow:inset 0 1px 3px rgba(0,0,0,.07);
@@ -1783,7 +1808,7 @@ input.badField, textarea.badField{
   border-radius:14px;
 }
 
-/* MCQ choices — تحسين التفاعل */
+/* MCQ choices â€” طھط­ط³ظٹظ† ط§ظ„طھظپط§ط¹ظ„ */
 .choice{
   position:relative;
   transition:all .2s cubic-bezier(.4,0,.2,1);
@@ -1816,7 +1841,7 @@ input.badField, textarea.badField{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
 }
 
-/* AI Model cards — hover مع خط سفلي */
+/* AI Model cards â€” hover ظ…ط¹ ط®ط· ط³ظپظ„ظٹ */
 .aiModelCard{
   transition:transform .2s, box-shadow .2s;
   cursor:default;
@@ -1835,11 +1860,11 @@ input.badField, textarea.badField{
 .aiModelCard:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(15,23,42,.1); }
 .aiModelCard:hover::after{ transform:scaleX(1); }
 
-/* ═══════════════════════════════════════════════
-   النماذج الخمسة الجديدة — CSS
-═══════════════════════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   ط§ظ„ظ†ظ…ط§ط°ط¬ ط§ظ„ط®ظ…ط³ط© ط§ظ„ط¬ط¯ظٹط¯ط© â€” CSS
+â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 
-/* قسم النماذج الموسّع */
+/* ظ‚ط³ظ… ط§ظ„ظ†ظ…ط§ط°ط¬ ط§ظ„ظ…ظˆط³ظ‘ط¹ */
 .aiExtSection{
   border-radius:18px;
   border:1px solid var(--line);
@@ -1850,7 +1875,7 @@ input.badField, textarea.badField{
   gap:12px;
 }
 
-/* ١. منحنى النسيان */
+/* ظ،. ظ…ظ†ط­ظ†ظ‰ ط§ظ„ظ†ط³ظٹط§ظ† */
 .forgettingCard{
   display:grid;
   gap:10px;
@@ -1872,7 +1897,7 @@ input.badField, textarea.badField{
 .forgettingReview.soon{background:#fef3c7;color:#d97706;border:1px solid rgba(217,119,6,.2)}
 .forgettingReview.ok{background:#d1fae5;color:#059669;border:1px solid rgba(5,150,105,.2)}
 
-/* ٢. IRT — قدرة الطالب */
+/* ظ¢. IRT â€” ظ‚ط¯ط±ط© ط§ظ„ط·ط§ظ„ط¨ */
 .irtCard{
   display:grid;
   gap:12px;
@@ -1927,7 +1952,7 @@ input.badField, textarea.badField{
   text-align:center;
 }
 
-/* ٣. محلل نمط الأخطاء */
+/* ظ£. ظ…ط­ظ„ظ„ ظ†ظ…ط· ط§ظ„ط£ط®ط·ط§ط، */
 .errorPatternCard{display:grid;gap:10px}
 .errorTypeRow{
   display:flex;align-items:center;gap:10px;
@@ -1949,7 +1974,7 @@ input.badField, textarea.badField{
 .errorBarWrap{display:flex;gap:3px;height:6px;border-radius:999px;overflow:hidden;background:#edf4fb}
 .errorBarSeg{height:100%;border-radius:999px;transition:width .5s ease}
 
-/* ٤. معايرة الثقة */
+/* ظ¤. ظ…ط¹ط§ظٹط±ط© ط§ظ„ط«ظ‚ط© */
 .calibCard{display:grid;gap:12px}
 .calibMatrix{
   display:grid;
@@ -1980,7 +2005,7 @@ input.badField, textarea.badField{
 .calibScore.warn{background:#fef3c7;color:#d97706}
 .calibScore.bad{background:#fee2e2;color:#dc2626}
 
-/* ٥. توقع الدرجة */
+/* ظ¥. طھظˆظ‚ط¹ ط§ظ„ط¯ط±ط¬ط© */
 .gradeCard{display:grid;gap:12px}
 .gradeBig{
   display:flex;align-items:center;gap:16px;
@@ -2003,7 +2028,7 @@ input.badField, textarea.badField{
   padding:10px 12px;border-radius:12px;background:#f1f5f9;border:1px solid var(--line);
 }
 
-/* Section titles للأقسام الجديدة */
+/* Section titles ظ„ظ„ط£ظ‚ط³ط§ظ… ط§ظ„ط¬ط¯ظٹط¯ط© */
 .aiExtSectionTitle{
   font-size:13px;font-weight:900;color:var(--ink);
   display:flex;align-items:center;gap:8px;
@@ -2016,7 +2041,7 @@ input.badField, textarea.badField{
   flex:0 0 auto;
 }
 
-/* شارة النموذج */
+/* ط´ط§ط±ط© ط§ظ„ظ†ظ…ظˆط°ط¬ */
 .aiExtModelBadge{
   font-size:10px;font-weight:900;letter-spacing:.05em;
   padding:3px 8px;border-radius:6px;
@@ -2024,9 +2049,9 @@ input.badField, textarea.badField{
   color:var(--brand2);margin-right:auto;
 }
 
-/* ═══════════════════════════════════════════════
-   تحسين المودالات — صحيح / تنبيه / الإجابة الصحيحة
-═══════════════════════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   طھط­ط³ظٹظ† ط§ظ„ظ…ظˆط¯ط§ظ„ط§طھ â€” طµط­ظٹط­ / طھظ†ط¨ظٹظ‡ / ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©
+â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 .modal-success-body{
   display:flex; flex-direction:column; align-items:center;
   text-align:center; padding:36px 24px; gap:16px;
@@ -2091,7 +2116,7 @@ input.badField, textarea.badField{
 .modal-warn-title{ font-size:16px; font-weight:900; color:#92400e; margin-bottom:6px; }
 .modal-warn-text{ font-size:14px; font-weight:700; color:#78350f; line-height:1.75; }
 
-/* تحسين modal عام */
+/* طھط­ط³ظٹظ† modal ط¹ط§ظ… */
 .modal .box{ border-radius:22px !important; box-shadow:0 30px 70px rgba(15,23,42,.2) !important; }
 .modal .box .mh{
   background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
@@ -2100,7 +2125,7 @@ input.badField, textarea.badField{
 }
 .modal .box .mh b{ font-size:16px; font-weight:900; }
 
-    /* زر إعادة التعيين في رأس البطاقة */
+    /* ط²ط± ط¥ط¹ط§ط¯ط© ط§ظ„طھط¹ظٹظٹظ† ظپظٹ ط±ط£ط³ ط§ظ„ط¨ط·ط§ظ‚ط© */
     #resetBtnMain{
       display:flex;align-items:center;gap:5px;
       padding:5px 10px;
@@ -2129,18 +2154,18 @@ input.badField, textarea.badField{
   <header class="topbar">
     <div class="row">
       <div class="topbarRight">
-        <div id="timerBar" class="timerBar" aria-live="polite">الوقت المتبقي: 30:00</div>
+        <div id="timerBar" class="timerBar" aria-live="polite">ط§ظ„ظˆظ‚طھ ط§ظ„ظ…طھط¨ظ‚ظٹ: 30:00</div>
       </div>
       <div class="brandblock">
         <div class="brandtext">
-          <div class="u">جامعة الملك سعود</div>
+          <div class="u">ط¬ط§ظ…ط¹ط© ط§ظ„ظ…ظ„ظƒ ط³ط¹ظˆط¯</div>
           <div class="u en">King Saud University</div>
-          <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">3.5 مقاييس الشكل للتوزيعات <span class="sep">|</span> Shape Measures of Distributions</div>
+          <div class="d">ط§ظ„ط³ظ†ط© ط§ظ„ط£ظˆظ„ظ‰ ط§ظ„ظ…ط´طھط±ظƒط© <span class="sep">|</span> First-Year Common Program</div>
+          <div class="s">3.2 ظ…ظ‚ط§ظٹظٹط³ ط§ظ„ظ…ظˆط¶ط¹ ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ط¥ط­طµط§ط¦ظٹط© <span class="sep">|</span> Measures of Position</div>
         </div>
       </div>
-      <div class="logoWrap" title="شعار الجامعة">
-        <div class="textLogo" aria-label="King Saud University">KSU</div>
+      <div class="logoWrap" title="ط´ط¹ط§ط± ط§ظ„ط¬ط§ظ…ط¹ط©">
+        <img alt="King Saud University Logo" src="ksu_logo.png" />
       </div>
     </div>
   </header>
@@ -2148,12 +2173,12 @@ input.badField, textarea.badField{
   <main class="wrap">
     <section class="card">
       <div class="mainhead">
-        <div style="font-weight:900;color:#0f2a3b">سؤال <span id="qNo">1</span> من <span id="qCount">0</span></div>
-        <div class="pill" id="statusPill">غير مكتمل</div>
-        <button id="resetBtnMain" title="إعادة تعيين الاختبار"
-          onclick="if(confirm('هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.')) resetAll();">
+        <div style="font-weight:900;color:#0f2a3b">ط³ط¤ط§ظ„ <span id="qNo">1</span> ظ…ظ† <span id="qCount">0</span></div>
+        <div class="pill" id="statusPill">ط؛ظٹط± ظ…ظƒطھظ…ظ„</div>
+        <button id="resetBtnMain" title="ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ† ط§ظ„ط§ط®طھط¨ط§ط±"
+          onclick="if(confirm('ظ‡ظ„ طھط±ظٹط¯ ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ† ط§ظ„ط§ط®طھط¨ط§ط±طں ط³ظٹطھظ… ط­ط°ظپ ط¬ظ…ظٹط¹ ط§ظ„ط¥ط¬ط§ط¨ط§طھ.')) resetAll();">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-          <span class="reset-label">إعادة</span>
+          <span class="reset-label">ط¥ط¹ط§ط¯ط©</span>
         </button>
       </div>
       <div class="content" id="mainContent"></div>
@@ -2161,21 +2186,21 @@ input.badField, textarea.badField{
 
     <aside class="card side">
       <div class="head">
-        <h3>مسار الأسئلة</h3>
-        <button class="btn small" id="resetBtn">إعادة</button>
+        <h3>ظ…ط³ط§ط± ط§ظ„ط£ط³ط¦ظ„ط©</h3>
+        <button class="btn small" id="resetBtn" aria-label="ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ† ط§ظ„ط§ط®طھط¨ط§ط±">ط¥ط¹ط§ط¯ط©</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="font-weight:900;color:var(--ink)" id="progressText">تم حل 0 سؤال</div>
+        <div style="font-weight:900;color:var(--ink)" id="progressText">طھظ… ط­ظ„ 0 ط³ط¤ط§ظ„</div>
         <div style="flex:1" class="progress"><div id="progressBar"></div></div>
       </div>
       <div class="sidebar-filter">
-        <button class="btn small" id="filterAllBtn" data-filter="all">الكل</button>
-        <button class="btn small" id="filterIncompleteBtn" data-filter="incomplete">غير مكتمل</button>
+        <button class="btn small" id="filterAllBtn" data-filter="all">ط§ظ„ظƒظ„</button>
+        <button class="btn small" id="filterIncompleteBtn" data-filter="incomplete">ط؛ظٹط± ظ…ظƒطھظ…ظ„</button>
       </div>
       <div class="qList" id="qList"></div>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;">
-        <button class="btn" id="showResultsBtn" aria-label="إظهار النتيجة">إظهار النتيجة</button>
-        <button class="btn primary" id="nextBtnSide">التالي</button>
+        <button class="btn" id="showResultsBtn" aria-label="ط¥ط¸ظ‡ط§ط± ط§ظ„ظ†طھظٹط¬ط©">ط¥ط¸ظ‡ط§ط± ط§ظ„ظ†طھظٹط¬ط©</button>
+        <button class="btn primary" id="nextBtnSide">ط§ظ„طھط§ظ„ظٹ</button>
       </div>
     </aside>
     <aside class="card aiResultsRail">
@@ -2187,7 +2212,7 @@ input.badField, textarea.badField{
     <div class="box">
       <div class="mh">
         <b id="modalTitle">...</b>
-        <button class="btn small" id="closeModal">إغلاق</button>
+        <button class="btn small" id="closeModal">ط¥ط؛ظ„ط§ظ‚</button>
       </div>
       <div class="mb" id="modalBody"></div>
     </div>
@@ -2223,9 +2248,9 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-const STATE_KEY = "stat102_3_5_state_v2";
+const STATE_KEY = "stat102_3_2_state_v2";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_3_5_timerEnd_v2";
+const TIMER_KEY = "stat102_3_2_timerEnd_v2";
 let state = loadState() || { currentIndex: 0, answers: {}, grading: {}, variants: {}, order: null, attempts: {}, saveAttempts: {}, locks: {}, outcomes: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
 state.attempts = state.attempts || {};
 state.saveAttempts = state.saveAttempts || {};
@@ -2258,17 +2283,17 @@ function startTimer(){
     const el = document.getElementById("timerBar");
     if(!el) return;
     const m = Math.floor(rem/60), s = rem % 60;
-    el.textContent = "الوقت المتبقي: " + m + ":" + (s<10?"0":"") + s;
+    el.textContent = "ط§ظ„ظˆظ‚طھ ط§ظ„ظ…طھط¨ظ‚ظٹ: " + m + ":" + (s<10?"0":"") + s;
     el.classList.remove("warn","done");
     if(rem <= 60) el.classList.add("warn");
-    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">دقيقة واحدة متبقية — احفظ إجاباتك إن لم تكن محفوظة.</p>"); }
+    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("طھظ†ط¨ظٹظ‡", "<p style=\"font-weight:800\">ط¯ظ‚ظٹظ‚ط© ظˆط§ط­ط¯ط© ظ…طھط¨ظ‚ظٹط© â€” ط§ط­ظپط¸ ط¥ط¬ط§ط¨ط§طھظƒ ط¥ظ† ظ„ظ… طھظƒظ† ظ…ط­ظپظˆط¸ط©.</p>"); }
     if(rem === 0){
       if(timerInterval) clearInterval(timerInterval);
       timerInterval = null;
       window.__examRunning = false;
       state.timerEnded = true;
       saveState();
-      el.textContent = "انتهى الوقت";
+      el.textContent = "ط§ظ†طھظ‡ظ‰ ط§ظ„ظˆظ‚طھ";
       el.classList.add("done");
       showResultsModal();
       renderAll();
@@ -2291,9 +2316,6 @@ function resetAll(){
   delete state.masteryVersion;
   state.masterySupportCount = 0;
   state.timerEnded = false;
-  state.dirty = {};
-  state.sidebarFilter = "all";
-  state.fontSize = 0;
   localStorage.removeItem(TIMER_KEY);
   state.variants = state.variants || {};
   (TEMPLATES||[]).forEach(t=>{
@@ -2308,21 +2330,24 @@ function isExamStarted(){
 function showIntroModal(){
   const html = `
     <div style="margin-bottom:16px;line-height:1.9;">
-      <p style="font-weight:800;margin-bottom:10px;">تعريف بالاختبار</p>
-      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>٣٠ دقيقة</b>.</p>
-      <p style="font-weight:800;margin:14px 0 6px;">تعليمات الاختبار:</p>
+      <p style="font-weight:800;margin-bottom:10px;">طھط¹ط±ظٹظپ ط¨ط§ظ„ط§ط®طھط¨ط§ط±</p>
+      <p>ظ‡ط°ط§ ط§ط®طھط¨ط§ط± ط°ط§طھظٹ ظ„ظ…ط§ط¯ط© ط§ظ„ط¥ط­طµط§ط،. ظ…ط¯ط© ط§ظ„ط§ط®طھط¨ط§ط± <b>ظ£ظ  ط¯ظ‚ظٹظ‚ط©</b>.</p>
+      <p style="font-weight:800;margin:14px 0 6px;">طھط¹ظ„ظٹظ…ط§طھ ط§ظ„ط§ط®طھط¨ط§ط±:</p>
       <ul style="margin:0;padding-right:20px;">
-        <li>يمكنك <b>تبديل السؤال</b> لاستبداله بسؤال آخر.</li>
-        <li>يمكنك التنقل بين الأسئلة بـ <b>السابق</b> و<b>التالي</b>.</li>
-        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك طلب <b>مساعدة</b> أو إظهار الإجابة الصحيحة حسب نظام المحاولات.</li>
-        <li>عند انتهاء الوقت يُقفل الاختبار تلقائياً وتظهر النتيجة.</li>
+        <li>ظٹظ…ظƒظ†ظƒ <b>طھط¨ط¯ظٹظ„ ط§ظ„ط³ط¤ط§ظ„</b> ظ„ط§ط³طھط¨ط¯ط§ظ„ظ‡ ط¨ط³ط¤ط§ظ„ ط¢ط®ط±.</li>
+        <li>ظٹظ…ظƒظ†ظƒ ط§ظ„طھظ†ظ‚ظ„ ط¨ظٹظ† ط§ظ„ط£ط³ط¦ظ„ط© ط¨ظ€ <b>ط§ظ„ط³ط§ط¨ظ‚</b> ظˆ<b>ط§ظ„طھط§ظ„ظٹ</b>.</li>
+        <li>ط¨ط¹ط¯ ط§ظ„ط¥ط¬ط§ط¨ط© ط§ط¶ط؛ط· <b>ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط©</b> ط«ظ… ظٹظ…ظƒظ†ظƒ ط·ظ„ط¨ <b>ظ…ط³ط§ط¹ط¯ط©</b> ط£ظˆ ط¥ط¸ظ‡ط§ط± ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط© ط­ط³ط¨ ظ†ط¸ط§ظ… ط§ظ„ظ…ط­ط§ظˆظ„ط§طھ.</li>
+        <li>ط¹ظ†ط¯ ط§ظ†طھظ‡ط§ط، ط§ظ„ظˆظ‚طھ ظٹظڈظ‚ظپظ„ ط§ظ„ط§ط®طھط¨ط§ط± طھظ„ظ‚ط§ط¦ظٹط§ظ‹ ظˆطھط¸ظ‡ط± ط§ظ„ظ†طھظٹط¬ط©.</li>
       </ul>
-      <p style="margin-top:16px;color:var(--muted);font-weight:700;">اضغط <b>بدء الاختبار</b> لبدء الوقت والاختبار.</p>
+      <p style="margin-top:16px;color:var(--muted);font-weight:700;">ط§ط¶ط؛ط· <b>ط¨ط¯ط، ط§ظ„ط§ط®طھط¨ط§ط±</b> ظ„ط¨ط¯ط، ط§ظ„ظˆظ‚طھ ظˆط§ظ„ط§ط®طھط¨ط§ط±.</p>
     </div>
-    <button class="btn primary" id="startExamBtn" style="font-size:16px;padding:12px 24px;">بدء الاختبار</button>
+    <button class="btn primary" id="startExamBtn" style="font-size:16px;padding:12px 24px;">ط¨ط¯ط، ط§ظ„ط§ط®طھط¨ط§ط±</button>
   `;
-  openModal("بداية الاختبار", html);
-  document.getElementById("startExamBtn").onclick = function(){ closeModal(); if(window.__startExam) window.__startExam(); };
+  openModal("ط¨ط¯ط§ظٹط© ط§ظ„ط§ط®طھط¨ط§ط±", html);
+  document.getElementById("startExamBtn").onclick = function(){
+    closeModal();
+    if(typeof window.__startExam === "function") window.__startExam();
+  };
 }
 window.__startExam = function(){
   window.__examRunning = true;
@@ -2494,7 +2519,7 @@ function instantCheckInput(qid, bi, key, inp){
   }else{
     const n = _incAttempt(qid, bi, key);
     _mark(inp, n>=2 ? "wrong2" : "wrong1");
-    // لا تفتح نافذة المساعدة تلقائياً—الطالب يضغط "مساعدة" إذا احتاج.
+    // ظ„ط§ طھظپطھط­ ظ†ط§ظپط°ط© ط§ظ„ظ…ط³ط§ط¹ط¯ط© طھظ„ظ‚ط§ط¦ظٹط§ظ‹â€”ط§ظ„ط·ط§ظ„ط¨ ظٹط¶ط؛ط· "ظ…ط³ط§ط¹ط¯ط©" ط¥ط°ط§ ط§ط­طھط§ط¬.
   }
 }
 
@@ -2516,7 +2541,7 @@ function bindInlineInputs(root, qid, bi){
     if(_isBranchLocked(qid, bi)){
       inp.disabled = true;
     }
-    const handler = ()=>{ /* لا يتم التخزين إلا عند الضغط على زر حفظ الإجابة */ };
+    const handler = ()=>{ /* ظ„ط§ ظٹطھظ… ط§ظ„طھط®ط²ظٹظ† ط¥ظ„ط§ ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط© */ };
     inp.addEventListener("input", ()=>{ _clearMarks(inp); handler(); });
     inp.addEventListener("change", ()=>{ _clearMarks(inp); handler(); });
     inp.addEventListener("blur", ()=>{ handler(); });
@@ -2614,381 +2639,921 @@ document.getElementById("modal").addEventListener("click", (e)=>{ if(e.target.id
 
 
 
+const LAT = { mean:"\\bar{x}", median:"\\tilde{x}", mode:"\\hat{x}" };
 
-const LAT = {};
+function meanRawGen(v){
+  const r = seededRand("mean_raw|"+v);
+  const n = (randInt(r, 7, 11) | 1);
+  const xs = Array.from({length:n}, ()=>randInt(r, 2, 10));
+  const sum = xs.reduce((a,b)=>a+b,0);
+  const mean = sum/n;
+  const meanRounded = Math.round(mean*100)/100;
 
-function round2(x){ return Math.round(Number(x)*100)/100; }
-function round3(x){ return Math.round(Number(x)*1000)/1000; }
-function sum(arr){ return arr.reduce((a,b)=>a+Number(b),0); }
-function pick(r, arr){ return arr[randInt(r,0,arr.length-1)]; }
-function shuffleLocal(arr, r){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(r()*(i+1));
-    const t = a[i]; a[i]=a[j]; a[j]=t;
+  const prompt = `ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${xs.join("طŒ ")}<br>ط§ط­ط³ط¨ \\( \\bar{x} \\) ط§ظ„ظ…طھظˆط³ط· ط§ظ„ط­ط³ط§ط¨ظٹ.`;
+  return {
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "ظ†ط³طھط®ط¯ظ… ظ‚ط§ظ†ظˆظ† ط§ظ„ظ…طھظˆط³ط· ط§ظ„ط­ط³ط§ط¨ظٹ ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط؛ظٹط± ط§ظ„ظ…ط¬ظ…ط¹ط©:",
+          `\\( ${LAT.mean} = \\frac{\\sum_{i=1}^{n} x_i}{n} \\)`,
+          "ط­ظٹط« \\(n\\) ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…طŒ ظˆ \\(\\sum x_i\\) ظ…ط¬ظ…ظˆط¹ ط§ظ„ظ‚ظٹظ…."
+        ],
+        promptHtml: `<div style="font-weight:900">${prompt}</div>`,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) ط§ظ„ظ…طھظˆط³ط· ط§ظ„ط­ط³ط§ط¨ظٹ`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…: \\( n = ${n} \\).`,
+          `ظ…ط¬ظ…ظˆط¹ ط§ظ„ظ‚ظٹظ…: \\( \\sum x_i = ${xs.join(" + ")} = ${sum} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${sum}}{${n}} = ${meanRounded} \\]`
+        ]
+      }
+    ]
+  };
+}
+
+function meanFromFreqTableGen(v){
+  const r = seededRand("mean_freq|"+v);
+  const x = [0,1,2,3,4];
+  let f = x.map(()=>randInt(r, 2, 14));
+  f[0]=randInt(r,2,6); f[4]=randInt(r,2,6);
+  const n = f.reduce((a,b)=>a+b,0);
+  const num = x.reduce((a,xi,i)=>a+xi*f[i],0);
+  const mean = num/n;
+
+  const rows = x.map((xi,i)=>`<tr><td>${xi}</td><td>${f[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">ط§ظ„ط¬ط¯ظˆظ„ ط§ظ„ط¢طھظٹ ظٹظˆط¶ط­ ط§ظ„ظ‚ظٹظ…ط© \\(x\\) ظˆطھظƒط±ط§ط±ظ‡ط§ \\(f\\):</div>
+    <table class="ftable" style="max-width:520px">
+      <thead><tr><th>ط§ظ„ظ‚ظٹظ…ط© \\(x\\)</th><th>ط§ظ„طھظƒط±ط§ط± \\(f\\)</th></tr></thead>
+      <tbody>${rows}<tr><td><b>\\(\\sum f\\)</b></td><td><b>${n}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">ط§ط­ط³ط¨ \\( ${LAT.mean} \\) ط§ظ„ظ…طھظˆط³ط·.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:["ط§ط³طھط®ط¯ظ… ط§ظ„ط¹ظ„ط§ظ‚ط© ط§ظ„ط®ط§طµط© ط¨ط§ظ„ظ…طھظˆط³ط· ظ„ظ„ط¬ط¯ط§ظˆظ„ ط§ظ„طھظƒط±ط§ط±ظٹط©."],
+        promptHtml,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) ط§ظ„ظ…طھظˆط³ط·`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `\\[ ${LAT.mean} = \\frac{\\sum_{i=1}^{n} x_i\\, f_i}{\\sum_{i=1}^{n} f_i} \\]`,
+          `ظ†ط­ط³ط¨ ط­ط§طµظ„ ط¶ط±ط¨ ظƒظ„ ظ‚ظٹظ…ط© ظپظٹ طھظƒط±ط§ط±ظ‡ط§: ${x.map((xi,i)=> (xi+"أ—"+f[i]+"="+(xi*f[i]))).join("طŒ ")}.`,
+          `ط«ظ… ظ†ط¬ظ…ط¹ ظ†ظˆط§طھط¬ ط§ظ„ط¶ط±ط¨: \\( \\sum x_i f_i = ${x.map((xi,i)=> (xi*f[i])).join(" + ")} = ${num} \\).`,
+          `ظˆظ†ط¬ظ…ط¹ ط§ظ„طھظƒط±ط§ط±ط§طھ: \\( \\sum f_i = ${f.join(" + ")} = ${n} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${num}}{${n}} = ${Math.round(mean*100)/100} \\]`
+]
+      }
+    ]
+  };
+}
+
+function meanGroupedGen(v){
+  const r = seededRand("mean_grouped|"+v);
+  const classes = [[20,25],[25,30],[30,35],[35,40],[40,45]];
+  let f = classes.map(()=>randInt(r, 8, 34));
+  f = f.map(x=>Math.max(6, Math.round(x/2)));
+  const mids = classes.map(c=>(c[0]+c[1])/2);
+  const N = f.reduce((a,b)=>a+b,0);
+  const products = mids.map((m,i)=>m*f[i]);
+  const num = products.reduce((a,b)=>a+b,0);
+  const mean = num/N;
+  const meanRounded = Math.round(mean*100)/100;
+
+  const rows = classes.map((c,i)=>`<tr><td>${c[0]}â€“${c[1]}</td><td>${f[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">ط§ظ„ط¬ط¯ظˆظ„ ط§ظ„طھط§ظ„ظٹ ظٹظˆط¶ط­ ظپط¦ط§طھ ط§ظ„ط¹ظ…ط± ظˆطھظƒط±ط§ط±ط§طھظ‡ط§:</div>
+    <table class="ftable" style="max-width:520px">
+      <thead><tr><th>ط§ظ„ظپط¦ط©</th><th>ط§ظ„طھظƒط±ط§ط± \\(f\\)</th></tr></thead>
+      <tbody>${rows}<tr><td><b>ط§ظ„ظ…ط¬ظ…ظˆط¹</b></td><td><b>${N}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">ط§ط­ط³ط¨ \\( ${LAT.mean} \\) ط§ظ„ظ…طھظˆط³ط· ط§ظ„طھظ‚ط±ظٹط¨ظٹ ط¨ط§ط³طھط®ط¯ط§ظ… ظ…ط±ط§ظƒط² ط§ظ„ظپط¦ط§طھ.</div>
+  `;
+
+  const midsTxt = classes.map((c,i)=>`${c[0]}â€“${c[1]} â‡’ ${mids[i]}`).join("طŒ ");
+  const prodTxt = classes.map((c,i)=>`${mids[i]}أ—${f[i]}=${products[i]}`).join("طŒ ");
+  const sumFtxt = f.join(" + ");
+  const sumProdTxt = products.join(" + ");
+
+  return {
+    branches:[
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:[
+          "ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط¬ظ…ط¹ط© ظ†ط³طھط®ط¯ظ… ظ…ط±ط§ظƒط² ط§ظ„ظپط¦ط§طھ (ظ…ظ†طھطµظپ ظƒظ„ ظپط¦ط©) ط¨ط¯ظ„ ط§ظ„ظ‚ظٹظ… ط§ظ„ط£طµظ„ظٹط©.",
+          `\\( x_i = \\frac{ط­ط¯\\,ط§ظ„ظپط¦ط©\\,ط§ظ„ط£ط¯ظ†ظ‰ + ط­ط¯\\,ط§ظ„ظپط¦ط©\\,ط§ظ„ط£ط¹ظ„ظ‰}{2} \\)`,
+          `ط«ظ…: \\( ${LAT.mean} = \\frac{\\sum x_i f_i}{\\sum f_i} \\).`
+        ],
+        promptHtml,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) ط§ظ„ظ…طھظˆط³ط· ط§ظ„طھظ‚ط±ظٹط¨ظٹ`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `ظ…ط±ط§ظƒط² ط§ظ„ظپط¦ط§طھ: ${midsTxt}.`,
+          `ظ†ط­ط³ط¨ \\(x_i f_i\\) ظ„ظƒظ„ ظپط¦ط©: ${prodTxt}.`,
+          `ظ…ط¬ظ…ظˆط¹ ط§ظ„طھظƒط±ط§ط±ط§طھ: \\( \\sum f_i = ${sumFtxt} = ${N} \\).`,
+          `ظ…ط¬ظ…ظˆط¹ \\(x_i f_i\\): \\( \\sum x_i f_i = ${sumProdTxt} = ${num} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${num}}{${N}} = ${meanRounded} \\]`
+        ]
+      }
+    ]
+  };
+}
+
+function medianRawGen(v){
+  const r = seededRand("median_raw|"+v);
+  const even = (v % 2 === 1);
+  const base = even ? randInt(r, 6, 10) : (randInt(r, 7, 11) | 1);
+  const n = even ? (base % 2 === 0 ? base : base+1) : base;
+  const xs = Array.from({length:n}, ()=>randInt(r, 10, 99));
+  const sorted = [...xs].sort((a,b)=>a-b);
+  let med;
+  if(n%2===1){
+    med = sorted[(n-1)/2];
+  }else{
+    med = (sorted[n/2 - 1] + sorted[n/2]) / 2;
   }
-  return a;
+  const promptHtml = `
+    <div style="font-weight:900">ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${xs.join("طŒ ")}<br>ط¨ط¹ط¯ طھط±طھظٹط¨ظ‡ط§ طھطµط§ط¹ط¯ظٹط§ظ‹طŒ ط§ط­ط³ط¨ \\( ${LAT.median} \\) ط§ظ„ظˆط³ظٹط·.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:["ط±طھظ‘ط¨ ط§ظ„ظ‚ظٹظ… طھطµط§ط¹ط¯ظٹط§ظ‹ ط«ظ… ط­ط¯ظ‘ط¯ ظ…ظˆظ‚ط¹/ظ…ظˆظ‚ط¹ظٹظ† ط§ظ„ظ…ظ†طھطµظپ."],
+        promptHtml,
+        parts:[{key:"med", type:"number", label:`\\( ${LAT.median} \\) ط§ظ„ظˆط³ظٹط·`, step:"0.5"}],
+        answers:{med},
+        method:[
+          "ط±طھظ‘ط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ طھطµط§ط¹ط¯ظٹط§ظ‹.",
+          `ط§ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط±طھط¨ط©: ${sorted.join("طŒ ")}.`,
+          n%2===1
+            ? `\\(n=${n}\\) ظپط±ط¯ظٹ â‡’ \\(k=\\frac{n+1}{2}=${(n+1)/2}\\) â‡’ \\( ${LAT.median} = ${med} \\).`
+            : `\\(n=${n}\\) ط²ظˆط¬ظٹ â‡’ ط§ظ„ظ‚ظٹظ…طھط§ظ† ظپظٹ ط§ظ„ظ…ظˆظ‚ط¹ظٹظ† \\(\\frac{n}{2}=${n/2}\\) ظˆ \\(\\frac{n}{2}+1=${n/2+1}\\) ظ‡ظ…ط§ ${sorted[n/2-1]} ظˆ ${sorted[n/2]} â‡’ \\( ${LAT.median} = \\frac{${sorted[n/2-1]}+${sorted[n/2]}}{2} = ${med} \\).`
+        ]
+      }
+    ]
+  };
 }
-function varianceRawStats(xs){
-  const n = xs.length;
-  const mean = sum(xs)/n;
-  const ss = xs.reduce((acc,x)=>acc + Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {n, mean, ss, variance, sd};
+
+function medianFreqGen(v){
+  const r = seededRand("median_freq|"+v);
+  const x = [2,3,5,6,7];
+  let f = [randInt(r,8,15), randInt(r,12,20), randInt(r,6,12), randInt(r,2,6), randInt(r,1,4)];
+  const n = f.reduce((a,b)=>a+b,0);
+  let cum = [];
+  let s = 0;
+  for(let i=0;i<f.length;i++){ s += f[i]; cum.push(s); }
+
+  const k = (n%2===1) ? (n+1)/2 : (n/2);
+  const idxK = cum.findIndex(c=>c>=k);
+  const exactHalf = (n%2===0 && cum[idxK]===k);
+
+  let med;
+  if(n%2===1){
+    med = x[idxK];
+  }else{
+    med = exactHalf ? (x[idxK] + x[idxK+1]) / 2 : x[idxK];
+  }
+  const rows = x.map((xi,i)=>`<tr><td>${xi}</td><td>${f[i]}</td><td>${cum[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">ط¬ط¯ظˆظ„ طھظƒط±ط§ط±ظٹ (ظ…ط¹ ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯):</div>
+    <table class="ftable" style="max-width:640px">
+      <thead><tr><th>ط§ظ„ظ‚ظٹظ…ط©</th><th>ط§ظ„طھظƒط±ط§ط± \\(f\\)</th><th>ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯</th></tr></thead>
+      <tbody>${rows}<tr><td><b>ط§ظ„ظ…ط¬ظ…ظˆط¹</b></td><td colspan="2"><b>${n}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">ط§ط­ط³ط¨ \\( ${LAT.median} \\) ط§ظ„ظˆط³ظٹط·.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:["ط­ط¯ظ‘ط¯ ظ‚ظٹظ…ط© k ط«ظ… ط§ط³طھط®ط¯ظ… ط¹ظ…ظˆط¯ ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ظ„طھط­ط¯ظٹط¯ ط§ظ„ظˆط³ظٹط·."],
+        promptHtml,
+        parts:[{key:"med", type:"number", label:`\\( ${LAT.median} \\) ط§ظ„ظˆط³ظٹط·`, step:"0.5"}],
+        answers:{med},
+        method:[
+          `ظ…ط¬ظ…ظˆط¹ ط§ظ„طھظƒط±ط§ط±ط§طھ: \\( n = ${n} \\).`,
+          `ظ†ط­ط¯ط¯ ظ‚ظٹظ…ط© ط§ظ„ظ…ط±ظƒط²: \\( k = ${k} \\).`,
+          `ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯: ${cum.join("طŒ ")}.`,
+          exactHalf
+            ? `ظ„ط£ظ† ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ظٹط³ط§ظˆظٹ \\(k\\) طھظ…ط§ظ…ظ‹ط§ ط¹ظ†ط¯ ط§ظ„ظ‚ظٹظ…ط© ${x[idxK]}طŒ ظپط¥ظ† ط§ظ„ظˆط³ظٹط· ظ‡ظˆ ظ…طھظˆط³ط· ط§ظ„ظ‚ظٹظ…طھظٹظ† ${x[idxK]} ظˆ ${x[idxK+1]}.`
+            : `ط£ظˆظ„ طھظƒط±ط§ط± ظ…طھط¬ظ…ط¹ طµط§ط¹ط¯ \\(\\ge k\\) ظٹظ‚ط¹ ط¹ظ†ط¯ ط§ظ„ظ‚ظٹظ…ط© ${x[idxK]}طŒ ظ„ط°ط§ ظٹظƒظˆظ† ط§ظ„ظˆط³ظٹط· ظ‡ط°ظ‡ ط§ظ„ظ‚ظٹظ…ط©.`,
+          exactHalf
+            ? `\\( ${LAT.median} = \\frac{${x[idxK]}+${x[idxK+1]}}{2} = ${med} \\).`
+            : `\\( ${LAT.median} = ${med} \\).`
+        ]
+      }
+    ]
+  };
 }
-function varianceFreqStats(values, freqs){
-  const n = sum(freqs);
-  const mean = values.reduce((acc,x,i)=>acc + x*freqs[i], 0)/n;
-  const ss = values.reduce((acc,x,i)=>acc + freqs[i]*Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {n, mean, ss, variance, sd};
+
+function modeRawGen(v){
+  const r = seededRand("mode_raw|"+v);
+  const n = randInt(r, 8, 12);
+  let xs = Array.from({length:n}, ()=>randInt(r, 2, 11));
+  // enforce a mode (maybe bimodal sometimes)
+  const a = randInt(r, 3, 9);
+  const b = randInt(r, 3, 9);
+  xs[0]=a; xs[3]=a; xs[5]=a;
+  if(v%3===2){
+    xs[1]=b; xs[6]=b; xs[7]=b; // make two modes sometimes
+  }
+  const freq = {};
+  xs.forEach(x=>freq[x]=(freq[x]||0)+1);
+  const maxf = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k=>freq[k]===maxf).map(Number).sort((x,y)=>x-y);
+  const correct = modes.length===1 ? String(modes[0]) : modes.join("طŒ ");
+  const promptHtml = `
+    <div style="font-weight:900">ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${xs.join("طŒ ")}<br>ط­ط¯ظ‘ظگط¯ \\( ${LAT.mode} \\) ط§ظ„ظ…ظ†ظˆط§ظ„.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:["ط§ظ„ظ…ظ†ظˆط§ظ„ ظ‡ظˆ ط§ظ„ظ‚ظٹظ…ط© ط§ظ„ط£ظƒط«ط± طھظƒط±ط§ط±ط§ظ‹."],
+        promptHtml,
+        parts:[{key:"mode", type:"text", label:`\\( ${LAT.mode} \\) ط§ظ„ظ…ظ†ظˆط§ظ„`, placeholder:"ط§ظƒطھط¨ ط§ظ„ظ‚ظٹظ…ط© (ط£ظˆ ظ‚ظٹظ…طھظٹظ† ط¥ط°ط§ ظƒط§ظ† ظ…ظ†ظˆط§ظ„ط§ظ†)"}],
+        answers:{mode: correct},
+        method:[
+          `\\( ${LAT.mode} \\) ظ‡ظˆ ط§ظ„ظ‚ظٹظ…ط© (ط£ظˆ ط§ظ„ظ‚ظٹظ…) ط§ظ„ط£ظƒط«ط± طھظƒط±ط§ط±ط§ظ‹.`,
+          `ط§ظ„طھظƒط±ط§ط±ط§طھ: ${Object.keys(freq).map(Number).sort((a,b)=>a-b).map(k=>`${k}â†’${freq[k]}`).join("طŒ ")}.`,
+          `ط£ظƒط¨ط± طھظƒط±ط§ط± = ${maxf}طŒ ط¥ط°ظ† \\( ${LAT.mode} = ${correct} \\).`
+        ]
+      }
+    ]
+  };
 }
-function groupedCenters(classes){
-  return classes.map(c=>round2((c[0]+c[1])/2));
+
+function modeGroupedGen(v){
+  const r = seededRand("mode_grouped|"+v);
+
+  // ط§ظ„ظپط¦ط§طھ ظƒظ…ط§ ظ‡ظٹ ظ…ظƒطھظˆط¨ط© ظپظٹ ط§ظ„ط¬ط¯ظˆظ„ (ظ…ط«ط§ظ„: 4â€“10 ط«ظ… 10â€“16)
+  const C = 6;
+  const k = 6;
+  const start = randInt(r, 4, 14);
+  const classes = Array.from({length:k}, (_,i)=>{
+    const a = start + i*C;
+    const b = a + C;
+    return {a,b,label:`${a}â€“${b}`};
+  });
+
+  // طھظƒط±ط§ط±ط§طھ ط£ط­ط§ط¯ظٹط© ط§ظ„ظ‚ظ…ط© ظ„ط¶ظ…ط§ظ† ظپط¦ط© ظ…ظ†ظˆط§ظ„ظٹط© ظˆط§ط­ط¯ط© ظپظ‚ط·
+  const modalIndex = randInt(r, 1, k-2);
+  let freqs;
+  while(true){
+    const peakF = randInt(r, 18, 28);
+    freqs = Array.from({length:k}, ()=>0);
+    freqs[modalIndex] = peakF;
+
+    let cur = peakF;
+    for(let i=modalIndex-1;i>=0;i--){
+      cur -= randInt(r, 2, 6);
+      freqs[i] = cur;
+    }
+
+    cur = peakF;
+    for(let i=modalIndex+1;i<k;i++){
+      cur -= randInt(r, 2, 6);
+      freqs[i] = cur;
+    }
+
+    if(freqs.every(f=>f>=2)) break;
+  }
+
+  // طھط£ظƒظٹط¯ ط§ظ„ط´ط±ط·: f_m > f_prev ظˆ f_m >= f_next
+  if(freqs[modalIndex] <= freqs[modalIndex-1]) freqs[modalIndex] = freqs[modalIndex-1] + 1;
+  if(freqs[modalIndex] < freqs[modalIndex+1]) freqs[modalIndex+1] = freqs[modalIndex] - 1;
+
+  const fPrev  = freqs[modalIndex-1];
+  const fModal = freqs[modalIndex];
+  const fNext  = freqs[modalIndex+1];
+
+  const Lhat = classes[modalIndex].a;
+  const d1 = fModal - fPrev;
+  const d2 = fModal - fNext;
+  const mode = Lhat + (d1 / (d1 + d2)) * C;
+  const modeRounded = Math.round(mode*100)/100;
+
+  const tableRows = classes.map((c,i)=>`
+    <tr>
+      <td class="r"><span class="ltr">${c.label}</span></td>
+      <td class="c">${freqs[i]}</td>
+    </tr>
+  `).join("");
+
+  const promptHtml = `
+    <div class="subTitle">ط¬ط¯ظˆظ„ طھظˆط²ظٹط¹ طھظƒط±ط§ط±ظٹ</div>
+    <div class="qText">
+      ظ…ظ† ط§ظ„ط¬ط¯ظˆظ„ ط§ظ„ط¢طھظٹطŒ ط­ط¯ط¯ ظ‚ظٹظ…ط© ط§ظ„ظ…ظ†ظˆط§ظ„ \\( ${LAT.mode} \\).
+    </div>
+    <div class="niceTableWrap">
+      <table class="niceTable">
+        <thead>
+          <tr><th class="r">ط§ظ„ظپط¦ط©</th><th class="c">ط§ظ„طھظƒط±ط§ط±</th></tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  const explain = [
+    "ظ†ط­ط¯ط¯ ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط©: طھظƒط±ط§ط±ظ‡ط§ ط£ظƒط¨ط± ظ…ظ† طھظƒط±ط§ط± ط§ظ„ظپط¦ط© ط§ظ„ط³ط§ط¨ظ‚ط©طŒ ظˆط£ظƒط¨ط± ط£ظˆ ظٹط³ط§ظˆظٹ طھظƒط±ط§ط± ط§ظ„ظپط¦ط© ط§ظ„ظ„ط§ط­ظ‚ط©.",
+    `\\[ ${LAT.mode} = \\hat{L} + \\frac{d_1}{d_1 + d_2} \\, C \\]`,
+    "ط­ظٹط«:",
+    `\\(\\hat{L}\\) ط­ط¯ظ‘ ط£ط¯ظ†ظ‰ ظ„ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط©.`,
+    `\\(d_1\\) = (طھظƒط±ط§ط± ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط© âˆ’ طھظƒط±ط§ط± ط§ظ„ظپط¦ط© ط§ظ„ط³ط§ط¨ظ‚ط©).`,
+    `\\(d_2\\) = (طھظƒط±ط§ط± ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط© âˆ’ طھظƒط±ط§ط± ط§ظ„ظپط¦ط© ط§ظ„ظ„ط§ط­ظ‚ط©).`,
+    `\\(C\\) ط³ط¹ط© ط§ظ„ظپط¦ط©.`
+  ];
+
+  const method = [
+    `ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط©: ${classes[modalIndex].label} (طھظƒط±ط§ط±ظ‡ط§ ${fModal}).`,
+    `ظ„ط£ظ† ${fModal} > ${fPrev} ظˆ ${fModal} >= ${fNext}.`,
+    `\\(\\hat{L} = ${Lhat}\\)طŒ \\(C = ${C}\\).`,
+    `\\(d_1 = ${fModal} - ${fPrev} = ${d1}\\).`,
+    `\\(d_2 = ${fModal} - ${fNext} = ${d2}\\).`,
+    `\\[ ${LAT.mode} = ${Lhat} + \\frac{${d1}}{${d1}+${d2}} \\times ${C} = ${modeRounded} \\]`
+  ];
+
+  return {
+    id:"mode_grouped",
+    title:"ط§ظ„ظ…ظ†ظˆط§ظ„",
+    branches:[
+      {
+        name:"ط³ظ‡ظ„",
+        level:"ط³ظ‡ظ„",
+        difficulty:"ط³ظ‡ظ„",
+        explain,
+        promptHtml,
+        parts:[
+          {key:"mode", type:"number", label:`ظ‚ظٹظ…ط© ط§ظ„ظ…ظ†ظˆط§ظ„ \\( ${LAT.mode} \\)`, placeholder:"ظ…ط«ط§ظ„: 31.5"}
+        ],
+        answers:{ mode: modeRounded },
+        method
+      }
+    ]
+  };
 }
-function varianceGroupedStats(classes, freqs){
-  const centers = groupedCenters(classes);
-  const n = sum(freqs);
-  const mean = centers.reduce((acc,x,i)=>acc + x*freqs[i], 0)/n;
-  const ss = centers.reduce((acc,x,i)=>acc + freqs[i]*Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {centers, n, mean, ss, variance, sd};
+
+
+function chooseMeasureGen(v){
+  const r = seededRand("choose|"+v);
+  const xs = Array.from({length:7}, ()=>randInt(r, 6, 20));
+  xs.push(randInt(r, 60, 90)); // outlier
+  const promptHtml = `
+    <div style="font-weight:900">ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${xs.join("طŒ ")}<br>ط§ط®طھط± ط§ظ„ظ…ظ‚ظٹط§ط³ ط§ظ„ط£ظ†ط³ط¨ ظ„طھظ…ط«ظٹظ„ظ‡ط§.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:["ط¹ظ†ط¯ ظˆط¬ظˆط¯ ظ‚ظٹظ…ط© ظ…طھط·ط±ظپط©طŒ ظ†ط®طھط§ط± ط§ظ„ظ…ظ‚ظٹط§ط³ ط§ظ„ط£ظ‚ظ„ طھط£ط«ط±ط§ظ‹."],
+        promptHtml,
+        parts:[{key:"best", type:"mcq", label:"ط§ظ„ظ…ظ‚ظٹط§ط³ ط§ظ„ط£ظ†ط³ط¨", options:[`ط§ظ„ظ…طھظˆط³ط· ط§ظ„ط­ط³ط§ط¨ظٹ`,`ط§ظ„ظˆط³ظٹط·`,`ط§ظ„ظ…ظ†ظˆط§ظ„`]} ],
+        answers:{best:`ط§ظ„ظˆط³ظٹط·`},
+        method:[
+          `ط¹ظ†ط¯ ظˆط¬ظˆط¯ ظ‚ظٹظ…ط© ظ…طھط·ط±ظپط© ظپط¥ظ† ط§ظ„ظ…طھظˆط³ط· \\( \\bar{x} \\) ظٹطھط£ط«ط± ط¨ظ‡ط§ ط£ظƒط«ط±.`,
+          `ط§ظ„ظˆط³ظٹط· \\( \\tilde{x} \\) ط£ظ‚ظ„ طھط£ط«ط±ط§ظ‹ ط¨ط§ظ„ظ‚ظٹظ… ط§ظ„ظ…طھط·ط±ظپط©.`,
+          "ظ„ط°ظ„ظƒ ظٹظƒظˆظ† ط§ظ„ط§ط®طھظٹط§ط± ط§ظ„طµط­ظٹط­ ظ‡ظˆ: ط§ظ„ظˆط³ظٹط·."
+        ]
+      }
+    ]
+  };
 }
-function cvValue(mean, sd){ return (sd/mean)*100; }
-function qcdValue(q1, q3){ return ((q3-q1)/(q3+q1))*100; }
-function zValue(x, mean, sd){ return (x-mean)/sd; }
-function pearsonWithMode(mean, mode, sd){ return (mean-mode)/sd; }
-function pearsonWithMedian(mean, median, sd){ return 3*(mean-median)/sd; }
-function momentSkew(xs){
-  const {n, mean, sd} = varianceRawStats(xs);
-  return (n/((n-1)*(n-2))) * xs.reduce((acc,x)=>acc + Math.pow((x-mean)/sd,3), 0);
-}
-function kurtosisBook(xs){
-  const {n, mean, sd} = varianceRawStats(xs);
-  return 3 - (1/n) * xs.reduce((acc,x)=>acc + Math.pow((x-mean)/sd,4), 0);
-}
-function lowerFence(q1,q3){ return q1 - 1.5*(q3-q1); }
-function upperFence(q1,q3){ return q3 + 1.5*(q3-q1); }
-function skewLabel(sk){
-  if(Math.abs(sk) < 1e-9) return "متناظر";
-  return sk > 0 ? "ملتوٍ نحو اليمين" : "ملتوٍ نحو اليسار";
-}
-function kurtosisLabel(ku){
-  if(Math.abs(ku) < 1e-9) return "معتدل";
-  if(ku < -1) return "مدبّب بشدّة";
-  if(ku < 0) return "مدبّب قليلاً";
-  if(ku > 1) return "منبسط بشدّة";
-  return "منبسط قليلاً";
-}
-function rangeLabel(a,b){ return `<span class="ltr">${a} â†’ ${b}</span>`; }
-function rawListHtml(xs){ return `<div class="card" style="padding:14px"><div style="font-weight:900">البيانات:</div><div style="margin-top:8px;font-weight:800">${xs.join("، ")}</div></div>`; }
-function table2colHtml(h1, h2, rows, maxW){
-  const body = rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||520}px"><thead><tr><th>${h1}</th><th>${h2}</th></tr></thead><tbody>${body}</tbody></table>`;
-}
-function groupedTableHtml(classes, freqs, maxW){
-  const head = `<thead><tr><th>الفئة</th><th>التكرار</th></tr></thead>`;
-  const body = classes.map((c,i)=>`<tr><td>${rangeLabel(c[0],c[1])}</td><td>${freqs[i]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||560}px">${head}<tbody>${body}</tbody></table>`;
-}
-function freqTableHtml(values, freqs, maxW){
-  const rows = values.map((x,i)=>`<tr><td>${x}</td><td>${freqs[i]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||520}px"><thead><tr><th>القيمة \\(x_i\\)</th><th>التكرار \\(f_i\\)</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-function chooseOptions(r, correct, distractors){
-  return shuffleLocal([correct, ...distractors], r);
-}
-function svgBoxplot(cfg){
-  const width = 620, height = 170, pad = 30, y = 78;
-  const vals = [cfg.min, cfg.ax, cfg.q1, cfg.q2, cfg.q3, cfg.ex, cfg.max].concat(cfg.outliers||[]);
-  const lo = Math.min(...vals), hi = Math.max(...vals);
-  const sx = x => pad + (width-2*pad) * ((x-lo)/(hi-lo || 1));
-  const tickVals = [cfg.min, cfg.q1, cfg.q2, cfg.q3, cfg.max];
-  const out = (cfg.outliers||[]).map(v=>`<circle cx="${sx(v)}" cy="${y}" r="4.5" fill="#dc2626"></circle><text x="${sx(v)}" y="${y-16}" text-anchor="middle" font-size="12" font-weight="800">${v}</text>`).join("");
-  const ticks = tickVals.map(v=>`<line x1="${sx(v)}" y1="${y+32}" x2="${sx(v)}" y2="${y+40}" stroke="#334155" stroke-width="2"></line><text x="${sx(v)}" y="${y+58}" text-anchor="middle" font-size="12" font-weight="800">${v}</text>`).join("");
-  return `
-  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block">
-    <rect x="0" y="0" width="${width}" height="${height}" rx="18" fill="#f8fafc" stroke="#e2e8f0"></rect>
-    <line x1="${pad}" y1="${y}" x2="${width-pad}" y2="${y}" stroke="#0f172a" stroke-width="2"></line>
-    <line x1="${sx(cfg.ax)}" y1="${y}" x2="${sx(cfg.q1)}" y2="${y}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.q3)}" y1="${y}" x2="${sx(cfg.ex)}" y2="${y}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.ax)}" y1="${y-20}" x2="${sx(cfg.ax)}" y2="${y+20}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.ex)}" y1="${y-20}" x2="${sx(cfg.ex)}" y2="${y+20}" stroke="#0f172a" stroke-width="3"></line>
-    <rect x="${sx(cfg.q1)}" y="${y-24}" width="${Math.max(8, sx(cfg.q3)-sx(cfg.q1))}" height="48" fill="#e0f2fe" stroke="#0369a1" stroke-width="3" rx="8"></rect>
-    <line x1="${sx(cfg.q2)}" y1="${y-24}" x2="${sx(cfg.q2)}" y2="${y+24}" stroke="#0369a1" stroke-width="4"></line>
-    ${out}
-    ${ticks}
+
+function histPolygonGen(v){
+  const r = seededRand("histpoly|"+v);
+
+  const w = 5;
+  const k = 6;
+  const start = randInt(r, 10, 14);
+  const classes = Array.from({length:k}, (_,i)=>[start+i*w, start+(i+1)*w]);
+
+  // ط¨ظ†ط§ط، طھظƒط±ط§ط±ط§طھ ط£ط­ط§ط¯ظٹط© ط§ظ„ظ‚ظ…ط© ظ„ط¶ظ…ط§ظ† ظ…ظ†ظˆط§ظ„ ظˆط§ط­ط¯ ظپظ‚ط·
+  const peak = randInt(r, 1, k-2);
+  let freqs = Array.from({length:k}, ()=>0);
+  const peakF = randInt(r, 18, 26);
+  freqs[peak] = peakF;
+
+  // ظٹط³ط§ط± ط§ظ„ظ‚ظ…ط©: طھط²ط§ظٹط¯ ط­طھظ‰ ط§ظ„ظ‚ظ…ط© (ط£ظ‚ظ„ ظ…ظ†ظ‡ط§ ط¯ط§ط¦ظ…ط§ظ‹)
+  for(let i=peak-1;i>=0;i--){
+    const dec = randInt(r, 2, 6);
+    freqs[i] = Math.max(2, freqs[i+1] - dec);
+  }
+  // ظٹظ…ظٹظ† ط§ظ„ظ‚ظ…ط©: طھظ†ط§ظ‚طµ ط¨ط¹ط¯ ط§ظ„ظ‚ظ…ط© (ط£ظ‚ظ„ ظ…ظ†ظ‡ط§ ط¯ط§ط¦ظ…ط§ظ‹)
+  for(let i=peak+1;i<k;i++){
+    const dec = randInt(r, 2, 6);
+    freqs[i] = Math.max(2, freqs[i-1] - dec);
+  }
+
+  // طھط£ظƒظٹط¯ ط§ظ„ط´ط±ط·: طھظƒط±ط§ط± ط§ظ„ظ‚ظ…ط© ط£ظƒط¨ط± ظ…ظ† ط§ظ„ط³ط§ط¨ظ‚ ظˆط§ظ„ظ„ط§ط­ظ‚
+  freqs[peak] = Math.max(freqs[peak], freqs[peak-1]+1, freqs[peak+1]+1);
+
+  const maxF = freqs[peak];
+  const n = freqs.reduce((a,b)=>a+b,0);
+
+  const cum = [];
+  freqs.reduce((acc, f, i)=>{ cum[i]=acc+f; return cum[i]; }, 0);
+
+  const target = (n%2===0) ? (n/2) : ((n+1)/2);
+  const medianIdx = cum.findIndex(c=>c>target);
+  const medianClass = `${classes[medianIdx][0]}â€“${classes[medianIdx][1]}`;
+
+  const modalIdx = peak;
+  const modalClass = `${classes[modalIdx][0]}â€“${classes[modalIdx][1]}`;
+
+  const W = 860, H = 290, pad = 70;
+  const plotW = W - pad*2;
+  const plotH = H - pad*2;
+  const bw = plotW / k;
+  const xStart = pad - bw/2;
+  const xEnd = W - pad + bw/2;
+
+  function yOf(val){ return pad + (plotH - (val/maxF)*plotH); }
+  function xOf(i){ return pad + i*bw; }
+  function midOf(i){ return pad + i*bw + bw/2; }
+
+  const xLabels = classes.map(c=>`${c[0]}â€“${c[1]}`);
+
+  // Histogram (touching bars)
+  let rects = "";
+  for(let i=0;i<k;i++){
+    const x = xOf(i);
+    const y = yOf(freqs[i]);
+    const h = (pad+plotH) - y;
+    rects += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="0" ry="0" fill="rgba(0,140,255,0.18)" stroke="rgba(0,100,180,0.55)" stroke-width="2"></rect>`;
+  }
+
+  let xText = "";
+  for(let i=0;i<k;i++){
+    xText += `<text x="${midOf(i)}" y="${H-pad+22}" text-anchor="middle" font-size="14" direction="ltr">${xLabels[i]}</text>`;
+  }
+
+  // grid
+  let yGrid = "";
+  const ticks = 5;
+  for(let t=0;t<=ticks;t++){
+    const vTick = Math.round((maxF/ticks)*t);
+    const y = yOf(vTick);
+    yGrid += `<line x1="${xStart}" y1="${y}" x2="${xEnd}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"></line>`;
+    yGrid += `<text x="${pad-10}" y="${y+5}" text-anchor="end" font-size="12" fill="rgba(0,0,0,0.55)" direction="ltr">${vTick}</text>`;
+  }
+
+  const histSvg = `
+  <svg viewBox="0 0 ${W} ${H}" width="100%" height="260" aria-label="Histogram">
+    ${yGrid}
+    <line x1="${xStart}" y1="${pad+plotH}" x2="${xEnd}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <line x1="${xStart}" y1="${pad}" x2="${xStart}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    ${rects}
+    ${xText}
   </svg>`;
-}
 
-function shapeTypeGen(v){
-  const sets = [
-    {rows:[[1,4],[2,4],[3,4],[4,4]], ans:"عديم المنوال"},
-    {rows:[[1,2],[2,6],[3,10],[4,6],[5,2]], ans:"أحادي المنوال"},
-    {rows:[[1,7],[2,3],[3,7],[4,2]], ans:"متعدد المناويل"}
-  ];
-  const c = sets[v % sets.length];
-  const options = shuffleLocal(["عديم المنوال","أحادي المنوال","متعدد المناويل","متناظر معتدل"], seededRand("opt35shape|"+v));
+  // Polygon
+  let pts = classes.map((_,i)=>`${midOf(i)},${yOf(freqs[i])}`).join(" ");
+  const axisY = (pad+plotH);
+  const leftMid = xStart;
+  const rightMid = xEnd;
+  const ptsClosed = `${leftMid},${axisY} ` + pts + ` ${rightMid},${axisY}`;
+  let dots = "";
+  for(let i=0;i<k;i++){
+    dots += `<circle cx="${midOf(i)}" cy="${yOf(freqs[i])}" r="5.5" fill="rgba(0,90,160,0.85)"></circle>`;
+  }
+  const polySvg = `
+  <svg viewBox="0 0 ${W} ${H}" width="100%" height="260" aria-label="Frequency Polygon">
+    ${yGrid}
+    <line x1="${xStart}" y1="${pad+plotH}" x2="${xEnd}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <line x1="${xStart}" y1="${pad}" x2="${xStart}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <polyline points="${ptsClosed}" fill="none" stroke="rgba(0,90,160,0.85)" stroke-width="3" stroke-linejoin="round"></polyline>
+    ${dots}
+    ${xText}
+  </svg>`;
+
+  // Table with empty cumulative column (inputs inline)
+  const cumInput = (i)=>`<input class="inlineInput" data-key="cum${i}" inputmode="numeric" autocomplete="off" placeholder="â€”" style="width:92px;border:2px solid #000;border-radius:14px;padding:10px 12px;font-weight:900;background:#fff;text-align:center" />`;
+  const tableRows = classes.map((c,i)=>`
+    <tr>
+      <td><span class="ltr">${c[0]}â€“${c[1]}</span></td>
+      <td>${freqs[i]}</td>
+      <td>${cumInput(i)}</td>
+    </tr>
+  `).join("");
+
+  const tableHtml = `
+  <div class="card" style="margin-top:12px;padding:14px 14px 8px">
+    <div style="font-weight:900;margin:2px 0 10px">ط£ظƒظ…ظ„ ط¹ظ…ظˆط¯ ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯:</div>
+    <table class="niceTable">
+      <thead>
+        <tr>
+          <th>ط§ظ„ظپط¦ط©</th>
+          <th>ط§ظ„طھظƒط±ط§ط±</th>
+          <th>ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯</th>
+        </tr>
+      </thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+  </div>`;
+
   return {
-    branches:[{
-      level:"سهل",
-      explain:["في بداية الدرس قُسّمت أشكال التوزيعات بحسب وجود المنوال: عديمة المنوال، أحادية المنوال، ومتعددة المناويل."],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900;margin-bottom:10px">انظر إلى الجدول التكراري الآتي ثم حدّد نوع الشكل من حيث عدد المناويل:</div>${table2colHtml("القيمة","التكرار",c.rows,420)}</div>`,
-      parts:[{key:"ans", type:"mcq", label:"نوع الشكل", options}],
-      answers:{ans:c.ans},
-      method:[`التكرارات ${c.ans==="عديم المنوال" ? "متساوية، لذا لا يوجد منوال مميّز." : c.ans==="أحادي المنوال" ? "تبلغ ذروة واحدة واضحة." : "تبلغ أكثر من ذروة واحدة."}`]
-    }]
+    branches:[
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:["ط§ظ‚ط±ط£ ط§ظ„ظ…ط¯ط±ط¬ ط§ظ„طھظƒط±ط§ط±ظٹ ط«ظ… ط£ظƒظ…ظ„ ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯ ظˆط­ط¯ط¯ ط§ظ„ظپط¦ط© ط§ظ„ظˆط³ظٹط·ظٹط©."],
+        promptHtml: `
+          <div class="card" style="padding:16px">
+            <div style="font-weight:900;margin-bottom:8px">ط§ظ„ط±ط³ظ… ط§ظ„ظ…ط¯ط±ط¬ ط§ظ„طھظƒط±ط§ط±ظٹ</div>
+            ${histSvg}
+          </div>
+          ${tableHtml}
+        `,
+        parts:[
+          {key:"cum0", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum1", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum2", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum3", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum4", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum5", type:"number", inline:true, label:"", step:"1"},
+          {key:"medianClass", type:"mcq", label:"ط§ظ„ظپط¦ط© ط§ظ„ظˆط³ظٹط·ظٹط©", options:xLabels}
+        ],
+        answers:{
+          cum0:cum[0], cum1:cum[1], cum2:cum[2], cum3:cum[3], cum4:cum[4], cum5:cum[5],
+          medianClass: medianClass
+        },
+        method:[
+          "ظ†ط­ط³ط¨ ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯ ط¨ط¬ظ…ط¹ ط§ظ„طھظƒط±ط§ط±ط§طھ طھط¯ط±ظٹط¬ظٹط§ظ‹.",
+          `ظ…ط¬ظ…ظˆط¹ ط§ظ„طھظƒط±ط§ط±ط§طھ: \\( n = ${n} \\).`,
+          `ظ†طµظپ ط§ظ„ظ…ط¬ظ…ظˆط¹ (ظ‚ظٹظ…ط© ط§ظ„ظ…ط±ظƒط²): \\( ${target} \\).`,
+          `ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط§ظ„طµط§ط¹ط¯: ${cum.join("طŒ ")}.`,
+          `ط£ظˆظ„ طھظƒط±ط§ط± ظ…طھط¬ظ…ط¹ طµط§ط¹ط¯ ط£ظƒط¨ط± ظ…ظ† \\( ${target} \\) ظ‡ظˆ \\( ${cum[medianIdx]} \\) ط¹ظ†ط¯ ط§ظ„ظپط¦ط©: ${medianClass}.`
+        ]
+      },
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:["ط§ظ‚ط±ط£ ط§ظ„ظ…ط¶ظ„ط¹ ط§ظ„طھظƒط±ط§ط±ظٹ ط«ظ… ط­ط¯ط¯ ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط© ظˆط§ظ„طھظƒط±ط§ط± ط§ظ„ط£ظƒط¨ط±."],
+        promptHtml: `
+          <div class="card" style="padding:16px">
+            <div style="font-weight:900;margin-bottom:8px">ط§ظ„ظ…ط¶ظ„ط¹ ط§ظ„طھظƒط±ط§ط±ظٹ</div>
+            ${polySvg}
+          </div>
+        `,
+        parts:[
+          {key:"modalClass", type:"mcq", label:"ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط©", options:xLabels},
+          {key:"maxF", type:"number", label:"ط§ظ„طھظƒط±ط§ط± ط§ظ„ط£ظƒط¨ط±", step:"1"}
+        ],
+        answers:{ modalClass, maxF },
+        method:[
+          "ظ…ظ† ط§ظ„ط±ط³ظ…: ط­ط¯ظ‘ظگط¯ ط£ط¹ظ„ظ‰ ظ†ظ‚ط·ط© ظپظٹ ط§ظ„ظ…ط¶ظ„ط¹ ط§ظ„طھظƒط±ط§ط±ظٹ.",
+          `ط£ظƒط¨ط± طھظƒط±ط§ط± ظ‡ظˆ \\( ${maxF} \\) ط¹ظ†ط¯ ط§ظ„ظپط¦ط©: ${modalClass}.`,
+          `ط¥ط°ظ† ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط©: ${modalClass}طŒ ظˆط§ظ„طھظƒط±ط§ط± ط§ظ„ط£ظƒط¨ط± = ${maxF}.`
+        ]
+      }
+    ]
   };
 }
 
-function pearsonGen(v){
-  const sets = [
-    {mode:36, mean:37, sd:9.99, kind:"mode"},
-    {mode:175, mean:173, sd:11.498, kind:"mode"},
-    {median:7, mean:7, sd:1.581, kind:"median"}
-  ];
-  const c = sets[v % sets.length];
-  const sk = c.kind==="mode" ? pearsonWithMode(c.mean, c.mode, c.sd) : pearsonWithMedian(c.mean, c.median, c.sd);
-  const label = skewLabel(round3(sk));
-  const options = shuffleLocal(["متناظر","ملتوٍ نحو اليمين","ملتوٍ نحو اليسار"], seededRand("opt35pearson|"+v));
-  const formula = c.kind==="mode"
-    ? `\\( SK_P = \\frac{\\bar{x}-\\hat{x}}{S} \\)`
-    : `\\( SK_P = \\frac{3(\\bar{x}-\\tilde{x})}{S} \\)`;
-  const given = c.kind==="mode"
-    ? `\\(\\bar{x}=${c.mean}\\)، \\(\\hat{x}=${c.mode}\\)، \\(S=${c.sd}\\)`
-    : `\\(\\bar{x}=${c.mean}\\)، \\(\\tilde{x}=${c.median}\\)، \\(S=${c.sd}\\)`;
+
+function miscMcqGen(v){
+  const r = seededRand("misc_mcq|"+v);
+  const sh = (arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; };
+  const clamp = (x,a,b)=>Math.max(a, Math.min(b,x));
+
+  const wTheory = randInt(r, 1, 3);
+  const wPrac = randInt(r, 2, 6);
+  const pTheory = randInt(r, 70, 95);
+  const pPrac = randInt(r, 70, 95);
+  const overall = Math.round((wTheory*pTheory + wPrac*pPrac)/(wTheory+wPrac));
+
+  const opt1 = overall;
+  const opt2 = clamp(overall + randInt(r, 3, 8), 0, 100);
+  const opt3 = clamp(overall - randInt(r, 3, 8), 0, 100);
+  const opt4 = clamp(overall + randInt(r, 10, 18), 0, 100);
+  const optsA = sh([opt1,opt2,opt3,opt4]).map(x=>`${x}%`);
+
+  const optionsB = sh(["0","9","3","10"]);
+
+  const promptA = `
+    <div class="card" style="padding:14px">
+      <div style="font-weight:900;margin-bottom:8px">ط¥ط°ط§ ظƒط§ظ† ط§ظ„ط§ط®طھط¨ط§ط± ظ…ظƒظˆظ‘ظ†ظ‹ط§ ظ…ظ† ظ‚ط³ظ…ظٹظ†: ظ†ط¸ط±ظٹ ظˆط¹ظ…ظ„ظٹطŒ ظˆظƒط§ظ† ظˆط²ظ† ط§ظ„ظ†ط¸ط±ظٹ = ${wTheory} ظˆظˆط²ظ† ط§ظ„ط¹ظ…ظ„ظٹ = ${wPrac}طŒ</div>
+      <div style="font-weight:900;margin-bottom:8px">ظˆط­طµظ„ ط·ط§ظ„ط¨ ط¹ظ„ظ‰ ${pTheory}% ظپظٹ ط§ظ„ظ†ط¸ط±ظٹ ظˆ ${pPrac}% ظپظٹ ط§ظ„ط¹ظ…ظ„ظٹط› ط§ط­ط³ط¨ ط§ظ„ظ†ط³ط¨ط© ط§ظ„ظ…ط¦ظˆظٹط© ط§ظ„ظƒظ„ظٹط©.</div>
+    </div>
+  `;
+
+  const promptB = `
+    <div class="card" style="padding:14px">
+      <div style="font-weight:900;margin-bottom:8px">ظ„ظ…ط¬ظ…ظˆط¹ط© ظ…ط´ط§ظ‡ط¯ط§طھ ط¹ط¯ط¯ظ‡ط§ 10طŒ ط¥ط°ط§ ط¹ظ„ظ…طھ ط£ظ† \\\(\\sum_{i=1}^{10} (x_i-\\bar{x})^2 = 9\\\) ظپط¥ظ†:</div>
+      <div style="font-weight:900">\\\(\\sum_{i=1}^{10} (x_i-\\bar{x})\\\) ظٹط³ط§ظˆظٹ:</div>
+    </div>
+  `;
+
   return {
-    branches:[{
-      level:"متوسط",
-      explain:["معامل بيرسون للالتواء يربط بين مقاييس النزعة المركزية والانحراف المعياري لتحديد مقدار الالتواء وجهته.", formula],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">إذا كانت المعطيات ${given}، فاحسب معامل بيرسون للالتواء ثم حدّد نوع التوزيع.</div></div>`,
-      parts:[
-        {key:"sk", type:"number", label:"\\(SK_P\\)", step:"0.01"},
-        {key:"shape", type:"mcq", label:"نوع التوزيع", options}
-      ],
-      answers:{sk:round2(sk), shape:label},
-      method:[
-        c.kind==="mode"
-          ? `\\[ SK_P = \\frac{${c.mean}-${c.mode}}{${c.sd}} = ${round2(sk)} \\]`
-          : `\\[ SK_P = \\frac{3(${c.mean}-${c.median})}{${c.sd}} = ${round2(sk)} \\]`,
-        `إشارة المعامل هي التي تحدد الجهة: ${label}.`
-      ]
-    }]
+    branches:[
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:["ط§ط­ط³ط¨ ط§ظ„ظ…طھظˆط³ط· ط§ظ„ظ…ط±ط¬ظ‘ط­ ط¨ط§ط³طھط®ط¯ط§ظ… ط§ظ„ط£ظˆط²ط§ظ† ط«ظ… ط§ط®طھط± ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©."],
+        promptHtml: promptA,
+        parts:[{key:"wavg", type:"mcq", label:"ط§ظ„ط¥ط¬ط§ط¨ط©", options:optsA}],
+        answers:{wavg:`${overall}%`},
+        method:[
+          "ط§ظ„ظ†ط³ط¨ط© ط§ظ„ظƒظ„ظٹط© = ط§ظ„ظ…طھظˆط³ط· ط§ظ„ظ…ط±ط¬ظ‘ط­ ظ„ظ„ط£ظˆط²ط§ظ†.",
+          `ط§ظ„ظ…ط¹ط·ظٹط§طھ: \\(w_T=${wTheory},\; P_T=${pTheory},\; w_P=${wPrac},\; P_P=${pPrac}\\).`,
+          `\\[ \\text{Overall} = \\frac{${wTheory}\\times${pTheory} + ${wPrac}\\times${pPrac}}{${wTheory}+${wPrac}} = ${overall} \\]`
+        ]
+      },
+      {
+        level:"ط³ظ‡ظ„",
+        explain:["ط®ط§طµظٹط© ظ…ظ‡ظ…ط©: ظ…ط¬ظ…ظˆط¹ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھ ط¹ظ† ط§ظ„ظ…طھظˆط³ط· ظٹط³ط§ظˆظٹ طµظپط±ظ‹ط§."],
+        promptHtml: promptB,
+        parts:[{key:"devsum", type:"mcq", label:"ط§ظ„ط¥ط¬ط§ط¨ط©", options:optionsB}],
+        answers:{devsum:"0"},
+        method:[
+          "ظ„ط£ظٹ ط¨ظٹط§ظ†ط§طھ: ظ…ط¬ظ…ظˆط¹ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھ ط¹ظ† ط§ظ„ظ…طھظˆط³ط· ظٹط³ط§ظˆظٹ طµظپط±ظ‹ط§.",
+          `\\[ \\sum (x_i-\\bar{x}) = 0 \\]`
+        ]
+      }
+    ]
   };
 }
 
-function momentGen(v){
-  const sets = [
-    {xs:[4,5,6,7,8,9,10]},
-    {xs:[3,3,4,4,5,5,6,8,12]},
-    {xs:[1,4,8,8,9,9,10,10,10]}
-  ];
-  const xs = sets[v % sets.length].xs;
-  const sk = momentSkew(xs);
-  const label = skewLabel(round3(sk));
+/* ===================== 3.2 â€” ظ…ظ‚ط§ظٹظٹط³ ط§ظ„ظ…ظˆط¶ط¹ ===================== */
+
+function _sortedSample(r, n, lo, hi){
+  const xs = [];
+  while(xs.length<n){
+    const v = randInt(r, lo, hi);
+    xs.push(v);
+  }
+  // allow repeats? book says "ظ‚ظٹظ… ظ…ط®طھظ„ظپط©" sometimes; make mostly distinct:
+  // ensure not too many duplicates
+  xs.sort((a,b)=>a-b);
+  return xs;
+}
+function _makeDistinctSample(r, n, lo, hi){
+  const set = new Set();
+  while(set.size<n){
+    set.add(randInt(r, lo, hi));
+  }
+  return Array.from(set).sort((a,b)=>a-b);
+}
+function _fmtList(arr){ return arr.join("طŒ "); }
+function _round2(x){ return Math.round(x*100)/100; }
+function shuffleInPlace(r, arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = randInt(r, 0, i);
+    const t = arr[i]; arr[i]=arr[j]; arr[j]=t;
+  }
+  return arr;
+}
+
+
+function tfStatementsGen(v){
   return {
-    branches:[{
-      level:"صعب",
-      explain:[
-        "معامل الالتواء العزومي أدق من معامل بيرسون عند الاختلاف بين النتائج.",
-        "\\( SK_m = \\frac{n}{(n-1)(n-2)} \\sum \\left(\\frac{x_i-\\bar{x}}{S}\\right)^3 \\)."
-      ],
-      promptHtml:`${rawListHtml(xs)}<div class="card" style="padding:14px;margin-top:12px"><div style="font-weight:900">احسب معامل الالتواء العزومي \\(SK_m\\) ثم حدّد نوع الالتواء.</div></div>`,
-      parts:[
-        {key:"skm", type:"number", label:"\\(SK_m\\)", step:"0.01"},
-        {key:"shape", type:"mcq", label:"نوع التوزيع", options:shuffleLocal(["متناظر","ملتوٍ نحو اليمين","ملتوٍ نحو اليسار"], seededRand("opt35moment|"+v))}
-      ],
-      answers:{skm:round2(sk), shape:label},
-      method:[
-        `بعد حساب المتوسط والانحراف المعياري والتعويض في العلاقة نحصل على: \\(SK_m=${round2(sk)}\\).`,
-        `إذن شكل التوزيع: ${label}.`
-      ]
-    }]
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "ط§ظ„ط¹ظ„ط§ظ‚ط§طھ ط§ظ„ظ…ظ‡ظ…ط©: \\(Q_1 = P_{25}\\)طŒ \\(Q_2 = P_{50} = \\tilde{x}\\)طŒ \\(Q_3 = P_{75}\\).",
+          "ظ„ظٹط³طھ ظƒظ„ ط¹ظ„ط§ظ‚ط© طµط­ظٹط­ط© ط¯ط§ط¦ظ…ظ‹ط§ط› ط§ظ†طھط¨ظ‡ ظ„ظƒظˆظ† ط§ظ„ط¹ط¨ط§ط±ط© ط¹ط§ظ…ط© ط£ظ… ظ„ط§."
+        ],
+        promptHtml:`<div style="font-weight:900">ط­ط¯ط¯ ظ…ط§ ط¥ط°ط§ ظƒط§ظ†طھ ط§ظ„ط¹ط¨ط§ط±ط§طھ ط§ظ„طھط§ظ„ظٹط© طµط­ظٹط­ط© ط£ظ… ط®ط§ط·ط¦ط©:</div>`,
+        parts:[
+          {key:"a", type:"mcq", options:["طµط­ظٹط­ط©","ط®ط§ط·ط¦ط©"], label:`(ط£) \\( \\tilde{x} = P_{25} \\).`},
+          {key:"b", type:"mcq", options:["طµط­ظٹط­ط©","ط®ط§ط·ط¦ط©"], label:`(ط¨) \\( \\tilde{x} = \\frac{Q_1 + Q_3}{2} \\).`},
+          {key:"c", type:"mcq", options:["طµط­ظٹط­ط©","ط®ط§ط·ط¦ط©"], label:`(ط¬) ط¯ط§ط¦ظ…ظ‹ط§ \\( Q_1 < Q_2 < Q_3 \\).`},
+          {key:"d", type:"mcq", options:["طµط­ظٹط­ط©","ط®ط§ط·ط¦ط©"], label:`(ط¯) \\( \\tilde{x} = Q_2 = P_{50} \\).`}
+        ],
+        answers:{a:"ط®ط§ط·ط¦ط©", b:"ط®ط§ط·ط¦ط©", c:"ط®ط§ط·ط¦ط©", d:"طµط­ظٹط­ط©"},
+        method:[
+          "ط§ظ„طھط°ظƒظٹط±: \\(Q_1 = P_{25}\\)طŒ ظˆ \\(Q_2 = P_{50}=\\tilde{x}\\)طŒ ظˆ \\(Q_3 = P_{75}\\).",
+          "(ط£) ط®ط§ط·ط¦ط© ظ„ط£ظ† \\(\\tilde{x} = P_{50}\\) ظˆظ„ظٹط³ \\(P_{25}\\).",
+          "(ط¨) ط®ط§ط·ط¦ط©ط› ظ„ظٹط³طھ ظ‚ط§ط¹ط¯ط© ط¹ط§ظ…ط©.",
+          "(ط¬) ط®ط§ط·ط¦ط©ط› ظ‚ط¯ ظٹط­ط¯ط« طھط³ط§ظˆظچ ط¹ظ†ط¯ طھظƒط±ط§ط± ط§ظ„ظ‚ظٹظ….",
+          "(ط¯) طµط­ظٹط­ط©."
+        ]
+      }
+    ]
   };
 }
 
-function kurtosisGen(v){
-  const sets = [
-    {xs:[1,2,3,4,5]},
-    {xs:[1,1,1,1,1,1,10]},
-    {xs:[2,2,3,4,4,5,5,6,8]}
-  ];
-  const xs = sets[v % sets.length].xs;
-  const ku = kurtosisBook(xs);
-  const label = kurtosisLabel(round3(ku));
+function _quartileRank(n, rQ){ return (rQ*(n+1))/4; }
+function _percentileRank(n, rP){ return (rP*(n+1))/100; }
+function _interpAt(sorted, pos){
+  // pos is 1-indexed (e.g., 3.25)
+  const k = Math.floor(pos);
+  const a = pos - k;
+  const xk = sorted[k-1];
+  const xk1 = sorted[k]; // safe if k < n
+  const val = (a===0 || xk1===undefined) ? xk : (xk + a*(xk1 - xk));
+  return {k, a, xk, xk1, val};
+}
+
+function quartileEvenGen(v){
+  const r = seededRand("q1_even|"+v);
+  const n = 12;
+  const sorted = _makeDistinctSample(r, n, 8, 45);
+  const shown = sorted.slice();
+  shuffleInPlace(seededRand("q1_even_show|"+v), shown); // show unsorted
+  const q1 = _quartileRank(n,1);
+  const it = _interpAt(sorted, q1);
+  const q1r = _round2(q1);
+  const Q1 = _round2(it.val);
+
+  const basePrompt = `ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${_fmtList(shown)}`;
   return {
-    branches:[{
-      level:"صعب",
-      explain:[
-        "بحسب الكتاب: يعتمد الحكم على التفلطح على إشارة معامل التفلطح وقيمته.",
-        "\\( KU = 3 - \\frac{1}{n}\\sum\\left(\\frac{x_i-\\bar{x}}{S}\\right)^4 \\)."
-      ],
-      promptHtml:`${rawListHtml(xs)}<div class="card" style="padding:14px;margin-top:12px"><div style="font-weight:900">احسب معامل التفلطح \\(KU\\) ثم صنّف التوزيع.</div></div>`,
-      parts:[
-        {key:"ku", type:"number", label:"\\(KU\\)", step:"0.01"},
-        {key:"shape", type:"mcq", label:"تصنيف التفلطح", options:shuffleLocal(["معتدل","مدبّب قليلاً","مدبّب بشدّة","منبسط قليلاً","منبسط بشدّة"], seededRand("opt35ku|"+v))}
-      ],
-      answers:{ku:round2(ku), shape:label},
-      method:[
-        `بعد التعويض في العلاقة ينتج \\(KU=${round2(ku)}\\).`,
-        `وبالتالي يكون التوزيع ${label}.`
-      ]
-    }]
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ \\(Q_r\\) ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط؛ظٹط± ط§ظ„ظ…ط¬ظ…ط¹ط©: \\( q_r = \\frac{r(n+1)}{4} \\).",
+          "ط­ظٹط« \\(n\\) ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…طŒ ظˆ \\(r=1,2,3\\)."
+        ],
+        promptHtml:`<div style="font-weight:900">${basePrompt}<br>ط§ط­ط³ط¨ ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„ \\(q_1\\).</div>`,
+        parts:[{key:"q1rank", type:"number", label:"ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„ \\(q_1\\)", step:"0.01"}],
+        answers:{q1rank: q1r},
+        method:[
+          `ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…: \\( n = ${n} \\).`,
+          `\\[ q_1 = \\frac{1(${n}+1)}{4} = \\frac{${n+1}}{4} = ${q1r} \\]`
+        ]
+      },
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "ط¨ط¹ط¯ طھط±طھظٹط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ طھطµط§ط¹ط¯ظٹظ‹ط§طŒ ط¥ط°ط§ ظƒط§ظ†طھ ط§ظ„ط±طھط¨ط© \\(q\\) ط؛ظٹط± طµط­ظٹط­ط© ط§ظ„ط¹ط¯ط¯:",
+          "ظ†ط£ط®ط° \\(k\\) ط§ظ„ط¬ط²ط، ط§ظ„طµط­ظٹط­ ظˆ \\(\\alpha\\) ط§ظ„ط¬ط²ط، ط§ظ„ظƒط³ط±ظٹ ظ…ظ† ط§ظ„ط±طھط¨ط©.",
+          "ط«ظ… \\( Q_r = x_k + \\alpha (x_{k+1}-x_k) \\)."
+        ],
+        promptHtml:`<div style="font-weight:900">${basePrompt}<br>ط§ط­ط³ط¨ ظ‚ظٹظ…ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„ \\(Q_1\\).</div>`,
+        parts:[{key:"Q1", type:"number", label:"ظ‚ظٹظ…ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„ \\(Q_1\\)", step:"0.01"}],
+        answers:{Q1: Q1},
+        method:[
+          `ط¨ط¹ط¯ ط§ظ„طھط±طھظٹط¨ طھطµط§ط¹ط¯ظٹظ‹ط§: \\(x_1\\le \\dots \\le x_{${n}}\\).`,
+          `ط§ظ„ط±طھط¨ط©: \\( q_1 = ${q1r} \\Rightarrow k=${it.k},\\ \\alpha=${_round2(it.a)} \\).`,
+          `ط§ظ„ظ‚ظٹظ…: \\(x_${it.k}=${it.xk}\\), \\(x_${it.k+1}=${it.xk1}\\).`,
+          `\\[ Q_1 = x_${it.k} + \\alpha(x_${it.k+1}-x_${it.k}) = ${it.xk} + ${_round2(it.a)}(${it.xk1}-${it.xk}) = ${Q1} \\]`
+        ]
+      }
+    ]
   };
 }
 
-function boxplotCaseGen(v){
-  const cases = [
-    {
-      title:"حالة مماثلة لمثال 3.5.4",
-      cfg:{min:-5, ax:1, q1:4, q2:5, q3:6, ex:9, max:16, outliers:[-5,16]},
-      skew:"ملتوٍ نحو اليمين",
-      kurt:"مدبّب بشدّة"
-    },
-    {
-      title:"حالة مماثلة لمثال 3.5.5",
-      cfg:{min:3, ax:3, q1:5, q2:6, q3:8.5, ex:12, max:17, outliers:[17]},
-      skew:"ملتوٍ نحو اليمين",
-      kurt:"مدبّب بشدّة"
-    },
-    {
-      title:"حالة مماثلة لمثال 3.5.6",
-      cfg:{min:-4, ax:-4, q1:-2, q2:5, q3:10, ex:18, max:18, outliers:[]},
-      skew:"ملتوٍ نحو اليمين",
-      kurt:"منبسط بشدّة"
-    }
-  ];
-  const c = cases[v % cases.length];
+function quartileOddGen(v){
+  const r = seededRand("q3_odd|"+v);
+  const n = 11;
+  const sorted = _makeDistinctSample(r, n, 10, 60);
+  const shown = sorted.slice();
+  shuffleInPlace(seededRand("q3_odd_show|"+v), shown);
+  const q3 = _quartileRank(n,3);
+  const it = _interpAt(sorted, q3);
+  const q3r = _round2(q3);
+  const Q3 = _round2(it.val);
+
+  const basePrompt = `ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${_fmtList(shown)}`;
   return {
-    branches:[{
-      level:"متوسط",
-      explain:[
-        "في المخطط الصندوقي نقرأ الالتواء من انزياح الصندوق وخط الوسيط، ونقرأ التفلطح من طول الصندوق مقارنة ببقية الامتداد.",
-        "الصندوق يمثل في الأصل \\(IQR\\) أي 50% من البيانات."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900;margin-bottom:10px">${c.title}</div>${svgBoxplot(c.cfg)}<div style="margin-top:10px;font-weight:900">استنتج نوع الالتواء، ثم علّق على التفلطح.</div></div>`,
-      parts:[
-        {key:"skew", type:"mcq", label:"نوع الالتواء", options:shuffleLocal(["متناظر","ملتوٍ نحو اليمين","ملتوٍ نحو اليسار"], seededRand("opt35box1|"+v))},
-        {key:"kurt", type:"mcq", label:"وصف التفلطح", options:shuffleLocal(["معتدل","مدبّب قليلاً","مدبّب بشدّة","منبسط قليلاً","منبسط بشدّة"], seededRand("opt35box2|"+v))}
-      ],
-      answers:{skew:c.skew, kurt:c.kurt},
-      method:[
-        `من موضع الصندوق وخط الوسيط يكون التوزيع ${c.skew}.`,
-        `ومن طول الصندوق نسبةً إلى بقية الامتداد يكون التوزيع ${c.kurt}.`
-      ]
-    }]
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ \\(Q_r\\) ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط؛ظٹط± ط§ظ„ظ…ط¬ظ…ط¹ط©: \\( q_r = \\frac{r(n+1)}{4} \\).",
+          "ط­ظٹط« \\(n\\) ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…."
+        ],
+        promptHtml:`<div style="font-weight:900">${basePrompt}<br>ط§ط­ط³ط¨ ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط«ط§ظ„ط« \\(q_3\\).</div>`,
+        parts:[{key:"q3rank", type:"number", label:"ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط«ط§ظ„ط« \\(q_3\\)", step:"0.01"}],
+        answers:{q3rank: q3r},
+        method:[
+          `ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…: \\( n = ${n} \\).`,
+          `\\[ q_3 = \\frac{3(${n}+1)}{4} = \\frac{3\\times${n+1}}{4} = ${q3r} \\]`
+        ]
+      },
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "ط¨ط¹ط¯ طھط±طھظٹط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ طھطµط§ط¹ط¯ظٹظ‹ط§ ظ†ط­ط¯ط¯ \\(k\\) ظˆ \\(\\alpha\\) ظ…ظ† ط§ظ„ط±طھط¨ط©.",
+          "ط«ظ… \\( Q_r = x_k + \\alpha (x_{k+1}-x_k) \\)."
+        ],
+        promptHtml:`<div style="font-weight:900">${basePrompt}<br>ط§ط­ط³ط¨ ظ‚ظٹظ…ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط«ط§ظ„ط« \\(Q_3\\).</div>`,
+        parts:[{key:"Q3", type:"number", label:"ظ‚ظٹظ…ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط«ط§ظ„ط« \\(Q_3\\)", step:"0.01"}],
+        answers:{Q3: Q3},
+        method:[
+          `ط¨ط¹ط¯ ط§ظ„طھط±طھظٹط¨ طھطµط§ط¹ط¯ظٹظ‹ط§: \\(x_1\\le \\dots \\le x_{${n}}\\).`,
+          `ط§ظ„ط±طھط¨ط©: \\( q_3 = ${q3r} \\Rightarrow k=${it.k},\\ \\alpha=${_round2(it.a)} \\).`,
+          `ط§ظ„ظ‚ظٹظ…ط© ط§ظ„ظ…ط·ظ„ظˆط¨ط©: \\( Q_3 = x_${it.k} + \\alpha(x_${it.k+1}-x_${it.k}) \\).`,
+          `\\[ Q_3 = ${Q3} \\]`
+        ]
+      }
+    ]
   };
 }
 
-function boxRuleGen(v){
-  const sets = [
-    {box:1.349, ans:"معتدل", txt:"لبيانات متناظرة يتبع توزيعها الطبيعي المعياري تقريباً"},
-    {box:1.1, ans:"مدبّب", txt:"لبيانات متناظرة طول صندوقها أصغر من 1.349"},
-    {box:1.9, ans:"منبسط", txt:"لبيانات متناظرة طول صندوقها أكبر من 1.349"},
-    {ratio:"half", ans:"منبسط قليلاً", txt:"لبيانات ليس فيها قيم منعزلة، مدىها 10 وحدات وطول الصندوق يقارب نصف المدى"},
-    {ratio:"fifth", ans:"مدبّب بشدّة", txt:"لبيانات ليس فيها قيم منعزلة، مدىها 7 وحدات وطول الصندوق لا يتجاوز خمس المدى"}
-  ];
-  const c = sets[v % sets.length];
-  const options = shuffleLocal(["معتدل","مدبّب","منبسط","منبسط قليلاً","مدبّب بشدّة"], seededRand("opt35rule|"+v));
+function percentileGen(v){
+  const r = seededRand("percentile|"+v);
+  const n = 15;
+  const sorted = _makeDistinctSample(r, n, 20, 95);
+  const shown = sorted.slice();
+  shuffleInPlace(seededRand("percentile_show|"+v), shown);
+  const rp = [20,35,60,67,80][randInt(r,0,4)];
+  const pr = _percentileRank(n, rp);
+  const it = _interpAt(sorted, pr);
+  const prr = _round2(pr);
+  const P = _round2(it.val);
+
+  const basePrompt = `ط§ظ„ط¨ظٹط§ظ†ط§طھ: ${_fmtList(shown)}`;
   return {
-    branches:[{
-      level:"سهل",
-      explain:["القواعد المباشرة المذكورة في الدرس تساعد على الحكم السريع على التفلطح من طول الصندوق."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.txt}. ما الوصف الأنسب؟</div>`,
-      parts:[{key:"ans", type:"mcq", label:"الوصف", options}],
-      answers:{ans:c.ans},
-      method:[`الوصف الصحيح هو: ${c.ans}.`]
-    }]
+    branches:[
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:[
+          "ط±طھط¨ط© ط§ظ„ظ…ط¦ظٹظ† \\(P_r\\): \\( p_r = \\frac{r(n+1)}{100} \\).",
+          "ط«ظ… ظ†ط­ط¯ط¯ \\(k\\) ظˆ \\(\\alpha\\) ظ…ظ† ط§ظ„ط±طھط¨ط© ط¨ط¹ط¯ طھط±طھظٹط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ."
+        ],
+        promptHtml:`<div style="font-weight:900">${basePrompt}<br>ط§ط­ط³ط¨ ط±طھط¨ط© \\(P_{${rp}}\\) ط£ظٹ \\(p_{${rp}}\\).</div>`,
+        parts:[{key:"prank", type:"number", label:`ط±طھط¨ط© \\(P_{${rp}}\\)`, step:"0.01"}],
+        answers:{prank: prr},
+        method:[
+          `ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ…: \\( n = ${n} \\).`,
+          `\\[ p_{${rp}} = \\frac{${rp}(${n}+1)}{100} = \\frac{${rp}\\times${n+1}}{100} = ${prr} \\]`
+        ]
+      },
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:[
+          "ط¨ط¹ط¯ طھط±طھظٹط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ: \\( P_r = x_k + \\alpha (x_{k+1}-x_k) \\).",
+          "ط­ظٹط« \\(k\\) ط§ظ„ط¬ط²ط، ط§ظ„طµط­ظٹط­ ظ…ظ† ط§ظ„ط±طھط¨ط© ظˆ \\(\\alpha\\) ط§ظ„ط¬ط²ط، ط§ظ„ظƒط³ط±ظٹ."
+        ],
+        promptHtml:`<div style="font-weight:900">${basePrompt}<br>ط§ط­ط³ط¨ ظ‚ظٹظ…ط© \\(P_{${rp}}\\).</div>`,
+        parts:[{key:"P", type:"number", label:`ظ‚ظٹظ…ط© \\(P_{${rp}}\\)`, step:"0.01"}],
+        answers:{P: P},
+        method:[
+          `ط¨ط¹ط¯ ط§ظ„طھط±طھظٹط¨ طھطµط§ط¹ط¯ظٹظ‹ط§: \\(x_1\\le \\dots \\le x_{${n}}\\).`,
+          `ط§ظ„ط±طھط¨ط©: \\( p_{${rp}} = ${prr} \\Rightarrow k=${it.k},\\ \\alpha=${_round2(it.a)} \\).`,
+          `ط§ظ„ظ‚ظٹظ…: \\(x_${it.k}=${it.xk}\\), \\(x_${it.k+1}=${it.xk1}\\).`,
+          `\\[ P_{${rp}} = x_${it.k} + \\alpha(x_${it.k+1}-x_${it.k}) = ${it.xk} + ${_round2(it.a)}(${it.xk1}-${it.xk}) = ${P} \\]`
+        ]
+      }
+    ]
   };
 }
 
-function fiveNumConceptGen(v){
-  const pool = [
-    {
-      q:"أي القيم الآتية ليست من القيم الخمس الأساسية في المخطط الصندوقي؟",
-      options:["الربيعي الثالث","القيمة الصغرى","الوسيط","المتوسط"],
-      a:"المتوسط",
-      method:["الأعداد الخمسة هي: أصغر قيمة، الربيعي الأول، الربيعي الثاني (الوسيط)، الربيعي الثالث، وأكبر قيمة."]
-    },
-    {
-      q:"الصندوق في المخطط الصندوقي يحتوي على:",
-      options:["75% من البيانات","60% من البيانات","50% من البيانات","25% من البيانات"],
-      a:"50% من البيانات",
-      method:["لأن الصندوق يمتد من \\(Q_1\\) إلى \\(Q_3\\)، أي يمثل المدى الربيعي."]
-    },
-    {
-      q:"إذا كان الوسيط قريباً من الربيعي الأول، فإن توزيع البيانات يكون غالباً:",
-      options:["منحرف لليسار بشدة","منحرف لليمين","متماثل","منحرف لليسار"],
-      a:"منحرف لليمين",
-      method:["اقتراب الوسيط من \\(Q_1\\) يعني غالباً امتداداً أكبر نحو اليمين."]
-    }
+function interpretPercentileGen(v){
+  const r = seededRand("interpret|"+v);
+  const rp = [80,90,25,75][randInt(r,0,3)];
+  const val = randInt(r, 40, 98);
+  const correct = `ظٹط¹ظ†ظٹ ط£ظ† ${rp}% ظ…ظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ ط£ظ‚ظ„ ظ…ظ† ط£ظˆ طھط³ط§ظˆظٹ ${val}.`;
+  const opts = [
+    correct,
+    `ظٹط¹ظ†ظٹ ط£ظ† ${rp}% ظ…ظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ ط£ظƒط¨ط± ظ…ظ† ط£ظˆ طھط³ط§ظˆظٹ ${val}.`,
+    `ظٹط¹ظ†ظٹ ط£ظ† ${100-rp}% ظ…ظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ ط£ظ‚ظ„ ظ…ظ† ط£ظˆ طھط³ط§ظˆظٹ ${val}.`,
+    `ظٹط¹ظ†ظٹ ط£ظ† ${val} ظ‡ظˆ ط£ظƒط¨ط± ظ‚ظٹظ…ط© ظپظٹ ط§ظ„ط¨ظٹط§ظ†ط§طھ.`
   ];
-  const c = pool[v % pool.length];
+  shuffleInPlace(seededRand("interpret_opts|"+v), opts);
   return {
-    branches:[{
-      level:"سهل",
-      explain:["سؤال مفاهيمي مباشر حول المخطط الصندوقي."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.q}</div>`,
-      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt35five|"+v))}],
-      answers:{mcq:c.a},
-      method:c.method
-    }]
+    branches:[
+      {
+        level:"ط³ظ‡ظ„",
+        explain:[
+          "طھظپط³ظٹط± \\(P_r\\): ط§ظ„ظ‚ظٹظ…ط© ط§ظ„طھظٹ ظٹظ‚ط¹ ط¹ظ†ط¯ظ‡ط§ طھظ‚ط±ظٹط¨ظ‹ط§ \\(r\\%\\) ظ…ظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ طھط­طھظ‡ط§ (ط£ظˆ طھط³ط§ظˆظٹظ‡ط§)."
+        ],
+        promptHtml:`<div style="font-weight:900">ط¥ط°ط§ ظƒط§ظ†طھ ظ‚ظٹظ…ط© \\(P_{${rp}}\\) طھط³ط§ظˆظٹ ${val}طŒ ظپط£ظٹ ط§ظ„ط¹ط¨ط§ط±ط§طھ ط§ظ„طھط§ظ„ظٹط© طھظ…ط«ظ„ طھظپط³ظٹط±ظ‹ط§ طµط­ظٹط­ظ‹ط§طں</div>`,
+        parts:[{key:"ans", type:"mcq", options:opts, label:"ط¶ط¹ ط¯ط§ط¦ط±ط© ط­ظˆظ„ ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©."}],
+        answers:{ans: correct},
+        method:[
+          `\\(P_{${rp}}=${val}\\) ظٹط¹ظ†ظٹ ط£ظ† ${rp}% ظ…ظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ ط£ظ‚ظ„ ظ…ظ† ط£ظˆ طھط³ط§ظˆظٹ ${val}.`
+        ]
+      }
+    ]
   };
 }
 
-function mcq35Gen(v){
-  const pool = [
-    {
-      q:"إذا كان التفلطح سالباً، فإن التوزيع يكون:",
-      options:["مدبّباً","معتدلاً","منبسطاً","مائلاً لليسار"],
-      a:"مدبّباً",
-      method:["وفق الكتاب: الإشارة السالبة لمعامل التفلطح تدل على تدبّب التوزيع."]
-    },
-    {
-      q:"التوزيع الطبيعي المعياري هو توزيع:",
-      options:["مائل نحو اليسار","مائل نحو اليمين","منبسط","متناظر"],
-      a:"متناظر",
-      method:["التوزيع الطبيعي المعياري يُعد معيار الاعتدال والتناظر."]
-    },
-    {
-      q:"التفلطح للتوزيع الطبيعي يساوي:",
-      options:["1","0","-1","1.5"],
-      a:"0",
-      method:["في الكتاب، \\(KU=0\\) يعني توزيعاً معتدلاً قريباً من الطبيعي."]
-    },
-    {
-      q:"أي مما يلي لا يعبّر عن الالتواء؟",
-      options:["التدبب","التناظر","الالتواء نحو اليمين","الالتواء نحو اليسار"],
-      a:"التدبب",
-      method:["التدبب/الانبساط يرتبطان بالتفلطح لا بالالتواء."]
-    }
-  ];
-  const c = pool[v % pool.length];
+function smartNfromQ1Gen(v){
   return {
-    branches:[{
-      level:"سهل",
-      explain:["سؤال نظري من الاختبار الذاتي للطالب في آخر الدرس."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.q}</div>`,
-      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt35mcq|"+v))}],
-      answers:{mcq:c.a},
-      method:c.method
-    }]
+    branches:[
+      {
+        level:"ظ…طھظˆط³ط·",
+        explain:[
+          "ط¥ط°ط§ ظƒط§ظ†طھ ط§ظ„ط¨ظٹط§ظ†ط§طھ ظ…ط±طھط¨ط© طھطµط§ط¹ط¯ظٹظ‹ط§ ظˆظƒط§ظ†طھ \\(x_k = Q_1\\) ظپظ‡ط°ط§ ظٹط¹ظ†ظٹ ط£ظ† ط±طھط¨ط© \\(Q_1\\) طھط³ط§ظˆظٹ \\(k\\).",
+          "ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„: \\( q_1 = \\frac{n+1}{4} \\)."
+        ],
+        promptHtml:`<div style="font-weight:900">ظ„ظ…ط¬ظ…ظˆط¹ط© ظ…ظ† ط§ظ„ظ‚ظٹظ… ط§ظ„ظ…ط®طھظ„ظپط© ظˆط§ظ„ظ…ط±طھط¨ط© طھطµط§ط¹ط¯ظٹظ‹ط§طŒ ط¥ط°ط§ ظƒط§ظ† \\(x_7 = Q_1\\) ظپط¥ظ† ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ… \\(n\\) ظٹط³ط§ظˆظٹ:</div>`,
+        parts:[{key:"n", type:"mcq", options:["29","7","8","27"], label:"ط¶ط¹ ط¯ط§ط¦ط±ط© ط­ظˆظ„ ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©."}],
+        answers:{n:"27"},
+        method:[
+          "ط¨ظ…ط§ ط£ظ† \\(x_7 = Q_1\\) ظپظ‡ط°ط§ ظٹط¹ظ†ظٹ ط£ظ† ط±طھط¨ط© ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„ \\(q_1 = 7\\).",
+          `\\[ q_1 = \\frac{n+1}{4} = 7 \\Rightarrow n+1 = 28 \\Rightarrow n = 27 \\]`
+        ]
+      }
+    ]
   };
 }
+/* =================== ظ†ظ‡ط§ظٹط© 3.2 =================== */
 
 const TEMPLATES = [
-  {id:"35_shape_type", title:"أشكال التوزيعات بحسب المناويل", icon:"∿", gen:shapeTypeGen},
-  {id:"35_pearson", title:"معامل بيرسون للالتواء", icon:"P", gen:pearsonGen},
-  {id:"35_moment", title:"معامل الالتواء العزومي", icon:"m", gen:momentGen},
-  {id:"35_kurtosis", title:"معامل التفلطح", icon:"KU", gen:kurtosisGen},
-  {id:"35_box", title:"قراءة المخطط الصندوقي", icon:"▭", gen:boxplotCaseGen},
-  {id:"35_rule", title:"قواعد الحكم من طول الصندوق", icon:"1.349", gen:boxRuleGen},
-  {id:"35_five", title:"مفاهيم الأعداد الخمسة", icon:"5", gen:fiveNumConceptGen},
-  {id:"35_mcq", title:"سؤال نظري", icon:"؟", gen:mcq35Gen}
+  {id:"q1_tf",          title:`طµط­ ط£ظ… ط®ط·ط£`,                 icon:"âœ“", gen: tfStatementsGen},
+  {id:"q2_q1_even",     title:`ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط£ظˆظ„ (n ط²ظˆط¬ظٹ)`,     icon:"آ¼", gen: quartileEvenGen},
+  {id:"q3_q3_odd",      title:`ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط«ط§ظ„ط« (n ظپط±ط¯ظٹ)`,    icon:"آ¾", gen: quartileOddGen},
+  {id:"q4_percentile",  title:`ط§ظ„ظ…ط¦ظٹظ† P_r`,                icon:"P", gen: percentileGen},
+  {id:"q5_interpret",   title:`طھظپط³ظٹط± ط§ظ„ظ…ط¦ظٹظ†`,              icon:"â—‰", gen: interpretPercentileGen},
+  {id:"q6_smart",       title:`ط­ط¬ظ… ط§ظ„ط¹ظٹظ†ط© `,                  icon:"n", gen: smartNfromQ1Gen}
 ];
+
 function shuffleInPlace(arr, r){
   for(let i=arr.length-1;i>0;i--){
     const j = Math.floor(r()*(i+1));
@@ -3022,42 +3587,40 @@ let BANK = buildBank();
 if(BANK.length===0){ console.error('BANK is empty'); }
 
 
-function markDirty(qid){ state.dirty[qid]=true; saveState(); renderSidebar(); }
 function renderSidebar(){
   const list=document.getElementById("qList");
   list.innerHTML="";
   const filter = state.sidebarFilter || "all";
-  const toShow = BANK.map((q,i)=>({q,i})).filter(({q,i})=>{
-    if(filter==="incomplete") return !isQuestionDone(q);
-    return true;
-  });
-  toShow.forEach(({q,i})=>{
+  BANK.forEach((q,i)=>{
     const st = getQuestionStatus(q);
+    if(filter==="incomplete" && (st==="completed_correct"||st==="completed_wrong")) return;
+
     let dotClass = "";
     if(st==="completed_correct") dotClass = "done";
     else if(st==="completed_wrong") dotClass = "bad";
     else if(st==="in_progress") dotClass = "progress";
+
     let badge;
-    if(st==="completed_correct") badge = el("span",{class:"badge good"},["مكتمل"]);
-    else if(st==="completed_wrong") badge = el("span",{class:"badge bad"},["مكتمل"]);
-    else badge = el("span",{class:"badge warn"},["غير مكتمل"]);
-    const unsaved = state.dirty[q.id];
+    if(st==="completed_correct"){
+      badge = el("span",{class:"badge good"},["ظ…ظƒطھظ…ظ„"]);
+    }else if(st==="completed_wrong"){
+      badge = el("span",{class:"badge bad"},["ظ…ظƒطھظ…ظ„"]);
+    }else{
+      badge = el("span",{class:"badge warn"},["ط؛ظٹط± ظ…ظƒطھظ…ظ„"]);
+    }
+
+    const hasDirty = state.dirty && state.dirty[q.id];
     const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{state.currentIndex=i;saveState();renderAll();}},[
       el("div",{class:"left"},[
-        unsaved ? el("div",{class:"unsaved-dot", title:"إجابة غير محفوظة"},[]) : null,
-        el("div",{class:"dot "+dotClass}),
+        hasDirty ? el("div",{class:"unsaved-dot"}) : el("div",{class:"dot "+dotClass}),
         el("div",{},[
-          el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
+          el("div",{class:"name"},[`ط³ط¤ط§ظ„ ${i+1}: ${q.title}`]),
           el("div",{style:"margin-top:6px"},[badge])
         ])
       ]),
       el("div",{class:"icon"},[q.icon])
-    ].filter(Boolean));
+    ]);
     list.appendChild(item);
-  });
-  ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{
-    const btn=document.getElementById(id);
-    if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
   });
   typesetMath(list);
 }
@@ -3071,12 +3634,12 @@ function setProgress(){
   if(qCountEl) qCountEl.textContent = BANK.length;
   if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
   const visibleCompleted = window.__examRunning ? completed : 0;
-  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
+  document.getElementById("progressText").textContent = `طھظ… ط­ظ„ ${visibleCompleted} ط³ط¤ط§ظ„`;
   document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
 
   const pill = document.getElementById("statusPill");
   const doneAll = (completed===BANK.length);
-  pill.textContent = doneAll ? "مكتمل" : "غير مكتمل";
+  pill.textContent = doneAll ? "ظ…ظƒطھظ…ظ„" : "ط؛ظٹط± ظ…ظƒطھظ…ظ„";
   pill.className = "pill" + (doneAll ? "" : " warn");
 
   const showBtn = document.getElementById("showResultsBtn");
@@ -3101,10 +3664,10 @@ function renderMain(){
       el("div",{},[q.title])
     ]),
     el("div",{class:"qmeta"},[
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["تبديل السؤال"]),
-      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["إظهار النتيجة"]),
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["السابق"]),
-      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["التالي"])
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["طھط¨ط¯ظٹظ„ ط§ظ„ط³ط¤ط§ظ„"]),
+      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["ط¥ط¸ظ‡ط§ط± ط§ظ„ظ†طھظٹط¬ط©"]),
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["ط§ظ„ط³ط§ط¨ظ‚"]),
+      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["ط§ظ„طھط§ظ„ظٹ"])
     ])
   ]);
 
@@ -3113,7 +3676,7 @@ function renderMain(){
     const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
     let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
     if(lvl.trim().toLowerCase()==="undefined") lvl="";
-    const tagClass=(lvl==="سهل")?"easy":(lvl==="متوسط"?"med":(lvl==="صعب"?"hard":""));
+    const tagClass=(lvl==="ط³ظ‡ظ„")?"easy":(lvl==="ظ…طھظˆط³ط·"?"med":(lvl==="طµط¹ط¨"?"hard":""));
     const branchCard=el("div",{class:"branch"},[]);
     const head=el("div",{class:"branchHead"},[
       ...(lvl ? [el("span",{class:`btag ${tagClass||"easy"}`},[lvl])] : [])
@@ -3135,45 +3698,67 @@ function renderMain(){
 
       let input;
       if(pp.type==="mcq"){
-        input=el("select",{},[
-          el("option",{value:""},["اختر..."]),
-          ...(pp.options||[]).map(op=>el("option",{value:op},[op]))
-        ]);
+        // ط§ط®طھظٹط§ط± ظ…طھط¹ط¯ط¯ ط¨ط£ط³ظ„ظˆط¨ "ط¶ط¹ ط¯ط§ط¦ط±ط©" (Radio)
+        input=el("div",{class:"radioGroup"},[]);
         input.setAttribute("data-qid", q.id);
         input.setAttribute("data-bi", String(bi));
         input.setAttribute("data-key", pp.key);
-        input.value = stored ?? "";
-        input.onchange=()=>{ markDirty(q.id); };
+
+        const name = `mcq_${q.id}_${bi}_${pp.key}`;
+        const opts = (pp.options||[]);
+        const letters = ["ط£","ط¨","ط¬","ط¯","ظ‡ظ€","ظˆ","ط²"];
+        opts.forEach((op, oi)=>{
+          const id = `${name}_${oi}`;
+          const radio = el("input",{type:"radio", name, id, value:op},[]);
+          if((stored ?? "") === op) radio.checked = true;
+          radio.onchange=()=>{ /* ظ„ط§ ظٹطھظ… ط§ظ„ط­ظپط¸ ط¥ظ„ط§ ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط© */ };
+          radio.addEventListener("change", ()=>_clearMarks(input));
+          const prefix = opts.length<=4 ? (letters[oi]||String(oi+1)) + ") " : (String(oi+1)+") ");
+          const txt = prefix + op;
+          const label = el("label",{class:"radioOpt", for:id},[
+            radio,
+            el("span",{class:"radioText"},[txt])
+          ]);
+          input.appendChild(label);
+        });
       }else if(pp.type==="text"){
         input=el("textarea",{placeholder:pp.placeholder||""},[]);
         input.setAttribute("data-qid", q.id);
         input.setAttribute("data-bi", String(bi));
         input.setAttribute("data-key", pp.key);
         input.value = stored ?? "";
-        input.oninput=()=>{ markDirty(q.id); };
+        input.oninput=()=>{ /* ظ„ط§ ظٹطھظ… ط§ظ„ط­ظپط¸ ط¥ظ„ط§ ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط© */ };
       }else{
         input=el("input",{type:"number", step:pp.step||"1", placeholder:pp.placeholder||""},[]);
         input.setAttribute("data-qid", q.id);
         input.setAttribute("data-bi", String(bi));
         input.setAttribute("data-key", pp.key);
         input.value = stored ?? "";
-        input.oninput=()=>{ markDirty(q.id); };
+        input.oninput=()=>{ /* ظ„ط§ ظٹطھظ… ط§ظ„ط­ظپط¸ ط¥ظ„ط§ ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط© */ };
       }
 
       inputWrap.appendChild(input);
-      // مسح التلوين عند التعديل (التقييم يتم عند الضغط على زر "حفظ الإجابة")
-      input.addEventListener("input", ()=>_clearMarks(input));
-      input.addEventListener("change", ()=>_clearMarks(input));
-
-      // قفل الحقول بعد الحفظ النهائي (صحيح أو بعد إظهار الإجابة الصحيحة)
-      if(_isBranchLocked(q.id, bi)){
-        input.disabled = true;
+      // ظ…ط³ط­ ط§ظ„طھظ„ظˆظٹظ† ط¹ظ†ط¯ ط§ظ„طھط¹ط¯ظٹظ„ (ط§ظ„طھظ‚ظٹظٹظ… ظٹطھظ… ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط²ط± "ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط©")
+      if(pp.type==="mcq"){
+        // طھظ…طھ ط¥ط¶ط§ظپط© ظ…ط³طھظ…ط¹ ط§ظ„طھط؛ظٹظٹط± ظ„ظ„ط±ط§ط¯ظٹظˆ ط£ط¹ظ„ط§ظ‡ ظ„ظ…ط³ط­ ط§ظ„طھظ„ظˆظٹظ†
+      }else{
+        input.addEventListener("input", ()=>_clearMarks(input));
+        input.addEventListener("change", ()=>_clearMarks(input));
       }
 
-      // إرشاد التقريب للقيم النسبية/المئوية
+      // ظ‚ظپظ„ ط§ظ„ط­ظ‚ظˆظ„ ط¨ط¹ط¯ ط§ظ„ط­ظپط¸ ط§ظ„ظ†ظ‡ط§ط¦ظٹ (طµط­ظٹط­ ط£ظˆ ط¨ط¹ط¯ ط¥ط¸ظ‡ط§ط± ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©)
+      if(_isBranchLocked(q.id, bi)){
+        if(pp.type==="mcq"){
+          input.querySelectorAll('input[type="radio"]').forEach(r=>r.disabled=true);
+        }else{
+          input.disabled = true;
+        }
+      }
+
+      // ط¥ط±ط´ط§ط¯ ط§ظ„طھظ‚ط±ظٹط¨ ظ„ظ„ظ‚ظٹظ… ط§ظ„ظ†ط³ط¨ظٹط©/ط§ظ„ظ…ط¦ظˆظٹط©
       const lbl = (pp.label||"");
-      if(pp.type==="number" && (lbl.includes("نسبي") || lbl.includes("مئوية"))){
-        const txt = lbl.includes("مئوية") ? "قرّب إلى منزلتين عشريتين (بدون علامة %)." : "قرّب إلى منزلتين عشريتين.";
+      if(pp.type==="number" && (lbl.includes("ظ†ط³ط¨ظٹ") || lbl.includes("ظ…ط¦ظˆظٹط©"))){
+        const txt = lbl.includes("ظ…ط¦ظˆظٹط©") ? "ظ‚ط±ظ‘ط¨ ط¥ظ„ظ‰ ظ…ظ†ط²ظ„طھظٹظ† ط¹ط´ط±ظٹطھظٹظ† (ط¨ط¯ظˆظ† ط¹ظ„ط§ظ…ط© %)." : "ظ‚ط±ظ‘ط¨ ط¥ظ„ظ‰ ظ…ظ†ط²ظ„طھظٹظ† ط¹ط´ط±ظٹطھظٹظ†.";
         inputWrap.appendChild(el("div",{class:"hint"},[txt]));
       }
       row.appendChild(label);
@@ -3182,15 +3767,15 @@ function renderMain(){
     });
 
     const locked = _isBranchLocked(q.id, bi);
-    const saveBtn = el("button",{class:"btn primary small"},[locked?"محفوظ":"حفظ الإجابة"]);
+    const saveBtn = el("button",{class:"btn primary small"},[locked?"ظ…ط­ظپظˆط¸":"ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط©"]);
     saveBtn.disabled = locked;
     saveBtn.onclick = ()=>saveBranchAnswer(q, b, bi, branchCard, saveBtn);
 
     const btns=el("div",{class:"branchBtns"},[
       saveBtn,
-      el("button",{class:"btn small ai-help-btn", onclick:()=>showHelp(q, b), title:"مساعد ذكاء اصطناعي"},[
+      el("button",{class:"btn small ai-help-btn", onclick:()=>showHelp(q, b), title:"ظ…ط³ط§ط¹ط¯ ط°ظƒط§ط، ط§طµط·ظ†ط§ط¹ظٹ"},[
         el("span",{class:"ai-help-glyph","aria-hidden":"true"},["âœ¦"]),
-        "مساعدة"
+        "ظ…ط³ط§ط¹ط¯ط©"
       ])
     ]);
 
@@ -3215,11 +3800,11 @@ function showExplain(q, b){
     <div style="font-weight:900;margin-bottom:8px">${escapeHtml(q.title)} â€” (${escapeHtml(lvl)})</div>
     ${list ? `<ul style="margin:0;padding-right:18px">${list}</ul>` : ``}
   `;
-  openModal("شرح السؤال", html);
+  openModal("ط´ط±ط­ ط§ظ„ط³ط¤ط§ظ„", html);
 }
 
 function showMethod(q, b){
-  const items = (b.method||["اتبع الخطوات المناسبة للحل."]).map(s=>`<li><div class="methodLine">${s}</div></li>`).join("");
+  const items = (b.method||["ط§طھط¨ط¹ ط§ظ„ط®ط·ظˆط§طھ ط§ظ„ظ…ظ†ط§ط³ط¨ط© ظ„ظ„ط­ظ„."]).map(s=>`<li><div class="methodLine">${s}</div></li>`).join("");
   const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
   let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
   if(lvl.trim().toLowerCase()==="undefined") lvl="";
@@ -3228,7 +3813,7 @@ function showMethod(q, b){
     <div class="methodHead">${head}</div>
     <ul class="methodList">${items}</ul>
   `;
-  openModal("طريقة الحل", html);
+  openModal("ط·ط±ظٹظ‚ط© ط§ظ„ط­ظ„", html);
 }
 
 function showHelp(q, b){
@@ -3240,18 +3825,18 @@ function showHelp(q, b){
   if(level.trim().toLowerCase()==="undefined") level="";
   const explainHtml = (b.explain && b.explain.length)
     ? `<ul style="margin:0;padding-right:18px;line-height:2">${b.explain.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المطلوب قبل التعويض.</div>";
+    : "<div style='color:var(--muted);font-weight:700'>ط§ط¨ط¯ط£ ط¨طھط­ط¯ظٹط¯ ط§ظ„ظ…ط¹ط·ظٹط§طھ ط«ظ… ظ†ظˆط¹ ط§ظ„ظ…ط·ظ„ظˆط¨ ظ‚ط¨ظ„ ط§ظ„طھط¹ظˆظٹط¶.</div>";
   const formulaHtml = (b.formula && b.formula.length)
-    ? `<div style="font-weight:900;margin:12px 0 6px">القانون/ملاحظات</div><ul style="margin:0;padding-right:18px;line-height:2">${b.formula.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
-  openModal("مساعدة", `
+    ? `<div style="font-weight:900;margin:12px 0 6px">ط§ظ„ظ‚ط§ظ†ظˆظ†/ظ…ظ„ط§ط­ط¸ط§طھ</div><ul style="margin:0;padding-right:18px;line-height:2">${b.formula.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>ط§ظƒطھط¨ ط§ظ„ظ‚ط§ظ†ظˆظ† ط§ظ„ظ…ظ†ط§ط³ط¨ ط«ظ… ط¹ظˆظ‘ط¶ ط®ط·ظˆط© ط®ط·ظˆط©.</div>";
+  openModal("ظ…ط³ط§ط¹ط¯ط©", `
     <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">${title}${level?` <span style="font-size:13px;color:var(--muted)">â€” (${escapeHtml(level)})</span>`:""}</div>
     <div style="background:var(--brand-light);border:1px solid rgba(3,105,161,.22);border-radius:14px;padding:14px 16px;margin-bottom:10px">
-      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">الفكرة</div>
+      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">ط§ظ„ظپظƒط±ط©</div>
       ${explainHtml}
     </div>
     <div style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px 16px">
-      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">القانون</div>
+      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">ط§ظ„ظ‚ط§ظ†ظˆظ†</div>
       ${formulaHtml}
     </div>
   `);
@@ -3266,9 +3851,32 @@ function _checkPart(part, studentRaw, correct){
   return {ok: nearlyEqual(Number(raw), Number(correct), 1e-2), empty:false};
 }
 
+function _getInputValue(part, node){
+  if(!node) return "";
+  if(part && part.type==="mcq"){
+    if(node.tagName && node.tagName.toLowerCase()==="select"){
+      return (node.value ?? "").toString().trim();
+    }
+    const checked = node.querySelector ? node.querySelector('input[type="radio"]:checked') : null;
+    return checked ? (checked.value ?? "").toString().trim() : "";
+  }
+  return (node.value ?? "").toString().trim();
+}
+
+
+
 function _lockBranchInputs(branchCard, qid, bi){
   const nodes = branchCard.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key]`);
-  nodes.forEach(n=>{ n.disabled = true; });
+  nodes.forEach(n=>{
+    // ط¹ظ†ط§طµط± ط§ظ„ط¥ط¯ط®ط§ظ„ ط§ظ„ط¹ط§ط¯ظٹط©
+    if("disabled" in n) n.disabled = true;
+    // ظپظٹ ط­ط§ظ„ط© ط§ط®طھظٹط§ط± ظ…طھط¹ط¯ط¯ (radioGroup) ط£ظˆ ط£ظٹ ط­ط§ظˆظٹط©طŒ ط§ظ‚ظپظ„ ظ…ط§ ط¨ط¯ط§ط®ظ„ظ‡ط§ ط£ظٹط¶ظ‹ط§
+    if(n.querySelectorAll){
+      n.querySelectorAll("input,select,textarea,button").forEach(ch=>{
+        if("disabled" in ch) ch.disabled = true;
+      });
+    }
+  });
 }
 
 function _showCorrectModal(q, b, wrongItems){
@@ -3278,7 +3886,7 @@ function _showCorrectModal(q, b, wrongItems){
   if(lvl.trim().toLowerCase()==="undefined") lvl="";
 
   const methodItems = (b.method && b.method.length)
-    ? `<div style="margin:10px 0 6px;font-weight:900">طريقة الحل</div>
+    ? `<div style="margin:10px 0 6px;font-weight:900">ط·ط±ظٹظ‚ط© ط§ظ„ط­ظ„</div>
        <ul style="margin:0;padding-right:18px">${b.method.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
     : "";
 
@@ -3291,24 +3899,24 @@ function _showCorrectModal(q, b, wrongItems){
   const html = `
     <div style="font-weight:900;margin-bottom:6px">${title}${lvl?` â€” (${escapeHtml(lvl)})`:""}</div>
     ${methodItems}
-    <div style="margin:10px 0 6px;font-weight:900">الإجابة الصحيحة</div>
+    <div style="margin:10px 0 6px;font-weight:900">ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©</div>
     <ul style="margin:0;padding-right:18px">${list}</ul>
-    <div style="margin-top:10px;color:#5b6b7a;font-weight:800">تم إظهار الإجابة الصحيحة. لتجنّب حفظ الحل، يمكنك توليد نسخة جديدة.</div>
+    <div style="margin-top:10px;color:#5b6b7a;font-weight:800">طھظ… ط¥ط¸ظ‡ط§ط± ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©. ظ„طھط¬ظ†ظ‘ط¨ ط­ظپط¸ ط§ظ„ط­ظ„طŒ ظٹظ…ظƒظ†ظƒ طھظˆظ„ظٹط¯ ظ†ط³ط®ط© ط¬ط¯ظٹط¯ط©.</div>
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button>
-      <button class="btn small" onclick="closeModal()">لاحقًا</button>
+      <button class="btn primary" id="regenAfterShowAnswerBtn">طھظˆظ„ظٹط¯ ط³ط¤ط§ظ„ ط¬ط¯ظٹط¯</button>
+      <button class="btn small" onclick="closeModal()">ظ„ط§ط­ظ‚ظ‹ط§</button>
     </div>
   `;
-  openModal("الإجابة الصحيحة", html);
+  openModal("ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„طµط­ظٹط­ط©", html);
   const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
   if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
 }
 
 function _promptShowCorrectModal(q, b, wrongItems){
-  openModal("انتهت المحاولات", `
-    <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
-    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
-    <button class="btn primary" id="showAnswerAfterAttemptsBtn">إظهار الإجابة</button>
+  openModal("ط§ظ†طھظ‡طھ ط§ظ„ظ…ط­ط§ظˆظ„ط§طھ", `
+    <div style="font-weight:900;margin-bottom:10px">ط§ظ†طھظ‡طھ ظ…ط­ط§ظˆظ„ط§طھ ظ‡ط°ط§ ط§ظ„ط³ط¤ط§ظ„.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">ظٹظ…ظƒظ†ظƒ ط§ظ„ط¢ظ† ط¹ط±ط¶ ط§ظ„ط­ظ„ ط§ظ„ظƒط§ظ…ظ„ ط¨ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط²ط± ط§ظ„طھط§ظ„ظٹ.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">ط¥ط¸ظ‡ط§ط± ط§ظ„ط¥ط¬ط§ط¨ط©</button>
   `);
   const btn = document.getElementById("showAnswerAfterAttemptsBtn");
   if(btn) btn.onclick = ()=>_showCorrectModal(q, b, wrongItems);
@@ -3326,7 +3934,7 @@ function saveBranchAnswer(q, b, bi, branchCard, saveBtn){
     const key = p.key;
     const inp = branchCard.querySelector(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${key}"]`);
     if(!inp) return;
-    const student = (inp.value ?? "").toString();
+    const student = _getInputValue(p, inp);
     const correct = b.answers ? b.answers[key] : undefined;
     const chk = _checkPart(p, student, correct);
     if(chk.empty) hasEmpty = true;
@@ -3334,17 +3942,16 @@ function saveBranchAnswer(q, b, bi, branchCard, saveBtn){
   });
 
   if(hasEmpty){
-    openModal("تنبيه", `<div style="font-weight:900">أكمل إدخال الإجابة ثم اضغط زر حفظ الإجابة.</div>`);
+    openModal("طھظ†ط¨ظٹظ‡", `<div style="font-weight:900">ط£ظƒظ…ظ„ ط¥ط¯ط®ط§ظ„ ط§ظ„ط¥ط¬ط§ط¨ط© ط«ظ… ط§ط¶ط؛ط· ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط©.</div>`);
     return;
   }
 
-  // تخزين الإجابة عند الضغط على زر الحفظ فقط (الانتقال لا يسبب تخزينًا)
+  // طھط®ط²ظٹظ† ط§ظ„ط¥ط¬ط§ط¨ط© ط¹ظ†ط¯ ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط²ط± ط§ظ„ط­ظپط¸ ظپظ‚ط· (ط§ظ„ط§ظ†طھظ‚ط§ظ„ ظ„ط§ ظٹط³ط¨ط¨ طھط®ط²ظٹظ†ظ‹ط§)
   if(!state.answers[qid]) state.answers[qid] = {};
   if(!state.answers[qid][bi]) state.answers[qid][bi] = {};
   results.forEach(r=>{
-    state.answers[qid][bi][r.key] = (r.inp && r.inp.value!=null) ? r.inp.value : "";
+    state.answers[qid][bi][r.key] = _getInputValue(r.part, r.inp);
   });
-  delete state.dirty[qid];
   saveState();
 
   const wrong = results.filter(r=>!r.ok);
@@ -3449,7 +4056,7 @@ function tryShowResults(){
   syncAllInputs();
   const p = setProgress();
   if(!p.doneAll){
-    if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
+    if(!confirm("ظ‡ظ†ط§ظƒ ط£ط³ط¦ظ„ط© ظ„ظ… طھظڈط¬ط¨ ط¹ظ†ظ‡ط§. ظ‡ظ„ طھط±ظٹط¯ ط§ظ„ظ…طھط§ط¨ط¹ط©طں")) return;
   }
   showResults();
 }
@@ -3461,9 +4068,9 @@ window.__goToQ = function(idx){
 }
 
 
-function syncAllInlineInputs(){ /* لا يتم تخزين الإجابات إلا عبر زر حفظ الإجابة */ }
+function syncAllInlineInputs(){ /* ظ„ط§ ظٹطھظ… طھط®ط²ظٹظ† ط§ظ„ط¥ط¬ط§ط¨ط§طھ ط¥ظ„ط§ ط¹ط¨ط± ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط© */ }
 
-function syncAllInputs(){ /* لا يتم تخزين الإجابات إلا عبر زر حفظ الإجابة */ }
+function syncAllInputs(){ /* ظ„ط§ ظٹطھظ… طھط®ط²ظٹظ† ط§ظ„ط¥ط¬ط§ط¨ط§طھ ط¥ظ„ط§ ط¹ط¨ط± ط²ط± ط­ظپط¸ ط§ظ„ط¥ط¬ط§ط¨ط© */ }
 
 
 function showResults(){
@@ -3473,18 +4080,14 @@ function showResults(){
   const s = computeScore();
   const pct = Math.round((s.correct/s.total)*1000)/10;
 
-  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
-  const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
   const header = `
     <div class="scoreCard">
       <div>
-        <div class="scoreBig">النتيجة: ${s.correct} من ${s.total} — ${pct}%</div>
-        <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
-        <div class="scoreSub">توضيح: تم تصحيح كل جزء بشكل مستقل.</div>
+        <div class="scoreBig">ط§ظ„ظ†طھظٹط¬ط©: ${s.correct} ظ…ظ† ${s.total} â€” ${pct}%</div>
+        <div class="scoreSub">طھظˆط¶ظٹط­: طھظ… طھطµط­ظٹط­ ظƒظ„ ط¬ط²ط، ط¨ط´ظƒظ„ ظ…ط³طھظ‚ظ„.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
-        <button class="btn small" onclick="resetAll(); closeModal();">إعادة تعيين</button>
+        <button class="btn small" onclick="resetAll(); closeModal();">ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ†</button>
       </div>
     </div>
   `;
@@ -3496,8 +4099,8 @@ function showResults(){
     let card = `
       <div class="resultCard">
         <div class="rt">
-          <div style="font-weight:900">سؤال ${i+1}: ${escapeHtml(q.title||"")}</div>
-          <span class="tag ${isCorrect?"good":"bad"}">${isCorrect?"صحيح":"غير صحيح"}</span>
+          <div style="font-weight:900">ط³ط¤ط§ظ„ ${i+1}: ${escapeHtml(q.title||"")}</div>
+          <span class="tag ${isCorrect?"good":"bad"}">${isCorrect?"طµط­ظٹط­":"ط؛ظٹط± طµط­ظٹط­"}</span>
         </div>
     `;
 
@@ -3512,7 +4115,7 @@ function showResults(){
       (b.parts||[]).forEach(p=>{
         const student = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][p.key] : "";
         const correctVal = b.answers[p.key];
-        const need2 = (p.label||"").includes("نسبي") || (p.label||"").includes("مئوية");
+        const need2 = (p.label||"").includes("ظ†ط³ط¨ظٹ") || (p.label||"").includes("ظ…ط¦ظˆظٹط©");
 
         let studentText = "â€”";
         if((student??"").toString().trim()!==""){
@@ -3531,9 +4134,9 @@ function showResults(){
 
         card += `
           <div class="partRow">
-            <div><b>الجزء:</b> ${escapeHtml(p.label||p.key||"")}</div>
-            <div><b>إجابتك:</b> ${studentText}</div>
-            <div><b>الصحيح:</b> ${correctText} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
+            <div><b>ط§ظ„ط¬ط²ط،:</b> ${escapeHtml(p.label||p.key||"")}</div>
+            <div><b>ط¥ط¬ط§ط¨طھظƒ:</b> ${studentText}</div>
+            <div><b>ط§ظ„طµط­ظٹط­:</b> ${correctText} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"âœ“":"أ—"}</span></div>
           </div>
         `;
       });
@@ -3545,36 +4148,45 @@ function showResults(){
 
   const footer = `
     <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start">
-      <button class="btn primary" onclick="closeModal()">إغلاق</button>
+      <button class="btn primary" onclick="window.print()">ط·ط¨ط§ط¹ط© ط§ظ„ظ†طھظٹط¬ط©</button>
+      <button class="btn primary" onclick="closeModal()">ط¥ط؛ظ„ط§ظ‚</button>
     </div>
   `;
 
-  openModal("النتيجة", `<div class="resultWrap">${header}${qCards}${footer}</div>`);
+  openModal("ط§ظ„ظ†طھظٹط¬ط©", `<div class="resultWrap">${header}${qCards}${footer}</div>`);
 }
 
 
 document.getElementById("nextBtnSide").onclick = next;
-document.getElementById("showResultsBtn").onclick = tryShowResults;
-document.getElementById("resetBtn").onclick = function(){ if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) resetAll(); };
+var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick = function(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen().then(function(){ if(_fsBtn) _fsBtn.textContent = "\u062e\u0631\u0648\u062c"; }); } else { document.exitFullscreen(); if(_fsBtn) _fsBtn.textContent = "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"; } };
+document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "ط®ط±ظˆط¬" : "ظ…ظ„ط، ط§ظ„ط´ط§ط´ط©"; });
 var _fsb=document.getElementById("fontSmallBtn"); if(_fsb) _fsb.onclick = ()=>{ state.fontSize = Math.max(-1, (state.fontSize||0)-1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fbb=document.getElementById("fontBigBtn"); if(_fbb) _fbb.onclick = ()=>{ state.fontSize = Math.min(1, (state.fontSize||0)+1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
-var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick = function(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen().then(function(){ if(_fsBtn) _fsBtn.textContent = "\u062e\u0631\u0648\u062c"; }); } else { document.exitFullscreen(); if(_fsBtn) _fsBtn.textContent = "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"; } };
-document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "خروج" : "ملء الشاشة"; });
-["filterAllBtn","filterIncompleteBtn"].forEach(id=>{ const b = document.getElementById(id); if(b) b.onclick = ()=>{ state.sidebarFilter = b.getAttribute("data-filter"); saveState(); renderSidebar(); }; });
-(function(){ const fs = state.fontSize; if(fs===1) document.body.classList.add("font-lg"); else if(fs===-1) document.body.classList.add("font-sm"); })();
+[["filterAllBtn","all"],["filterIncompleteBtn","incomplete"]].forEach(([id,f])=>{ const b=document.getElementById(id); if(b) b.onclick=()=>{ state.sidebarFilter=f; saveState(); document.querySelectorAll(".sidebar-filter .btn.small").forEach(x=>x.classList.remove("primary")); if(b) b.classList.add("primary"); renderSidebar(); }; });
+if(state.sidebarFilter==="all") document.getElementById("filterAllBtn")?.classList.add("primary"); else document.getElementById("filterIncompleteBtn")?.classList.add("primary");
+document.getElementById("showResultsBtn").onclick = tryShowResults;
+document.getElementById("resetBtn").onclick = function(){ if(confirm("ظ‡ظ„ طھط±ظٹط¯ ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ† ط§ظ„ط§ط®طھط¨ط§ط±طں ط³ظٹطھظ… ط­ط°ظپ ط¬ظ…ظٹط¹ ط§ظ„ط¥ط¬ط§ط¨ط§طھ.")) resetAll(); };
 
 function renderAll(){ renderMain(); renderSidebar(); setProgress(); }
-window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); renderAll(); if(window.__examRunning) startTimer(); else showIntroModal(); });/* Codex Adaptive Mastery Start */
+window.addEventListener("load", ()=>{
+  window.__examRunning = isExamStarted();
+  document.body.classList.remove("font-sm","font-lg");
+  if(state.fontSize===1) document.body.classList.add("font-lg");
+  else if(state.fontSize===-1) document.body.classList.add("font-sm");
+  renderAll();
+  if(window.__examRunning) startTimer();
+  else showIntroModal();
+});/* Codex Adaptive Mastery Start */
 (function(){
-  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_5";
-  const MASTERY_VERSION = "chapter3_mastery_3_5_v2";
-  const CORE_ORDER = ["35_shape_type","35_pearson","35_box"];
-  const ALL_ORDER = ["35_shape_type","35_pearson","35_moment","35_kurtosis","35_box","35_rule","35_five","35_mcq"];
-  const QUESTION_PROFILES = {"35_shape_type":{"skills":["shape","modes"],"remediation":["35_mcq"],"advancement":["35_pearson"]},"35_pearson":{"skills":["skewness","pearson"],"remediation":["35_shape_type"],"advancement":["35_moment"]},"35_moment":{"skills":["skewness","moment"],"remediation":["35_pearson"],"advancement":["35_kurtosis"]},"35_kurtosis":{"skills":["kurtosis","shape"],"remediation":["35_moment"],"advancement":[]},"35_box":{"skills":["boxplot","five-number"],"remediation":["35_five","35_rule"],"advancement":[]},"35_rule":{"skills":["boxplot","rule"],"remediation":["35_box","35_five"],"advancement":[]},"35_five":{"skills":["five-number","quartile"],"remediation":["35_box"],"advancement":["35_rule"]},"35_mcq":{"skills":["concept","shape"],"remediation":["35_shape_type"],"advancement":[]}};
+  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_2";
+  const MASTERY_VERSION = "chapter3_mastery_3_2_v2";
+  const CORE_ORDER = ["q1_tf","q2_q1_even","q4_percentile"];
+  const ALL_ORDER = ["q1_tf","q2_q1_even","q3_q3_odd","q4_percentile","q5_interpret","q6_smart"];
+  const QUESTION_PROFILES = {"q1_tf":{"skills":["quartile","concept"],"remediation":["q2_q1_even","q3_q3_odd"],"advancement":[]},"q2_q1_even":{"skills":["q1","quartile","even"],"remediation":["q1_tf"],"advancement":["q3_q3_odd"]},"q3_q3_odd":{"skills":["q3","quartile","odd"],"remediation":["q2_q1_even"],"advancement":["q4_percentile"]},"q4_percentile":{"skills":["percentile","position"],"remediation":["q2_q1_even","q3_q3_odd"],"advancement":["q5_interpret"]},"q5_interpret":{"skills":["interpret","percentile"],"remediation":["q4_percentile"],"advancement":[]},"q6_smart":{"skills":["sample-size","position"],"remediation":["q4_percentile"],"advancement":[]}};
   const SUPPORT_LIMIT = 4;
   const READINESS_TO_ADVANCE = 0.74;
   const NEED_SUPPORT_BELOW = 0.62;
-  const AI_ADAPTIVE_KEY = "stat102_3_5_ai_adaptive_v1";
+  const AI_ADAPTIVE_KEY = "stat102_3_2_ai_adaptive_v1";
 
   const originalBuildBank = buildBank;
   const originalRenderSidebar = renderSidebar;
@@ -3887,8 +4499,8 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     modal.innerHTML = `
       <div class="ai-assist-shell" role="dialog" aria-modal="true" aria-labelledby="aiAssistLabel">
         <div class="ai-assist-topbar">
-          <button class="btn small ai-assist-close" type="button" id="aiAssistCloseBtn">إغلاق</button>
-          <div class="ai-assist-topbar-title" id="aiAssistLabel">مساعدة</div>
+          <button class="btn small ai-assist-close" type="button" id="aiAssistCloseBtn">ط¥ط؛ظ„ط§ظ‚</button>
+          <div class="ai-assist-topbar-title" id="aiAssistLabel">ظ…ط³ط§ط¹ط¯ط©</div>
         </div>
         <div class="ai-assist-body" id="aiAssistBody"></div>
       </div>
@@ -3931,67 +4543,67 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     /* Codex prompt-aware safe hints */
     const lower = title.toLowerCase();
     const hints = {
-      q1_mean_raw: ["حدّد عدد القيم أولا ثم اجمعها دون القفز للنتيجة.", "انتبه إلى أن المتوسط يعتمد على كل القيم."],
-      q2_mean_freq: ["تعامل مع كل قيمة مكررة بعدد تكرارها.", "ابدأ بعمودي حاصل الضرب والمجموع الكلي للتكرارات."],
-      q3_mean_group: ["حوّل كل فئة إلى مركزها قبل الحساب.", "استخدم مراكز الفئات مع التكرارات، لا حدود الفئات مباشرة."],
-      q4_median_raw: ["ابدأ بترتيب البيانات تصاعديا.", "افحص هل عدد القيم فردي أم زوجي قبل اختيار موقع الوسيط."],
-      q6_mode_raw: ["ابحث عن القيمة أو الفئة ذات التكرار الأكبر.", "لا تعرض قيمة المنوال قبل تحديد التكرار الأعلى بنفسك."],
-      q7_choose: ["حدّد طبيعة البيانات ووجود القيم المتطرفة قبل اختيار المقياس."],
-      q8_histpoly: ["اقرأ التكرارات من الرسم أو الجدول أولا.", "لا تحدد الفئة المطلوبة قبل بناء التكرار المتجمع أو مقارنة التكرارات."],
-      q1_tf: ["قارن كل عبارة بالتعريف قبل الحكم عليها."],
-      q2_q1_even: ["رتب البيانات أولا ثم حدّد موقع الربيع المطلوب."],
-      q3_q3_odd: ["رتب البيانات أولا ثم انتبه لموقع الربيع الثالث."],
-      q4_percentile: ["حدد رتبة المئين ثم اقرأها من البيانات المرتبة."],
-      q5_interpret: ["ركز على معنى النسبة التي تقع دون المئين."],
-      q6_smart: ["ابدأ من علاقة الموقع ثم اعكسها لإيجاد حجم العينة."],
-      "33_sd_raw": ["ابدأ بحساب مركز البيانات ثم فروق القيم عنه.", "التباين خطوة سابقة للانحراف المعياري."],
-      "33_sd_freq": ["استخدم التكرارات كأوزان عند حساب الفروق.", "احسب المتوسط المناسب قبل التباين."],
-      "33_sd_group": ["استخدم مراكز الفئات عند التعامل مع البيانات المجمعة."],
-      "33_range_raw": ["حدد أكبر قيمة وأصغر قيمة فقط."],
-      "33_range_group": ["اقرأ حدود أول فئة وآخر فئة قبل الحساب."],
-      "33_iqr": ["احسب الربيعين أولا ثم قارن بينهما."],
-      "34_cv_basic": ["حدد المتوسط والانحراف المعياري قبل حساب النسبة."],
-      "34_cv_compare": ["احسب المقياس النسبي لكل مجموعة ثم قارن."],
-      "34_qcd_basic": ["ابدأ بتحديد الربيعين الأول والثالث."],
-      "34_qcd_compare": ["قارن باستخدام النسبة لا الفرق الخام فقط."],
-      "34_z_basic": ["حدد القيمة والمتوسط والانحراف المعياري قبل التعويض."],
-      "34_x_from_z": ["ابدأ من الدرجة المعيارية ثم اعزل القيمة المطلوبة."],
-      "34_z_compare": ["حوّل القيم إلى درجات معيارية قبل المقارنة."],
-      "35_shape_type": ["لاحظ عدد القمم واتجاه الذيل دون استعجال التصنيف."],
-      "35_pearson": ["حدد المتوسط والوسيط والانحراف المعياري قبل حساب الالتواء."],
-      "35_moment": ["ركز على العزم الثالث واتجاه الإشارة."],
-      "35_kurtosis": ["حدد العزم الرابع ثم قارن قيمة التفلطح بالقاعدة المناسبة."],
-      "35_box": ["اقرأ الأعداد الخمسة من المخطط قبل تفسير الشكل."],
-      "35_rule": ["قارن أطوال أجزاء الصندوق والشاربين بصريا."],
-      "35_five": ["استخرج القيم الخمس بالترتيب قبل أي تفسير."]
+      q1_mean_raw: ["ط­ط¯ظ‘ط¯ ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ… ط£ظˆظ„ط§ ط«ظ… ط§ط¬ظ…ط¹ظ‡ط§ ط¯ظˆظ† ط§ظ„ظ‚ظپط² ظ„ظ„ظ†طھظٹط¬ط©.", "ط§ظ†طھط¨ظ‡ ط¥ظ„ظ‰ ط£ظ† ط§ظ„ظ…طھظˆط³ط· ظٹط¹طھظ…ط¯ ط¹ظ„ظ‰ ظƒظ„ ط§ظ„ظ‚ظٹظ…."],
+      q2_mean_freq: ["طھط¹ط§ظ…ظ„ ظ…ط¹ ظƒظ„ ظ‚ظٹظ…ط© ظ…ظƒط±ط±ط© ط¨ط¹ط¯ط¯ طھظƒط±ط§ط±ظ‡ط§.", "ط§ط¨ط¯ط£ ط¨ط¹ظ…ظˆط¯ظٹ ط­ط§طµظ„ ط§ظ„ط¶ط±ط¨ ظˆط§ظ„ظ…ط¬ظ…ظˆط¹ ط§ظ„ظƒظ„ظٹ ظ„ظ„طھظƒط±ط§ط±ط§طھ."],
+      q3_mean_group: ["ط­ظˆظ‘ظ„ ظƒظ„ ظپط¦ط© ط¥ظ„ظ‰ ظ…ط±ظƒط²ظ‡ط§ ظ‚ط¨ظ„ ط§ظ„ط­ط³ط§ط¨.", "ط§ط³طھط®ط¯ظ… ظ…ط±ط§ظƒط² ط§ظ„ظپط¦ط§طھ ظ…ط¹ ط§ظ„طھظƒط±ط§ط±ط§طھطŒ ظ„ط§ ط­ط¯ظˆط¯ ط§ظ„ظپط¦ط§طھ ظ…ط¨ط§ط´ط±ط©."],
+      q4_median_raw: ["ط§ط¨ط¯ط£ ط¨طھط±طھظٹط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ طھطµط§ط¹ط¯ظٹط§.", "ط§ظپط­طµ ظ‡ظ„ ط¹ط¯ط¯ ط§ظ„ظ‚ظٹظ… ظپط±ط¯ظٹ ط£ظ… ط²ظˆط¬ظٹ ظ‚ط¨ظ„ ط§ط®طھظٹط§ط± ظ…ظˆظ‚ط¹ ط§ظ„ظˆط³ظٹط·."],
+      q6_mode_raw: ["ط§ط¨ط­ط« ط¹ظ† ط§ظ„ظ‚ظٹظ…ط© ط£ظˆ ط§ظ„ظپط¦ط© ط°ط§طھ ط§ظ„طھظƒط±ط§ط± ط§ظ„ط£ظƒط¨ط±.", "ظ„ط§ طھط¹ط±ط¶ ظ‚ظٹظ…ط© ط§ظ„ظ…ظ†ظˆط§ظ„ ظ‚ط¨ظ„ طھط­ط¯ظٹط¯ ط§ظ„طھظƒط±ط§ط± ط§ظ„ط£ط¹ظ„ظ‰ ط¨ظ†ظپط³ظƒ."],
+      q7_choose: ["ط­ط¯ظ‘ط¯ ط·ط¨ظٹط¹ط© ط§ظ„ط¨ظٹط§ظ†ط§طھ ظˆظˆط¬ظˆط¯ ط§ظ„ظ‚ظٹظ… ط§ظ„ظ…طھط·ط±ظپط© ظ‚ط¨ظ„ ط§ط®طھظٹط§ط± ط§ظ„ظ…ظ‚ظٹط§ط³."],
+      q8_histpoly: ["ط§ظ‚ط±ط£ ط§ظ„طھظƒط±ط§ط±ط§طھ ظ…ظ† ط§ظ„ط±ط³ظ… ط£ظˆ ط§ظ„ط¬ط¯ظˆظ„ ط£ظˆظ„ط§.", "ظ„ط§ طھط­ط¯ط¯ ط§ظ„ظپط¦ط© ط§ظ„ظ…ط·ظ„ظˆط¨ط© ظ‚ط¨ظ„ ط¨ظ†ط§ط، ط§ظ„طھظƒط±ط§ط± ط§ظ„ظ…طھط¬ظ…ط¹ ط£ظˆ ظ…ظ‚ط§ط±ظ†ط© ط§ظ„طھظƒط±ط§ط±ط§طھ."],
+      q1_tf: ["ظ‚ط§ط±ظ† ظƒظ„ ط¹ط¨ط§ط±ط© ط¨ط§ظ„طھط¹ط±ظٹظپ ظ‚ط¨ظ„ ط§ظ„ط­ظƒظ… ط¹ظ„ظٹظ‡ط§."],
+      q2_q1_even: ["ط±طھط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ ط£ظˆظ„ط§ ط«ظ… ط­ط¯ظ‘ط¯ ظ…ظˆظ‚ط¹ ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ظ…ط·ظ„ظˆط¨."],
+      q3_q3_odd: ["ط±طھط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ ط£ظˆظ„ط§ ط«ظ… ط§ظ†طھط¨ظ‡ ظ„ظ…ظˆظ‚ط¹ ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ط«ط§ظ„ط«."],
+      q4_percentile: ["ط­ط¯ط¯ ط±طھط¨ط© ط§ظ„ظ…ط¦ظٹظ† ط«ظ… ط§ظ‚ط±ط£ظ‡ط§ ظ…ظ† ط§ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط±طھط¨ط©."],
+      q5_interpret: ["ط±ظƒط² ط¹ظ„ظ‰ ظ…ط¹ظ†ظ‰ ط§ظ„ظ†ط³ط¨ط© ط§ظ„طھظٹ طھظ‚ط¹ ط¯ظˆظ† ط§ظ„ظ…ط¦ظٹظ†."],
+      q6_smart: ["ط§ط¨ط¯ط£ ظ…ظ† ط¹ظ„ط§ظ‚ط© ط§ظ„ظ…ظˆظ‚ط¹ ط«ظ… ط§ط¹ظƒط³ظ‡ط§ ظ„ط¥ظٹط¬ط§ط¯ ط­ط¬ظ… ط§ظ„ط¹ظٹظ†ط©."],
+      "33_sd_raw": ["ط§ط¨ط¯ط£ ط¨ط­ط³ط§ط¨ ظ…ط±ظƒط² ط§ظ„ط¨ظٹط§ظ†ط§طھ ط«ظ… ظپط±ظˆظ‚ ط§ظ„ظ‚ظٹظ… ط¹ظ†ظ‡.", "ط§ظ„طھط¨ط§ظٹظ† ط®ط·ظˆط© ط³ط§ط¨ظ‚ط© ظ„ظ„ط§ظ†ط­ط±ط§ظپ ط§ظ„ظ…ط¹ظٹط§ط±ظٹ."],
+      "33_sd_freq": ["ط§ط³طھط®ط¯ظ… ط§ظ„طھظƒط±ط§ط±ط§طھ ظƒط£ظˆط²ط§ظ† ط¹ظ†ط¯ ط­ط³ط§ط¨ ط§ظ„ظپط±ظˆظ‚.", "ط§ط­ط³ط¨ ط§ظ„ظ…طھظˆط³ط· ط§ظ„ظ…ظ†ط§ط³ط¨ ظ‚ط¨ظ„ ط§ظ„طھط¨ط§ظٹظ†."],
+      "33_sd_group": ["ط§ط³طھط®ط¯ظ… ظ…ط±ط§ظƒط² ط§ظ„ظپط¦ط§طھ ط¹ظ†ط¯ ط§ظ„طھط¹ط§ظ…ظ„ ظ…ط¹ ط§ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط¬ظ…ط¹ط©."],
+      "33_range_raw": ["ط­ط¯ط¯ ط£ظƒط¨ط± ظ‚ظٹظ…ط© ظˆط£طµط؛ط± ظ‚ظٹظ…ط© ظپظ‚ط·."],
+      "33_range_group": ["ط§ظ‚ط±ط£ ط­ط¯ظˆط¯ ط£ظˆظ„ ظپط¦ط© ظˆط¢ط®ط± ظپط¦ط© ظ‚ط¨ظ„ ط§ظ„ط­ط³ط§ط¨."],
+      "33_iqr": ["ط§ط­ط³ط¨ ط§ظ„ط±ط¨ظٹط¹ظٹظ† ط£ظˆظ„ط§ ط«ظ… ظ‚ط§ط±ظ† ط¨ظٹظ†ظ‡ظ…ط§."],
+      "34_cv_basic": ["ط­ط¯ط¯ ط§ظ„ظ…طھظˆط³ط· ظˆط§ظ„ط§ظ†ط­ط±ط§ظپ ط§ظ„ظ…ط¹ظٹط§ط±ظٹ ظ‚ط¨ظ„ ط­ط³ط§ط¨ ط§ظ„ظ†ط³ط¨ط©."],
+      "34_cv_compare": ["ط§ط­ط³ط¨ ط§ظ„ظ…ظ‚ظٹط§ط³ ط§ظ„ظ†ط³ط¨ظٹ ظ„ظƒظ„ ظ…ط¬ظ…ظˆط¹ط© ط«ظ… ظ‚ط§ط±ظ†."],
+      "34_qcd_basic": ["ط§ط¨ط¯ط£ ط¨طھط­ط¯ظٹط¯ ط§ظ„ط±ط¨ظٹط¹ظٹظ† ط§ظ„ط£ظˆظ„ ظˆط§ظ„ط«ط§ظ„ط«."],
+      "34_qcd_compare": ["ظ‚ط§ط±ظ† ط¨ط§ط³طھط®ط¯ط§ظ… ط§ظ„ظ†ط³ط¨ط© ظ„ط§ ط§ظ„ظپط±ظ‚ ط§ظ„ط®ط§ظ… ظپظ‚ط·."],
+      "34_z_basic": ["ط­ط¯ط¯ ط§ظ„ظ‚ظٹظ…ط© ظˆط§ظ„ظ…طھظˆط³ط· ظˆط§ظ„ط§ظ†ط­ط±ط§ظپ ط§ظ„ظ…ط¹ظٹط§ط±ظٹ ظ‚ط¨ظ„ ط§ظ„طھط¹ظˆظٹط¶."],
+      "34_x_from_z": ["ط§ط¨ط¯ط£ ظ…ظ† ط§ظ„ط¯ط±ط¬ط© ط§ظ„ظ…ط¹ظٹط§ط±ظٹط© ط«ظ… ط§ط¹ط²ظ„ ط§ظ„ظ‚ظٹظ…ط© ط§ظ„ظ…ط·ظ„ظˆط¨ط©."],
+      "34_z_compare": ["ط­ظˆظ‘ظ„ ط§ظ„ظ‚ظٹظ… ط¥ظ„ظ‰ ط¯ط±ط¬ط§طھ ظ…ط¹ظٹط§ط±ظٹط© ظ‚ط¨ظ„ ط§ظ„ظ…ظ‚ط§ط±ظ†ط©."],
+      "35_shape_type": ["ظ„ط§ط­ط¸ ط¹ط¯ط¯ ط§ظ„ظ‚ظ…ظ… ظˆط§طھط¬ط§ظ‡ ط§ظ„ط°ظٹظ„ ط¯ظˆظ† ط§ط³طھط¹ط¬ط§ظ„ ط§ظ„طھطµظ†ظٹظپ."],
+      "35_pearson": ["ط­ط¯ط¯ ط§ظ„ظ…طھظˆط³ط· ظˆط§ظ„ظˆط³ظٹط· ظˆط§ظ„ط§ظ†ط­ط±ط§ظپ ط§ظ„ظ…ط¹ظٹط§ط±ظٹ ظ‚ط¨ظ„ ط­ط³ط§ط¨ ط§ظ„ط§ظ„طھظˆط§ط،."],
+      "35_moment": ["ط±ظƒط² ط¹ظ„ظ‰ ط§ظ„ط¹ط²ظ… ط§ظ„ط«ط§ظ„ط« ظˆط§طھط¬ط§ظ‡ ط§ظ„ط¥ط´ط§ط±ط©."],
+      "35_kurtosis": ["ط­ط¯ط¯ ط§ظ„ط¹ط²ظ… ط§ظ„ط±ط§ط¨ط¹ ط«ظ… ظ‚ط§ط±ظ† ظ‚ظٹظ…ط© ط§ظ„طھظپظ„ط·ط­ ط¨ط§ظ„ظ‚ط§ط¹ط¯ط© ط§ظ„ظ…ظ†ط§ط³ط¨ط©."],
+      "35_box": ["ط§ظ‚ط±ط£ ط§ظ„ط£ط¹ط¯ط§ط¯ ط§ظ„ط®ظ…ط³ط© ظ…ظ† ط§ظ„ظ…ط®ط·ط· ظ‚ط¨ظ„ طھظپط³ظٹط± ط§ظ„ط´ظƒظ„."],
+      "35_rule": ["ظ‚ط§ط±ظ† ط£ط·ظˆط§ظ„ ط£ط¬ط²ط§ط، ط§ظ„طµظ†ط¯ظˆظ‚ ظˆط§ظ„ط´ط§ط±ط¨ظٹظ† ط¨طµط±ظٹط§."],
+      "35_five": ["ط§ط³طھط®ط±ط¬ ط§ظ„ظ‚ظٹظ… ط§ظ„ط®ظ…ط³ ط¨ط§ظ„طھط±طھظٹط¨ ظ‚ط¨ظ„ ط£ظٹ طھظپط³ظٹط±."]
     };
-    if((/x_i|bar\{x\}|انحراف/.test(prompt)) && (/\^2|مربعات|تربيع/.test(prompt))){
+    if((/x_i|bar\{x\}|ط§ظ†ط­ط±ط§ظپ/.test(prompt)) && (/\^2|ظ…ط±ط¨ط¹ط§طھ|طھط±ط¨ظٹط¹/.test(prompt))){
       return [
-        "انتبه: المعطى عن مجموع مربعات الانحرافات، لكن المطلوب عن مجموع الانحرافات نفسها.",
-        "فكر في خاصية توازن الانحرافات حول المتوسط الحسابي، ولا تستخدم رقم مجموع المربعات مباشرة."
+        "ط§ظ†طھط¨ظ‡: ط§ظ„ظ…ط¹ط·ظ‰ ط¹ظ† ظ…ط¬ظ…ظˆط¹ ظ…ط±ط¨ط¹ط§طھ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھطŒ ظ„ظƒظ† ط§ظ„ظ…ط·ظ„ظˆط¨ ط¹ظ† ظ…ط¬ظ…ظˆط¹ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھ ظ†ظپط³ظ‡ط§.",
+        "ظپظƒط± ظپظٹ ط®ط§طµظٹط© طھظˆط§ط²ظ† ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھ ط­ظˆظ„ ط§ظ„ظ…طھظˆط³ط· ط§ظ„ط­ط³ط§ط¨ظٹطŒ ظˆظ„ط§ طھط³طھط®ط¯ظ… ط±ظ‚ظ… ظ…ط¬ظ…ظˆط¹ ط§ظ„ظ…ط±ط¨ط¹ط§طھ ظ…ط¨ط§ط´ط±ط©."
       ];
     }
-    if(prompt.includes("وزن") && (prompt.includes("نسبة") || prompt.includes("مئوية"))){
+    if(prompt.includes("ظˆط²ظ†") && (prompt.includes("ظ†ط³ط¨ط©") || prompt.includes("ظ…ط¦ظˆظٹط©"))){
       return [
-        "هذا سؤال متوسط مرجح: لا تجمع النسب مباشرة.",
-        "اربط كل نسبة بوزنها ثم قارن بالمجموع الكلي للأوزان."
+        "ظ‡ط°ط§ ط³ط¤ط§ظ„ ظ…طھظˆط³ط· ظ…ط±ط¬ط­: ظ„ط§ طھط¬ظ…ط¹ ط§ظ„ظ†ط³ط¨ ظ…ط¨ط§ط´ط±ط©.",
+        "ط§ط±ط¨ط· ظƒظ„ ظ†ط³ط¨ط© ط¨ظˆط²ظ†ظ‡ط§ ط«ظ… ظ‚ط§ط±ظ† ط¨ط§ظ„ظ…ط¬ظ…ظˆط¹ ط§ظ„ظƒظ„ظٹ ظ„ظ„ط£ظˆط²ط§ظ†."
       ];
     }
     if(hints[qid]) return hints[qid];
-    if(title.includes("الوسيط")) return hints.q4_median_raw;
-    if(title.includes("المنوال")) return hints.q6_mode_raw;
-    if(title.includes("المتوسط") && title.includes("تكراري")) return hints.q2_mean_freq;
-    if(title.includes("المتوسط")) return hints.q1_mean_raw;
-    if(title.includes("مئين")) return hints.q4_percentile;
-    if(title.includes("ربيع")) return ["رتب البيانات وحدد موقع الربيع قبل الحساب."];
-    if(title.includes("انحراف") || title.includes("تباين")) return hints["33_sd_raw"];
-    if(title.includes("مدى")) return ["حدد الحدود أو القيم الطرفية المناسبة قبل الحساب."];
-    if(title.includes("اختلاف")) return hints["34_cv_basic"];
-    if(title.includes("معياري")) return hints["34_z_basic"];
-    if(title.includes("التواء")) return hints["35_pearson"];
-    if(title.includes("تفلطح")) return hints["35_kurtosis"];
-    if(title.includes("صندوق")) return hints["35_box"];
-    return ["حدد المطلوب والمعطيات أولا، ثم افصل بين ما هو معطى وما هو مطلوب.", "اختر القاعدة المناسبة للفكرة، ولا تبدأ بالتعويض قبل فهم نوع السؤال."];
+    if(title.includes("ط§ظ„ظˆط³ظٹط·")) return hints.q4_median_raw;
+    if(title.includes("ط§ظ„ظ…ظ†ظˆط§ظ„")) return hints.q6_mode_raw;
+    if(title.includes("ط§ظ„ظ…طھظˆط³ط·") && title.includes("طھظƒط±ط§ط±ظٹ")) return hints.q2_mean_freq;
+    if(title.includes("ط§ظ„ظ…طھظˆط³ط·")) return hints.q1_mean_raw;
+    if(title.includes("ظ…ط¦ظٹظ†")) return hints.q4_percentile;
+    if(title.includes("ط±ط¨ظٹط¹")) return ["ط±طھط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ ظˆط­ط¯ط¯ ظ…ظˆظ‚ط¹ ط§ظ„ط±ط¨ظٹط¹ ظ‚ط¨ظ„ ط§ظ„ط­ط³ط§ط¨."];
+    if(title.includes("ط§ظ†ط­ط±ط§ظپ") || title.includes("طھط¨ط§ظٹظ†")) return hints["33_sd_raw"];
+    if(title.includes("ظ…ط¯ظ‰")) return ["ط­ط¯ط¯ ط§ظ„ط­ط¯ظˆط¯ ط£ظˆ ط§ظ„ظ‚ظٹظ… ط§ظ„ط·ط±ظپظٹط© ط§ظ„ظ…ظ†ط§ط³ط¨ط© ظ‚ط¨ظ„ ط§ظ„ط­ط³ط§ط¨."];
+    if(title.includes("ط§ط®طھظ„ط§ظپ")) return hints["34_cv_basic"];
+    if(title.includes("ظ…ط¹ظٹط§ط±ظٹ")) return hints["34_z_basic"];
+    if(title.includes("ط§ظ„طھظˆط§ط،")) return hints["35_pearson"];
+    if(title.includes("طھظپظ„ط·ط­")) return hints["35_kurtosis"];
+    if(title.includes("طµظ†ط¯ظˆظ‚")) return hints["35_box"];
+    return ["ط­ط¯ط¯ ط§ظ„ظ…ط·ظ„ظˆط¨ ظˆط§ظ„ظ…ط¹ط·ظٹط§طھ ط£ظˆظ„ط§طŒ ط«ظ… ط§ظپطµظ„ ط¨ظٹظ† ظ…ط§ ظ‡ظˆ ظ…ط¹ط·ظ‰ ظˆظ…ط§ ظ‡ظˆ ظ…ط·ظ„ظˆط¨.", "ط§ط®طھط± ط§ظ„ظ‚ط§ط¹ط¯ط© ط§ظ„ظ…ظ†ط§ط³ط¨ط© ظ„ظ„ظپظƒط±ط©طŒ ظˆظ„ط§ طھط¨ط¯ط£ ط¨ط§ظ„طھط¹ظˆظٹط¶ ظ‚ط¨ظ„ ظپظ‡ظ… ظ†ظˆط¹ ط§ظ„ط³ط¤ط§ظ„."];
   }
 
   function aiLawItems(question, branch){
@@ -4005,15 +4617,15 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const laws = {
       q1_mean_raw: ["\\(\\bar{x}=\\frac{\\sum x_i}{n}\\)"],
       q2_mean_freq: ["\\(\\bar{x}=\\frac{\\sum x_i f_i}{\\sum f_i}\\)"],
-      q3_mean_group: ["\\(\\bar{x}=\\frac{\\sum m_i f_i}{\\sum f_i}\\)", "\\(m_i\\) مركز الفئة و\\(f_i\\) تكرارها."],
-      q4_median_raw: ["إذا كان \\(n\\) فردياً: موقع الوسيط \\(k=\\frac{n+1}{2}\\).", "إذا كان \\(n\\) زوجياً: \\(\\tilde{x}=\\frac{x_{(n/2)}+x_{(n/2+1)}}{2}\\)."],
-      q6_mode_raw: ["للبيانات الخام: المنوال هو القيمة الأكثر تكراراً.", "للبيانات المجمعة: نحدد الفئة المنوالية أولا ثم نستخدم قانون المنوال إن طُلب."],
+      q3_mean_group: ["\\(\\bar{x}=\\frac{\\sum m_i f_i}{\\sum f_i}\\)", "\\(m_i\\) ظ…ط±ظƒط² ط§ظ„ظپط¦ط© ظˆ\\(f_i\\) طھظƒط±ط§ط±ظ‡ط§."],
+      q4_median_raw: ["ط¥ط°ط§ ظƒط§ظ† \\(n\\) ظپط±ط¯ظٹط§ظ‹: ظ…ظˆظ‚ط¹ ط§ظ„ظˆط³ظٹط· \\(k=\\frac{n+1}{2}\\).", "ط¥ط°ط§ ظƒط§ظ† \\(n\\) ط²ظˆط¬ظٹط§ظ‹: \\(\\tilde{x}=\\frac{x_{(n/2)}+x_{(n/2+1)}}{2}\\)."],
+      q6_mode_raw: ["ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ط®ط§ظ…: ط§ظ„ظ…ظ†ظˆط§ظ„ ظ‡ظˆ ط§ظ„ظ‚ظٹظ…ط© ط§ظ„ط£ظƒط«ط± طھظƒط±ط§ط±ط§ظ‹.", "ظ„ظ„ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ…ط¬ظ…ط¹ط©: ظ†ط­ط¯ط¯ ط§ظ„ظپط¦ط© ط§ظ„ظ…ظ†ظˆط§ظ„ظٹط© ط£ظˆظ„ط§ ط«ظ… ظ†ط³طھط®ط¯ظ… ظ‚ط§ظ†ظˆظ† ط§ظ„ظ…ظ†ظˆط§ظ„ ط¥ظ† ط·ظڈظ„ط¨."],
       q2_q1_even: ["\\(L_{Q_1}=\\frac{n+1}{4}\\)"],
       q3_q3_odd: ["\\(L_{Q_3}=\\frac{3(n+1)}{4}\\)"],
       q4_percentile: ["\\(L_{P_r}=\\frac{r}{100}(n+1)\\)"],
       "33_sd_raw": ["\\(s^2=\\frac{\\sum (x_i-\\bar{x})^2}{n-1}\\)", "\\(s=\\sqrt{s^2}\\)"],
       "33_sd_freq": ["\\(s^2=\\frac{\\sum f_i(x_i-\\bar{x})^2}{\\sum f_i-1}\\)", "\\(s=\\sqrt{s^2}\\)"],
-      "33_sd_group": ["\\(s^2=\\frac{\\sum f_i(m_i-\\bar{x})^2}{\\sum f_i-1}\\)", "\\(m_i\\) مركز الفئة."],
+      "33_sd_group": ["\\(s^2=\\frac{\\sum f_i(m_i-\\bar{x})^2}{\\sum f_i-1}\\)", "\\(m_i\\) ظ…ط±ظƒط² ط§ظ„ظپط¦ط©."],
       "33_range_raw": ["\\(R=x_{max}-x_{min}\\)"],
       "33_iqr": ["\\(IQR=Q_3-Q_1\\)"],
       "34_cv_basic": ["\\(CV=\\frac{s}{\\bar{x}}\\times 100\\%\\)"],
@@ -4023,48 +4635,48 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
       "35_pearson": ["\\(Sk=\\frac{3(\\bar{x}-\\tilde{x})}{s}\\)"],
       "35_moment": ["\\(\\alpha_3=\\frac{m_3}{s^3}\\)"],
       "35_kurtosis": ["\\(\\alpha_4=\\frac{m_4}{s^4}\\)"],
-      "35_box": ["الأعداد الخمسة: الصغرى، \\(Q_1\\)، الوسيط، \\(Q_3\\)، العظمى."]
+      "35_box": ["ط§ظ„ط£ط¹ط¯ط§ط¯ ط§ظ„ط®ظ…ط³ط©: ط§ظ„طµط؛ط±ظ‰طŒ \\(Q_1\\)طŒ ط§ظ„ظˆط³ظٹط·طŒ \\(Q_3\\)طŒ ط§ظ„ط¹ط¸ظ…ظ‰."]
     };
-    if((/x_i|bar\{x\}|انحراف/.test(prompt)) && (/\^2|مربعات|تربيع/.test(prompt))){
+    if((/x_i|bar\{x\}|ط§ظ†ط­ط±ط§ظپ/.test(prompt)) && (/\^2|ظ…ط±ط¨ط¹ط§طھ|طھط±ط¨ظٹط¹/.test(prompt))){
       return [
-        "خاصية عامة: مجموع انحرافات القيم عن متوسطها الحسابي يتوازن حول المتوسط.",
-        "لا تحوّل مجموع مربعات الانحرافات إلى مجموع الانحرافات؛ المطلوب يعتمد على الخاصية لا على التعويض في رقم 9."
+        "ط®ط§طµظٹط© ط¹ط§ظ…ط©: ظ…ط¬ظ…ظˆط¹ ط§ظ†ط­ط±ط§ظپط§طھ ط§ظ„ظ‚ظٹظ… ط¹ظ† ظ…طھظˆط³ط·ظ‡ط§ ط§ظ„ط­ط³ط§ط¨ظٹ ظٹطھظˆط§ط²ظ† ط­ظˆظ„ ط§ظ„ظ…طھظˆط³ط·.",
+        "ظ„ط§ طھط­ظˆظ‘ظ„ ظ…ط¬ظ…ظˆط¹ ظ…ط±ط¨ط¹ط§طھ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھ ط¥ظ„ظ‰ ظ…ط¬ظ…ظˆط¹ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھط› ط§ظ„ظ…ط·ظ„ظˆط¨ ظٹط¹طھظ…ط¯ ط¹ظ„ظ‰ ط§ظ„ط®ط§طµظٹط© ظ„ط§ ط¹ظ„ظ‰ ط§ظ„طھط¹ظˆظٹط¶ ظپظٹ ط±ظ‚ظ… 9."
       ];
     }
-    if(prompt.includes("وزن") && (prompt.includes("نسبة") || prompt.includes("مئوية"))){
+    if(prompt.includes("ظˆط²ظ†") && (prompt.includes("ظ†ط³ط¨ط©") || prompt.includes("ظ…ط¦ظˆظٹط©"))){
       return [
-        "المتوسط المرجح = مجموع (الوزن × القيمة) مقسوماً على مجموع الأوزان.",
-        "استخدم القاعدة العامة فقط، ثم عوّض الأرقام بنفسك في الحل."
+        "ط§ظ„ظ…طھظˆط³ط· ط§ظ„ظ…ط±ط¬ط­ = ظ…ط¬ظ…ظˆط¹ (ط§ظ„ظˆط²ظ† أ— ط§ظ„ظ‚ظٹظ…ط©) ظ…ظ‚ط³ظˆظ…ط§ظ‹ ط¹ظ„ظ‰ ظ…ط¬ظ…ظˆط¹ ط§ظ„ط£ظˆط²ط§ظ†.",
+        "ط§ط³طھط®ط¯ظ… ط§ظ„ظ‚ط§ط¹ط¯ط© ط§ظ„ط¹ط§ظ…ط© ظپظ‚ط·طŒ ط«ظ… ط¹ظˆظ‘ط¶ ط§ظ„ط£ط±ظ‚ط§ظ… ط¨ظ†ظپط³ظƒ ظپظٹ ط§ظ„ط­ظ„."
       ];
     }
     /* Codex prompt-aware safe laws */
-    if((/x_i|bar\{x\}|انحراف/.test(prompt)) && (/\^2|مربعات|تربيع/.test(prompt))){
+    if((/x_i|bar\{x\}|ط§ظ†ط­ط±ط§ظپ/.test(prompt)) && (/\^2|ظ…ط±ط¨ط¹ط§طھ|طھط±ط¨ظٹط¹/.test(prompt))){
       return [
-        "خاصية عامة: مجموع انحرافات القيم عن متوسطها الحسابي يتوازن حول المتوسط.",
-        "لا تحوّل مجموع مربعات الانحرافات إلى مجموع الانحرافات؛ المطلوب يعتمد على الخاصية لا على التعويض في رقم 9."
+        "ط®ط§طµظٹط© ط¹ط§ظ…ط©: ظ…ط¬ظ…ظˆط¹ ط§ظ†ط­ط±ط§ظپط§طھ ط§ظ„ظ‚ظٹظ… ط¹ظ† ظ…طھظˆط³ط·ظ‡ط§ ط§ظ„ط­ط³ط§ط¨ظٹ ظٹطھظˆط§ط²ظ† ط­ظˆظ„ ط§ظ„ظ…طھظˆط³ط·.",
+        "ظ„ط§ طھط­ظˆظ‘ظ„ ظ…ط¬ظ…ظˆط¹ ظ…ط±ط¨ط¹ط§طھ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھ ط¥ظ„ظ‰ ظ…ط¬ظ…ظˆط¹ ط§ظ„ط§ظ†ط­ط±ط§ظپط§طھط› ط§ظ„ظ…ط·ظ„ظˆط¨ ظٹط¹طھظ…ط¯ ط¹ظ„ظ‰ ط§ظ„ط®ط§طµظٹط© ظ„ط§ ط¹ظ„ظ‰ ط§ظ„طھط¹ظˆظٹط¶ ظپظٹ ط±ظ‚ظ… 9."
       ];
     }
-    if(prompt.includes("وزن") && (prompt.includes("نسبة") || prompt.includes("مئوية"))){
+    if(prompt.includes("ظˆط²ظ†") && (prompt.includes("ظ†ط³ط¨ط©") || prompt.includes("ظ…ط¦ظˆظٹط©"))){
       return [
-        "المتوسط المرجح = مجموع (الوزن × القيمة) مقسوماً على مجموع الأوزان.",
-        "استخدم القاعدة العامة فقط، ثم عوّض الأرقام بنفسك في الحل."
+        "ط§ظ„ظ…طھظˆط³ط· ط§ظ„ظ…ط±ط¬ط­ = ظ…ط¬ظ…ظˆط¹ (ط§ظ„ظˆط²ظ† أ— ط§ظ„ظ‚ظٹظ…ط©) ظ…ظ‚ط³ظˆظ…ط§ظ‹ ط¹ظ„ظ‰ ظ…ط¬ظ…ظˆط¹ ط§ظ„ط£ظˆط²ط§ظ†.",
+        "ط§ط³طھط®ط¯ظ… ط§ظ„ظ‚ط§ط¹ط¯ط© ط§ظ„ط¹ط§ظ…ط© ظپظ‚ط·طŒ ط«ظ… ط¹ظˆظ‘ط¶ ط§ظ„ط£ط±ظ‚ط§ظ… ط¨ظ†ظپط³ظƒ ظپظٹ ط§ظ„ط­ظ„."
       ];
     }
     if(laws[qid]) return laws[qid];
-    if(title.includes("الوسيط")) return laws.q4_median_raw;
-    if(title.includes("المنوال")) return laws.q6_mode_raw;
-    if(title.includes("المتوسط") && title.includes("تكراري")) return laws.q2_mean_freq;
-    if(title.includes("المتوسط")) return laws.q1_mean_raw;
-    if(title.includes("مئين")) return laws.q4_percentile;
-    if(title.includes("ربيع")) return ["حدد موقع الربيع المطلوب بعد ترتيب البيانات." ];
-    if(title.includes("انحراف") || title.includes("تباين")) return laws["33_sd_raw"];
-    if(title.includes("مدى")) return laws["33_range_raw"];
-    if(title.includes("اختلاف")) return laws["34_cv_basic"];
-    if(title.includes("معياري")) return laws["34_z_basic"];
-    if(title.includes("التواء")) return laws["35_pearson"];
-    if(title.includes("تفلطح")) return laws["35_kurtosis"];
-    if(title.includes("صندوق")) return laws["35_box"];
-    return ["اكتب القانون العام المرتبط بالمفهوم المطلوب أولا.", "بعد تحديد القانون، عوّض القيم بنفسك خطوة خطوة دون عرض الناتج النهائي داخل المساعدة."];
+    if(title.includes("ط§ظ„ظˆط³ظٹط·")) return laws.q4_median_raw;
+    if(title.includes("ط§ظ„ظ…ظ†ظˆط§ظ„")) return laws.q6_mode_raw;
+    if(title.includes("ط§ظ„ظ…طھظˆط³ط·") && title.includes("طھظƒط±ط§ط±ظٹ")) return laws.q2_mean_freq;
+    if(title.includes("ط§ظ„ظ…طھظˆط³ط·")) return laws.q1_mean_raw;
+    if(title.includes("ظ…ط¦ظٹظ†")) return laws.q4_percentile;
+    if(title.includes("ط±ط¨ظٹط¹")) return ["ط­ط¯ط¯ ظ…ظˆظ‚ط¹ ط§ظ„ط±ط¨ظٹط¹ ط§ظ„ظ…ط·ظ„ظˆط¨ ط¨ط¹ط¯ طھط±طھظٹط¨ ط§ظ„ط¨ظٹط§ظ†ط§طھ." ];
+    if(title.includes("ط§ظ†ط­ط±ط§ظپ") || title.includes("طھط¨ط§ظٹظ†")) return laws["33_sd_raw"];
+    if(title.includes("ظ…ط¯ظ‰")) return laws["33_range_raw"];
+    if(title.includes("ط§ط®طھظ„ط§ظپ")) return laws["34_cv_basic"];
+    if(title.includes("ظ…ط¹ظٹط§ط±ظٹ")) return laws["34_z_basic"];
+    if(title.includes("ط§ظ„طھظˆط§ط،")) return laws["35_pearson"];
+    if(title.includes("طھظپظ„ط·ط­")) return laws["35_kurtosis"];
+    if(title.includes("طµظ†ط¯ظˆظ‚")) return laws["35_box"];
+    return ["ط§ظƒطھط¨ ط§ظ„ظ‚ط§ظ†ظˆظ† ط§ظ„ط¹ط§ظ… ط§ظ„ظ…ط±طھط¨ط· ط¨ط§ظ„ظ…ظپظ‡ظˆظ… ط§ظ„ظ…ط·ظ„ظˆط¨ ط£ظˆظ„ط§.", "ط¨ط¹ط¯ طھط­ط¯ظٹط¯ ط§ظ„ظ‚ط§ظ†ظˆظ†طŒ ط¹ظˆظ‘ط¶ ط§ظ„ظ‚ظٹظ… ط¨ظ†ظپط³ظƒ ط®ط·ظˆط© ط®ط·ظˆط© ط¯ظˆظ† ط¹ط±ط¶ ط§ظ„ظ†ط§طھط¬ ط§ظ„ظ†ظ‡ط§ط¦ظٹ ط¯ط§ط®ظ„ ط§ظ„ظ…ط³ط§ط¹ط¯ط©."];
   }
   function openUnifiedAiHelp(question, branch){
     const modal = ensureAiAssistModal();
@@ -4072,8 +4684,8 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const title = escapeHtml(aiEscape(question && question.title));
     const level = aiLevel(branch);
     const levelHtml = level ? ` <span class="ai-help-level">(${escapeHtml(level)})</span>` : "";
-    const explainHtml = aiList(aiHintItems(question, branch), "ابدأ بفهم المطلوب وربطه بالمفاهيم الأساسية قبل اختيار القانون.");
-    const formulaHtml = aiList(aiLawItems(question, branch), "اكتب القانون أو المسار المناسب ثم عوّض خطوة خطوة بدون الوصول إلى الإجابة النهائية مباشرة.");
+    const explainHtml = aiList(aiHintItems(question, branch), "ط§ط¨ط¯ط£ ط¨ظپظ‡ظ… ط§ظ„ظ…ط·ظ„ظˆط¨ ظˆط±ط¨ط·ظ‡ ط¨ط§ظ„ظ…ظپط§ظ‡ظٹظ… ط§ظ„ط£ط³ط§ط³ظٹط© ظ‚ط¨ظ„ ط§ط®طھظٹط§ط± ط§ظ„ظ‚ط§ظ†ظˆظ†.");
+    const formulaHtml = aiList(aiLawItems(question, branch), "ط§ظƒطھط¨ ط§ظ„ظ‚ط§ظ†ظˆظ† ط£ظˆ ط§ظ„ظ…ط³ط§ط± ط§ظ„ظ…ظ†ط§ط³ط¨ ط«ظ… ط¹ظˆظ‘ط¶ ط®ط·ظˆط© ط®ط·ظˆط© ط¨ط¯ظˆظ† ط§ظ„ظˆطµظˆظ„ ط¥ظ„ظ‰ ط§ظ„ط¥ط¬ط§ط¨ط© ط§ظ„ظ†ظ‡ط§ط¦ظٹط© ظ…ط¨ط§ط´ط±ط©.");
 
     body.innerHTML = `
       <div class="ai-help-panel">
@@ -4087,14 +4699,14 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
           <div class="ai-help-section">
             <div class="ai-help-section-head">
               <span class="ai-help-chip-icon">âœ¦</span>
-              <span>كيف تفكر في السؤال؟</span>
+              <span>ظƒظٹظپ طھظپظƒط± ظپظٹ ط§ظ„ط³ط¤ط§ظ„طں</span>
             </div>
             <div class="ai-help-body">${explainHtml}</div>
           </div>
           <div class="ai-help-section">
             <div class="ai-help-section-head">
               <span class="ai-help-chip-icon">âˆ‘</span>
-              <span>ما القانون أو المسار؟</span>
+              <span>ظ…ط§ ط§ظ„ظ‚ط§ظ†ظˆظ† ط£ظˆ ط§ظ„ظ…ط³ط§ط±طں</span>
             </div>
             <div class="ai-help-body">${formulaHtml}</div>
           </div>
@@ -4162,7 +4774,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_3_5_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_3_2_ai_models_v1";
 
   function aiStoreGet(key){
     try{
@@ -4192,14 +4804,14 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
       events: [],
       topics: {},
       lastTopic: "â€”",
-      /* ── النماذج الخمسة الجديدة ── */
-      irtTheta: 0,          /* قدرة الطالب IRT */
-      irtSE: 1.0,           /* خطأ معياري IRT */
-      irtN: 0,              /* عدد التقديرات */
-      errorCounts: { conceptual:0, computational:0, application:0 }, /* أنماط الأخطاء */
-      confidenceEvents: [], /* لحساب Brier Score */
-      forgettingDays: {},   /* آخر مراجعة لكل موضوع (timestamp) */
-      forgettingStability:{} /* قوة الذاكرة لكل موضوع */
+      /* â”€â”€ ط§ظ„ظ†ظ…ط§ط°ط¬ ط§ظ„ط®ظ…ط³ط© ط§ظ„ط¬ط¯ظٹط¯ط© â”€â”€ */
+      irtTheta: 0,          /* ظ‚ط¯ط±ط© ط§ظ„ط·ط§ظ„ط¨ IRT */
+      irtSE: 1.0,           /* ط®ط·ط£ ظ…ط¹ظٹط§ط±ظٹ IRT */
+      irtN: 0,              /* ط¹ط¯ط¯ ط§ظ„طھظ‚ط¯ظٹط±ط§طھ */
+      errorCounts: { conceptual:0, computational:0, application:0 }, /* ط£ظ†ظ…ط§ط· ط§ظ„ط£ط®ط·ط§ط، */
+      confidenceEvents: [], /* ظ„ط­ط³ط§ط¨ Brier Score */
+      forgettingDays: {},   /* ط¢ط®ط± ظ…ط±ط§ط¬ط¹ط© ظ„ظƒظ„ ظ…ظˆط¶ظˆط¹ (timestamp) */
+      forgettingStability:{} /* ظ‚ظˆط© ط§ظ„ط°ط§ظƒط±ط© ظ„ظƒظ„ ظ…ظˆط¶ظˆط¹ */
     };
   }
 
@@ -4281,36 +4893,36 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     return clamp(weighted.reduce((sum, item) => sum + item.weight * item.value, 0) / totalWeight, 0.05, 0.98);
   }
 
-  /* ══════════════════════════════════════════════
-     النموذج ١: منحنى النسيان (Ebbinghaus)
-  ══════════════════════════════════════════════ */
+  /* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+     ط§ظ„ظ†ظ…ظˆط°ط¬ ظ،: ظ…ظ†ط­ظ†ظ‰ ط§ظ„ظ†ط³ظٹط§ظ† (Ebbinghaus)
+  â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
   function forgettingRetention(daysSince, stability){
-    /* R = e^(-t/S) — نسبة الاحتفاظ بالمعلومة */
+    /* R = e^(-t/S) â€” ظ†ط³ط¨ط© ط§ظ„ط§ط­طھظپط§ط¸ ط¨ط§ظ„ظ…ط¹ظ„ظˆظ…ط© */
     return Math.exp(-Math.max(0, daysSince) / Math.max(0.1, stability));
   }
   function forgettingReviewLabel(retention){
-    if(retention < 0.5) return { text:"راجع الآن", cls:"now" };
-    if(retention < 0.75) return { text:"راجع قريباً", cls:"soon" };
-    return { text:"بخير ✓", cls:"ok" };
+    if(retention < 0.5) return { text:"ط±ط§ط¬ط¹ ط§ظ„ط¢ظ†", cls:"now" };
+    if(retention < 0.75) return { text:"ط±ط§ط¬ط¹ ظ‚ط±ظٹط¨ط§ظ‹", cls:"soon" };
+    return { text:"ط¨ط®ظٹط± âœ“", cls:"ok" };
   }
   function updateForgetting(model, correct){
-    /* تحديث قوة الذاكرة بعد كل مراجعة */
+    /* طھط­ط¯ظٹط« ظ‚ظˆط© ط§ظ„ط°ط§ظƒط±ط© ط¨ط¹ط¯ ظƒظ„ ظ…ط±ط§ط¬ط¹ط© */
     const oldStab = model.forgettingStab || 1.0;
     model.forgettingStab = correct
-      ? clamp(oldStab * 1.8, 1, 60)   /* نجاح: تضاعف الاستقرار */
-      : clamp(oldStab * 0.5, 0.3, 60); /* فشل: انخفاض الاستقرار */
+      ? clamp(oldStab * 1.8, 1, 60)   /* ظ†ط¬ط§ط­: طھط¶ط§ط¹ظپ ط§ظ„ط§ط³طھظ‚ط±ط§ط± */
+      : clamp(oldStab * 0.5, 0.3, 60); /* ظپط´ظ„: ط§ظ†ط®ظپط§ط¶ ط§ظ„ط§ط³طھظ‚ط±ط§ط± */
     model.lastStudied = Date.now();
   }
 
-  /* ══════════════════════════════════════════════
-     النموذج ٢: IRT — Item Response Theory
-  ══════════════════════════════════════════════ */
+  /* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+     ط§ظ„ظ†ظ…ظˆط°ط¬ ظ¢: IRT â€” Item Response Theory
+  â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
   function irtProb(theta, b, a=1.0){
-    /* P(correct) = 1 / (1 + e^(-a*(θ-b))) */
+    /* P(correct) = 1 / (1 + e^(-a*(خ¸-b))) */
     return 1 / (1 + Math.exp(-a * (theta - b)));
   }
   function updateIRT(correct, model){
-    /* تقدير θ بخوارزمية تدرج بسيطة (EAP-like online) */
+    /* طھظ‚ط¯ظٹط± خ¸ ط¨ط®ظˆط§ط±ط²ظ…ظٹط© طھط¯ط±ط¬ ط¨ط³ظٹط·ط© (EAP-like online) */
     if(!aiModelsState.irtN) aiModelsState.irtN = 0;
     const theta = aiModelsState.irtTheta || 0;
     const b = model.irtB || 0;
@@ -4318,10 +4930,10 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const lr_rate = 0.65 / (1 + aiModelsState.irtN * 0.02);
     const delta = correct ? lr_rate * (1 - p) : -lr_rate * p;
     aiModelsState.irtTheta = clamp((theta + delta), -3, 3);
-    /* تحديث صعوبة السؤال (item difficulty) */
+    /* طھط­ط¯ظٹط« طµط¹ظˆط¨ط© ط§ظ„ط³ط¤ط§ظ„ (item difficulty) */
     const itemLR = 0.25 / (1 + (model.attempts || 1) * 0.05);
     model.irtB = clamp(b + (correct ? -itemLR * (1-p) : itemLR * p), -3, 3);
-    /* خطأ معياري — يقل مع زيادة المحاولات */
+    /* ط®ط·ط£ ظ…ط¹ظٹط§ط±ظٹ â€” ظٹظ‚ظ„ ظ…ط¹ ط²ظٹط§ط¯ط© ط§ظ„ظ…ط­ط§ظˆظ„ط§طھ */
     aiModelsState.irtSE = clamp(1.0 / Math.sqrt(1 + aiModelsState.irtN * 0.5), 0.15, 1.0);
     aiModelsState.irtN += 1;
   }
@@ -4330,29 +4942,29 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     var att = evts.length;
     var ok = evts.filter(function(e){return e.correct}).length;
     var pct = att > 0 ? ok / att : 0;
-    if(pct >= 0.85) return { text:"متقدم", color:"#059669" };
-    if(pct >= 0.65) return { text:"جيد", color:"#0369a1" };
-    if(pct >= 0.45) return { text:"متوسط", color:"#d97706" };
-    if(pct >= 0.25) return { text:"دون المتوسط", color:"#dc2626" };
-    if(att === 0) return { text:"لم يُقيّم بعد", color:"#94a3b8" };
-    return { text:"يحتاج دعماً", color:"#dc2626" };
+    if(pct >= 0.85) return { text:"ظ…طھظ‚ط¯ظ…", color:"#059669" };
+    if(pct >= 0.65) return { text:"ط¬ظٹط¯", color:"#0369a1" };
+    if(pct >= 0.45) return { text:"ظ…طھظˆط³ط·", color:"#d97706" };
+    if(pct >= 0.25) return { text:"ط¯ظˆظ† ط§ظ„ظ…طھظˆط³ط·", color:"#dc2626" };
+    if(att === 0) return { text:"ظ„ظ… ظٹظڈظ‚ظٹظ‘ظ… ط¨ط¹ط¯", color:"#94a3b8" };
+    return { text:"ظٹط­طھط§ط¬ ط¯ط¹ظ…ط§ظ‹", color:"#dc2626" };
   }
 
-  /* ══════════════════════════════════════════════
-     النموذج ٣: محلل نمط الأخطاء
-  ══════════════════════════════════════════════ */
+  /* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+     ط§ظ„ظ†ظ…ظˆط°ط¬ ظ£: ظ…ط­ظ„ظ„ ظ†ظ…ط· ط§ظ„ط£ط®ط·ط§ط،
+  â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
   const ERROR_TYPES = {
-    conceptual:    { label:"خطأ مفاهيمي",  badge:"conceptual",    advice:"راجع تعريف الارتباط والمفاهيم الأساسية" },
-    computational: { label:"خطأ حسابي",    badge:"computational", advice:"تحقق من خطوات حساب ΣXY و Sxx" },
-    application:   { label:"خطأ تطبيقي",   badge:"application",   advice:"راجع كيفية تطبيق الصيغة على البيانات" },
-    none:          { label:"لا أخطاء",      badge:"none",          advice:"أداء ممتاز، استمر!" }
+    conceptual:    { label:"ط®ط·ط£ ظ…ظپط§ظ‡ظٹظ…ظٹ",  badge:"conceptual",    advice:"ط±ط§ط¬ط¹ طھط¹ط±ظٹظپ ط§ظ„ط§ط±طھط¨ط§ط· ظˆط§ظ„ظ…ظپط§ظ‡ظٹظ… ط§ظ„ط£ط³ط§ط³ظٹط©" },
+    computational: { label:"ط®ط·ط£ ط­ط³ط§ط¨ظٹ",    badge:"computational", advice:"طھط­ظ‚ظ‚ ظ…ظ† ط®ط·ظˆط§طھ ط­ط³ط§ط¨ خ£XY ظˆ Sxx" },
+    application:   { label:"ط®ط·ط£ طھط·ط¨ظٹظ‚ظٹ",   badge:"application",   advice:"ط±ط§ط¬ط¹ ظƒظٹظپظٹط© طھط·ط¨ظٹظ‚ ط§ظ„طµظٹط؛ط© ط¹ظ„ظ‰ ط§ظ„ط¨ظٹط§ظ†ط§طھ" },
+    none:          { label:"ظ„ط§ ط£ط®ط·ط§ط،",      badge:"none",          advice:"ط£ط¯ط§ط، ظ…ظ…طھط§ط²طŒ ط§ط³طھظ…ط±!" }
   };
   function classifyError(correct, attempts, mastery){
     if(correct) return "none";
-    /* تصنيف مبني على الإتقان والمحاولات */
-    if(mastery < 0.35) return "conceptual";    /* إتقان منخفض = خطأ مفاهيمي */
-    if(attempts > 2)   return "computational"; /* محاولات عديدة = خطأ حسابي */
-    return "application";                       /* غير ذلك = خطأ تطبيقي */
+    /* طھطµظ†ظٹظپ ظ…ط¨ظ†ظٹ ط¹ظ„ظ‰ ط§ظ„ط¥طھظ‚ط§ظ† ظˆط§ظ„ظ…ط­ط§ظˆظ„ط§طھ */
+    if(mastery < 0.35) return "conceptual";    /* ط¥طھظ‚ط§ظ† ظ…ظ†ط®ظپط¶ = ط®ط·ط£ ظ…ظپط§ظ‡ظٹظ…ظٹ */
+    if(attempts > 2)   return "computational"; /* ظ…ط­ط§ظˆظ„ط§طھ ط¹ط¯ظٹط¯ط© = ط®ط·ط£ ط­ط³ط§ط¨ظٹ */
+    return "application";                       /* ط؛ظٹط± ط°ظ„ظƒ = ط®ط·ط£ طھط·ط¨ظٹظ‚ظٹ */
   }
   function updateErrorPattern(correct, attempts, model){
     const errType = classifyError(correct, attempts, model.mastery);
@@ -4367,11 +4979,11 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     return sorted[0][0];
   }
 
-  /* ══════════════════════════════════════════════
-     النموذج ٤: معايرة الثقة (Brier Score)
-     ملاحظة: نستخدم mastery كتقدير للثقة لأن
-     الواجهة لا تطلب ثقة صريحة من المستخدم
-  ══════════════════════════════════════════════ */
+  /* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+     ط§ظ„ظ†ظ…ظˆط°ط¬ ظ¤: ظ…ط¹ط§ظٹط±ط© ط§ظ„ط«ظ‚ط© (Brier Score)
+     ظ…ظ„ط§ط­ط¸ط©: ظ†ط³طھط®ط¯ظ… mastery ظƒطھظ‚ط¯ظٹط± ظ„ظ„ط«ظ‚ط© ظ„ط£ظ†
+     ط§ظ„ظˆط§ط¬ظ‡ط© ظ„ط§ طھط·ظ„ط¨ ط«ظ‚ط© طµط±ظٹط­ط© ظ…ظ† ط§ظ„ظ…ط³طھط®ط¯ظ…
+  â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
   function updateConfidenceCalib(correct, model){
     const evts = aiModelsState.events || []; const confidence = evts.length > 0 ? evts.filter(function(e){return e.correct}).length / evts.length : 0.5;
     if(!aiModelsState.confidenceEvents) aiModelsState.confidenceEvents = [];
@@ -4389,17 +5001,17 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     var evts = aiModelsState.events || [];
     var att = evts.length;
     var ok = evts.filter(function(e){return e.correct}).length;
-    if(att === 0) return { text:"لا توجد بيانات كافية بعد.", cls:"" };
+    if(att === 0) return { text:"ظ„ط§ طھظˆط¬ط¯ ط¨ظٹط§ظ†ط§طھ ظƒط§ظپظٹط© ط¨ط¹ط¯.", cls:"" };
     var pct = ok / att;
-    if(pct >= 0.85) return { text:"🎯 أداء ممتاز — استمر في هذا المستوى!", cls:"good" };
-    if(pct >= 0.6) return { text:"✓ أداء جيد مع مجال للتحسين.", cls:"good" };
-    if(pct >= 0.4) return { text:"⚠️ أداء متوسط — ركّز على المفاهيم التي أخطأت فيها.", cls:"warn" };
-    return { text:"⚠️ أداء ضعيف — راجع المادة بتمعّن وأعد المحاولة.", cls:"bad" };
+    if(pct >= 0.85) return { text:"ًںژ¯ ط£ط¯ط§ط، ظ…ظ…طھط§ط² â€” ط§ط³طھظ…ط± ظپظٹ ظ‡ط°ط§ ط§ظ„ظ…ط³طھظˆظ‰!", cls:"good" };
+    if(pct >= 0.6) return { text:"âœ“ ط£ط¯ط§ط، ط¬ظٹط¯ ظ…ط¹ ظ…ط¬ط§ظ„ ظ„ظ„طھط­ط³ظٹظ†.", cls:"good" };
+    if(pct >= 0.4) return { text:"âڑ ï¸ڈ ط£ط¯ط§ط، ظ…طھظˆط³ط· â€” ط±ظƒظ‘ط² ط¹ظ„ظ‰ ط§ظ„ظ…ظپط§ظ‡ظٹظ… ط§ظ„طھظٹ ط£ط®ط·ط£طھ ظپظٹظ‡ط§.", cls:"warn" };
+    return { text:"âڑ ï¸ڈ ط£ط¯ط§ط، ط¶ط¹ظٹظپ â€” ط±ط§ط¬ط¹ ط§ظ„ظ…ط§ط¯ط© ط¨طھظ…ط¹ظ‘ظ† ظˆط£ط¹ط¯ ط§ظ„ظ…ط­ط§ظˆظ„ط©.", cls:"bad" };
   }
 
-  /* ══════════════════════════════════════════════
-     النموذج ٥: توقع الدرجة
-  ══════════════════════════════════════════════ */
+  /* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+     ط§ظ„ظ†ظ…ظˆط°ط¬ ظ¥: طھظˆظ‚ط¹ ط§ظ„ط¯ط±ط¬ط©
+  â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
   function predictGrade(ensemble, bkt, lr_val, completion){
     const trend = (aiModelsState.events || []).length >= 4
       ? (() => {
@@ -4408,17 +5020,17 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
           const half2 = ev.slice(Math.floor(ev.length/2));
           const acc1 = half1.filter(e=>e.correct).length / (half1.length||1);
           const acc2 = half2.filter(e=>e.correct).length / (half2.length||1);
-          return acc2 - acc1; /* موجب = يتحسن */
+          return acc2 - acc1; /* ظ…ظˆط¬ط¨ = ظٹطھط­ط³ظ† */
         })()
       : 0;
     const raw = clamp(
       bkt * 0.35 + ensemble * 0.30 + lr_val * 0.20 + clamp(completion, 0, 1) * 0.15 + trend * 0.1,
       0, 1
     );
-    if(raw >= 0.88) return { grade:"ممتاز",        range:"90-100", color:"#059669", tip:"مستوى رائع، راجع بانتظام للحفاظ عليه." };
-    if(raw >= 0.75) return { grade:"جيد جداً",     range:"75-89",  color:"#0369a1", tip:"قريب جداً من الامتياز، ركّز على المواضيع الأضعف." };
-    if(raw >= 0.60) return { grade:"جيد",           range:"60-74",  color:"#d97706", tip:"مراجعة إضافية ستحسّن نتيجتك بشكل ملحوظ." };
-    return             { grade:"يحتاج مراجعة",   range:"< 60",   color:"#dc2626", tip:"ابدأ المراجعة من المفاهيم الأساسية." };
+    if(raw >= 0.88) return { grade:"ظ…ظ…طھط§ط²",        range:"90-100", color:"#059669", tip:"ظ…ط³طھظˆظ‰ ط±ط§ط¦ط¹طŒ ط±ط§ط¬ط¹ ط¨ط§ظ†طھط¸ط§ظ… ظ„ظ„ط­ظپط§ط¸ ط¹ظ„ظٹظ‡." };
+    if(raw >= 0.75) return { grade:"ط¬ظٹط¯ ط¬ط¯ط§ظ‹",     range:"75-89",  color:"#0369a1", tip:"ظ‚ط±ظٹط¨ ط¬ط¯ط§ظ‹ ظ…ظ† ط§ظ„ط§ظ…طھظٹط§ط²طŒ ط±ظƒظ‘ط² ط¹ظ„ظ‰ ط§ظ„ظ…ظˆط§ط¶ظٹط¹ ط§ظ„ط£ط¶ط¹ظپ." };
+    if(raw >= 0.60) return { grade:"ط¬ظٹط¯",           range:"60-74",  color:"#d97706", tip:"ظ…ط±ط§ط¬ط¹ط© ط¥ط¶ط§ظپظٹط© ط³طھط­ط³ظ‘ظ† ظ†طھظٹط¬طھظƒ ط¨ط´ظƒظ„ ظ…ظ„ط­ظˆط¸." };
+    return             { grade:"ظٹط­طھط§ط¬ ظ…ط±ط§ط¬ط¹ط©",   range:"< 60",   color:"#dc2626", tip:"ط§ط¨ط¯ط£ ط§ظ„ظ…ط±ط§ط¬ط¹ط© ظ…ظ† ط§ظ„ظ…ظپط§ظ‡ظٹظ… ط§ظ„ط£ط³ط§ط³ظٹط©." };
   }
 
   function sanitizeAiKey(value){
@@ -4426,7 +5038,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   }
 
   function getTopicMeta(question, branch, branchIndex){
-    const title = String((question && question.title) || (branch && (branch.level || branch.name)) || ("سؤال " + (branchIndex + 1 || 1))).trim();
+    const title = String((question && question.title) || (branch && (branch.level || branch.name)) || ("ط³ط¤ط§ظ„ " + (branchIndex + 1 || 1))).trim();
     const keyBase = (question && question.id) ? question.id : title;
     return { key: sanitizeAiKey(keyBase), label: title };
   }
@@ -4447,7 +5059,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
         ensemble: 0.5,
         lastProb: 0.5,
         /* IRT per-topic */
-        irtB: 0,        /* صعوبة السؤال */
+        irtB: 0,        /* طµط¹ظˆط¨ط© ط§ظ„ط³ط¤ط§ظ„ */
         /* Forgetting */
         lastStudied: Date.now(),
         forgettingStab: 1.0,
@@ -4473,7 +5085,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     model.ensemble = clamp(0.20 * model.nbScore + 0.50 * model.lr + 0.30 * model.knn, 0.05, 0.98);
     model.lastProb = model.ensemble;
     aiModelsState.lastTopic = meta.label;
-    /* ── النماذج الخمسة الجديدة ── */
+    /* â”€â”€ ط§ظ„ظ†ظ…ط§ط°ط¬ ط§ظ„ط®ظ…ط³ط© ط§ظ„ط¬ط¯ظٹط¯ط© â”€â”€ */
     updateForgetting(model, correct);
     updateIRT(correct, model);
     updateErrorPattern(correct, attempts || 1, model);
@@ -4515,14 +5127,14 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const strong = strongestTopic();
     const ensemble = averageMetric((item) => item.ensemble, 0.5);
     if(!weak){
-      return "تظهر هنا قراءة الأداء بعد بدء الإجابات المحفوظة.";
+      return "طھط¸ظ‡ط± ظ‡ظ†ط§ ظ‚ط±ط§ط،ط© ط§ظ„ط£ط¯ط§ط، ط¨ط¹ط¯ ط¨ط¯ط، ط§ظ„ط¥ط¬ط§ط¨ط§طھ ط§ظ„ظ…ط­ظپظˆط¸ط©.";
     }
     const statusText = ensemble < 0.45
-      ? "هناك حاجة إلى دعم إضافي قبل السؤال التالي."
+      ? "ظ‡ظ†ط§ظƒ ط­ط§ط¬ط© ط¥ظ„ظ‰ ط¯ط¹ظ… ط¥ط¶ط§ظپظٹ ظ‚ط¨ظ„ ط§ظ„ط³ط¤ط§ظ„ ط§ظ„طھط§ظ„ظٹ."
       : (ensemble < 0.7
-        ? "الوضع متوسط ويحتاج إلى تثبيت أكثر."
-        : "الأداء الحالي يوحي بجاهزية جيدة للسؤال التالي.");
-    return `الموضوع الأقوى حاليًا: «${strong ? strong.label : "—"}»، والموضوع الذي يحتاج إلى مراجعة: «${weak.label}». ${statusText}`;
+        ? "ط§ظ„ظˆط¶ط¹ ظ…طھظˆط³ط· ظˆظٹط­طھط§ط¬ ط¥ظ„ظ‰ طھط«ط¨ظٹطھ ط£ظƒط«ط±."
+        : "ط§ظ„ط£ط¯ط§ط، ط§ظ„ط­ط§ظ„ظٹ ظٹظˆط­ظٹ ط¨ط¬ط§ظ‡ط²ظٹط© ط¬ظٹط¯ط© ظ„ظ„ط³ط¤ط§ظ„ ط§ظ„طھط§ظ„ظٹ.");
+    return `ط§ظ„ظ…ظˆط¶ظˆط¹ ط§ظ„ط£ظ‚ظˆظ‰ ط­ط§ظ„ظٹظ‹ط§: آ«${strong ? strong.label : "â€”"}آ»طŒ ظˆط§ظ„ظ…ظˆط¶ظˆط¹ ط§ظ„ط°ظٹ ظٹط­طھط§ط¬ ط¥ظ„ظ‰ ظ…ط±ط§ط¬ط¹ط©: آ«${weak.label}آ». ${statusText}`;
   }
 
   function ensureAiModelsPanelMount(){
@@ -4550,7 +5162,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const strong   = strongestTopic();
     const weak     = weakestTopic();
 
-    /* ── بيانات النماذج الجديدة ── */
+    /* â”€â”€ ط¨ظٹط§ظ†ط§طھ ط§ظ„ظ†ظ…ط§ط°ط¬ ط§ظ„ط¬ط¯ظٹط¯ط© â”€â”€ */
     const theta    = aiModelsState.irtTheta || 0;
     const se       = aiModelsState.irtSE || 1.0;
     const thetaLbl = irtThetaLabel(theta);
@@ -4570,7 +5182,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
       : 0;
     const grade    = predictGrade(ensemble, bkt, lr_avg, completion);
 
-    /* ── بناء HTML لوحة منحنى النسيان ── */
+    /* â”€â”€ ط¨ظ†ط§ط، HTML ظ„ظˆط­ط© ظ…ظ†ط­ظ†ظ‰ ط§ظ„ظ†ط³ظٹط§ظ† â”€â”€ */
     const forgettingRows = topics.map(t => {
       const daysSince = ((Date.now() - (t.lastStudied || Date.now())) / 86400000);
       const ret       = forgettingRetention(daysSince, t.forgettingStab || 1.0);
@@ -4587,7 +5199,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
         </div>`;
     }).join("");
 
-    /* ── بناء HTML محلل الأخطاء ── */
+    /* â”€â”€ ط¨ظ†ط§ط، HTML ظ…ط­ظ„ظ„ ط§ظ„ط£ط®ط·ط§ط، â”€â”€ */
     const errBarTotal = Math.max(1, errTotal);
     const errBars = ["conceptual","computational","application"].map(k => {
       const cnt = ec[k]||0;
@@ -4597,60 +5209,60 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     }).join("");
 
     panel.innerHTML = `
-      <!-- ═══ Hero ═══ -->
+      <!-- â•گâ•گâ•گ Hero â•گâ•گâ•گ -->
       <div class="aiModelsHero">
         <div class="aiModelsHeroTop">
           <div class="aiModelsCopy">
             
-            <div class="aiModelsTitle">مؤشرات أداء الطالب</div>
+            <div class="aiModelsTitle">ظ…ط¤ط´ط±ط§طھ ط£ط¯ط§ط، ط§ظ„ط·ط§ظ„ط¨</div>
           </div>
           <div class="aiModelsOrb"><span></span></div>
         </div>
         <div class="aiModelsChips">
-          <span class="aiModelsChip">الإتقان</span>
-          <span class="aiModelsChip">الدقة</span>
-          <span class="aiModelsChip">الجاهزية</span>
-          <span class="aiModelsChip">الثبات</span>
-          <span class="aiModelsChip">القدرة</span>
-          <span class="aiModelsChip">الذاكرة</span>
-          <span class="aiModelsChip">الأخطاء</span>
-          <span class="aiModelsChip">الثقة</span>
-          <span class="aiModelsChip">التوقع</span>
+          <span class="aiModelsChip">ط§ظ„ط¥طھظ‚ط§ظ†</span>
+          <span class="aiModelsChip">ط§ظ„ط¯ظ‚ط©</span>
+          <span class="aiModelsChip">ط§ظ„ط¬ط§ظ‡ط²ظٹط©</span>
+          <span class="aiModelsChip">ط§ظ„ط«ط¨ط§طھ</span>
+          <span class="aiModelsChip">ط§ظ„ظ‚ط¯ط±ط©</span>
+          <span class="aiModelsChip">ط§ظ„ط°ط§ظƒط±ط©</span>
+          <span class="aiModelsChip">ط§ظ„ط£ط®ط·ط§ط،</span>
+          <span class="aiModelsChip">ط§ظ„ط«ظ‚ط©</span>
+          <span class="aiModelsChip">ط§ظ„طھظˆظ‚ط¹</span>
         </div>
       </div>
 
-      <!-- ═══ النماذج الأصلية الأربعة ═══ -->
+      <!-- â•گâ•گâ•گ ط§ظ„ظ†ظ…ط§ط°ط¬ ط§ظ„ط£طµظ„ظٹط© ط§ظ„ط£ط±ط¨ط¹ط© â•گâ•گâ•گ -->
       <div class="aiModelsGrid">
         <div class="aiModelCard">
-          <div class="aiModelHead"><div class="aiModelIcon">إت</div><div class="aiModelName">الإتقان</div></div>
+          <div class="aiModelHead"><div class="aiModelIcon">ط¥طھ</div><div class="aiModelName">ط§ظ„ط¥طھظ‚ط§ظ†</div></div>
           <div class="aiModelValue">${Math.round(bkt*100)}%</div>
-          <div class="aiModelMeta">يعكس مستوى الإتقان الحالي بناءً على تسلسل الإجابات.</div>
+          <div class="aiModelMeta">ظٹط¹ظƒط³ ظ…ط³طھظˆظ‰ ط§ظ„ط¥طھظ‚ط§ظ† ط§ظ„ط­ط§ظ„ظٹ ط¨ظ†ط§ط،ظ‹ ط¹ظ„ظ‰ طھط³ظ„ط³ظ„ ط§ظ„ط¥ط¬ط§ط¨ط§طھ.</div>
         </div>
         <div class="aiModelCard">
-          <div class="aiModelHead"><div class="aiModelIcon">دق</div><div class="aiModelName">الدقة</div></div>
+          <div class="aiModelHead"><div class="aiModelIcon">ط¯ظ‚</div><div class="aiModelName">ط§ظ„ط¯ظ‚ط©</div></div>
           <div class="aiModelValue">${Math.round(nb*100)}%</div>
-          <div class="aiModelMeta">يعكس جودة الإجابات المحفوظة.</div>
+          <div class="aiModelMeta">ظٹط¹ظƒط³ ط¬ظˆط¯ط© ط§ظ„ط¥ط¬ط§ط¨ط§طھ ط§ظ„ظ…ط­ظپظˆط¸ط©.</div>
         </div>
         <div class="aiModelCard">
-          <div class="aiModelHead"><div class="aiModelIcon">جه</div><div class="aiModelName">الجاهزية</div></div>
+          <div class="aiModelHead"><div class="aiModelIcon">ط¬ظ‡</div><div class="aiModelName">ط§ظ„ط¬ط§ظ‡ط²ظٹط©</div></div>
           <div class="aiModelValue">${Math.round(lr_avg*100)}%</div>
-          <div class="aiModelMeta">الاستعداد للانتقال للمستوى التالي.</div>
+          <div class="aiModelMeta">ط§ظ„ط§ط³طھط¹ط¯ط§ط¯ ظ„ظ„ط§ظ†طھظ‚ط§ظ„ ظ„ظ„ظ…ط³طھظˆظ‰ ط§ظ„طھط§ظ„ظٹ.</div>
         </div>
         <div class="aiModelCard">
-          <div class="aiModelHead"><div class="aiModelIcon">ثب</div><div class="aiModelName">الثبات</div></div>
+          <div class="aiModelHead"><div class="aiModelIcon">ط«ط¨</div><div class="aiModelName">ط§ظ„ط«ط¨ط§طھ</div></div>
           <div class="aiModelValue">${Math.round(knn*100)}%</div>
-          <div class="aiModelMeta">اتساق الأداء بين المحاولات.</div>
+          <div class="aiModelMeta">ط§طھط³ط§ظ‚ ط§ظ„ط£ط¯ط§ط، ط¨ظٹظ† ط§ظ„ظ…ط­ط§ظˆظ„ط§طھ.</div>
         </div>
         <div class="aiModelCard full">
-          <div class="aiModelHead"><div class="aiModelIcon">عا</div><div class="aiModelName">الأداء العام</div></div>
+          <div class="aiModelHead"><div class="aiModelIcon">ط¹ط§</div><div class="aiModelName">ط§ظ„ط£ط¯ط§ط، ط§ظ„ط¹ط§ظ…</div></div>
           <div class="aiModelValue">${Math.round(ensemble*100)}%</div>
-          <div class="aiModelMeta">ملخص الأداء الحالي. آخر موضوع: ${escapeHtml(aiModelsState.lastTopic||"—")}</div>
+          <div class="aiModelMeta">ظ…ظ„ط®طµ ط§ظ„ط£ط¯ط§ط، ط§ظ„ط­ط§ظ„ظٹ. ط¢ط®ط± ظ…ظˆط¶ظˆط¹: ${escapeHtml(aiModelsState.lastTopic||"â€”")}</div>
         </div>
       </div>
 
-      <!-- ═══ لوحة الإتقان ═══ -->
+      <!-- â•گâ•گâ•گ ظ„ظˆط­ط© ط§ظ„ط¥طھظ‚ط§ظ† â•گâ•گâ•گ -->
       <div class="aiTopicBoard">
-        <div class="aiSectionTitle">لوحة الإتقان حسب الموضوع</div>
+        <div class="aiSectionTitle">ظ„ظˆط­ط© ط§ظ„ط¥طھظ‚ط§ظ† ط­ط³ط¨ ط§ظ„ظ…ظˆط¶ظˆط¹</div>
         <div class="aiTopicList">
           ${topics.length ? topics.map(topic=>`
             <div class="aiTopicRow">
@@ -4658,36 +5270,36 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
               <div class="aiTopicBar"><div class="aiTopicFill" style="width:${Math.round(topic.mastery*100)}%"></div></div>
               <div class="aiTopicPct">${Math.round(topic.mastery*100)}%</div>
             </div>`).join("") :
-            `<div class="aiModelMeta">لا توجد بيانات بعد. ابدأ بحفظ إجابة ليبدأ التحليل.</div>`}
+            `<div class="aiModelMeta">ظ„ط§ طھظˆط¬ط¯ ط¨ظٹط§ظ†ط§طھ ط¨ط¹ط¯. ط§ط¨ط¯ط£ ط¨ط­ظپط¸ ط¥ط¬ط§ط¨ط© ظ„ظٹط¨ط¯ط£ ط§ظ„طھط­ظ„ظٹظ„.</div>`}
         </div>
       </div>
 
-      <!-- ═══ النموذج ١: منحنى النسيان ═══ -->
+      <!-- â•گâ•گâ•گ ط§ظ„ظ†ظ…ظˆط°ط¬ ظ،: ظ…ظ†ط­ظ†ظ‰ ط§ظ„ظ†ط³ظٹط§ظ† â•گâ•گâ•گ -->
       <div class="aiExtSection">
         <div class="aiExtSectionTitle">
-          منحنى النسيان — احتفاظك بالمادة
+          ظ…ظ†ط­ظ†ظ‰ ط§ظ„ظ†ط³ظٹط§ظ† â€” ط§ط­طھظپط§ط¸ظƒ ط¨ط§ظ„ظ…ط§ط¯ط©
         </div>
         <div class="forgettingCard">
           ${topics.length ? forgettingRows :
-            `<div class="aiModelMeta">ابدأ بحفظ إجابة لتفعيل هذا المؤشر.</div>`}
+            `<div class="aiModelMeta">ط§ط¨ط¯ط£ ط¨ط­ظپط¸ ط¥ط¬ط§ط¨ط© ظ„طھظپط¹ظٹظ„ ظ‡ط°ط§ ط§ظ„ظ…ط¤ط´ط±.</div>`}
         </div>
         <div class="aiModelMeta" style="margin-top:4px">
-          يقيس نسبة احتفاظك بكل موضوع مع مرور الوقت — يرتفع بالمراجعة المنتظمة.
+          ظٹظ‚ظٹط³ ظ†ط³ط¨ط© ط§ط­طھظپط§ط¸ظƒ ط¨ظƒظ„ ظ…ظˆط¶ظˆط¹ ظ…ط¹ ظ…ط±ظˆط± ط§ظ„ظˆظ‚طھ â€” ظٹط±طھظپط¹ ط¨ط§ظ„ظ…ط±ط§ط¬ط¹ط© ط§ظ„ظ…ظ†طھط¸ظ…ط©.
         </div>
       </div>
 
-      <!-- ═══ النموذج ٢: القدرة المعرفية ═══ -->
+      <!-- â•گâ•گâ•گ ط§ظ„ظ†ظ…ظˆط°ط¬ ظ¢: ط§ظ„ظ‚ط¯ط±ط© ط§ظ„ظ…ط¹ط±ظپظٹط© â•گâ•گâ•گ -->
       <div class="aiExtSection">
         <div class="aiExtSectionTitle">
-          القدرة المعرفية — مستواك التقديري
+          ط§ظ„ظ‚ط¯ط±ط© ط§ظ„ظ…ط¹ط±ظپظٹط© â€” ظ…ط³طھظˆط§ظƒ ط§ظ„طھظ‚ط¯ظٹط±ظٹ
         </div>
         <div class="irtCard">
           <div class="irtTheta">
             <div>
               <div class="irtThetaNum" style="color:${thetaLbl.color}">
-                المستوى: ${thetaLbl.text}
+                ط§ظ„ظ…ط³طھظˆظ‰: ${thetaLbl.text}
               </div>
-              <div class="irtThetaSub">نسبة الإجابات الصحيحة: ${totalAtt > 0 ? Math.round((totalOk/totalAtt)*100) : 0}%</div>
+              <div class="irtThetaSub">ظ†ط³ط¨ط© ط§ظ„ط¥ط¬ط§ط¨ط§طھ ط§ظ„طµط­ظٹط­ط©: ${totalAtt > 0 ? Math.round((totalOk/totalAtt)*100) : 0}%</div>
             </div>
           </div>
           <div>
@@ -4695,19 +5307,19 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
               <div class="irtPointer" style="left:${totalAtt > 0 ? Math.min(100,Math.round((totalOk/totalAtt)*100)) : 50}%"></div>
             </div>
             <div class="irtLabels">
-              <span>ضعيف</span><span></span><span>متوسط</span><span></span><span>متقدم</span>
+              <span>ط¶ط¹ظٹظپ</span><span></span><span>ظ…طھظˆط³ط·</span><span></span><span>ظ…طھظ‚ط¯ظ…</span>
             </div>
           </div>
           <div class="irtSE">
-            بناءً على ${totalOk} إجابة صحيحة من أصل ${totalAtt} محاولة
+            ط¨ظ†ط§ط،ظ‹ ط¹ظ„ظ‰ ${totalOk} ط¥ط¬ط§ط¨ط© طµط­ظٹط­ط© ظ…ظ† ط£طµظ„ ${totalAtt} ظ…ط­ط§ظˆظ„ط©
           </div>
         </div>
       </div>
 
-      <!-- ═══ النموذج ٣: محلل الأخطاء ═══ -->
+      <!-- â•گâ•گâ•گ ط§ظ„ظ†ظ…ظˆط°ط¬ ظ£: ظ…ط­ظ„ظ„ ط§ظ„ط£ط®ط·ط§ط، â•گâ•گâ•گ -->
       <div class="aiExtSection">
         <div class="aiExtSectionTitle">
-          تشخيص نمط أخطائك
+          طھط´ط®ظٹطµ ظ†ظ…ط· ط£ط®ط·ط§ط¦ظƒ
         </div>
         <div class="errorPatternCard">
           ${errTotal > 0 ? `
@@ -4715,46 +5327,46 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
           <div class="errorTypeRow">
             <span class="errorTypeBadge ${errInfo.badge}">${errInfo.label}</span>
             <div class="errorTypeDetail">
-              <div class="errorTypeName">النمط الأكثر تكراراً</div>
+              <div class="errorTypeName">ط§ظ„ظ†ظ…ط· ط§ظ„ط£ظƒط«ط± طھظƒط±ط§ط±ط§ظ‹</div>
               <div class="errorTypeAdvice">${escapeHtml(errInfo.advice)}</div>
             </div>
             <div class="errorTypeCount">${errTotal}</div>
           </div>
           <div class="aiModelMeta" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center">
-            <span>مفاهيمي: ${ec.conceptual||0}</span>
-            <span>حسابي: ${ec.computational||0}</span>
-            <span>تطبيقي: ${ec.application||0}</span>
+            <span>ظ…ظپط§ظ‡ظٹظ…ظٹ: ${ec.conceptual||0}</span>
+            <span>ط­ط³ط§ط¨ظٹ: ${ec.computational||0}</span>
+            <span>طھط·ط¨ظٹظ‚ظٹ: ${ec.application||0}</span>
           </div>` :
           `<div class="errorTypeRow">
-            <span class="errorTypeBadge none">لا أخطاء</span>
+            <span class="errorTypeBadge none">ظ„ط§ ط£ط®ط·ط§ط،</span>
             <div class="errorTypeDetail">
-              <div class="errorTypeName">أداء مثالي حتى الآن</div>
-              <div class="errorTypeAdvice">لم تُسجَّل أخطاء — استمر في هذا المستوى!</div>
+              <div class="errorTypeName">ط£ط¯ط§ط، ظ…ط«ط§ظ„ظٹ ط­طھظ‰ ط§ظ„ط¢ظ†</div>
+              <div class="errorTypeAdvice">ظ„ظ… طھظڈط³ط¬ظژظ‘ظ„ ط£ط®ط·ط§ط، â€” ط§ط³طھظ…ط± ظپظٹ ظ‡ط°ط§ ط§ظ„ظ…ط³طھظˆظ‰!</div>
             </div>
           </div>`}
         </div>
       </div>
 
-      <!-- ═══ النموذج ٤: مدى دقة تقييمك لنفسك ═══ -->
+      <!-- â•گâ•گâ•گ ط§ظ„ظ†ظ…ظˆط°ط¬ ظ¤: ظ…ط¯ظ‰ ط¯ظ‚ط© طھظ‚ظٹظٹظ…ظƒ ظ„ظ†ظپط³ظƒ â•گâ•گâ•گ -->
       <div class="aiExtSection">
         <div class="aiExtSectionTitle">
-          مدى دقة تقييمك لنفسك
+          ظ…ط¯ظ‰ ط¯ظ‚ط© طھظ‚ظٹظٹظ…ظƒ ظ„ظ†ظپط³ظƒ
         </div>
         <div class="calibCard">
           <div class="calibMatrix">
             <div class="calibCell">
               <div class="calibCellVal">${totalAtt}</div>
-              <div class="calibCellLabel">إجمالي المحاولات</div>
+              <div class="calibCellLabel">ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ظ…ط­ط§ظˆظ„ط§طھ</div>
             </div>
             <div class="calibCell">
               <div class="calibCellVal" style="color:#059669">${totalOk}</div>
-              <div class="calibCellLabel">إجابات صحيحة</div>
+              <div class="calibCellLabel">ط¥ط¬ط§ط¨ط§طھ طµط­ظٹط­ط©</div>
             </div>
             <div class="calibCell">
               <div class="calibCellVal" style="color:${totalAtt>0?(totalOk/totalAtt>=0.7?'#059669':totalOk/totalAtt>=0.4?'#d97706':'#dc2626'):'var(--muted)'}">
                 ${totalAtt > 0 ? Math.round((totalOk/totalAtt)*100)+"%" : "â€”"}
               </div>
-              <div class="calibCellLabel">نسبة النجاح</div>
+              <div class="calibCellLabel">ظ†ط³ط¨ط© ط§ظ„ظ†ط¬ط§ط­</div>
             </div>
           </div>
           ${calibDx.cls ? `<div class="calibScore ${calibDx.cls}">${escapeHtml(calibDx.text)}</div>` :
@@ -4762,31 +5374,31 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
         </div>
       </div>
 
-      <!-- ═══ النموذج ٥: توقع الدرجة ═══ -->
+      <!-- â•گâ•گâ•گ ط§ظ„ظ†ظ…ظˆط°ط¬ ظ¥: طھظˆظ‚ط¹ ط§ظ„ط¯ط±ط¬ط© â•گâ•گâ•گ -->
       <div class="aiExtSection">
         <div class="aiExtSectionTitle">
-          التوقع المبدئي للدرجة
+          ط§ظ„طھظˆظ‚ط¹ ط§ظ„ظ…ط¨ط¯ط¦ظٹ ظ„ظ„ط¯ط±ط¬ط©
         </div>
         <div class="gradeCard">
           <div class="gradeBig" style="border-color:${grade.color}20;background:${grade.color}08">
             <div>
               <div class="gradeLabel" style="color:${grade.color}">${grade.grade}</div>
-              <div class="gradeRange">النطاق المتوقع: ${grade.range}%</div>
+              <div class="gradeRange">ط§ظ„ظ†ط·ط§ظ‚ ط§ظ„ظ…طھظˆظ‚ط¹: ${grade.range}%</div>
             </div>
           </div>
           <div class="gradeTrajectory">
             <div class="gradeTrajectoryRow">
-              <span style="font-size:10px;color:var(--muted)">الإتقان</span>
+              <span style="font-size:10px;color:var(--muted)">ط§ظ„ط¥طھظ‚ط§ظ†</span>
               <div class="gradeTrajectoryBar"><div class="gradeTrajectoryFill" style="width:${Math.round(bkt*100)}%;background:linear-gradient(90deg,var(--brand),#38bdf8)"></div></div>
               <span style="color:var(--brand2)">${Math.round(bkt*100)}%</span>
             </div>
             <div class="gradeTrajectoryRow">
-              <span style="font-size:10px;color:var(--muted)">الأداء العام</span>
+              <span style="font-size:10px;color:var(--muted)">ط§ظ„ط£ط¯ط§ط، ط§ظ„ط¹ط§ظ…</span>
               <div class="gradeTrajectoryBar"><div class="gradeTrajectoryFill" style="width:${Math.round(ensemble*100)}%;background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
               <span style="color:#7c3aed">${Math.round(ensemble*100)}%</span>
             </div>
             <div class="gradeTrajectoryRow">
-              <span style="font-size:10px;color:var(--muted)">الإنجاز</span>
+              <span style="font-size:10px;color:var(--muted)">ط§ظ„ط¥ظ†ط¬ط§ط²</span>
               <div class="gradeTrajectoryBar"><div class="gradeTrajectoryFill" style="width:${Math.round(completion*100)}%;background:linear-gradient(90deg,#059669,#34d399)"></div></div>
               <span style="color:#059669">${Math.round(completion*100)}%</span>
             </div>
@@ -4795,13 +5407,13 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
         </div>
       </div>
 
-      <!-- ═══ قراءة سريعة ═══ -->
+      <!-- â•گâ•گâ•گ ظ‚ط±ط§ط،ط© ط³ط±ظٹط¹ط© â•گâ•گâ•گ -->
       <div class="aiInferenceCard">
-        <div class="aiSectionTitle">قراءة سريعة</div>
+        <div class="aiSectionTitle">ظ‚ط±ط§ط،ط© ط³ط±ظٹط¹ط©</div>
         <div class="aiInferenceText">${escapeHtml(aiInferenceText())}</div>
         <div class="aiInferenceHint">
-          ${weak ? ("أضعف موضوع: " + escapeHtml(weak.label)) : "سيظهر أضعف موضوع بعد أول محاولة محفوظة."}
-          ${strong ? (" | أقوى موضوع: " + escapeHtml(strong.label)) : ""}
+          ${weak ? ("ط£ط¶ط¹ظپ ظ…ظˆط¶ظˆط¹: " + escapeHtml(weak.label)) : "ط³ظٹط¸ظ‡ط± ط£ط¶ط¹ظپ ظ…ظˆط¶ظˆط¹ ط¨ط¹ط¯ ط£ظˆظ„ ظ…ط­ط§ظˆظ„ط© ظ…ط­ظپظˆط¸ط©."}
+          ${strong ? (" | ط£ظ‚ظˆظ‰ ظ…ظˆط¶ظˆط¹: " + escapeHtml(strong.label)) : ""}
         </div>
       </div>
     `;
@@ -4878,9 +5490,9 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_3_5_lesson_3_5_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["35_shape_type", "35_pearson", "35_box"];
-  const MASTERY_PROFILES_UNIFIED = {"35_shape_type": {"supports": ["35_pearson", "35_moment", "35_kurtosis", "35_box"]}, "35_pearson": {"supports": ["35_moment", "35_kurtosis", "35_box", "35_rule"]}, "35_moment": {"supports": ["35_kurtosis", "35_box", "35_rule", "35_five"]}, "35_kurtosis": {"supports": ["35_box", "35_rule", "35_five", "35_mcq"]}, "35_box": {"supports": ["35_rule", "35_five", "35_mcq", "35_shape_type"]}, "35_rule": {"supports": ["35_five", "35_mcq", "35_shape_type", "35_pearson"]}, "35_five": {"supports": ["35_mcq", "35_shape_type", "35_pearson", "35_moment"]}, "35_mcq": {"supports": ["35_shape_type", "35_pearson", "35_moment", "35_kurtosis"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_3_2_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["q1_tf", "q2_q1_even", "q4_percentile"];
+  const MASTERY_PROFILES_UNIFIED = {"q1_tf": {"supports": ["q2_q1_even", "q3_q3_odd", "q4_percentile", "q5_interpret"]}, "q2_q1_even": {"supports": ["q3_q3_odd", "q4_percentile", "q5_interpret", "q6_smart"]}, "q3_q3_odd": {"supports": ["q4_percentile", "q5_interpret", "q6_smart", "q1_tf"]}, "q4_percentile": {"supports": ["q5_interpret", "q6_smart", "q1_tf", "q2_q1_even"]}, "q5_interpret": {"supports": ["q6_smart", "q1_tf", "q2_q1_even", "q3_q3_odd"]}, "q6_smart": {"supports": ["q1_tf", "q2_q1_even", "q3_q3_odd", "q4_percentile"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}
@@ -5033,7 +5645,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     if((state.masterySupportSources[key] || 0) >= 1) return null;
     const nextId = adaptiveChooseSupportId(sourceId);
     if(!nextId) return null;
-    /* تبديل السؤال تلقائياً (variant جديد + مسح كامل) */
+    /* طھط¨ط¯ظٹظ„ ط§ظ„ط³ط¤ط§ظ„ طھظ„ظ‚ط§ط¦ظٹط§ظ‹ (variant ط¬ط¯ظٹط¯ + ظ…ط³ط­ ظƒط§ظ…ظ„) */
     if(typeof bumpVariant === "function") try{ bumpVariant(nextId); }catch(e){}
     if(typeof clearAnswersForQuestion === "function") try{ clearAnswersForQuestion(nextId); }catch(e){}
     active.push(nextId);
@@ -5138,7 +5750,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     let p = null;
     try{ if(typeof setProgress === "function") p = setProgress(); }catch(e){}
     if(p && !p.doneAll){
-      if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
+      if(!confirm("ظ‡ظ†ط§ظƒ ط£ط³ط¦ظ„ط© ظ„ظ… طھظڈط¬ط¨ ط¹ظ†ظ‡ط§. ظ‡ظ„ طھط±ظٹط¯ ط§ظ„ظ…طھط§ط¨ط¹ط©طں")) return;
     }
     if(typeof showResultsModal === "function") return showResultsModal();
     if(typeof showResults === "function") return showResults();
@@ -5164,7 +5776,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 </script>
 
 
-<!-- ═══ نظام الزر العائم الدائري ═══ -->
+<!-- â•گâ•گâ•گ ظ†ط¸ط§ظ… ط§ظ„ط²ط± ط§ظ„ط¹ط§ط¦ظ… ط§ظ„ط¯ط§ط¦ط±ظٹ â•گâ•گâ•گ -->
 <style>
 /* â”€â”€ Overlay â”€â”€ */
 .fab-overlay{
@@ -5218,17 +5830,17 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 .fab-drawer-body .side{display:block !important;padding:0 !important;}
 .fab-drawer-body .aiResultsRail{display:block !important;padding:0 !important;}
 
-/* ══════════════════════════════
-   الزر العائم الدائري الرئيسي
-   ══════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   ط§ظ„ط²ط± ط§ظ„ط¹ط§ط¦ظ… ط§ظ„ط¯ط§ط¦ط±ظٹ ط§ظ„ط±ط¦ظٹط³ظٹ
+   â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 .fab-root{
   position:fixed;
   bottom:28px;
   right:20px;
-  z-index:495;  /* فوق الـ overlay (490) وتحت الـ drawers (500) */
+  z-index:495;  /* ظپظˆظ‚ ط§ظ„ظ€ overlay (490) ظˆطھط­طھ ط§ظ„ظ€ drawers (500) */
 }
 
-/* الزر المشغّل الرئيسي */
+/* ط§ظ„ط²ط± ط§ظ„ظ…ط´ط؛ظ‘ظ„ ط§ظ„ط±ط¦ظٹط³ظٹ */
 .fab-trigger{
   width:62px;height:62px;
   border-radius:50%;
@@ -5249,8 +5861,8 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   50%{box-shadow:0 8px 28px rgba(3,105,161,.45),0 0 0 12px rgba(3,105,161,0)}
 }
 
-/* أيقونة الزر */
-/* أيقونات الزر المشغّل */
+/* ط£ظٹظ‚ظˆظ†ط© ط§ظ„ط²ط± */
+/* ط£ظٹظ‚ظˆظ†ط§طھ ط§ظ„ط²ط± ط§ظ„ظ…ط´ط؛ظ‘ظ„ */
 .fab-icon-default, .fab-icon-close{
   position:absolute;
   width:26px;height:26px;
@@ -5264,7 +5876,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   opacity:0;
   transform:rotate(-90deg) scale(.7);
 }
-/* حالة الفتح */
+/* ط­ط§ظ„ط© ط§ظ„ظپطھط­ */
 .fab-root.open .fab-icon-default{
   opacity:0;
   transform:rotate(90deg) scale(.7);
@@ -5276,7 +5888,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 .fab-root.open .fab-trigger{animation:none;box-shadow:0 8px 28px rgba(220,38,38,.5)}
 .fab-root.open .fab-trigger{background:linear-gradient(135deg,#b91c1c,#dc2626)}
 
-/* حلقة التقدم */
+/* ط­ظ„ظ‚ط© ط§ظ„طھظ‚ط¯ظ… */
 .fab-progress-ring{
   position:absolute;inset:-5px;
   border-radius:50%;
@@ -5287,7 +5899,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   z-index:0;
 }
 
-/* شارة */
+/* ط´ط§ط±ط© */
 .fab-badge{
   position:absolute;top:-3px;right:-3px;
   background:#dc2626;color:#fff;
@@ -5302,12 +5914,12 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 }
 .fab-root.open .fab-badge{transform:scale(0)}
 
-/* ══════════════════════════════
-   أزرار الدائرة الأربعة
-   ══════════════════════════════ */
+/* â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ
+   ط£ط²ط±ط§ط± ط§ظ„ط¯ط§ط¦ط±ط© ط§ظ„ط£ط±ط¨ط¹ط©
+   â•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گâ•گ */
 .fab-radial{
   position:absolute;
-  /* مركزها على مركز الزر الرئيسي */
+  /* ظ…ط±ظƒط²ظ‡ط§ ط¹ظ„ظ‰ ظ…ط±ظƒط² ط§ظ„ط²ط± ط§ظ„ط±ط¦ظٹط³ظٹ */
   bottom:0;right:0;
   width:52px;height:52px;
   border-radius:50%;
@@ -5320,7 +5932,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     transform .35s cubic-bezier(.34,1.56,.64,1),
     opacity .25s ease;
   z-index:1;
-  /* نقل المركز لمركز الزر الرئيسي */
+  /* ظ†ظ‚ظ„ ط§ظ„ظ…ط±ظƒط² ظ„ظ…ط±ظƒط² ط§ظ„ط²ط± ط§ظ„ط±ط¦ظٹط³ظٹ */
   margin-bottom:5px;
   margin-right:5px;
 }
@@ -5332,39 +5944,39 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   pointer-events:none;
 }
 
-/* حالة المفتوح — تحريك كل زر إلى موضعه */
-/* الزر 1: مباشرة للأعلى (90°) */
+/* ط­ط§ظ„ط© ط§ظ„ظ…ظپطھظˆط­ â€” طھط­ط±ظٹظƒ ظƒظ„ ط²ط± ط¥ظ„ظ‰ ظ…ظˆط¶ط¹ظ‡ */
+/* ط§ظ„ط²ط± 1: ظ…ط¨ط§ط´ط±ط© ظ„ظ„ط£ط¹ظ„ظ‰ (90آ°) */
 .fab-root.open .fab-radial.r1{
   transform:translate(5px, -90px) scale(1);
   opacity:1;
   transition-delay:.04s;
 }
-/* الزر 2: أعلى يسار (135°) */
+/* ط§ظ„ط²ط± 2: ط£ط¹ظ„ظ‰ ظٹط³ط§ط± (135آ°) */
 .fab-root.open .fab-radial.r2{
   transform:translate(-63px, -64px) scale(1);
   opacity:1;
   transition-delay:.08s;
 }
-/* الزر 3: يسار (180°) */
+/* ط§ظ„ط²ط± 3: ظٹط³ط§ط± (180آ°) */
 .fab-root.open .fab-radial.r3{
   transform:translate(-90px, 5px) scale(1);
   opacity:1;
   transition-delay:.12s;
 }
-/* الزر 4: أعلى يمين (45°) — لكن قريب من الحافة اليمنى، نوجّهه للأعلى */
+/* ط§ظ„ط²ط± 4: ط£ط¹ظ„ظ‰ ظٹظ…ظٹظ† (45آ°) â€” ظ„ظƒظ† ظ‚ط±ظٹط¨ ظ…ظ† ط§ظ„ط­ط§ظپط© ط§ظ„ظٹظ…ظ†ظ‰طŒ ظ†ظˆط¬ظ‘ظ‡ظ‡ ظ„ظ„ط£ط¹ظ„ظ‰ */
 .fab-root.open .fab-radial.r4{
   transform:translate(5px, -160px) scale(1);
   opacity:1;
   transition-delay:.0s;
 }
 
-/* ألوان الأزرار */
-.fab-radial.r1{background:linear-gradient(135deg,#0369a1,#0ea5e9)} /* أسئلة - أزرق */
-.fab-radial.r2{background:linear-gradient(135deg,#7c3aed,#a78bfa)} /* AI - بنفسجي */
-.fab-radial.r3{background:linear-gradient(135deg,#059669,#34d399)} /* نتائج - أخضر */
-.fab-radial.r4{background:linear-gradient(135deg,#b45309,#f59e0b)} /* إعادة - ذهبي */
+/* ط£ظ„ظˆط§ظ† ط§ظ„ط£ط²ط±ط§ط± */
+.fab-radial.r1{background:linear-gradient(135deg,#0369a1,#0ea5e9)} /* ط£ط³ط¦ظ„ط© - ط£ط²ط±ظ‚ */
+.fab-radial.r2{background:linear-gradient(135deg,#7c3aed,#a78bfa)} /* AI - ط¨ظ†ظپط³ط¬ظٹ */
+.fab-radial.r3{background:linear-gradient(135deg,#059669,#34d399)} /* ظ†طھط§ط¦ط¬ - ط£ط®ط¶ط± */
+.fab-radial.r4{background:linear-gradient(135deg,#b45309,#f59e0b)} /* ط¥ط¹ط§ط¯ط© - ط°ظ‡ط¨ظٹ */
 
-/* تسمية tooltip */
+/* طھط³ظ…ظٹط© tooltip */
 .fab-radial-label{
   position:absolute;
   right:calc(100% + 10px);
@@ -5390,16 +6002,16 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   transform:translateY(-50%) translateX(0);
 }
 
-/* لـ r4 (أعلى مباشرة عمودياً) — تسمية في اليمين */
+/* ظ„ظ€ r4 (ط£ط¹ظ„ظ‰ ظ…ط¨ط§ط´ط±ط© ط¹ظ…ظˆط¯ظٹط§ظ‹) â€” طھط³ظ…ظٹط© ظپظٹ ط§ظ„ظٹظ…ظٹظ† */
 .fab-radial.r4 .fab-radial-label{
   right:calc(100% + 10px);top:50%;
 }
-/* لـ r1 (أعلى) — تسمية في اليمين أيضاً */
+/* ظ„ظ€ r1 (ط£ط¹ظ„ظ‰) â€” طھط³ظ…ظٹط© ظپظٹ ط§ظ„ظٹظ…ظٹظ† ط£ظٹط¶ط§ظ‹ */
 .fab-radial.r1 .fab-radial-label{
   right:calc(100% + 10px);
 }
 
-/* أيقونة SVG داخل الأزرار */
+/* ط£ظٹظ‚ظˆظ†ط© SVG ط¯ط§ط®ظ„ ط§ظ„ط£ط²ط±ط§ط± */
 .fab-radial svg{
   width:24px;height:24px;
   transition:transform .2s;
@@ -5408,15 +6020,15 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 .fab-radial:active{transform-origin:center center;filter:brightness(.9)}
 </style>
 
-<!-- Overlay مشترك -->
+<!-- Overlay ظ…ط´طھط±ظƒ -->
 <div class="fab-overlay" id="fabOverlay" onclick="closeFabSystem()"></div>
 
-<!-- Drawer: بنك الأسئلة -->
+<!-- Drawer: ط¨ظ†ظƒ ط§ظ„ط£ط³ط¦ظ„ط© -->
 <div class="fab-drawer" id="drawerQuestions">
   <div class="fab-drawer-head">
     <h2>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="5" rx="2.5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><rect x="2" y="10" width="20" height="5" rx="2.5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><rect x="2" y="17" width="20" height="4" rx="2" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/></svg>
-      بنك الأسئلة
+      ط¨ظ†ظƒ ط§ظ„ط£ط³ط¦ظ„ط©
     </h2>
     <button class="fab-drawer-close" onclick="closeFabSystem()">âœ•</button>
   </div>
@@ -5424,17 +6036,17 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     <div id="drawerQuestionsInner"></div>
   </div>
   <div class="fab-drawer-footer">
-    <button class="btn" id="showResultsBtnDrawer" style="flex:1">📊 النتيجة</button>
-    <button class="btn primary" id="nextBtnDrawer" style="flex:1">التالي ←</button>
+    <button class="btn" id="showResultsBtnDrawer" style="flex:1">ًں“ٹ ط§ظ„ظ†طھظٹط¬ط©</button>
+    <button class="btn primary" id="nextBtnDrawer" style="flex:1">ط§ظ„طھط§ظ„ظٹ â†گ</button>
   </div>
 </div>
 
-<!-- Drawer: التحليل الذكي -->
+<!-- Drawer: ط§ظ„طھط­ظ„ظٹظ„ ط§ظ„ط°ظƒظٹ -->
 <div class="fab-drawer" id="drawerAI">
   <div class="fab-drawer-head" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">
     <h2>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="rgba(255,255,255,.8)"/></svg>
-      التحليل الذكي | AI Analysis
+      ط§ظ„طھط­ظ„ظٹظ„ ط§ظ„ط°ظƒظٹ | AI Analysis
     </h2>
     <button class="fab-drawer-close" onclick="closeFabSystem()">âœ•</button>
   </div>
@@ -5443,62 +6055,62 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   </div>
 </div>
 
-<!-- ═══ الزر العائم الرئيسي ═══ -->
+<!-- â•گâ•گâ•گ ط§ظ„ط²ط± ط§ظ„ط¹ط§ط¦ظ… ط§ظ„ط±ط¦ظٹط³ظٹ â•گâ•گâ•گ -->
 <div class="fab-root" id="fabRoot">
-  <!-- حلقة التقدم -->
+  <!-- ط­ظ„ظ‚ط© ط§ظ„طھظ‚ط¯ظ… -->
   <div class="fab-progress-ring" id="fabProgressRing"></div>
-  <!-- شارة الأسئلة المتبقية -->
+  <!-- ط´ط§ط±ط© ط§ظ„ط£ط³ط¦ظ„ط© ط§ظ„ظ…طھط¨ظ‚ظٹط© -->
   <span class="fab-badge" id="fabQBadge" style="display:none">0</span>
 
-  <!-- الزر 4: أعلى (إعادة تعيين) -->
-  <button class="fab-radial r4" onclick="handleFabAction('reset')" title="إعادة تعيين">
+  <!-- ط§ظ„ط²ط± 4: ط£ط¹ظ„ظ‰ (ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ†) -->
+  <button class="fab-radial r4" onclick="handleFabAction('reset')" title="ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ†">
     <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linecap="round">
       <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
       <path d="M3 3v5h5"/>
     </svg>
-    <span class="fab-radial-label">إعادة التعيين</span>
+    <span class="fab-radial-label">ط¥ط¹ط§ط¯ط© ط§ظ„طھط¹ظٹظٹظ†</span>
   </button>
 
-  <!-- الزر 1: أعلى يمين (أسئلة) -->
-  <button class="fab-radial r1" onclick="handleFabAction('questions')" title="بنك الأسئلة">
+  <!-- ط§ظ„ط²ط± 1: ط£ط¹ظ„ظ‰ ظٹظ…ظٹظ† (ط£ط³ط¦ظ„ط©) -->
+  <button class="fab-radial r1" onclick="handleFabAction('questions')" title="ط¨ظ†ظƒ ط§ظ„ط£ط³ط¦ظ„ط©">
     <div class="fab-progress-ring" id="fabProgressRing2" style="inset:-3px;border-radius:50%;position:absolute;pointer-events:none;z-index:0;"></div>
     <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linecap="round" style="position:relative;z-index:1">
       <rect x="3" y="4" width="18" height="4" rx="2"/>
       <rect x="3" y="10" width="18" height="4" rx="2"/>
       <rect x="3" y="16" width="11" height="4" rx="2"/>
     </svg>
-    <span class="fab-radial-label">بنك الأسئلة</span>
+    <span class="fab-radial-label">ط¨ظ†ظƒ ط§ظ„ط£ط³ط¦ظ„ط©</span>
   </button>
 
-  <!-- الزر 2: أعلى يسار (AI) -->
-  <button class="fab-radial r2" onclick="handleFabAction('ai')" title="التحليل الذكي">
+  <!-- ط§ظ„ط²ط± 2: ط£ط¹ظ„ظ‰ ظٹط³ط§ط± (AI) -->
+  <button class="fab-radial r2" onclick="handleFabAction('ai')" title="ط§ظ„طھط­ظ„ظٹظ„ ط§ظ„ط°ظƒظٹ">
     <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linecap="round">
       <circle cx="12" cy="12" r="3"/>
       <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
     </svg>
-    <span class="fab-radial-label">التحليل الذكي</span>
+    <span class="fab-radial-label">ط§ظ„طھط­ظ„ظٹظ„ ط§ظ„ط°ظƒظٹ</span>
   </button>
 
-  <!-- الزر 3: يسار (النتيجة) -->
-  <button class="fab-radial r3" onclick="handleFabAction('results')" title="النتيجة">
+  <!-- ط§ظ„ط²ط± 3: ظٹط³ط§ط± (ط§ظ„ظ†طھظٹط¬ط©) -->
+  <button class="fab-radial r3" onclick="handleFabAction('results')" title="ط§ظ„ظ†طھظٹط¬ط©">
     <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linecap="round">
       <path d="M9 11l3 3L22 4"/>
       <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
     </svg>
-    <span class="fab-radial-label">النتيجة</span>
+    <span class="fab-radial-label">ط§ظ„ظ†طھظٹط¬ط©</span>
   </button>
 
-  <!-- الزر الرئيسي المشغّل -->
-  <button class="fab-trigger" id="fabTrigger" onclick="toggleFabMenu()" aria-label="القائمة">
-    <!-- أيقونة "ذكي" - تظهر عند الإغلاق -->
+  <!-- ط§ظ„ط²ط± ط§ظ„ط±ط¦ظٹط³ظٹ ط§ظ„ظ…ط´ط؛ظ‘ظ„ -->
+  <button class="fab-trigger" id="fabTrigger" onclick="toggleFabMenu()" aria-label="ط§ظ„ظ‚ط§ط¦ظ…ط©">
+    <!-- ط£ظٹظ‚ظˆظ†ط© "ط°ظƒظٹ" - طھط¸ظ‡ط± ط¹ظ†ط¯ ط§ظ„ط¥ط؛ظ„ط§ظ‚ -->
     <svg class="fab-icon-default" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- نجمة ذكاء اصطناعي -->
+      <!-- ظ†ط¬ظ…ط© ط°ظƒط§ط، ط§طµط·ظ†ط§ط¹ظٹ -->
       <path d="M14 4 L15.5 10.5 L22 12 L15.5 13.5 L14 20 L12.5 13.5 L6 12 L12.5 10.5 Z" fill="white" fill-opacity="0.95"/>
       <circle cx="22" cy="6" r="1.8" fill="white" fill-opacity="0.7"/>
       <circle cx="6" cy="22" r="1.4" fill="white" fill-opacity="0.6"/>
       <circle cx="22" cy="22" r="1" fill="white" fill-opacity="0.5"/>
     </svg>
-    <!-- X عند الفتح -->
+    <!-- X ط¹ظ†ط¯ ط§ظ„ظپطھط­ -->
     <svg class="fab-icon-close" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
       <line x1="18" y1="6" x2="6" y2="18"/>
       <line x1="6" y1="6" x2="18" y2="18"/>
@@ -5507,7 +6119,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 </div>
 
 <script>
-/* ═══ منطق الزر العائم الدائري ═══ */
+/* â•گâ•گâ•گ ظ…ظ†ط·ظ‚ ط§ظ„ط²ط± ط§ظ„ط¹ط§ط¦ظ… ط§ظ„ط¯ط§ط¦ط±ظٹ â•گâ•گâ•گ */
 (function(){
   var fabOpen = false;
 
@@ -5517,7 +6129,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     var overlay = document.getElementById("fabOverlay");
     if(fabOpen){
       root.classList.add("open");
-      // لا نُظهر الـ overlay عند الأزرار الدائرية — فقط خلفية شفيفة جداً
+      // ظ„ط§ ظ†ظڈط¸ظ‡ط± ط§ظ„ظ€ overlay ط¹ظ†ط¯ ط§ظ„ط£ط²ط±ط§ط± ط§ظ„ط¯ط§ط¦ط±ظٹط© â€” ظپظ‚ط· ط®ظ„ظپظٹط© ط´ظپظٹظپط© ط¬ط¯ط§ظ‹
       overlay.style.background = "rgba(15,23,42,.08)";
       overlay.classList.add("show");
     } else {
@@ -5533,12 +6145,12 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     document.getElementById("fabRoot").classList.remove("open");
     document.getElementById("fabOverlay").classList.remove("show");
     document.body.style.overflow = "";
-    // أغلق أي درج مفتوح
+    // ط£ط؛ظ„ظ‚ ط£ظٹ ط¯ط±ط¬ ظ…ظپطھظˆط­
     document.querySelectorAll(".fab-drawer").forEach(function(d){ d.classList.remove("show"); });
   };
 
   window.handleFabAction = function(action){
-    // أغلق القائمة أولاً
+    // ط£ط؛ظ„ظ‚ ط§ظ„ظ‚ط§ط¦ظ…ط© ط£ظˆظ„ط§ظ‹
     document.getElementById("fabRoot").classList.remove("open");
     fabOpen = false;
 
@@ -5553,7 +6165,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
       if(typeof tryShowResults === "function") tryShowResults();
     } else if(action === "reset"){
       closeFabSystem();
-      if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) {
+      if(confirm("ظ‡ظ„ طھط±ظٹط¯ ط¥ط¹ط§ط¯ط© طھط¹ظٹظٹظ† ط§ظ„ط§ط®طھط¨ط§ط±طں ط³ظٹطھظ… ط­ط°ظپ ط¬ظ…ظٹط¹ ط§ظ„ط¥ط¬ط§ط¨ط§طھ.")) {
         if(typeof resetAll === "function") resetAll();
       }
     }
@@ -5633,13 +6245,13 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     inner.innerHTML = rail.innerHTML;
   }
 
-  /* أزرار الدرج السفلية */
+  /* ط£ط²ط±ط§ط± ط§ظ„ط¯ط±ط¬ ط§ظ„ط³ظپظ„ظٹط© */
   var nextDrawer = document.getElementById("nextBtnDrawer");
   var resultsDrawer = document.getElementById("showResultsBtnDrawer");
   if(nextDrawer) nextDrawer.onclick = function(){ closeFabSystem(); if(typeof next==="function") next(); };
   if(resultsDrawer) resultsDrawer.onclick = function(){ closeFabSystem(); if(typeof tryShowResults==="function") tryShowResults(); };
 
-  /* مزامنة التقدم */
+  /* ظ…ط²ط§ظ…ظ†ط© ط§ظ„طھظ‚ط¯ظ… */
   function updateFabProgress(){
     var progressBar = document.getElementById("progressBar");
     var ring = document.getElementById("fabProgressRing");
@@ -5671,7 +6283,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 
   setTimeout(updateFabProgress, 800);
 
-  /* إغلاق بـ Escape */
+  /* ط¥ط؛ظ„ط§ظ‚ ط¨ظ€ Escape */
   document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeFabSystem(); });
 
 })();
