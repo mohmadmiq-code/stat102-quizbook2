@@ -168,9 +168,10 @@ html,body{min-height:100vh;font-family:'Cairo',sans-serif;background:#07101f;col
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:4px;padding:10px 14px;text-align:center;
 }
-.hico{width:30px;height:30px;flex-shrink:0}
+.hico{width:22px;height:22px;flex-shrink:0}
+.hico svg{width:100%;height:100%;display:block}
 .h-num{font-size:9.5px;font-weight:700;letter-spacing:.08em;opacity:.7;margin-top:1px}
-.h-name{font-size:11px;font-weight:700;line-height:1.28;color:#fff}
+.h-name{font-size:10px;font-weight:700;line-height:1.2;color:#fff}
 
 .hinfo{
   margin-top:11px;width:180px;text-align:center;
@@ -265,7 +266,7 @@ html,body{min-height:100vh;font-family:'Cairo',sans-serif;background:#07101f;col
   .hcard{width:140px}
   .hshell{width:126px;height:145px}
   .hinfo{width:126px;padding:8px 10px}
-  .hico{width:30px;height:30px}
+  .hico{width:22px;height:22px}
   .h-num{font-size:8.5px}
   .h-name{font-size:10px}
   .hi-t{font-size:11px}
@@ -280,7 +281,7 @@ html,body{min-height:100vh;font-family:'Cairo',sans-serif;background:#07101f;col
   .hcard{width:168px}
   .hshell{width:152px;height:175px}
   .hinfo{width:152px}
-  .hico{width:34px;height:34px}
+  .hico{width:24px;height:24px}
   .h-name{font-size:10.5px}
 }
 </style>
@@ -377,17 +378,17 @@ html,body{min-height:100vh;font-family:'Cairo',sans-serif;background:#07101f;col
 <script>
 const CHS=[
   {id:1,ar:'الأول',name:'مفاهيم أولية في الإحصاء',short:'المجتمع · العينة · البيانات',color:'#0ea5e9',gF:'#0ea5e9',gT:'#0369a1',icon:IC1(),
-    lessons:[{num:'1.1',name:'المجتمع الإحصائي وطرائق دراسته',url:'quiz-1-1.html'},{num:'1.2',name:'المتغيرات وتصنيف البيانات',url:'quiz-1-2.html'}]},
+    lessons:[{num:'1.1',name:'المجتمع الإحصائي وطرائق دراسته',url:'STAT102_1_1/'},{num:'1.2',name:'المتغيرات وتصنيف البيانات',url:'STAT102_1_2/'}]},
   {id:2,ar:'الثاني',name:'تنظيم البيانات الخام وتمثيلها',short:'الجداول التكرارية · الأشكال البيانية',color:'#10b981',gF:'#10b981',gT:'#059669',icon:IC2(),
-    lessons:[{num:'2.1',name:'تنظيم بيانات المتغيرات المتقطعة وتمثيلها بيانياً',url:'quiz-2-1.html'},{num:'2.2',name:'تنظيم بيانات المتغيرات المستمرة وتمثيلها بيانياً',url:'quiz-2-2.html'}]},
+    lessons:[{num:'2.1',name:'تنظيم بيانات المتغيرات المتقطعة وتمثيلها بيانياً',url:'STAT102_2_1/'},{num:'2.2',name:'تنظيم بيانات المتغيرات المستمرة وتمثيلها بيانياً',url:'STAT102_2_2/'}]},
   {id:3,ar:'الثالث',name:'مقاييس وصف البيانات',short:'المتوسط · الوسيط · التشتت',color:'#8b5cf6',gF:'#8b5cf6',gT:'#7c3aed',icon:IC3(),
-    lessons:[{num:'3.1',name:'مقاييس النزعة المركزية',url:'quiz-3-1.html'},{num:'3.2',name:'الربيعيات والمئينات',url:'quiz-3-2.html'},{num:'3.3',name:'مقاييس التشتت',url:'quiz-3-3.html'},{num:'3.4',name:'معاملات التشتت والدرجة المعيارية',url:'quiz-3-4.html'},{num:'3.5',name:'مقاييس الشكل للتوزيعات',url:'quiz-3-5.html'}]},
+    lessons:[{num:'3.1',name:'مقاييس النزعة المركزية',url:'STAT102_3_1/'},{num:'3.2',name:'الربيعيات والمئينات',url:'STAT102_3_2/'},{num:'3.3',name:'مقاييس التشتت',url:'STAT102_3_3/lesson_3_3/'},{num:'3.4',name:'معاملات التشتت والدرجة المعيارية',url:'STAT102_3_4/lesson_3_4/'},{num:'3.5',name:'مقاييس الشكل للتوزيعات',url:'STAT102_3_5/lesson_3_5/'}]},
   {id:4,ar:'الرابع',name:'الارتباط والانحدار',short:'بيرسون · سبيرمان · الانحدار الخطي',color:'#f59e0b',gF:'#f59e0b',gT:'#d97706',icon:IC4(),
-    lessons:[{num:'4.1',name:'معامل ارتباط بيرسون',url:'quiz-4-1.html'},{num:'4.2',name:'معامل ارتباط سبيرمان للرتب',url:'quiz-4-2.html'},{num:'4.3',name:'الانحدار الخطي البسيط',url:'quiz-4-3.html'}]},
+    lessons:[{num:'4.1',name:'معامل ارتباط بيرسون',url:'STAT102_4_1/'},{num:'4.2',name:'معامل ارتباط سبيرمان للرتب',url:'STAT102_4_2/'},{num:'4.3',name:'الانحدار الخطي البسيط',url:'STAT102_4_3/'}]},
   {id:5,ar:'الخامس',name:'مدخل إلى الاحتمالات',short:'الفضاء العيني · التوافيق · الشرطية',color:'#ef4444',gF:'#ef4444',gT:'#dc2626',icon:IC5(),
-    lessons:[{num:'5.1',name:'التجربة العشوائية وفضاء الحوادث الابتدائية',url:'quiz-5-1.html'},{num:'5.2',name:'التحليل التوافيقي',url:'quiz-5-2.html'},{num:'5.3',name:'الحادث وحساب احتماله',url:'quiz-5-3.html'},{num:'5.4',name:'الاحتمالات الشرطية واستقلال الحوادث',url:'quiz-5-4.html'}]},
+    lessons:[{num:'5.1',name:'التجربة العشوائية وفضاء الحوادث الابتدائية',url:'STAT102_5_1/'},{num:'5.2',name:'التحليل التوافيقي',url:'STAT102_5_2/'},{num:'5.3',name:'الحادث وحساب احتماله',url:'STAT102_5_3/'},{num:'5.4',name:'الاحتمالات الشرطية واستقلال الحوادث',url:'STAT102_5_4/'}]},
   {id:6,ar:'السادس',name:'المتغيرات العشوائية وتوزيعاتها',short:'التوزيع الاحتمالي · المتقطع · المستمر',color:'#14b8a6',gF:'#14b8a6',gT:'#0d9488',icon:IC6(),
-    lessons:[{num:'6.1',name:'المتغيرات العشوائية',url:'quiz-6-1.html'},{num:'6.2',name:'المتغيرات العشوائية المتقطعة وتوزيعاتها الاحتمالية',url:'quiz-6-2.html'},{num:'6.3',name:'المتغيرات العشوائية المستمرة وتوزيعاتها الاحتمالية',url:'quiz-6-3.html'}]}
+    lessons:[{num:'6.1',name:'المتغيرات العشوائية',url:'#'},{num:'6.2',name:'المتغيرات العشوائية المتقطعة وتوزيعاتها الاحتمالية',url:'#'},{num:'6.3',name:'المتغيرات العشوائية المستمرة وتوزيعاتها الاحتمالية',url:'#'}]}
 ];
 
 function IC1(){return`<svg viewBox="0 0 56 56" fill="none"><circle cx="16" cy="17" r="5" fill="rgba(255,255,255,.92)"/><circle cx="28" cy="13" r="5" fill="rgba(255,255,255,.92)"/><circle cx="40" cy="17" r="5" fill="rgba(255,255,255,.92)"/><path d="M8 33c0-5 3.6-8 8-8s8 3 8 8" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M20 33c0-5 3.6-8 8-8s8 3 8 8" stroke="rgba(255,255,255,.95)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M32 33c0-5 3.6-8 8-8s8 3 8 8" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="34" cy="39" r="7" stroke="rgba(255,255,255,.9)" stroke-width="2" fill="none"/><line x1="39.5" y1="44" x2="46" y2="50" stroke="rgba(255,255,255,.9)" stroke-width="2.2" stroke-linecap="round"/></svg>`}
