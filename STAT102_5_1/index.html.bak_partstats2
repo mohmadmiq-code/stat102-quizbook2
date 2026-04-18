@@ -4635,55 +4635,36 @@ if(window.__examRunning) startTimer(); else showIntroModal();
       var ans = 0, ok = 0;
       var errs = { conceptual: 0, computational: 0, application: 0 };
       try{
-        if(typeof state === "undefined" || !state || !state.answers) return { answered: 0, correct: 0, errs: errs };
-        var _qMap = {};
-        if(Array.isArray(BANK)){
-          BANK.forEach(function(_q){ if(_q && _q.id != null) _qMap[String(_q.id)] = _q; });
-        }
-        Object.keys(state.answers).forEach(function(_qid){
-          var _bySlot = state.answers[_qid];
-          if(!_bySlot || typeof _bySlot !== "object") return;
-          var _q = _qMap[String(_qid)] || null;
-          Object.keys(_bySlot).forEach(function(_biKey){
-            var _stored = _bySlot[_biKey];
-            if(!_stored || typeof _stored !== "object") return;
-            var _bi = parseInt(_biKey, 10);
-            if(isNaN(_bi)) _bi = 0;
-            var _b = (_q && Array.isArray(_q.branches) && _q.branches[_bi]) ? _q.branches[_bi] : null;
-            var _parts = (_b && Array.isArray(_b.parts)) ? _b.parts : null;
-            var _attemptsBranch = 1;
-            try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_qid, _bi) || 1); } }catch(_e){}
-            var _outcome = null;
-            try{ if(typeof _getOutcome === "function"){ _outcome = _getOutcome(_qid, _bi); } }catch(_e){}
-            if(_parts){
+        if(Array.isArray(BANK) && typeof state !== "undefined" && state && state.answers){
+          BANK.forEach(function(_q){
+            var _branches = Array.isArray(_q.branches) ? _q.branches : [];
+            _branches.forEach(function(_b, _bi){
+              var _parts = Array.isArray(_b.parts) ? _b.parts : [];
+              var _stored = (state.answers && state.answers[_q.id] && state.answers[_q.id][_bi]) ? state.answers[_q.id][_bi] : null;
+              if(!_stored) return;
+              var _attemptsBranch = 1;
+              try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_q.id, _bi) || 1); } }catch(_e){}
               _parts.forEach(function(_p){
-                if(!_p) return;
-                var _val = _stored[_p.key];
-                if(_val === undefined || _val === null || _val === "") return;
+                if(!_p || _stored[_p.key] === undefined || _stored[_p.key] === null || _stored[_p.key] === "") return;
                 ans++;
                 var _isOk = false;
                 try{
                   var _corr = _b.answers ? _b.answers[_p.key] : undefined;
-                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _val, _corr) : { ok:false };
+                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _stored[_p.key], _corr) : { ok:false };
                   _isOk = !!(_chk && _chk.ok);
                 }catch(_e){}
                 if(_isOk){ ok++; return; }
                 var _kind = "application";
-                if(_p.type === "mcq" || _p.type === "text"){ _kind = "conceptual"; }
-                else if(_p.type === "number"){ _kind = _attemptsBranch > 1 ? "computational" : "application"; }
+                if(_p.type === "mcq" || _p.type === "text"){
+                  _kind = "conceptual";
+                } else if(_p.type === "number"){
+                  _kind = _attemptsBranch > 1 ? "computational" : "application";
+                }
                 errs[_kind] = (errs[_kind] || 0) + 1;
               });
-            } else {
-              Object.keys(_stored).forEach(function(_k){
-                var _val = _stored[_k];
-                if(_val === undefined || _val === null || _val === "") return;
-                ans++;
-                if(_outcome === "correct"){ ok++; return; }
-                if(_outcome === "wrong"){ errs.application = (errs.application || 0) + 1; }
-              });
-            }
+            });
           });
-        });
+        }
       }catch(_e){}
       return { answered: ans, correct: ok, errs: errs };
     })();

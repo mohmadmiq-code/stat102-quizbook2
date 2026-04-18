@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 5.1 فضاء العينة</title>
+  <title>جامعة الملك سعود - السنة الأولى المشتركة - STAT 102 | 1.2 المتغيرات وأنواع البيانات</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -25,6 +25,7 @@
       --brand2:#0c4a6e;
       --brand-light:#e0f2fe;
       --accent:#0284c7;
+      --accent-hover:#0ea5e9;
       --good:#059669;
       --good-bg:#d1fae5;
       --bad:#dc2626;
@@ -38,7 +39,7 @@
       --shadow-lg: 0 20px 50px rgba(15,23,42,.1);
       --r:16px;
       --r-lg:22px;
-      --font:"Cairo", "Noto Sans Symbols 2", system-ui, sans-serif;
+      --font:"Cairo", "Noto Sans Symbols 2", system-ui, -apple-system, sans-serif;
       --transition: .2s cubic-bezier(.4,0,.2,1);
     }
     *{box-sizing:border-box}
@@ -63,6 +64,7 @@
       min-height:80px;
       position:sticky; top:0; z-index:10;
       box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(8px);
     }
     .topbar .row{
       max-width:1280px;
@@ -82,7 +84,7 @@
     .brandblock{display:flex; align-items:center; gap:14px; min-width:0; text-align:center;}
     .brandtext{min-width:0; text-align:center}
     .brandtext .u{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
-    .brandtext .u.en{font-size:13px;font-weight:700;opacity:.9;margin-top:2px;direction:ltr;unicode-bidi:embed}
+    .brandtext .u.en{font-size:13px;font-weight:700;opacity:.9;margin-top:2px;direction:ltr;unicode-bidi:embed;letter-spacing:.03em}
     .sep{opacity:.6;margin:0 6px;font-weight:600;font-size:12px}
     .brandtext .d{font-size:13px;font-weight:700;opacity:.92;margin-top:2px;line-height:1.3}
     .brandtext .s{font-size:12px;opacity:.85;margin-top:2px;font-weight:600}
@@ -101,7 +103,9 @@
       background: rgba(255,255,255,.18);
       border:1px solid rgba(255,255,255,.35);
       border-radius:12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      box-shadow:
+        0 12px 24px rgba(0,0,0,.2),
+        0 0 0 4px rgba(30,167,255,.10);
       flex:0 0 auto;
       transition: var(--transition);
     }
@@ -424,7 +428,7 @@
     .btag.easy{background:var(--good-bg);border-color:rgba(5,150,105,.25);color:var(--good)}
     .btag.med{background:var(--warn-bg);border-color:rgba(217,119,6,.25);color:var(--warn)}
     .btag.hard{background:var(--bad-bg);border-color:rgba(220,38,38,.25);color:var(--bad)}
-    .branchBody{padding:14px 16px 16px; line-height:1.75; font-size:14px; font-weight:600; color:var(--ink-soft)}
+    .branchBody{padding:16px 18px 18px; line-height:1.85; font-size:15px; font-weight:600; color:var(--ink-soft)}
 
     .parts{display:grid; gap:12px; margin-top:16px;}
     .part{
@@ -439,6 +443,9 @@
     }
     .part .label{font-weight:800;color:var(--ink);line-height:1.5;min-width:0;font-size:14px}
     .part .inputWrap{display:flex; gap:10px; align-items:center; justify-content:flex-end; flex:0 0 auto;}
+    .part.mcqPart{flex-direction:column;align-items:stretch;justify-content:flex-start;}
+    .part.mcqPart .label{width:100%;font-size:15px;}
+    .part.mcqPart .inputWrap{width:100%;justify-content:stretch;flex:1 1 auto;}
     input[type="text"], input[type="number"], textarea, select{
       border:2px solid var(--line);
       border-radius:12px;
@@ -522,24 +529,26 @@
     }
     .scoreBig{font-size:20px;font-weight:900;color:var(--ink)}
     .scoreSub{font-size:13px;font-weight:600;color:var(--muted);margin-top:4px}
-    .resultCard{border:1px solid var(--line);border-radius:18px; image-rendering:auto;background:#fff;padding:14px;margin-top:12px;}
-    .resultCard .rt{display:flex; align-items:center; justify-content:center;
-      position:relative; gap:10px; flex-wrap:wrap; margin-bottom:8px;}
-    .tag{font-size:12px;padding:6px 10px;border-radius:999px;font-weight:900;border:1px solid;}
-    .tag.good{background:#effaf4;border-color:#cfeedd;color:#0b7a43}
-    .tag.bad{background:#ffecec;border-color:#ffd1d1;color:#b42318}
+    .resultCard{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:16px;margin-top:14px; transition: var(--transition);}
+    .resultCard:hover{border-color:var(--line); box-shadow: var(--shadow-sm)}
+    .resultCard .rt{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;}
+    .tag{font-size:12px;padding:6px 12px;border-radius:10px;font-weight:800;border:1px solid;}
+    .tag.good{background:var(--good-bg);border-color:rgba(5,150,105,.3);color:var(--good)}
+    .tag.bad{background:var(--bad-bg);border-color:rgba(220,38,38,.3);color:var(--bad)}
     .partRow{
       display:grid;
       grid-template-columns: 1.15fr .9fr .95fr;
-      gap:8px;
-      padding:10px;
-      border-radius:14px;
-      border:1px solid #eef4fb;
-      background:#fbfdff;
-      margin-top:8px;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:var(--bg-warm);
+      margin-top:10px;
       font-size:13px;
+      font-weight:600;
     }
-    .partRow b{font-weight:900}
+    .partRow b{font-weight:800}
+    .partRow:first-of-type{border-top:none; margin-top:0; padding-top:0}
 
     .modal{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;}
     .modal.show{display:flex;animation:modalFadeIn .2s ease}
@@ -552,32 +561,32 @@
 
     .stemleaf{
       border:1px solid var(--line);
-      border-radius:18px; image-rendering:auto;
-      padding:14px;
-      background:linear-gradient(180deg,#f7fbff,#ffffff);
-      margin-top:10px;
+      border-radius:16px;
+      padding:18px;
+      background:linear-gradient(180deg, var(--line-soft), var(--card));
+      margin-top:14px;
     }
     .stemleaf .slRow{
       display:grid;
       grid-template-columns: 110px 12px 1fr;
-      gap:10px;
+      gap:12px;
       align-items:center;
-      margin-top:10px;
-      font-weight:900;
-      direction:ltr; /* ضمان الساق على اليسار */
+      margin-top:12px;
+      font-weight:800;
+      direction:ltr;
     }
     .stemleaf .sep{
-      width:12px;height:46px;border-radius:12px;background:#e6eef6;
-      display:grid; place-items:center; color:#2a4c66;
-      font-weight:900;
+      width:12px;height:46px;border-radius:10px;background:var(--line);
+      display:grid; place-items:center; color:var(--muted);
+      font-weight:800;
     }
     .stemleaf .stem{
-      border:1px solid #e7f0fa;border-radius:14px;padding:12px;background:#fff;
-      text-align:center;font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);
+      text-align:center;font-family: ui-monospace, monospace;
     }
     .stemleaf .leaves{
-      border:1px solid #e7f0fa;border-radius:14px;padding:12px;background:#fff;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);
+      font-family: ui-monospace, monospace;
       text-align:left; white-space:nowrap; overflow:auto;
     }
 
@@ -586,78 +595,99 @@
       border-collapse:collapse;
       overflow:hidden;
       border-radius:14px;
-      border:1px solid #cfe0f4;
-      background:#fff;
-      margin-top:10px;
+      border:1px solid var(--line);
+      background:var(--card);
+      margin-top:14px;
+      direction:ltr;
+      box-shadow: var(--shadow-sm);
     }
     .ftable th{
-      background: linear-gradient(180deg, #1a74bf, #0f5fa6);
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
       color:#fff;
-      padding:10px 8px;
+      padding:12px 10px;
       font-size:13px;
-      font-weight:900;
-      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.15);
       text-align:center;
       white-space:nowrap;
     }
     .ftable td{
-      border:1px solid #dbe7f2;
-      padding:10px 8px;
+      border:1px solid var(--line);
+      padding:12px 10px;
       text-align:center;
-      font-weight:800;
-      color:#0d2b42;
+      font-weight:700;
+      color:var(--ink);
       font-size:13px;
-      background:#fff;
+      background:var(--card);
     }
+    .ftable tr:nth-child(even) td{background:var(--bg-warm)}
     .cellInput{
       width:100%;
       min-width:unset;
-      padding:10px 10px;
-      border-radius:12px;
-      border:2px solid rgba(10,35,68,.55);
-      background:#fbfdff;
-      font-weight:900;
+      padding:10px 12px;
+      border-radius:10px;
+      border:2px solid var(--line);
+      background:var(--card);
+      font-weight:700;
       text-align:center;
       font-family:var(--font);
     }
 
     .charts{
       border:1px solid var(--line);
-      border-radius:18px; image-rendering:auto;
-      padding:14px;
-      background:linear-gradient(180deg,#f7fbff,#ffffff);
-      margin-top:10px;
+      border-radius:16px;
+      padding:18px;
+      background: linear-gradient(180deg, var(--line-soft), var(--card));
+      margin-top:14px;
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:12px;
+      gap:16px;
       align-items:start;
     }
     @media (max-width: 860px){ .charts{grid-template-columns:1fr;} }
     .chartBox{
-      border:1px solid #e7f0fa;
-      border-radius:16px;
-      background:#fff;
-      padding:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--card);
+      padding:16px;
       overflow:hidden;
+      transition: var(--transition);
     }
-    .chartTitle{font-weight:900;color:#0f2a3b;margin-bottom:8px;font-size:13px}
-    .chartNote{color:var(--muted);font-weight:800;font-size:12px;margin-top:8px;line-height:1.5}
+    .chartBox:hover{box-shadow: var(--shadow-sm)}
+    .chartTitle{font-weight:800;color:var(--ink);margin-bottom:10px;font-size:14px}
+    .chartNote{color:var(--muted);font-weight:600;font-size:12px;margin-top:10px;line-height:1.5}
     svg{display:block;width:100%;height:auto}
-  
-    .hint{margin-top:8px;font-size:13px;color:rgba(0,0,0,0.62);font-weight:900}
+
+    .hint{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
+    .dataGrid{font-family:ui-monospace, monospace;font-size:14px;padding:12px;background:var(--line-soft);border-radius:10px;margin:10px 0;border:1px solid var(--line);direction:ltr;text-align:left}
+    .smallMuted{color:var(--muted);font-size:14px;font-weight:600}
 
     input:focus, textarea:focus, select:focus{
       outline:none;
-      border-color:#0b2b4c;
-      box-shadow:0 0 0 4px rgba(11,43,76,.12);
+      border-color:var(--brand);
+      box-shadow: 0 0 0 3px rgba(3,105,161,.15);
     }
     .cellWrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-    .cellHint{font-size:11px;color:#1b3d5b;opacity:.85}
-    
-    /* خيارات متعددة (دوائر) */
-    .mcqGroup{display:flex; flex-direction:column; gap:10px; align-items:stretch; justify-content:flex-start}
-    .choice{display:flex; align-items:center; gap:10px; border:1.8px solid #dbe7f2; border-radius:999px; padding:10px 12px; font-weight:900; color:var(--brand2); cursor:pointer; background:#fff; transition:all .15s ease; width:100%}
-    .choice:hover{transform:translateY(-1px); box-shadow:0 10px 18px rgba(11,27,42,.06)}
+    .cellHint{font-size:11px;color:var(--muted);font-weight:600}
+
+    .mcqGroup{display:flex;flex-direction:column;gap:10px;margin-top:12px;align-items:stretch}
+    .choice{
+      display:flex; align-items:center; gap:12px;
+      border:2px solid var(--line);
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:700;
+      color:var(--ink);
+      cursor:pointer;
+      background:var(--card);
+      transition: var(--transition);
+    }
+    .choice:hover{
+      border-color:var(--brand);
+      background:var(--brand-light);
+      transform:translateX(-2px);
+      box-shadow: var(--shadow-sm);
+    }
     .choice input{width:18px; height:18px; margin:0; accent-color:var(--brand)}
     .choice.badField{border-color:var(--bad); background:var(--bad-bg); color:var(--bad)}
     .choice.goodField{border-color:var(--good); background:var(--good-bg); color:var(--good)}
@@ -665,11 +695,11 @@
     input.badField, textarea.badField{border-color:var(--bad) !important; background:var(--bad-bg) !important}
     input.goodField, textarea.goodField{border-color:var(--good) !important; background:var(--good-bg) !important}
 
-    /* تلميحات الرسوم */
-    .chartTip{position:fixed; z-index:10000; pointer-events:none; background:#0b1b2a; color:#fff; padding:10px 12px; border-radius:12px; box-shadow:0 12px 24px rgba(0,0,0,.18); font-weight:800; font-size:12px; max-width:260px; line-height:1.5}
-    .svgInteractive .barSeg{cursor:pointer}
-    .svgInteractive .pieSeg{cursor:pointer}
-    .svgInteractive .barSeg.selected, .svgInteractive .pieSeg.selected{stroke:rgba(10,94,168,.9); stroke-width:3}
+    .chartTip{position:fixed; z-index:10000; pointer-events:none; background:var(--ink); color:#fff; padding:12px 14px; border-radius:12px; box-shadow: var(--shadow-lg); font-weight:700; font-size:12px; max-width:280px; line-height:1.5}
+    .graphs{display:grid; gap:16px;}
+    .svgInteractive .barSeg,.svgInteractive .pieSeg{cursor:pointer; transition: var(--transition)}
+    .svgInteractive .barSeg:hover,.svgInteractive .pieSeg:hover{opacity:.9}
+    .svgInteractive .barSeg.selected, .svgInteractive .pieSeg.selected, .svgInteractive .polyDot.selected, .svgInteractive .ogDot.selected{stroke:var(--brand); stroke-width:3}
 
     .katex,.katex-display,.mathInline,.mathBlock{direction:ltr;unicode-bidi:embed;}
     .mathInline{display:inline-block;}
@@ -681,10 +711,16 @@
     body.font-lg{ font-size: 110%; }
     .unsaved-dot{ width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0; }
     .sidebar-filter{ display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap; }
+    .sidebar-filter .btn.small{ padding:6px 10px;font-size:12px; }
     .score-bar-wrap{ height:12px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0;display:flex; }
     .score-bar-correct{ height:100%;background:linear-gradient(90deg,var(--good),var(--accent));border-radius:999px;transition:width .3s; }
     .score-bar-wrong{ height:100%;background:var(--line);border-radius:0 999px 999px 0; }
-    @media print{ body * { visibility: hidden; } .modal.show, .modal.show * { visibility: visible; } .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; } .modal .box { box-shadow: none; border: 1px solid #ccc; } }
+    @media print{
+      body * { visibility: hidden; }
+      .modal.show, .modal.show * { visibility: visible; }
+      .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; }
+      .modal .box { box-shadow: none; border: 1px solid #ccc; }
+    }
 
 /* Codex Unified AI Help Start */
     .branchHead{
@@ -2165,7 +2201,7 @@ input.badField, textarea.badField{
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">5.1 فضاء العينة <span class="sep">|</span> Sample Space</div>
+          <div class="s">1.2 المتغيرات وأنواع البيانات <span class="sep">|</span> Variables and Data Types</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
@@ -2191,10 +2227,10 @@ input.badField, textarea.badField{
     <aside class="card side">
       <div class="head">
         <h3>مسار الأسئلة</h3>
-        <button class="btn small" id="resetBtn" aria-label="إعادة تعيين الاختبار">إعادة</button>
+        <button class="btn small" id="resetBtn" aria-label="إعادة ضبط الاختبار">إعادة</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="font-weight:900;color:#0f2a3b" id="progressText">0 / 0</div>
+        <div style="font-weight:900;color:#0f2a3b" id="progressText">تم حل 0 سؤال</div>
         <div style="flex:1" class="progress"><div id="progressBar"></div></div>
       </div>
       <div class="sidebar-filter">
@@ -2224,7 +2260,7 @@ input.badField, textarea.badField{
 
 
 <script>
-/* ===== أدوات عشوائية (Seeded RNG) ===== */
+/* ===== ????? ??????? (Seeded RNG) ===== */
 function xmur3(str){
   let h = 1779033703 ^ str.length;
   for (let i = 0; i < str.length; i++) {
@@ -2251,21 +2287,36 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-/* ===== حالة الصفحة (تُحفظ فقط عند ضغط حفظ الإجابة) ===== */
-const STATE_KEY = "stat102_5_1_state_v8";
+/* ===== ???? ?????? (????? ??? ??? ??? ??? ???????) ===== */
+const STATE_KEY = "stat102_1_2_state_v16";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_5_1_timerEnd_v2";
-const state = loadState() || { currentIndex: 0, variants: {}, branches: {}, order: null, timerEnded: false, reviewSet: {}, dirty: {}, sidebarFilter: "all", fontSize: 0 };
-function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
-function loadState(){ try{ const s = JSON.parse(localStorage.getItem(STATE_KEY)); if(s){ s.timerEnded = !!s.timerEnded; if(!s.reviewSet) s.reviewSet = {}; if(!s.dirty) s.dirty = {}; if(!s.sidebarFilter) s.sidebarFilter = "all"; if(s.fontSize==null) s.fontSize = 0; } return s; }catch(e){ return null; } }
+const TIMER_KEY = "stat102_1_2_timerEnd_v16";
+// Safe storage wrapper (works even if localStorage is blocked)
+const __storage = (function(){
+  try{
+    const k="__stat102_test__";
+    window.storageSet(k,"1");
+    window.storageRemove(k);
+    return window.localStorage;
+  }catch(e){
+    return null;
+  }
+})();
+function storageGet(key){ try{ return __storage ? __storage.getItem(key) : null; }catch(e){ return null; } }
+function storageSet(key, val){ try{ if(__storage) __storage.setItem(key, val); }catch(e){} }
+function storageRemove(key){ try{ if(__storage) __storage.removeItem(key); }catch(e){} }
+
+const state = loadState() || { currentIndex: 0, variants: {}, branches: {}, order: null, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
+function saveState(){ storageSet(STATE_KEY, JSON.stringify(state)); }
+function loadState(){ try{ const s = JSON.parse(storageGet(STATE_KEY)); if(s){ s.timerEnded = !!s.timerEnded; if(!s.dirty) s.dirty = {}; if(!s.sidebarFilter) s.sidebarFilter = "all"; if(s.fontSize==null) s.fontSize = 0; } return s; }catch(e){ return null; } }
 
 let timerInterval = null;
 function startTimer(){
   let endAt = null;
-  try{ const v = localStorage.getItem(TIMER_KEY); if(v) endAt = parseInt(v,10); }catch(e){}
+  try{ const v = storageGet(TIMER_KEY); if(v) endAt = parseInt(v,10); }catch(e){}
   if(endAt == null || endAt < Date.now()){
     endAt = Date.now() + TIMER_MINUTES * 60 * 1000;
-    localStorage.setItem(TIMER_KEY, String(endAt));
+    storageSet(TIMER_KEY, String(endAt));
   }
   if(endAt != null && endAt > Date.now()){
     state.timerEnded = false;
@@ -2282,7 +2333,7 @@ function startTimer(){
     el.textContent = "الوقت المتبقي: " + m + ":" + (s<10?"0":"") + s;
     el.classList.remove("warn","done");
     if(rem <= 60) el.classList.add("warn");
-    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">دقيقة واحدة متبقية — احفظ إجاباتك إن لم تكن محفوظة.</p>"); }
+    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">بقيت دقيقة واحدة على انتهاء الوقت.</p>"); }
     if(rem === 0){
       if(timerInterval) clearInterval(timerInterval);
       timerInterval = null;
@@ -2316,31 +2367,31 @@ function resetAll(){
   state.currentIndex = 0;
   state.variants = {};
   state.branches = {};
-  state.activeOrder = [];
-  state.masteryVersion = null;
+  state.order = null;
+  delete state.masteryVersion;
   state.masterySupportCount = 0;
-  state.masterySupportLog = [];
-  state.masterySupportSources = {};
   state.timerEnded = false;
-  localStorage.removeItem(TIMER_KEY);
-  reshuffleOrder();
+  state.dirty = {};
+  state.sidebarFilter = "all";
+  state.fontSize = 0;
+  storageRemove(TIMER_KEY);
   saveState();
   location.reload();
 }
 function isExamStarted(){
-  try{ const v = localStorage.getItem(TIMER_KEY); if(!v) return false; const endAt = parseInt(v,10); return endAt > Date.now(); }catch(e){ return false; }
+  try{ const v = storageGet(TIMER_KEY); if(!v) return false; const endAt = parseInt(v,10); return endAt > Date.now(); }catch(e){ return false; }
 }
 function showIntroModal(){
   const html = `
     <div style="margin-bottom:16px;line-height:1.9;">
       <p style="font-weight:800;margin-bottom:10px;">تعريف بالاختبار</p>
-      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>٣٠ دقيقة</b>.</p>
+      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>30 دقيقة</b>.</p>
       <p style="font-weight:800;margin:14px 0 6px;">تعليمات الاختبار:</p>
       <ul style="margin:0;padding-right:20px;">
-        <li>يمكنك <b>تبديل السؤال</b> لاستبداله بسؤال آخر.</li>
-        <li>يمكنك التنقل بين الأسئلة بـ <b>السابق</b> و<b>التالي</b>.</li>
-        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك طلب <b>مساعدة</b> أو إظهار الإجابة الصحيحة حسب نظام المحاولات.</li>
-        <li>عند انتهاء الوقت يُقفل الاختبار تلقائياً وتظهر النتيجة.</li>
+        <li>يمكن التنقل بين الأسئلة في أي وقت.</li>
+        <li>استخدم أزرار <b>السابق</b> و<b>التالي</b> أو مسار الأسئلة.</li>
+        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك فتح <b>مساعدة</b>.</li>
+        <li>لن يتم عرض الجواب النهائي مباشرة داخل المساعدة.</li>
       </ul>
       <p style="margin-top:16px;color:var(--muted);font-weight:700;">اضغط <b>بدء الاختبار</b> لبدء الوقت والاختبار.</p>
     </div>
@@ -2354,7 +2405,7 @@ function showIntroModal(){
 }
 window.__startExam = function(){
   window.__examRunning = true;
-  localStorage.setItem(TIMER_KEY, String(Date.now() + TIMER_MINUTES * 60 * 1000));
+  storageSet(TIMER_KEY, String(Date.now() + TIMER_MINUTES * 60 * 1000));
   state.timerEnded = false;
   saveState();
   startTimer();
@@ -2371,7 +2422,7 @@ function clearQuestionState(qid){
   saveState();
 }
 
-/* ===== أدوات مساعدة ===== */
+/* ===== ????? ?????? ===== */
 const SVG_TAGS = new Set(["svg","g","path","rect","line","circle","text","defs","linearGradient","stop","polyline","polygon"]);
 function el(tag, attrs={}, children=[]){
   const isSvg = SVG_TAGS.has(String(tag).toLowerCase());
@@ -2390,10 +2441,10 @@ function el(tag, attrs={}, children=[]){
   return node;
 }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
-function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[ظھ%]/g,"%"); }
+function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[%%]/g,"%"); }
 function parseNumberLoose(v){
   if(v==null) return NaN;
-  const s = String(v).replace(/[٬،]/g,",").replace(/[%٪]/g,"").trim();
+  const s = String(v).replace(/[??]/g,",").replace(/[%%]/g,"").trim();
   if(!s) return NaN;
   const n = Number(s);
   return Number.isFinite(n) ? n : NaN;
@@ -2417,7 +2468,7 @@ function formatNumber(x){
 }
 function parseNumberList(s){
   if(s==null) return [];
-  const raw = String(s).replace(/[،]/g, ",").trim();
+  const raw = String(s).replace(/[?]/g, ",").trim();
   if(!raw) return [];
   return raw.split(",").map(x=>x.trim()).filter(Boolean).map(x=>Number(x)).filter(x=>Number.isFinite(x)).sort((a,b)=>a-b);
 }
@@ -2436,7 +2487,7 @@ function latexFix(s){
   return String(s).replace(/\\\\/g, "\\");
 }
 
-/* ===== نافذة منبثقة ===== */
+/* ===== ????? ?????? ===== */
 function openModal(title, html){
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalBody").innerHTML = html;
@@ -2448,415 +2499,518 @@ window.closeModal = closeModal;
 document.getElementById("closeModal").onclick = closeModal;
 document.getElementById("modal").addEventListener("click", (e)=>{ if(e.target.id==="modal") closeModal(); });
 
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll('.katex, .katex-display').forEach(n=>{
-      n.setAttribute('dir','ltr');
-      n.style.direction='ltr';
-      n.style.unicodeBidi='isolate';
-    });
-  }catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll('.katex, .katex-display').forEach(n=>{
-      n.setAttribute('dir','ltr');
-      n.style.direction='ltr';
-      n.style.unicodeBidi='isolate';
-    });
-  }catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{root.querySelectorAll('.katex, .katex-display').forEach(n=>{n.setAttribute('dir','ltr');n.style.direction='ltr';n.style.unicodeBidi='isolate';});}catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll('.katex, .katex-display').forEach(n=>{
-      n.setAttribute('dir','ltr');
-      n.style.direction='ltr';
-      n.style.unicodeBidi='isolate';
-    });
-  }catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll('.katex, .katex-display').forEach(n=>{
-      n.setAttribute('dir','ltr');
-      n.style.direction='ltr';
-      n.style.unicodeBidi='isolate';
-    });
-  }catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll(".katex, .katex-display").forEach(n=>{
-      n.setAttribute("dir","ltr");
-      n.style.direction="ltr";
-      n.style.unicodeBidi="isolate";
-    });
-  }catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll('.katex, .katex-display').forEach(n=>{
-      n.setAttribute('dir','ltr');
-      n.style.direction='ltr';
-      n.style.unicodeBidi='isolate';
-    });
-  }catch(e){}
-}
-
-function fixMathDir(root){
-  if(!root) return;
-  try{
-    root.querySelectorAll(".katex, .katex-display").forEach(n=>{
-      n.setAttribute("dir","ltr");
-      n.style.direction="ltr";
-      n.style.unicodeBidi="isolate";
-    });
-  }catch(e){}
-}
-
 function typesetMath(root){
   if(!root) return;
   try{
     if(window.renderMathInElement){
-      window.renderMathInElement(root,{
-        delimiters:[
-          {left:"\\(", right:"\\)", display:false},
-          {left:"\\[", right:"\\]", display:true}
+      window.renderMathInElement(root, {
+        delimiters: [
+          {left: "\\(", right: "\\)", display: false},
+          {left: "\\[", right: "\\]", display: true}
         ],
-        throwOnError:false
+        throwOnError: false
       });
     }
   }catch(e){}
-  fixMathDir(root);
 }
 
-/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة/* ===== مسار الأسئلة (5.1) ===== */
+/* ===== ??? ??????? (????? 1.2) ===== */
 const TEMPLATES = [
   {
-    id:"q1",
-    title:"5.1 فضاء العينة — مفاهيم أساسية",
-    icon:"Ω",
-    gen:(seed)=>({
-      branches:[{
-        level:"سهل",
-        explain:[
-          "هذه أسئلة مفاهيمية مباشرة من الدرس.",
-          "اختر الإجابة الصحيحة لكل فرع."
-        ],
-        formula:[
-          String.raw`فضاء العينة يرمز له بـ \(\Omega\).`,
-          "التجربة العشوائية: يمكن تكرارها تحت نفس الظروف ولا يمكن التنبؤ بالناتج بدقة قبل إجرائها."
-        ],
-        prompt:`أجب عن الفروع التالية:`,
-        parts:[
-          { type:"mcq", key:"a", label:"(أ) تجربة حتمية", options:[
-            "قياس درجة غليان الماء عند ضغط محدد.",
-            "سحب كرة من صندوق دون النظر.",
-            "رمي حجر نرد مرة واحدة.",
-            "إلقاء قطعة نقد مرة واحدة."
-          ]},
-          { type:"mcq", key:"b", label:"(ب) رمز فضاء العينة", options:["S","E",String.raw`\(\Omega\)`,"A"] },
-          { type:"mcq", key:"c", label:"(ج) نوع الفضاء: إلقاء قطعة نقد حتى تظهر H لأول مرة", options:[
-            "فضاء محدود.",
-            "فضاء غير محدود قابل للعد.",
-            "فضاء غير محدود غير قابل للعد."
-          ]},
-          { type:"mcq", key:"d", label:"(د) خاصية ليست من خصائص التجربة العشوائية", options:[
-            "يمكن تكرار التجربة تحت نفس الظروف.",
-            "جميع النواتج الممكنة معلومة سلفًا.",
-            "لا يمكن التنبؤ بالناتج بدقة قبل إجراء التجربة.",
-            "يمكن تحديد مجموعة النواتج الممكنة."
-          ]}
-        ],
-        answers:{ a:"قياس درجة غليان الماء عند ضغط محدد.", b:String.raw`\(\Omega\)`, c:"فضاء غير محدود قابل للعد.", d:"جميع النواتج الممكنة معلومة سلفًا."},
-        solutionSteps:[
-          "التجربة الحتمية: نتيجتها معروفة مسبقًا تحت نفس الظروف ⟵ (قياس درجة الغليان).",
-          String.raw`رمز فضاء العينة هو \(\Omega\).`,
-          "في تجربة: نكرر رمي القطعة حتى تظهر H؛ عدد المحاولات قد يستمر بلا حد لكن يمكن عده (1،2،3،...) لذا فهو غير محدود قابل للعد.",
-          "في التجربة العشوائية لا تكون النتيجة مؤكدة مسبقًا؛ إذن العبارة غير المناسبة كتعبير عن العشوائية هي: جميع النواتج الممكنة معلومة سلفًا (بمعنى أن النتيجة مؤكدة)."
-        ]
-      }]
-    })
-  },
+    id:"q1_circle",
+    title:"?? ????? ??? ??????? ??????? � ????????? ?????? ????????",
+    gen:(variant)=>{
+      const r = seededRand("q1_circle|"+variant);
 
-    {
-    id:"q2",
-    title:"5.1 فضاء العينة — قطعة نقد",
-    icon:"2ⁿ",
-    gen:(seed)=>{
-      return ({
-        branches:[{
-          level:"سهل",
-          explain:[
-            "اكتب فضاء العينة عند إلقاء قطعة نقد 3 مرات.",
-            "ثم احسب عدد عناصر فضاء العينة للتجربة نفسها."
+      // 7 ???? ?? ????? 1.2 (???? ?????? 3 ???????? ???? ??????)
+      const POOL = [
+        {
+          s:"??????? (Variable) ??:",
+          options:[
+            "?????/????? ??????? ??? ????? ?????? (?? ???????) ????? ?????? (???)",
+            "???? ????? ??? ??????? ??????",
+            "???? ?????? ????????",
+            "????? ??????? ??????"
           ],
-          formula:[
-            "كل إلقاء له نتيجتان ممكنتان: H أو T.",
-            "فضاء العينة هنا هو جميع السلاسل بطول 3 من H و T.",
-            String.raw`عدد النواتج = \(2^{3} = 8\).`
+          a:"?????/????? ??????? ??? ????? ?????? (?? ???????) ????? ?????? (???)"
+        },
+        {
+          s:"?? ??? ??? ???? ??? ?????? ????? (?????)?",
+          options:[
+            "??? ?????? ???????????",
+            "????? ???? (A, B, AB, O)",
+            "??? ?????? ??????????",
+            "???? ???????? ?? 100"
           ],
-          prompt:String.raw`(أ) فضاء العينة عند إلقاء قطعة نقد 3 مرات هو:  
-(ب) أوجد \(|\Omega|\) للتجربة نفسها.`,
-          parts:[
-            { type:"mcq", key:"a", label:String.raw`(أ) \(\Omega\)`, options:[
-              String.raw`\[\Omega=\{HHH,HHT,HTH,HTT,THH,THT,TTH,TTT\}\]`,
-              String.raw`\[\Omega=\{HH,HT,TH,TT\}\]`,
-              String.raw`\[\Omega=\{\begin{aligned}
-&HHHHH,HHHHT,HHHTH,HHHTT,\dots
-\end{aligned}\}\]`,
-              String.raw`\(\{H,T\}\)`
-            ]},
-            { type:"num", key:"b", label:String.raw`(ب) \(|\Omega|\)` }
+          a:"????? ???? (A, B, AB, O)"
+        },
+        {
+          s:"?? ??? ??? ???? ??? ?????? ?????",
+          options:[
+            "?????? ?????????? (????/?????/...)",
+            "??? ?????",
+            "??? ???????? ?? ???",
+            "???????"
           ],
-          answers:{
-            a:String.raw`\[\Omega=\{HHH,HHT,HTH,HTT,THH,THT,TTH,TTT\}\]`,
-            b: 8
-          },
-          solutionSteps:[
-            "نكتب جميع السلاسل الممكنة بطول 3 من H و T:",
-            String.raw`\[\Omega=\{HHH,HHT,HTH,HTT,THH,THT,TTH,TTT\}\]`,
-            String.raw`ولأن لكل مرة نتيجتين، إذن عدد النواتج \(2^{3}=8\) وبالتالي \(|\Omega|=8\).`
-          ]
-        }]
-      })
-  }
-  },
-
-  {
-    id:"q3",
-    title:"5.1 فضاء العينة — المخطط الشجري والزوج المرتب",
-    icon:"↳",
-    gen:(seed)=>({
-      branches:[{
-        level:"متوسط",
-        explain:[
-          "المخطط الشجري يساعد على حصر النواتج.",
-          "الزوج المرتب يصف نتيجة مركبة (مثل نرد ثم قطعة نقد)."
-        ],
-        formula:[
-          "النقطة النهائية التي تمثل ناتجًا واحدًا في الشجرة تسمى ناتجًا/مسارًا نهائيًا.",
-          "عند نرد ثم قطعة نقد: الزوج المرتب (الرقم, الوجه)."
-        ],
-        prompt:`أجب عن الفروع التالية:`,
-        customUI:"diceCoin",
-        parts:[
-          { type:"mcq", key:"a", label:"(أ) في المخطط الشجري، كل نقطة نهائية تمثل ناتجًا واحدًا تُسمى:", options:[
-            "فرع داخلي","نقطة بداية","ناتج/مسار نهائي","جذر"
-          ]},
-          { type:"mcq", key:"b", label:"(ب) عند رمي حجر نرد ثم قطعة نقد، ماذا يمثل الزوج (6, T) ؟", options:[
-            "ظهور 6 على النرد و T على القطعة.",
-            "ظهور T على النرد و 6 على القطعة.",
-            "ظهور 6 على القطعة ثم T على النرد.",
-            "حدث مستحيل."
-          ]}
-        ],
-        answers:{ a:"ناتج/مسار نهائي", b:"ظهور 6 على النرد و T على القطعة." },
-        solutionSteps:[
-          "النهاية في الشجرة تمثل ناتجًا واحدًا لذلك تسمى ناتج/مسار نهائي.",
-          "الزوج (6,T): الرقم من النرد أولًا ثم وجه القطعة ثانيًا."
-        ]
-      }]
-    })
-  },
-
-  {
-    id:"q4",
-    title:"5.1 فضاء العينة — فضاء محدود (سحب كرات)",
-    icon:"|Ω|",
-    gen:(seed)=>{
-      const r = seededRand("q4|"+seed);
-      const a = randInt(r, 4, 7);
-      const b = a + randInt(r, 4, 6);
-      const start = 5;
-      const end = 15;
-      const omega1 = (b - a + 1);
-      return {
-        branches:[{
-          level:"متوسط",
-          explain:[
-            "الفضاء محدود إذا كان عدد النواتج محدودًا.",
-            "عند سحب كرة واحدة مرقمة من a إلى b فإن |Ω| هو عدد الأعداد بينهما شاملًا."
+          a:"??? ???????? ?? ???"
+        },
+        {
+          s:"???????? ??????? (Nominal) ????? ?????:",
+          options:[
+            "????? ???????? ??? ????/????? ??? ??? ?????",
+            "????? ???????? ??? ???? ???? ???????",
+            "???? ?????? ?????? ??? ?? ???? ?????????",
+            "???? ??? ???????? ???????? ??? ???? ????????"
           ],
-          formula:[
-            String.raw`\(|\Omega| = \\text{عدد القيم الممكنة}\).`
+          a:"????? ???????? ??? ????/????? ??? ??? ?????"
+        },
+        {
+          s:"???????? ??????? (Ordinal) ????? ?????:",
+          options:[
+            "?? ???? ????? ?????? ??????",
+            "???? ????? ?????? ??????? ????????/????????",
+            "????? ???? ??? ?????",
+            "?? ???? ????????"
           ],
-          prompt:`تجربة (1): سحب كرة واحدة من صندوق كرات مرقمة من **${a} إلى ${b}**.  
-(أ) أوجد ${String.raw`\(|\Omega|\)`}.  
-
-تجربة (2): سحب كرة واحدة من صندوق كرات مرقمة من **${start} إلى ${end}**.  
-(ب) نوع فضاء العينة.  
-(ج) أوجد ${String.raw`\(|\Omega|\)`}.`,
-          parts:[
-            { type:"num", key:"a1", label:"(أ) |Ω| للتجربة (1)" },
-            { type:"mcq", key:"t", label:"(ب) النوع", options:["فضاء محدود.","فضاء غير محدود قابل للعد.","فضاء غير محدود غير قابل للعد."] },
-            { type:"num", key:"a2", label:"(ج) |Ω| للتجربة (2)" }
+          a:"???? ????? ?????? ??????? ????????/????????"
+        },
+        {
+          s:"????? ??????? (Interval) ????? ????:",
+          options:[
+            "????? ??? ??? ?????",
+            "????? ??? ??? ??????? ???/???",
+            "???? ????? ????? ?????? ??? ?? ???? ???????? ??? ???? ???? ???? ??? ?????",
+            "???? ????? ???? ???????? ??? ???? ???????? ????? ??? ?????"
           ],
-          answers:{ a1: omega1, t:"فضاء محدود.", a2:(end-start+1) },
-          solutionSteps:[
-            `الأعداد الممكنة من ${a} إلى ${b} عددها ${omega1}؛ إذن ${String.raw`\(|\Omega|=${omega1}\)`}.`,
-            "في التجربة (2) عدد النواتج محدود لذا الفضاء محدود.",
-            String.raw`من 5 إلى 15: \(15-5+1=11\) إذن \(|\Omega|=11\).`
-          ]
-        }]
-      };
-    }
-  },
-
-  {
-    id:"q5",
-    title:"5.1 نوع فضاء العينة",
-    icon:"n",
-    gen:(seed)=>{
-      const r = seededRand("q5|"+seed);
-      const scenarios = [
-        { name:"زمن احتراق فتيل (بالثواني)", sym:"t", ans:"فضاء غير محدود غير قابل للعد.",
-          why:"الزمن قيمة مستمرة يمكن أن تأخذ قيمًا حقيقية كثيرة جدًا ⟵ غير محدود غير قابل للعد."},
-        { name:"درجة حرارة سائل (بالدرجة)", sym:"T", ans:"فضاء غير محدود غير قابل للعد.",
-          why:"درجة الحرارة (قياس مستمر) ⟵ غير محدود غير قابل للعد."},
-        { name:"عدد المحاولات حتى النجاح الأول", sym:"N", ans:"فضاء غير محدود قابل للعد.",
-          why:"عدد المحاولات يأخذ قيمًا صحيحة 1,2,3,... ⟵ غير محدود قابل للعد."},
-        { name:"عدد الاتصالات الواردة في دقيقة", sym:"X", ans:"فضاء غير محدود قابل للعد.",
-          why:"العدد يأخذ 0,1,2,... ⟵ غير محدود قابل للعد."}
-      ];
-      const sc = scenarios[randInt(r,0,scenarios.length-1)];
-      return ({
-        branches:[{
-          level:"متوسط",
-          explain:[
-            "حدد نوع فضاء العينة من طبيعة المتغير: مستمر أو عددي.",
-            "ثم اختر فضاء العينة الصحيح لتجربة قطعة النقد."
+          a:"???? ????? ????? ?????? ??? ?? ???? ???????? ??? ???? ???? ???? ??? ?????"
+        },
+        {
+          s:"????? ?????? (Ratio) ????? ????:",
+          options:[
+            "?? ???? ????????? ????????",
+            "???? ?????? ?????? ???",
+            "???? ??? ???????? ???????? ??? ???? ???????? ????? ??? ?????",
+            "??????? ???????? ??????? ???"
           ],
-          formula:[
-            "المتغير المستمر ⟵ فضاء غير محدود غير قابل للعد.",
-            "المتغير الذي يأخذ أعدادًا صحيحة ⟵ فضاء غير محدود قابل للعد."
-          ],
-          prompt:`(أ) إذا كانت التجربة هي قياس ${sc.name} ويرمز له بـ (${sc.sym})، فما نوع فضاء العينة؟  
-(ب) أي المجموعات التالية يمكن أن تكون فضاء عينة لإلقاء قطعة نقد مرة واحدة؟`,
-          parts:[
-            { type:"mcq", key:"a", label:"(أ) النوع", options:[
-              "فضاء محدود.",
-              "فضاء غير محدود قابل للعد.",
-              "فضاء غير محدود غير قابل للعد."
-            ]},
-            { type:"mcq", key:"b", label:"(ب) Ω", options:[
-              "\\(\\{H,T\\}\\)",
-              "\\(\\{H,H,T\\}\\)",
-              "\\(\\{H\\}\\)",
-              "\\(\\{T\\}\\)"
-            ]}
-          ],
-          answers:{ a: sc.ans, b:"\\(\\{H,T\\}\\)" },
-          solutionSteps:[
-            `${sc.why}`,
-            "فضاء العينة لإلقاء قطعة نقد مرة واحدة هو \\(\\{H,T\\}\\) لأنه يشمل جميع النواتج الممكنة دون تكرار."
-          ]
-        }]
-      })
-    }
-  },
-
-
-  {
-    id:"q6",
-    title:"5.1 فضاء العينة — النرد وقطعة النقد",
-    icon:"E",
-    gen:(seed)=>{
-      const r = seededRand("q6|"+seed);
-
-      const face = (randInt(r,0,1)===0 ? "H" : "T");
-
-      // اختيار حدث E
-      const kind = randInt(r,0,2); // 0: parity, 1: >k, 2: prime
-      let Efull = "";
-      let Eset = [];
-
-      if(kind===0){
-        const parity = (randInt(r,0,1)===0 ? "زوجي" : "فردي");
-        const nums = (parity==="زوجي") ? [2,4,6] : [1,3,5];
-        Efull = `ظهور رقم ${parity} وظهور (${face})`;
-        Eset = nums.map(n=>`(${n},${face})`);
-      }else if(kind===1){
-        const k = randInt(r,3,5);
-        const nums=[];
-        for(let n=k+1; n<=6; n++) nums.push(n);
-        Efull = `ظهور رقم أكبر من ${k} وظهور (${face})`;
-        Eset = nums.map(n=>`(${n},${face})`);
-      }else{
-        const nums=[2,3,5];
-        Efull = `ظهور رقم أولي وظهور (${face})`;
-        Eset = nums.map(n=>`(${n},${face})`);
-      }
-
-      const omegaSize = 6*2;
-      const eventSize = Eset.length;
-
-      // زوج للاختبار (قد ينتمي وقد لا ينتمي)
-      let testPair;
-      if(randInt(r,0,1)===0){
-        testPair = Eset[randInt(r,0,Eset.length-1)];
-      }else{
-        const all=[];
-        for(let d=1; d<=6; d++){
-          for(const c of ["H","T"]) all.push(`(${d},${c})`);
+          a:"???? ??? ???????? ???????? ??? ???? ???????? ????? ??? ?????"
         }
-        const outside = all.filter(x=>!Eset.includes(x));
-        testPair = outside[randInt(r,0,outside.length-1)];
-      }
-      const belongs = Eset.includes(testPair) ? "ينتمي" : "لا ينتمي";
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"mcq"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["mcq"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"???",
+            prompt:"?? ????? ??? ??????? ??????? ??? ???:",
+            parts,
+            answers,
+            explain:[
+              "??????? ?????/???? ???? ?????? ??? ??????? ??? ????? ??????/???????.",
+              "???????? ????? ?? ????? ???? ??? ??????? ???? ??????."
+            ],
+            solutionSteps:[
+              "???? ????? ?? ?????? ?? ????? ??????? ?? ?? ??? ???????? ?? ?? ????? ???????.",
+              "???? ?????? ???? ????? ??????? ????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+
+  {
+    id:"q2_tf",
+    title:"?? / ??? � ????????? ?????? ????????",
+    gen:(variant)=>{
+      const r = seededRand("q2_tf|"+variant);
+
+      // 10 ?????? (???? ?????? 5 ???????? ???? ??????)
+      const POOL = [
+        {s:"???????? ??????? (???????) ?????? ???? ?? ??????? ?? �??� ?? �???�.", a:"??"},
+        {s:"???????? ?????? ?????? ???? ?? ??????? ?? �??�.", a:"??"},
+        {s:"????? ??????? ???????? ???????? (ID) ???? ?????? ????? ????? ??????? ??????.", a:"??"},
+        {s:"???????? ???? ???? ??????? ?????? ?? ???? ????? ??????? ??????? ????????.", a:"??"},
+        {s:"?? ??????? ?????? ???? ????? ?????? ??? ?????? ??? ????? ???? ???????? ????? ??????.", a:"??"},
+        {s:"???? ??????? ???????? ??????? (C�) ???? ???? ??? ????? ?????? (Interval).", a:"??"},
+        {s:"????? ?????? ?????? ??? ????? ?????? (Ratio) ????? ??? ?????.", a:"??"},
+        {s:"?????? ???????? ???????? ???? ????? ??????? ???????? ??????? ????????.", a:"??"},
+        {s:"?????? ???????? ???????? ???? ?? ???? ????? ??? ???? ?? ??????? ????????.", a:"??"},
+        {s:"?? ????? ?????? ???? ???????? (???: ???/???) ??? ????.", a:"??"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,5);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"tf"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["??","???"]
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["tf"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"???",
+            prompt:"???? (??) ?? (???) ??? ?????:",
+            parts,
+            answers,
+            explain:[
+              "?????? ??? ????/????? ??????? ???? ??? ?????? ?????? ??? ????.",
+              "?????? ??????? (????/????/??????/????) ???? ?? ???????? ???????? ??? ????????."
+            ],
+            solutionSteps:[
+              "????: ?? ??????? ????? ?? (??? ????????) ?? (????? ???????) ?? (?????/?????)?",
+              "???? (??) ??? ???? ?????? ???????? ?????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+
+  {
+    id:"q3_method",
+    title:"???? ??????? � ???? ?? ????",
+    gen:(variant)=>{
+      const r = seededRand("q3_method|"+variant);
+
+      const POOL = [
+        {s:"??? ?????", a:"????? (Qualitative)"},
+        {s:"??? ??????", a:"???? (Quantitative)"},
+        {s:"????? ????", a:"????? (Qualitative)"},
+        {s:"???? ????????", a:"???? (Quantitative)"},
+        {s:"?????? ??????????", a:"????? (Qualitative)"},
+        {s:"??? ?????? ??????????", a:"???? (Quantitative)"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"cls"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["????? (Qualitative)","???? (Quantitative)"]
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["cls"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"?????",
+            prompt:"???? ??????? ?????? ??? ?????:",
+            parts,
+            answers,
+            explain:[
+              "?????? ??? ????/????? ??????? ???? (???? ?? ???? �??�)."
+            ],
+            solutionSteps:[
+              "??? ???? ????? ?????/????/????? ? ?????.",
+              "??? ???? ????? ??????? ??? ???? ????? ? ????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+
+  {
+    id:"q4_param_stat",
+    title:"???? ????? ??????? � ????/????/??????/????",
+    gen:(variant)=>{
+      const r = seededRand("q4_param_stat|"+variant);
+
+      const POOL = [
+        {
+          s:"????? (???/????)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Nominal)"
+        },
+        {
+          s:"??????? (?????/??? ????/???/?????)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ordinal)"
+        },
+        {
+          s:"???? ??????? ???????? ??????? (C�)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"?????? (Interval)"
+        },
+        {
+          s:"????? ???????????",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ratio)"
+        },
+        {
+          s:"??? ?????? / ????? ??????? (ID)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Nominal)"
+        },
+        {
+          s:"????? ?????????? ?? ???? (?????/??????/??????...)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ordinal)"
+        },
+        {
+          s:"??? ?????? ?? ????",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ratio)"
+        }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"lvl"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["lvl"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"?????",
+            prompt:"???? ????? ??????? ??????? ??? ???:",
+            parts,
+            answers,
+            explain:[
+              "????: ????? ??? ?????. ????: ????? ?? ?????.",
+              "??????: ???/??? ??? ??? (?? ??? ?????). ????: ???? ???????? ?????? (??? ?????)."
+            ],
+            solutionSteps:[
+              "?? ???????? ???? ?????? ? ????.",
+              "?? ???? ???????? ? ????.",
+              "?? ????? ????? ?????? ?????? ? ????.",
+              "??? ?? ??? ????? ??? ?????/????? ?????? ? ??????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+  {
+    id:"q5_nominal_ordinal",
+    title:"تمييز الاسمي والترتيبي",
+    gen:(variant)=>{
+      const r = seededRand("q5_nominal_ordinal|"+variant);
+      const POOL = [
+        { s:"فصيلة الدم", a:"اسمي (Nominal)" },
+        { s:"مستوى الرضا: منخفض، متوسط، مرتفع", a:"ترتيبي (Ordinal)" },
+        { s:"المرحلة الدراسية: أول، ثاني، ثالث", a:"ترتيبي (Ordinal)" },
+        { s:"الجنسية", a:"اسمي (Nominal)" },
+        { s:"الحالة الاجتماعية", a:"اسمي (Nominal)" },
+        { s:"ترتيب الطالب في المسابقة", a:"ترتيبي (Ordinal)" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"no"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["اسمي (Nominal)","ترتيبي (Ordinal)"]
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["no"+(i+1)] = it.a; });
 
       return {
         branches:[{
           level:"متوسط",
+          prompt:"حدد المستوى الأنسب لكل مثال:",
+          parts,
+          answers,
           explain:[
-            "التجربة المركبة: نرد ثم قطعة نقد.",
-            "عدد نواتج التجربة = (عدد نواتج النرد) × (عدد نواتج القطعة).",
-            "لإيجاد عدد عناصر حدث: احصر الأزواج التي تحقق الشرط."
+            "الاسمي يعني فئات دون ترتيب.",
+            "الترتيبي يعني فئات بينها ترتيب لكن الفروق العددية غير محددة."
           ],
           formula:[
-            String.raw`\(|\Omega| = 6 \\times 2 = 12\).`,
-            "نكتب الحدث E كأزواج مرتبة تحقق الشرط."
+            "اسمي = تصنيف فقط.",
+            "ترتيبي = تصنيف مع ترتيب."
           ],
-          prompt:`تجربة: رمي حجر نرد مرة واحدة ثم إلقاء قطعة نقد مرة واحدة.  
-
-(أ) أوجد ${String.raw`\(|\Omega|\)`}.  
-(ب) إذا كان الحدث ${String.raw`\((E)\)`}: ${Efull}، أوجد ${String.raw`\(|E|\)`}.  
-(ج) هل الزوج ${testPair} ينتمي للحدث ${String.raw`\((E)\)`}؟`,
-          customUI:"diceCoin",
-          parts:[
-            { type:"num", key:"w1", label:"(أ) |Ω|" },
-            { type:"num", key:"w2", label:"(ب) |E|" },
-            { type:"mcq", key:"w3", label:"(ج) الانتماء", options:["ينتمي","لا ينتمي"] }
-          ],
-          answers:{ w1: omegaSize, w2: eventSize, w3: belongs },
           solutionSteps:[
-            String.raw`عدد نواتج النرد \(6\) وعدد نواتج القطعة \(2\) إذن \(|\Omega|=6\\times2=12\).`,
-            `نكتب عناصر الحدث E التي تحقق الشرط: ${Eset.join(", ")}. ثم \(|E|=${eventSize}\).`,
-            `الزوج ${testPair} ${belongs==="ينتمي" ? "يحقق الشرط" : "لا يحقق الشرط"}؛ إذن الإجابة: ${belongs}.`
+            "اسأل: هل يمكن ترتيب الفئات من الأقل إلى الأعلى؟",
+            "إذا نعم فهو ترتيبي، وإذا لا فهو اسمي."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q6_interval_ratio",
+    title:"تمييز الفئوي والنسبي",
+    gen:(variant)=>{
+      const r = seededRand("q6_interval_ratio|"+variant);
+      const POOL = [
+        { s:"درجة الحرارة المئوية", a:"فئوي (Interval)" },
+        { s:"الوزن بالكيلوجرام", a:"نسبي (Ratio)" },
+        { s:"العمر بالسنوات", a:"نسبي (Ratio)" },
+        { s:"درجة الذكاء IQ", a:"فئوي (Interval)" },
+        { s:"المسافة بالكيلومترات", a:"نسبي (Ratio)" },
+        { s:"درجة الحرارة بالفهرنهايت", a:"فئوي (Interval)" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"ir"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["فئوي (Interval)","نسبي (Ratio)"]
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["ir"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"صعب",
+          prompt:"حدد المستوى الأنسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "الفئوي يملك فروقا ذات معنى لكن الصفر فيه ليس حقيقيا.",
+            "النسبي يملك صفرا حقيقيا ويمكن فيه مقارنة النسب."
+          ],
+          formula:[
+            "فئوي = فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي = فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "افحص أولا هل الصفر يعني انعدام الكمية فعلا.",
+            "إذا كان الصفر حقيقيا فالمستوى نسبي، وإلا فهو فئوي."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q7_codes_vs_values",
+    title:"الأرقام كرموز أم قياسات؟",
+    gen:(variant)=>{
+      const r = seededRand("q7_codes_vs_values|"+variant);
+      const POOL = [
+        { s:"رقم الهوية الوطنية", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"نوعي اسمي" },
+        { s:"رقم الطالب الجامعي", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"نوعي اسمي" },
+        { s:"عدد الغرف في المنزل", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"كمي نسبي" },
+        { s:"ترتيب المتسابق في السباق", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"نوعي ترتيبي" },
+        { s:"درجة الحرارة المئوية", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"كمي فئوي" },
+        { s:"عدد الساعات التي درسها الطالب", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"كمي نسبي" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"cv"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["cv"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"صعب",
+          prompt:"اختر الوصف الأدق لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "وجود أرقام في البيانات لا يعني دائما أنها كمية قابلة للحساب.",
+            "بعض الأرقام تعمل كرموز تعريف فقط مثل رقم الطالب أو الهوية."
+          ],
+          formula:[
+            "أرقام ترميزية = نوعي اسمي.",
+            "أرقام تعبر عن مقدار = متغير كمي."
+          ],
+          solutionSteps:[
+            "اسأل: هل الرقم يمثل كمية أم مجرد بطاقة تعريف؟",
+            "إذا كان مجرد تعريف فتعامل معه كبيان نوعي اسمي."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q8_advanced_tf",
+    title:"صح أو خطأ - فهم أعمق لمستويات القياس",
+    gen:(variant)=>{
+      const r = seededRand("q8_advanced_tf|"+variant);
+      const POOL = [
+        { s:"يمكن مقارنة النسب مباشرة في المستوى النسبي.", a:"صح" },
+        { s:"إذا وُجد ترتيب بين الفئات فهذا يكفي للحكم بأن البيانات فئوية.", a:"خطأ" },
+        { s:"الرقم المخصص للاعب في الفريق يعد مثالا على بيانات كمية.", a:"خطأ" },
+        { s:"الصفر في مقياس الحرارة المئوي لا يعني انعدام الحرارة تماما.", a:"صح" },
+        { s:"كل متغير ترتيبي هو في الأصل متغير نوعي.", a:"صح" },
+        { s:"العمر يمكن عده من البيانات الاسمية لأنه يكتب أرقاما.", a:"خطأ" },
+        { s:"المستوى الفئوي يسمح بفهم الفروق بين القيم لكنه لا يدعم مقارنة النسب الحقيقية.", a:"صح" },
+        { s:"الحالة الاجتماعية مثال جيد على بيانات ترتيبيّة.", a:"خطأ" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,4);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"atf"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["صح","خطأ"]
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["atf"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"صعب",
+          prompt:"حدد (صح) أو (خطأ) لكل عبارة:",
+          parts,
+          answers,
+          explain:[
+            "ركز على ثلاثة مفاتيح: وجود ترتيب، معنى الفروق، ووجود الصفر الحقيقي.",
+            "ولا تنخدع بوجود الأرقام إذا كانت مجرد رموز تعريف."
+          ],
+          formula:[
+            "ترتيب فقط = ترتيبي.",
+            "فروق ذات معنى بلا صفر حقيقي = فئوي.",
+            "فروق ذات معنى مع صفر حقيقي = نسبي."
+          ],
+          solutionSteps:[
+            "حلل العبارة وحدد أي خاصية من خصائص مستويات القياس تشير إليها.",
+            "ثم طابقها مع التعريف الصحيح للمستوى."
           ]
         }]
       };
     }
   }
-
 ];
-
 
 function randomToken(){
   return String(Date.now()) + "_" + Math.floor(Math.random()*1000000);
@@ -2888,7 +3042,8 @@ function ensureOrder(){
     && state.order.length === ids.length
     && ids.every(id=>state.order.includes(id));
   if(!ok){
-    state.order = [...ids];
+    const r = seededRand("order|"+Date.now()+"|"+Math.random());
+    state.order = shuffleInPlace([...ids], r);
     saveState();
   }
   return state.order;
@@ -2900,136 +3055,19 @@ function reshuffleOrder(){
   saveState();
 }
 
-/* Codex Adaptive Mastery Start */
-function buildQuestionById(id){
-  const t = TEMPLATES.find(x=>x.id===id);
-  if(!t) return null;
-  const v = getVariant(t.id);
-  const g = t.gen(v);
-  return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
-}
-
-const MASTERY_VERSION = "stat102_5_1_mastery_v1";
-const MASTERY_CORE = ["q1", "q3", "q5"];
-const MASTERY_PROFILES = {
-  q1:{supports:["q2", "q4", "q6"]},
-  q2:{supports:["q3", "q6", "q1"]},
-  q3:{supports:["q2", "q6", "q4"]},
-  q4:{supports:["q5", "q6", "q1"]},
-  q5:{supports:["q4", "q2", "q6"]},
-  q6:{supports:["q3", "q4", "q2"]}
-};
-
-function normalizeAdaptiveOrder(order){
-  const ids = TEMPLATES.map(t=>t.id);
-  const seen = new Set();
-  return (Array.isArray(order) ? order : []).filter(id=>{
-    if(!ids.includes(id) || seen.has(id)) return false;
-    seen.add(id);
-    return true;
+function buildBank(){
+  const order = ensureOrder();
+  return order.map(id=>{
+    const t = TEMPLATES.find(x=>x.id===id);
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
   });
 }
 
-function ensureAdaptiveState(){
-  const ids = TEMPLATES.map(t=>t.id);
-  const core = MASTERY_CORE.filter(id=>ids.includes(id));
-  let active = normalizeAdaptiveOrder(state.activeOrder);
-  if(state.masteryVersion !== MASTERY_VERSION || active.length===0){
-    const r = seededRand("mastery-core|" + Date.now() + "|" + Math.random());
-    active = shuffleInPlace([...core], r);
-    state.masteryVersion = MASTERY_VERSION;
-    state.activeOrder = active;
-    state.order = active.slice();
-    state.masterySupportCount = 0;
-    state.masterySupportLog = [];
-    state.masterySupportSources = {};
-    saveState();
-  }else if(active.length !== (state.activeOrder || []).length){
-    state.activeOrder = active;
-    state.order = active.slice();
-    saveState();
-  }
-  if(state.currentIndex >= state.activeOrder.length){
-    state.currentIndex = Math.max(0, state.activeOrder.length - 1);
-    saveState();
-  }
-  return state.activeOrder;
-}
+let BANK = [];
 
-function chooseSupportId(qid){
-  const active = ensureAdaptiveState();
-  const ids = TEMPLATES.map(t=>t.id);
-  const pools = [];
-  if(qid && MASTERY_PROFILES[qid]) pools.push(MASTERY_PROFILES[qid].supports || []);
-  pools.push(MASTERY_CORE.filter(id=>id!==qid));
-  pools.push(ids);
-  for(const pool of pools){
-    for(const id of pool){
-      if(ids.includes(id) && !active.includes(id)) return id;
-    }
-  }
-  return null;
-}
-
-function addAdaptiveSupportFor(qid, reason){
-  const active = ensureAdaptiveState();
-  const sourceKey = qid || "general";
-  state.masterySupportSources = state.masterySupportSources || {};
-  if((state.masterySupportSources[sourceKey] || 0) >= 1) return null;
-  const nextId = chooseSupportId(qid);
-  if(!nextId) return null;
-  active.push(nextId);
-  state.activeOrder = active;
-  state.order = active.slice();
-  state.masterySupportSources[sourceKey] = (state.masterySupportSources[sourceKey] || 0) + 1;
-  state.masterySupportCount = (state.masterySupportCount || 0) + 1;
-  state.masterySupportLog = state.masterySupportLog || [];
-  state.masterySupportLog.push({ source: sourceKey, support: nextId, reason: reason || "mastery", at: Date.now() });
-  saveState();
-  return nextId;
-}
-
-function maybeQueueAdaptiveSupport(question){
-  if(!window.__examRunning || !question) return null;
-  if(isQuestionWrong(question)) return addAdaptiveSupportFor(question.id, "wrong");
-  return null;
-}
-
-function ensureSupportForWeakQuestions(){
-  if(!window.__examRunning) return false;
-  ensureAdaptiveState();
-  const activeSet = new Set(state.activeOrder || []);
-  const activeQuestions = BANK.filter(q=>activeSet.has(q.id));
-  const done = activeQuestions.filter(q=>isQuestionComplete(q));
-  const wrong = done.filter(q=>isQuestionWrong(q));
-  let added = false;
-  wrong.forEach(q=>{ if(addAdaptiveSupportFor(q.id, "locked")) added = true; });
-  if(!added && done.length > 0 && done.length === activeQuestions.length && state.activeOrder.length < TEMPLATES.length){
-    const correctCount = done.filter(q=>isQuestionCorrect(q)).length;
-    const masteryRatio = correctCount / done.length;
-    if(masteryRatio < 0.85){
-      const anchor = wrong[0] || done.find(q=>!isQuestionCorrect(q)) || done[done.length-1];
-      if(addAdaptiveSupportFor(anchor && anchor.id, "mastery-threshold")) added = true;
-    }
-  }
-  if(added) BANK = buildBank();
-  return added;
-}
-
-function buildBank(){
-  const order = ensureAdaptiveState();
-  const bank = order.map(buildQuestionById).filter(Boolean);
-  if(bank.length) return bank;
-  state.activeOrder = TEMPLATES.slice(0, Math.min(3, TEMPLATES.length)).map(t=>t.id);
-  state.order = state.activeOrder.slice();
-  saveState();
-  return state.activeOrder.map(buildQuestionById).filter(Boolean);
-}
-
-let BANK = buildBank();
-/* Codex Adaptive Mastery End */
-
-/* ===== قراءة مفاتيح الإجابات لكل فرع ===== */
+/* ===== ????? ?????? ???????? ??? ??? ===== */
 function collectPartKeys(branch){
   const keys=[];
   (branch.parts||[]).forEach(p=>keys.push(p.key));
@@ -3039,7 +3077,7 @@ function collectPartKeys(branch){
   return keys;
 }
 
-/* ===== تقييم فرع ===== */
+/* ===== ????? ??? ===== */
 function gradeBranch(q, branch, bi, savedObj){
   const result = { okAll: true, byKey: {} };
 
@@ -3076,7 +3114,7 @@ function gradeBranch(q, branch, bi, savedObj){
   return result;
 }
 
-/* ===== حالة الإنجاز ===== */
+/* ===== ???? ??????? ===== */
 function isBranchComplete(qid, bi){
   const rec = ensureBranchRec(qid, bi);
   return rec.status==="correct" || rec.status==="locked" || !window.__examRunning;
@@ -3093,25 +3131,26 @@ function isQuestionWrong(q){
 
 function setProgress(){
   const completed = BANK.filter(q=>isQuestionComplete(q)).length;
+  const visibleCompleted = window.__examRunning ? completed : 0;
     const qCountEl = document.getElementById("qCount");
   const qNoEl = document.getElementById("qNo");
   if(qCountEl) qCountEl.textContent = BANK.length;
   if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
-  document.getElementById("progressText").textContent = `${completed} / ${BANK.length}`;
-  document.getElementById("progressBar").style.width = `${(completed/BANK.length)*100}%`;
+  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
+  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
 
   const pill = document.getElementById("statusPill");
   const q = BANK[state.currentIndex];
   if(isQuestionComplete(q)){
     if(isQuestionCorrect(q)){
-      pill.textContent="مكتمل";
+      pill.textContent="?????";
       pill.className="pill";
     }else{
-      pill.textContent="مكتمل (إجابة غير صحيحة)";
+      pill.textContent="????? (????? ??? ?????)";
       pill.className="pill warn";
     }
   }else{
-    pill.textContent="غير مكتمل";
+    pill.textContent="??? ?????";
     pill.className="pill warn";
   }
 
@@ -3126,33 +3165,40 @@ function setProgress(){
 function renderSidebar(){
   const list=document.getElementById("qList");
   list.innerHTML="";
+  state.dirty = state.dirty || {};
   const filter = state.sidebarFilter || "all";
-  BANK.forEach((q,i)=>{
+  const toShow = BANK.map((q,i)=>({q,i})).filter(({q,i})=>{
+    if(filter==="incomplete") return !isQuestionComplete(q);
+    return true;
+  });
+  toShow.forEach(({q,i})=>{
     const complete = isQuestionComplete(q);
-    if(filter==="incomplete" && complete) return;
     const correct = complete && isQuestionCorrect(q);
-    const hasDirty = state.dirty && state.dirty[q.id];
-
     const dotClass = !complete ? "" : (correct ? "done" : "bad");
     const badge = !complete
-      ? el("span",{class:"badge warn"},["غير مكتمل"])
-      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"مكتمل":"مكتمل (خطأ)"]);
-
+      ? el("span",{class:"badge warn"},["??? ?????"])
+      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"?????":"????? (???)"]);
+    const unsaved = state.dirty[q.id];
     const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
       el("div",{class:"left"},[
-        hasDirty ? el("div",{class:"unsaved-dot"}) : el("div",{class:"dot "+dotClass}),
+        unsaved ? el("div",{class:"unsaved-dot", title:"????? ??? ??????"},[]) : null,
+        el("div",{class:"dot "+dotClass}),
         el("div",{},[
-          el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
+          el("div",{class:"name"},[`???? ${i+1}: ${q.title}`]),
           el("div",{style:"margin-top:6px"},[badge])
         ])
       ]),
       el("div",{class:"icon"},[q.icon])
-    ]);
+    ].filter(Boolean));
     list.appendChild(item);
+  });
+  ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{
+    const btn=document.getElementById(id);
+    if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
   });
 }
 
-/* ===== واجهات مخصصة ===== */
+/* ===== ?????? ????? ===== */
 function renderFreqTable(q, branch, bi){
   const rec = ensureBranchRec(q.id, bi);
   const t = branch.table;
@@ -3174,7 +3220,7 @@ function renderFreqTable(q, branch, bi){
         inp.setAttribute("data-qid", q.id);
         inp.setAttribute("data-bi", String(bi));
         inp.setAttribute("data-key", k);
-        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); };
+        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
         if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
 
         tr.appendChild(el("td",{},[inp]));
@@ -3222,7 +3268,7 @@ function renderChartsInteractive(branch){
 
   // Bar chart (SVG)
   const w=520, h=260, pad=34, bw=56, gap=22, x0=24, baseY=h-54;
-  const barSvg = el("svg",{viewBox:`0 0 ${w} ${h}`, class:"svgInteractive", "aria-label":"الرسم بالأعمدة"},[]);
+  const barSvg = el("svg",{viewBox:`0 0 ${w} ${h}`, class:"svgInteractive", "aria-label":"????? ????????"},[]);
   barSvg.appendChild(el("rect",{x:"0",y:"0",width:String(w),height:String(h),rx:"14",fill:"#ffffff"}));
   barSvg.appendChild(el("line",{x1:String(pad),y1:String(baseY),x2:String(w-pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
   barSvg.appendChild(el("line",{x1:String(pad),y1:String(pad),x2:String(pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
@@ -3237,17 +3283,17 @@ function renderChartsInteractive(branch){
       fill:"rgba(10,94,168,.22)", stroke:"rgba(10,94,168,.45)", "stroke-width":"1.5", class:"barSeg", "data-i":String(i)},[]);
     rect.addEventListener("mousemove",(ev)=>{
       const pct = (c/N)*100;
-      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">التكرار: ${c}</div><div>النسبة: ${pct.toFixed(1)}%</div>`);
+      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">???????: ${c}</div><div>??????: ${pct.toFixed(1)}%</div>`);
     });
     rect.addEventListener("mouseleave", hideTip);
     rect.addEventListener("click", ()=>{
       barSvg.querySelectorAll(".barSeg").forEach(n=>n.classList.remove("selected"));
       rect.classList.add("selected");
-      info.innerHTML = `<div><b>الفئة:</b> ${escapeHtml(cats[i])}</div>
-                        <div><b>التكرار:</b> ${c}</div>
-                        <div><b>التكرار النسبي:</b> ${(c/N).toFixed(3)}</div>
-                        <div><b>النسبة المئوية:</b> ${((c/N)*100).toFixed(1)}%</div>
-                        <div><b>زاوية القطاع:</b> ${Math.round((c/N)*360)}°</div>`;
+      info.innerHTML = `<div><b>?????:</b> ${escapeHtml(cats[i])}</div>
+                        <div><b>???????:</b> ${c}</div>
+                        <div><b>??????? ??????:</b> ${(c/N).toFixed(3)}</div>
+                        <div><b>?????? ???????:</b> ${((c/N)*100).toFixed(1)}%</div>
+                        <div><b>????? ??????:</b> ${Math.round((c/N)*360)}�</div>`;
     });
     barGroup.appendChild(rect);
 
@@ -3257,14 +3303,14 @@ function renderChartsInteractive(branch){
   barSvg.appendChild(barGroup);
 
   const barBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["الرسم بالأعمدة"]),
+    el("div",{class:"chartTitle"},["????? ????????"]),
     el("div",{class:"svgWrap"},[barSvg]),
-    el("div",{class:"chartNote"},[`N = ${N} — مرّر المؤشر فوق العمود أو اضغط لتثبيت التفاصيل.`])
+    el("div",{class:"chartNote"},[`N = ${N} � ???? ?????? ??? ?????? ?? ???? ?????? ????????.`])
   ]);
 
   // Pie chart (SVG)
   const pcw=320, pch=260, cx=150, cy=130, pr=92;
-  const pieSvg = el("svg",{viewBox:`0 0 ${pcw} ${pch}`, class:"svgInteractive", "aria-label":"القطاعات الدائرية"},[]);
+  const pieSvg = el("svg",{viewBox:`0 0 ${pcw} ${pch}`, class:"svgInteractive", "aria-label":"???????? ????????"},[]);
   pieSvg.appendChild(el("rect",{x:"0",y:"0",width:String(pcw),height:String(pch),rx:"14",fill:"#ffffff"}));
 
   const pie = piePaths(counts, cx, cy, pr);
@@ -3273,31 +3319,31 @@ function renderChartsInteractive(branch){
     const path = el("path",{d:seg.d, fill:`rgba(30,167,255,${0.12+0.08*i})`, stroke:"rgba(10,94,168,.25)", "stroke-width":"1.5", class:"pieSeg", "data-i":String(i)},[]);
     path.addEventListener("mousemove",(ev)=>{
       const angle = (c/N)*360;
-      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">التكرار: ${c}</div><div>الزاوية: ${angle.toFixed(1)}°</div>`);
+      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">???????: ${c}</div><div>???????: ${angle.toFixed(1)}�</div>`);
     });
     path.addEventListener("mouseleave", hideTip);
     path.addEventListener("click", ()=>{
       pieSvg.querySelectorAll(".pieSeg").forEach(n=>n.classList.remove("selected"));
       path.classList.add("selected");
-      info.innerHTML = `<div><b>الفئة:</b> ${escapeHtml(cats[i])}</div>
-                        <div><b>التكرار:</b> ${c}</div>
-                        <div><b>التكرار النسبي:</b> ${(c/N).toFixed(3)}</div>
-                        <div><b>النسبة المئوية:</b> ${((c/N)*100).toFixed(1)}%</div>
-                        <div><b>زاوية القطاع:</b> ${Math.round((c/N)*360)}°</div>`;
+      info.innerHTML = `<div><b>?????:</b> ${escapeHtml(cats[i])}</div>
+                        <div><b>???????:</b> ${c}</div>
+                        <div><b>??????? ??????:</b> ${(c/N).toFixed(3)}</div>
+                        <div><b>?????? ???????:</b> ${((c/N)*100).toFixed(1)}%</div>
+                        <div><b>????? ??????:</b> ${Math.round((c/N)*360)}�</div>`;
     });
     pieSvg.appendChild(path);
   });
   pieSvg.appendChild(el("circle",{cx:String(cx),cy:String(cy),r:String(pr),fill:"none",stroke:"#dbe7f2","stroke-width":"2"}));
 
   const pieBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["القطاعات الدائرية"]),
+    el("div",{class:"chartTitle"},["???????? ????????"]),
     el("div",{class:"svgWrap"},[pieSvg]),
-    el("div",{class:"chartNote"},[`اضغط على القطاع لإظهار تفاصيله.`])
+    el("div",{class:"chartNote"},[`???? ??? ?????? ?????? ???????.`])
   ]);
 
-  const info = el("div",{class:"chartInfo", html:`<div style="font-weight:900;color:#0f2a3b;margin-bottom:6px">تفاصيل العنصر المحدد</div><div style="color:#5b6b7a;font-weight:800">اضغط على عمود/قطاع.</div>`});
+  const info = el("div",{class:"chartInfo", html:`<div style="font-weight:900;color:#0f2a3b;margin-bottom:6px">?????? ?????? ??????</div><div style="color:#5b6b7a;font-weight:800">???? ??? ????/????.</div>`});
   const infoBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["لوحة التفاصيل"]),
+    el("div",{class:"chartTitle"},["???? ????????"]),
     info
   ]);
 
@@ -3311,63 +3357,6 @@ function renderChartsInteractive(branch){
   return outer;
 }
 
-
-/* ===== رسومات: حجر نرد + قطعة نقد ===== */
-function renderDiceCoinWidget(){
-  let die = 1;
-  let coin = "H";
-  const info = el("div",{class:"muted", style:"margin-top:8px;font-weight:800"},[`النتيجة المختارة: (${die}, ${coin})`]);
-
-  function makeDieFace(n){
-    const active = (n===die);
-    const box = el("div",{class:"btn small", style:`width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;border:2px solid ${active?"#0a5ea8":"#b9cde0"};background:${active?"#e8f4ff":"#fff"};font-weight:900;cursor:pointer;`},[String(n)]);
-    box.addEventListener("click", ()=>{
-      die=n;
-      update();
-    });
-    return box;
-  }
-  function makeCoinSide(lbl){
-    const active = (lbl===coin);
-    const c = el("div",{class:"btn small", style:`width:70px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:999px;border:2px solid ${active?"#0a5ea8":"#b9cde0"};background:${active?"#e8f4ff":"#fff"};font-weight:900;cursor:pointer;`},[lbl]);
-    c.addEventListener("click", ()=>{
-      coin=lbl;
-      update();
-    });
-    return c;
-  }
-
-  const dieRow = el("div",{style:"display:flex;gap:10px;flex-wrap:wrap;justify-content:center"},[]);
-  const coinRow = el("div",{style:"display:flex;gap:10px;justify-content:center;margin-top:10px"},[]);
-  const dieFaces = [];
-  for(let n=1;n<=6;n++){ const f=makeDieFace(n); dieFaces.push(f); dieRow.appendChild(f); }
-  const coinH = makeCoinSide("H");
-  const coinT = makeCoinSide("T");
-  coinRow.appendChild(coinH); coinRow.appendChild(coinT);
-
-  function update(){
-    dieFaces.forEach((node, idx)=>{
-      const n=idx+1;
-      const active=(n===die);
-      node.style.borderColor = active?"#0a5ea8":"#b9cde0";
-      node.style.background = active?"#e8f4ff":"#fff";
-    });
-    [coinH,coinT].forEach(node=>{
-      const active=(node.textContent===coin);
-      node.style.borderColor = active?"#0a5ea8":"#b9cde0";
-      node.style.background = active?"#e8f4ff":"#fff";
-    });
-    info.textContent = `النتيجة المختارة: (${die}, ${coin})`;
-  }
-
-  const wrap = el("div",{style:"margin:12px 0; padding:12px; border:1px solid var(--line); border-radius:16px; background:#fff"},[
-    el("div",{style:"font-weight:900;margin-bottom:6px"},["النرد وقطعة النقد"]),
-    el("div",{class:"muted", style:"margin-bottom:10px"},["اختر رقم النرد والوجه (H/T) لعرض شكل الزوج المرتب."]),
-    dieRow, coinRow, info
-  ]);
-  return wrap;
-}
-
 function renderStemLeaf(branch){
   return el("div",{class:"stemleaf"},[
     ...(branch.stemleaf||[]).map(r=> el("div",{class:"slRow"},[
@@ -3378,7 +3367,7 @@ function renderStemLeaf(branch){
   ]);
 }
 
-/* ===== قراءة المدخلات من DOM بدون حفظ ===== */
+/* ===== ????? ???????? ?? DOM ???? ??? ===== */
 function readBranchInputs(qid, bi, branch){
   const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
   const saved = {};
@@ -3458,16 +3447,16 @@ function disableBranchInputs(qid, bi){
   if(saveBtn) saveBtn.disabled = true;
 }
 
-/* ===== المساعدة والإجابة الصحيحة ===== */
+/* ===== ???????? ???????? ??????? ===== */
 function openHelp(q, branch){
   const explainHtml = (branch.explain && branch.explain.length)
     ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المطلوب قبل التعويض.</div>";
+    : "<div style='color:var(--muted);font-weight:700'>???? ?????? ???????? ?? ??? ??????? ??? ???????.</div>";
   const formulaHtml = (branch.formula && branch.formula.length)
     ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
+    : "<div style='color:var(--muted);font-weight:700'>???? ??????? ??????? ?? ???? ???? ????.</div>";
 
-  openModal("مساعدة", `
+  openModal("?????? ????", `
     <div class="ai-help-panel">
       <div class="ai-help-hero">
         <div class="ai-help-orb"><span></span></div>
@@ -3478,15 +3467,15 @@ function openHelp(q, branch){
       <div class="ai-help-grid">
         <div class="ai-help-section">
           <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">✦</span>
-            <span>كيف تفكر في السؤال؟</span>
+            <span class="ai-help-chip-icon">?</span>
+            <span>??? ???? ?? ???????</span>
           </div>
           <div class="ai-help-body">${explainHtml}</div>
         </div>
         <div class="ai-help-section">
           <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">∑</span>
-            <span>ما القانون أو المسار؟</span>
+            <span class="ai-help-chip-icon">?</span>
+            <span>?? ??????? ?? ???????</span>
           </div>
           <div class="ai-help-body">${formulaHtml}</div>
         </div>
@@ -3497,7 +3486,7 @@ function openHelp(q, branch){
 
 function openCorrectAnswer(q, branch, bi){
   const steps = (branch.solutionSteps && branch.solutionSteps.length)
-    ? `<div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>
+    ? `<div style="font-weight:900;margin:10px 0 6px">????? ????</div>
        <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
     : "";
 
@@ -3510,53 +3499,55 @@ function openCorrectAnswer(q, branch, bi){
   if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
     branch.table.rows.forEach(r=>{
       (r.inputs||[]).forEach(k=>{
-        correctList.push(`<li><b>قيمة</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
+        correctList.push(`<li><b>????</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
       });
     });
   }
   const correctHtml = correctList.length
-    ? `<div style="font-weight:900;margin:12px 0 6px">الإجابة الصحيحة</div>
+    ? `<div style="font-weight:900;margin:12px 0 6px">??????? ???????</div>
        <ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
     : "";
 
-  openModal("الإجابة الصحيحة", `
-    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} — (${escapeHtml(branch.level)})</div>
+  openModal("??????? ???????", `
+    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} � (${escapeHtml(branch.level)})</div>
     ${steps}
     ${correctHtml}
-    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">تم إظهار الإجابة الصحيحة. لتجنّب حفظ الحل، يمكنك توليد نسخة جديدة.</div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button><button class="btn small" onclick="closeModal()">لاحقًا</button></div>
+    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">?? ????? ??????? ???????. ?????? ??? ????? ????? ????? ???? ?????.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">????? ???? ????</button><button class="btn small" onclick="closeModal()">??????</button></div>
   `);
   const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
   if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
 }
 
 function promptOpenCorrectAnswer(q, branch, bi){
-  openModal("انتهت المحاولات", `
-    <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
-    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
-    <button class="btn primary" id="showAnswerAfterAttemptsBtn">إظهار الإجابة</button>
+  openModal("????? ?????????", `
+    <div style="font-weight:900;margin-bottom:10px">????? ??????? ??? ??????.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">????? ???? ??? ???? ?????? ?????? ??? ???? ??????.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">????? ???????</button>
   `);
   const btn = document.getElementById("showAnswerAfterAttemptsBtn");
   if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
 }
 
-/* ===== حفظ الإجابة (المنطق المتفق عليه) ===== */
+function markDirty(qid){ state.dirty = state.dirty || {}; state.dirty[qid]=true; saveState(); renderSidebar(); }
+
+/* ===== ??? ??????? (?????? ?????? ????) ===== */
 function handleSaveBranch(q, branch, bi){
   const rec = ensureBranchRec(q.id, bi);
 
-  // إذا كان مغلق/صحيح فلا حفظ
+  // ??? ??? ????/???? ??? ???
   if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
 
   const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
   if(!okFilled){
-    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الخانات المطلوبة ثم اضغط (حفظ الإجابة).</div>`);
+    openModal("?????", `<div style="font-weight:900">???? ???? ??????? ???????? ?? ???? (??? ???????).</div>`);
     return;
   }
 
-  // سجل المحاولة والحفظ
+  // ??? ???????? ??????
   rec.attempts = (rec.attempts || 0) + 1;
   rec.saved = saved;
-  if(state.dirty) state.dirty[q.id] = false;
+  delete state.dirty[q.id];
   saveState();
 
   const grade = gradeBranch(q, branch, bi, rec.saved);
@@ -3569,18 +3560,18 @@ function handleSaveBranch(q, branch, bi){
     return;
   }
 
-  // خطأ
+  // ???
   if(rec.attempts === 1){
     rec.status = "wrong1";
     saveState();
   applyFieldFeedback(q.id, bi, grade);
     setProgress(); renderSidebar();
-    // افتح المساعدة تلقائياً (بدون طريقة الحل)
+    // ???? ???????? ???????? (???? ????? ????)
     openHelp(q, branch);
     return;
   }
 
-  // المحاولة الثانية: إظهار الإجابة الصحيحة وإغلاق التعديل
+  // ???????? ???????: ????? ??????? ??????? ?????? ???????
   rec.status = "locked";
   saveState();
   applyFieldFeedback(q.id, bi, grade);
@@ -3589,8 +3580,7 @@ function handleSaveBranch(q, branch, bi){
   promptOpenCorrectAnswer(q, branch, bi);
 }
 
-/* ===== عرض الصفحة الرئيسية ===== */
-
+/* ===== ??? ?????? ???????? ===== */
 function renderMain(){
   BANK = buildBank();
   const i = state.currentIndex;
@@ -3606,22 +3596,22 @@ function renderMain(){
       el("div",{},[q.title])
     ]),
     el("div",{class:"qmeta"},[
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["تبديل السؤال"]),
-      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["إظهار النتيجة"]),
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["السابق"]),
-      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["التالي"])
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["????? ??????"]),
+      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["????? ???????"]),
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["??????"]),
+      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["??????"])
     ])
   ]);
 
   const branches = el("div",{class:"branches"},[]);
   q.branches.forEach((branch, bi)=>{
-    const tagClass=(branch.level==="سهل")?"easy":(branch.level==="متوسط"?"med":"hard");
+    const tagClass=(branch.level==="???")?"easy":(branch.level==="?????"?"med":"hard");
     const rec = ensureBranchRec(q.id, bi);
 
     const branchCard = el("div",{class:"branch"},[]);
     const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
       ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},
-        [rec.status==="correct" ? "صحيح" : "خطأ"])
+        [rec.status==="correct" ? "????" : "???"])
       : null;
 
     const head = el("div",{class:"branchHead"},[
@@ -3634,8 +3624,6 @@ const body = el("div",{class:"branchBody"},[]);
 
     if(branch.customUI==="stemleaf"){ body.appendChild(renderStemLeaf(branch)); }
     if(branch.customUI==="freqTable"){ body.appendChild(renderFreqTable(q, branch, bi)); }
-    if(branch.customUI==="diceCoin"){ body.appendChild(renderDiceCoinWidget()); }
-
     if(branch.customUI==="charts"){
       const ch = renderChartsInteractive(branch);
       body.appendChild(ch);
@@ -3644,6 +3632,7 @@ const body = el("div",{class:"branchBody"},[]);
     const parts = el("div",{class:"parts"},[]);
     (branch.parts||[]).forEach(p=>{
       const row = el("div",{class:"part"},[]);
+      if(p.type==="mcq") row.classList.add("mcqPart");
       const label = el("div",{class:"label"},[p.label]);
       const inputWrap = el("div",{class:"inputWrap"},[]);
       const savedVal = (rec.saved && rec.saved[p.key]!=null) ? rec.saved[p.key] : "";
@@ -3657,9 +3646,9 @@ const body = el("div",{class:"branchBody"},[]);
           radio.setAttribute("data-bi", String(bi));
           radio.setAttribute("data-key", p.key);
           if(String(savedVal)===String(op)) radio.checked = true;
+          radio.onchange = ()=>{ markDirty(q.id); };
           if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
 
-          radio.addEventListener("change", ()=>{ state.dirty=state.dirty||{}; state.dirty[q.id]=true; saveState(); renderSidebar(); });
           const lab = el("label",{class:"choice", for:id},[
             radio,
             el("span",{},[op])
@@ -3673,7 +3662,7 @@ const body = el("div",{class:"branchBody"},[]);
         ta.setAttribute("data-bi", String(bi));
         ta.setAttribute("data-key", p.key);
         ta.value = savedVal;
-        ta.oninput = ()=>{ ta.classList.remove("badField","goodField"); state.dirty=state.dirty||{}; state.dirty[q.id]=true; saveState(); renderSidebar(); };
+        ta.oninput = ()=>{ ta.classList.remove("badField","goodField"); markDirty(q.id); };
         if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) ta.disabled = true;
         inputWrap.appendChild(ta);
       }else{
@@ -3682,7 +3671,7 @@ const body = el("div",{class:"branchBody"},[]);
         inp.setAttribute("data-bi", String(bi));
         inp.setAttribute("data-key", p.key);
         inp.value = savedVal;
-        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); state.dirty=state.dirty||{}; state.dirty[q.id]=true; saveState(); renderSidebar(); };
+        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
         if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
         inputWrap.appendChild(inp);
       }
@@ -3693,10 +3682,10 @@ const body = el("div",{class:"branchBody"},[]);
     });
 
     const btns = el("div",{class:"branchBtns"},[
-      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["حفظ الإجابة"]),
-      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"مساعد ذكاء اصطناعي"},[
-        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["✦"]),
-        "مساعدة"
+      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["??? ???????"]),
+      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"????? ???? ???????"},[
+        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["?"]),
+        "?????? ????"
       ])
     ]);
     if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
@@ -3724,7 +3713,7 @@ const body = el("div",{class:"branchBody"},[]);
   typesetMath(wrap);
 }
 
-/* ===== تبديل السؤال ===== */
+/* ===== ????? ?????? ===== */
 function swapQuestion(qid){
   bumpVariant(qid);
   clearQuestionState(qid);
@@ -3740,42 +3729,25 @@ function swapQuestion(qid){
   renderAll();
 }
 
-/* ===== التنقل ===== */
+/* ===== ?????? ===== */
 function next(){
-  if(typeof ensureSupportForWeakQuestions === "function" && ensureSupportForWeakQuestions()){
+  if(state.currentIndex < BANK.length-1){
+    state.currentIndex++;
     saveState();
+    renderAll();
+  }else{
+    tryShowResults();
   }
-  const start = Math.min(state.currentIndex + 1, BANK.length);
-  for(let i=start;i<BANK.length;i++){
-    if(!isQuestionComplete(BANK[i])){
-      state.currentIndex = i;
-      saveState();
-      renderAll();
-      return;
-    }
-  }
-  for(let i=0;i<BANK.length;i++){
-    if(!isQuestionComplete(BANK[i])){
-      state.currentIndex = i;
-      saveState();
-      renderAll();
-      return;
-    }
-  }
-  tryShowResults();
 }
 function prev(){
-  for(let i=state.currentIndex-1;i>=0;i--){
-    if(BANK[i]){
-      state.currentIndex=i;
-      saveState();
-      renderAll();
-      return;
-    }
+  if(state.currentIndex>0){
+    state.currentIndex--;
+    saveState();
+    renderAll();
   }
 }
 
-/* ===== النتيجة (نافذة منبثقة) ===== */
+/* ===== ??????? (????? ??????) ===== */
 function listIncomplete(){
   const arr=[];
   BANK.forEach((q,i)=>{
@@ -3785,14 +3757,9 @@ function listIncomplete(){
 }
 
 function tryShowResults(){
-  if(typeof ensureSupportForWeakQuestions === "function" && ensureSupportForWeakQuestions()){
-    renderAll();
-    openModal("متابعة الإتقان", `<div style="font-weight:900;line-height:1.9">تمت إضافة سؤال دعم بناءً على الأداء. أكمل السؤال الجديد ثم ستظهر النتيجة.</div>`);
-    return;
-  }
   const p = setProgress();
   if(!p.doneAll){
-    if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
+    if(!confirm("???? ????? ?? ???? ????. ?? ???? ?????????")) return;
   }
   showResultsModal();
 }
@@ -3824,8 +3791,8 @@ function showResultsModal(){
 
     let inner = `
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <div style="font-weight:900">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
-        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"✓ صحيح":"× غير صحيح"}</span>
+        <div style="font-weight:900">???? ${qi+1}: ${escapeHtml(q.title)}</div>
+        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"? ????":"� ??? ????"}</span>
       </div>
     `;
 
@@ -3836,16 +3803,16 @@ function showResultsModal(){
 
       inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
       keys.forEach(k=>{
-        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "—";
+        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "�";
         const correctVal = branch.answers[k];
         const ok = grade.byKey[k];
         const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
 
         inner += `
           <div class="partRow">
-            <div><b>الجزء:</b> ${escapeHtml(k)}</div>
-            <div><b>إجابتك:</b> ${escapeHtml(String(student))}</div>
-            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
+            <div><b>?????:</b> ${escapeHtml(k)}</div>
+            <div><b>??????:</b> ${escapeHtml(String(student))}</div>
+            <div><b>??????:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"?":"�"}</span></div>
           </div>`;
       });
     });
@@ -3853,38 +3820,601 @@ function showResultsModal(){
     return `<div class="resultCard">${inner}</div>`;
   }).join("");
 
-  const scoreBar = `<div class="score-bar-wrap"><div class="score-bar-correct" style="width:${s.total? (s.correct/s.total)*100 : 0}%"></div><div class="score-bar-wrong" style="flex:1"></div></div>`;
-  openModal("النتيجة", `
-    <div class="resultWrap">
+  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
+  const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
+  openModal("???????", `
     <div class="scoreCard" style="margin-bottom:14px">
       <div>
-        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} — ${s.pct}%</div>
-        ${scoreBar}
-        <div class="scoreSub">تم تصحيح كل جزء بشكل مستقل.</div>
+        <div class="scoreBig">??????: ${s.correct} ?? ${s.total} � ${s.pct}%</div>
+        <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
+        <div class="scoreSub">?? ????? ?? ??? ???? ?????.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
-        <button class="btn primary" onclick="window.__resetAll()">إعادة المحاولة</button>
+        <button class="btn primary" onclick="window.print()">????? ???????</button>
+        <button class="btn primary" onclick="window.__resetAll(); closeModal();">????? ????????</button>
       </div>
     </div>
     ${cards}
+  `);
+}
+const CLEAN_TEMPLATES_12 = [
+  {
+    id:"q1_circle",
+    title:"اختر الإجابة الصحيحة - المتغيرات وأنواع البيانات",
+    gen:(variant)=>{
+      const r = seededRand("q1_circle|"+variant);
+      const POOL = [
+        { s:"المتغير (Variable) هو:", options:["صفة أو خاصية تختلف من مفردة إلى أخرى","جدول لعرض البيانات","طريقة لحساب المتوسط","عدد الفئات فقط"], a:"صفة أو خاصية تختلف من مفردة إلى أخرى" },
+        { s:"أي مما يلي مثال على متغير نوعي اسمي؟", options:["درجة الحرارة المئوية","فصيلة الدم (A, B, AB, O)","عدد الإخوة","العمر بالسنوات"], a:"فصيلة الدم (A, B, AB, O)" },
+        { s:"أي مما يلي مثال على متغير كمي؟", options:["المدينة السكنية","لون العين","عدد الغيابات في الفصل","الجنسية"], a:"عدد الغيابات في الفصل" },
+        { s:"المستوى الاسمي (Nominal) يتميز بأنه:", options:["تصنيف دون ترتيب بين الفئات","تصنيف مع ترتيب واضح","بيانات ذات صفر حقيقي","بيانات يمكن مقارنة النسب فيها"], a:"تصنيف دون ترتيب بين الفئات" },
+        { s:"المستوى الترتيبي (Ordinal) يتميز بأنه:", options:["لا يوجد فيه ترتيب","تصنيف مع ترتيب بين الفئات","فروق عددية متساوية","وجود صفر حقيقي"], a:"تصنيف مع ترتيب بين الفئات" },
+        { s:"المستوى الفئوي (Interval) يتميز بأنه:", options:["يستخدم للفئات الاسمية فقط","ترتيب فقط دون أعداد","الفروق بين القيم ذات معنى لكن الصفر غير حقيقي","يمكن مقارنة النسب فيه مباشرة"], a:"الفروق بين القيم ذات معنى لكن الصفر غير حقيقي" },
+        { s:"المستوى النسبي (Ratio) يتميز بأنه:", options:["لا يحتوي على صفر حقيقي","مناسب فقط للبيانات النوعية","يحتوي على صفر حقيقي ويمكن مقارنة النسب","يعبر عن ترتيب فقط"], a:"يحتوي على صفر حقيقي ويمكن مقارنة النسب" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"mcq"+(i+1), label:(i+1)+") "+it.s, options:it.options }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["mcq"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"سهل",
+          prompt:"اختر الإجابة الصحيحة لكل عبارة:",
+          parts,
+          answers,
+          explain:[
+            "حدد أولا هل السؤال عن نوع المتغير أم عن مستوى القياس.",
+            "المتغير الكمي يعبر عن عدد أو مقدار، أما النوعي فيصف فئة أو صفة."
+          ],
+          formula:[
+            "اسمي: تصنيف فقط.",
+            "ترتيبي: تصنيف مع ترتيب.",
+            "فئوي: فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي: فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "اقرأ العبارة وابحث عن الكلمة المفتاحية في التعريف.",
+            "استبعد الاختيارات التي تتحدث عن مستوى مختلف."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q2_tf",
+    title:"صح / خطأ - أنواع البيانات ومستويات القياس",
+    gen:(variant)=>{
+      const r = seededRand("q2_tf|"+variant);
+      const POOL = [
+        {s:"البيانات الاسمية تصنف في فئات دون ترتيب.", a:"صح"},
+        {s:"البيانات الكمية تقاس عدديا.", a:"صح"},
+        {s:"رقم الهوية متغير كمي يمكن إجراء العمليات الحسابية عليه.", a:"خطأ"},
+        {s:"المتغير النوعي لا يمثل كمية قابلة للقياس العددي.", a:"صح"},
+        {s:"المستوى التعليمي مثال على بيانات ترتيبية.", a:"صح"},
+        {s:"درجة الحرارة المئوية من المستوى النسبي.", a:"خطأ"},
+        {s:"الوزن من المستوى النسبي لأنه يملك صفرا حقيقيا.", a:"صح"},
+        {s:"البيانات الترتيبية تسمح بالمقارنة من حيث الترتيب فقط.", a:"صح"},
+        {s:"البيانات الفئوية لا تحتوي على صفر حقيقي.", a:"صح"},
+        {s:"جميع المتغيرات النوعية ثنائية فقط.", a:"خطأ"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,5);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"tf"+(i+1), label:(i+1)+") "+it.s, options:["صح","خطأ"] }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["tf"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"سهل",
+          prompt:"حدد (صح) أو (خطأ) لكل عبارة:",
+          parts,
+          answers,
+          explain:[
+            "اسأل نفسك: هل المتغير وصفي أم عددي؟ وهل يوجد ترتيب أو صفر حقيقي؟",
+            "رقم التعريف قد يكون مكتوبا بالأرقام لكنه لا يمثل كمية قابلة للقياس."
+          ],
+          formula:[
+            "اسمي = فئات فقط.",
+            "ترتيبي = فئات مرتبة.",
+            "فئوي = فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي = فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "حدد المفهوم الأساسي في العبارة.",
+            "طابق العبارة مع تعريف المستوى أو نوع المتغير."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q3_method",
+    title:"نوع المتغير - نوعي أم كمي",
+    gen:(variant)=>{
+      const r = seededRand("q3_method|"+variant);
+      const POOL = [
+        {s:"لون العين", a:"نوعي (Qualitative)"},
+        {s:"عدد الإخوة", a:"كمي (Quantitative)"},
+        {s:"المدينة السكنية", a:"نوعي (Qualitative)"},
+        {s:"الطول بالسنتيمتر", a:"كمي (Quantitative)"},
+        {s:"الحالة الاجتماعية", a:"نوعي (Qualitative)"},
+        {s:"الدخل الشهري", a:"كمي (Quantitative)"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"cls"+(i+1), label:(i+1)+") "+it.s, options:["نوعي (Qualitative)","كمي (Quantitative)"] }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["cls"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"متوسط",
+          prompt:"حدد نوع المتغير المناسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "إذا كان الناتج صفة أو فئة فهو متغير نوعي.",
+            "إذا كان الناتج عددا أو مقدارا قابلا للقياس فهو متغير كمي."
+          ],
+          formula:[
+            "نوعي = وصف أو فئة.",
+            "كمي = عدد أو قياس."
+          ],
+          solutionSteps:[
+            "حدد هل الإجابة ستكون وصفا أم قيمة عددية.",
+            "اختر النوع الموافق لذلك."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q4_param_stat",
+    title:"مستوى القياس المناسب",
+    gen:(variant)=>{
+      const r = seededRand("q4_param_stat|"+variant);
+      const POOL = [
+        { s:"الجنس (ذكر/أنثى)", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"اسمي (Nominal)" },
+        { s:"التقدير (ضعيف/جيد/ممتاز)", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"ترتيبي (Ordinal)" },
+        { s:"درجة الحرارة المئوية", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"فئوي (Interval)" },
+        { s:"الوزن بالكيلوغرام", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"نسبي (Ratio)" },
+        { s:"رقم الطالب الجامعي", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"اسمي (Nominal)" },
+        { s:"المستوى التعليمي", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"ترتيبي (Ordinal)" },
+        { s:"العمر بالسنوات", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"نسبي (Ratio)" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"lvl"+(i+1), label:(i+1)+") "+it.s, options:it.options }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["lvl"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"متوسط",
+          prompt:"حدد مستوى القياس المناسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "اسأل: هل توجد فئات فقط أم ترتيب أم فروق ذات معنى أم صفر حقيقي؟",
+            "وجود صفر حقيقي يجعل المستوى نسبيا."
+          ],
+          formula:[
+            "اسمي: فئات فقط.",
+            "ترتيبي: فئات مرتبة.",
+            "فئوي: فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي: فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "حدد إن كانت البيانات فئوية أو عددية.",
+            "افحص وجود ترتيب.",
+            "افحص معنى الفروق ووجود الصفر الحقيقي."
+          ]
+        }]
+      };
+    }
+  }
+];
+
+const ADAPTIVE_TEMPLATE_EXTRA_IDS_12 = new Set(["q5_nominal_ordinal","q6_interval_ratio","q7_codes_vs_values","q8_advanced_tf"]);
+const ADAPTIVE_TEMPLATES_12 = CLEAN_TEMPLATES_12.concat(
+  TEMPLATES.filter((template) => ADAPTIVE_TEMPLATE_EXTRA_IDS_12.has(template.id))
+);
+
+function buildBank(){
+  const order = ensureOrder();
+  const bank = order.map(id=>{
+    const t = ADAPTIVE_TEMPLATES_12.find(x=>x.id===id);
+    if(!t) return null;
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+  }).filter(Boolean);
+  return bank.length ? bank : ADAPTIVE_TEMPLATES_12.map(t=>{
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+  });
+}
+
+function swapQuestion(qid){
+  bumpVariant(qid);
+  clearQuestionState(qid);
+  const t = ADAPTIVE_TEMPLATES_12.find(x=>x.id===qid);
+  if(t){
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    const ni = BANK.findIndex(q=>q.id===qid);
+    const obj = { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+    if(ni>=0) BANK[ni]=obj;
+  }
+  saveState();
+  renderAll();
+}
+
+function setProgress(){
+  const completed = BANK.filter(q=>isQuestionComplete(q)).length;
+  const visibleCompleted = window.__examRunning ? completed : 0;
+    const qCountEl = document.getElementById("qCount");
+  const qNoEl = document.getElementById("qNo");
+  if(qCountEl) qCountEl.textContent = BANK.length;
+  if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
+  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
+  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
+
+  const pill = document.getElementById("statusPill");
+  const q = BANK[state.currentIndex];
+  if(isQuestionComplete(q)){
+    if(isQuestionCorrect(q)){
+      pill.textContent = "مكتمل";
+      pill.className = "pill";
+    }else{
+      pill.textContent = "مكتمل (توجد أخطاء)";
+      pill.className = "pill warn";
+    }
+  }else{
+    pill.textContent = "غير مكتمل";
+    pill.className = "pill warn";
+  }
+
+  const showBtn = document.getElementById("showResultsBtn");
+  const nextBtnSide = document.getElementById("nextBtnSide");
+  showBtn.disabled = (completed !== BANK.length) || !window.__examRunning;
+  if(nextBtnSide) nextBtnSide.disabled = !window.__examRunning;
+
+  return {completed, doneAll:(completed===BANK.length)};
+}
+
+function renderSidebar(){
+  const list = document.getElementById("qList");
+  list.innerHTML = "";
+  state.dirty = state.dirty || {};
+  const filter = state.sidebarFilter || "all";
+  const toShow = BANK.map((q,i)=>({q,i})).filter(({q})=>filter==="incomplete" ? !isQuestionComplete(q) : true);
+
+  toShow.forEach(({q,i})=>{
+    const complete = isQuestionComplete(q);
+    const correct = complete && isQuestionCorrect(q);
+    const dotClass = !complete ? "" : (correct ? "done" : "bad");
+    const badge = !complete
+      ? el("span",{class:"badge warn"},["غير مكتمل"])
+      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"مكتمل":"مكتمل (خطأ)"]);
+    const unsaved = state.dirty[q.id];
+    const item = el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
+      el("div",{class:"left"},[
+        unsaved ? el("div",{class:"unsaved-dot", title:"توجد إجابة غير محفوظة"},[]) : null,
+        el("div",{class:"dot "+dotClass}),
+        el("div",{},[
+          el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
+          el("div",{style:"margin-top:6px"},[badge])
+        ])
+      ]),
+      el("div",{class:"icon"},[q.icon])
+    ].filter(Boolean));
+    list.appendChild(item);
+  });
+
+  ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{
+    const btn = document.getElementById(id);
+    if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
+  });
+}
+
+function openHelp(q, branch){
+  const explainHtml = (branch.explain && branch.explain.length)
+    ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>ابدأ بفهم المطلوب ثم حدد نوع الفكرة قبل الحل.</div>";
+  const formulaHtml = (branch.formula && branch.formula.length)
+    ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون أو القاعدة المناسبة ثم عوّض عليها.</div>";
+
+  openModal("مساعدة", `
+    <div class="ai-help-panel">
+      <div class="ai-help-hero">
+        <div class="ai-help-orb"><span></span></div>
+        <div class="ai-help-copy">
+          <div class="ai-help-kicker">HELP</div>
+          <div class="ai-help-title">${escapeHtml(q.title)} <span style="font-size:13px;color:rgba(255,255,255,.7)">(${escapeHtml(branch.level)})</span></div>        </div>
+      </div>
+      <div class="ai-help-grid">
+        <div class="ai-help-section">
+          <div class="ai-help-section-head">
+            <span class="ai-help-chip-icon">?</span>
+            <span>الفكرة</span>
+          </div>
+          <div class="ai-help-body">${explainHtml}</div>
+        </div>
+        <div class="ai-help-section">
+          <div class="ai-help-section-head">
+            <span class="ai-help-chip-icon">?</span>
+            <span>القانون</span>
+          </div>
+          <div class="ai-help-body">${formulaHtml}</div>
+        </div>
+      </div>
     </div>
+  `);
+}
+
+function openCorrectAnswer(q, branch, bi){
+  const steps = (branch.solutionSteps && branch.solutionSteps.length)
+    ? `<div style="font-weight:900;margin:10px 0 6px">خطوات الحل</div><ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
+    : "";
+
+  const correctList = [];
+  (branch.parts||[]).forEach(p=>{
+    const val = (p.type==="mcq") ? branch.answers[p.key] : formatNumber(branch.answers[p.key]);
+    correctList.push(`<li><b>${escapeHtml(p.label)}:</b> ${escapeHtml(String(val))}</li>`);
+  });
+  const correctHtml = correctList.length
+    ? `<div style="font-weight:900;margin:12px 0 6px">الإجابات الصحيحة</div><ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
+    : "";
+
+  openModal("الإجابة الصحيحة", `
+    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} - (${escapeHtml(branch.level)})</div>
+    ${steps}
+    ${correctHtml}
+    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">يمكنك توليد نسخة جديدة من السؤال بعد الإغلاق.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">سؤال جديد</button><button class="btn small" onclick="closeModal()">إغلاق</button></div>
+  `);
+  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
+  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
+}
+
+function promptOpenCorrectAnswer(q, branch, bi){
+  openModal("عرض الإجابة", `
+    <div style="font-weight:900;margin-bottom:10px">انتهت المحاولات لهذا الجزء.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الإجابة الصحيحة.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">عرض الإجابة</button>
+  `);
+  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
+  if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
+}
+
+function handleSaveBranch(q, branch, bi){
+  const rec = ensureBranchRec(q.id, bi);
+  if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
+
+  const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
+  if(!okFilled){
+    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الحقول المطلوبة ثم احفظ الإجابة.</div>`);
+    return;
+  }
+
+  rec.attempts = (rec.attempts || 0) + 1;
+  rec.saved = saved;
+  delete state.dirty[q.id];
+  saveState();
+
+  const grade = gradeBranch(q, branch, bi, rec.saved);
+  if(grade.okAll){
+    rec.status = "correct";
+    saveState();
+    applyFieldFeedback(q.id, bi, grade);
+    disableBranchInputs(q.id, bi);
+    setProgress();
+    renderSidebar();
+    return;
+  }
+
+  if(rec.attempts === 1){
+    rec.status = "wrong1";
+    saveState();
+    applyFieldFeedback(q.id, bi, grade);
+    setProgress();
+    renderSidebar();
+    openHelp(q, branch);
+    return;
+  }
+
+  rec.status = "locked";
+  saveState();
+  applyFieldFeedback(q.id, bi, grade);
+  disableBranchInputs(q.id, bi);
+  setProgress();
+  renderSidebar();
+  promptOpenCorrectAnswer(q, branch, bi);
+}
+
+function renderMain(){
+  BANK = buildBank();
+  const i = state.currentIndex;
+  const q = BANK[i];
+  const wrap = document.getElementById("mainContent");
+  wrap.innerHTML = "";
+  const p = setProgress();
+
+  const titleRow = el("div",{class:"qtitleRow"},[
+    el("div",{class:"qtitle"},[
+      el("div",{class:"qnum"},[String(i+1)]),
+      el("div",{},[q.title])
+    ]),
+    el("div",{class:"qmeta"},[
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["تبديل السؤال"]),
+      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["إظهار النتيجة"]),
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["السابق"]),
+      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["التالي"])
+    ])
+  ]);
+
+  const branches = el("div",{class:"branches"},[]);
+  q.branches.forEach((branch, bi)=>{
+    const tagClass = (branch.level==="سهل") ? "easy" : (branch.level==="متوسط" ? "med" : "hard");
+    const rec = ensureBranchRec(q.id, bi);
+    const branchCard = el("div",{class:"branch"},[]);
+    const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
+      ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},[rec.status==="correct" ? "صحيح" : "خطأ"])
+      : null;
+
+    const head = el("div",{class:"branchHead"},[
+      el("span",{class:`btag ${tagClass}`},[branch.level]),
+      statusTag
+    ]);
+    const body = el("div",{class:"branchBody"},[]);
+    body.innerHTML = latexFix(branch.prompt).replace(/\n/g,"<br/>");
+    typesetMath(body);
+
+    const parts = el("div",{class:"parts"},[]);
+    (branch.parts||[]).forEach(p=>{
+      const row = el("div",{class:"part"},[]);
+      if(p.type==="mcq") row.classList.add("mcqPart");
+      const label = el("div",{class:"label"},[p.label]);
+      const inputWrap = el("div",{class:"inputWrap"},[]);
+      const savedVal = (rec.saved && rec.saved[p.key]!=null) ? rec.saved[p.key] : "";
+
+      if(p.type==="mcq"){
+        const group = el("div",{class:"mcqGroup"},[]);
+        (p.options||[]).forEach((op,idx)=>{
+          const id = `${q.id}_${bi}_${p.key}_${idx}`;
+          const radio = el("input",{type:"radio", id, name:`${q.id}_${bi}_${p.key}`, value:op},[]);
+          radio.setAttribute("data-qid", q.id);
+          radio.setAttribute("data-bi", String(bi));
+          radio.setAttribute("data-key", p.key);
+          if(String(savedVal)===String(op)) radio.checked = true;
+          radio.onchange = ()=>{ markDirty(q.id); };
+          if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
+          group.appendChild(el("label",{class:"choice", for:id},[radio, el("span",{},[op])]));
+        });
+        inputWrap.appendChild(group);
+      }
+
+      row.appendChild(label);
+      row.appendChild(inputWrap);
+      parts.appendChild(row);
+    });
+
+    const btns = el("div",{class:"branchBtns"},[
+      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["حفظ الإجابة"]),
+      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"فتح المساعدة"},[
+        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["?"]),
+        "مساعدة"
+      ])
+    ]);
+    if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
+      const sb = btns.querySelector(`[data-save-btn="${q.id}::${bi}"]`);
+      if(sb) sb.disabled = true;
+    }
+
+    const container = el("div",{"data-branch-container":`${q.id}::${bi}`},[]);
+    container.appendChild(head);
+    container.appendChild(body);
+    if((branch.parts||[]).length>0){ typesetMath(parts); container.appendChild(parts); }
+    container.appendChild(btns);
+    branchCard.appendChild(container);
+    branches.appendChild(branchCard);
+  });
+
+  wrap.appendChild(titleRow);
+  wrap.appendChild(branches);
+}
+
+function listIncomplete(){
+  const arr = [];
+  BANK.forEach((q,i)=>{ if(!isQuestionComplete(q)) arr.push({i:i+1, title:q.title}); });
+  return arr;
+}
+
+function tryShowResults(){
+  const p = setProgress();
+  if(!p.doneAll){
+    if(!confirm("لم تكمل جميع الأسئلة. هل تريد عرض النتيجة الآن؟")) return;
+  }
+  showResultsModal();
+}
+
+function showResultsModal(){
+  BANK = buildBank();
+  const s = computeScore();
+  const cards = BANK.map((q,qi)=>{
+    const complete = isQuestionComplete(q);
+    const correctQ = complete && isQuestionCorrect(q);
+    let inner = `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="font-weight:900">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
+        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"تم بنجاح":"توجد أخطاء"}</span>
+      </div>
+    `;
+
+    q.branches.forEach((branch,bi)=>{
+      const rec = ensureBranchRec(q.id,bi);
+      const grade = gradeBranch(q, branch, bi, rec.saved||{});
+      const keys = collectPartKeys(branch);
+      inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
+      keys.forEach(k=>{
+        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "-";
+        const correctVal = branch.answers[k];
+        const ok = grade.byKey[k];
+        const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
+        inner += `
+          <div class="partRow">
+            <div><b>البند:</b> ${escapeHtml(k)}</div>
+            <div><b>إجابتك:</b> ${escapeHtml(String(student))}</div>
+            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"صح":"خطأ"}</span></div>
+          </div>`;
+      });
+    });
+    return `<div class="resultCard">${inner}</div>`;
+  }).join("");
+
+  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
+  const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
+  openModal("النتيجة", `
+    <div class="scoreCard" style="margin-bottom:14px">
+      <div>
+        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} - ${s.pct}%</div>
+        <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
+        <div class="scoreSub">هذا ملخص سريع لجميع إجاباتك.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
+        <button class="btn primary" onclick="window.__resetAll(); closeModal();">إعادة الاختبار</button>
+      </div>
+    </div>
+    ${cards}
   `);
 }
 window.__resetAll = resetAll;
 
-/* ===== أزرار الشريط الجانبي ===== */
+/* ===== ????? ?????? ??????? ===== */
 document.getElementById("nextBtnSide").onclick = next;
 document.getElementById("showResultsBtn").onclick = tryShowResults;
-document.getElementById("resetBtn").onclick = function(){ if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) resetAll(); };
-var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick = function(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen().then(function(){ if(_fsBtn) _fsBtn.textContent = "\u062e\u0631\u0648\u062c"; }); } else { document.exitFullscreen(); if(_fsBtn) _fsBtn.textContent = "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"; } };
-document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "خروج" : "ملء الشاشة"; });
+document.getElementById("resetBtn").onclick = function(){ if(confirm("سيتم حذف التقدم الحالي وبدء الاختبار من جديد.")) resetAll(); };
+
 var _fsb=document.getElementById("fontSmallBtn"); if(_fsb) _fsb.onclick = ()=>{ state.fontSize = Math.max(-1, (state.fontSize||0)-1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fbb=document.getElementById("fontBigBtn"); if(_fbb) _fbb.onclick = ()=>{ state.fontSize = Math.min(1, (state.fontSize||0)+1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
-[["filterAllBtn","all"],["filterIncompleteBtn","incomplete"]].forEach(([id,f])=>{ const b=document.getElementById(id); if(b) b.onclick=()=>{ state.sidebarFilter=f; saveState(); document.querySelectorAll(".sidebar-filter .btn.small").forEach(x=>x.classList.remove("primary")); if(b) b.classList.add("primary"); renderSidebar(); }; });
-if(state.sidebarFilter==="all") document.getElementById("filterAllBtn")?.classList.add("primary"); else document.getElementById("filterIncompleteBtn")?.classList.add("primary");
+var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick = function(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen().then(function(){ if(_fsBtn) _fsBtn.textContent = "\u062e\u0631\u0648\u062c"; }); } else { document.exitFullscreen(); if(_fsBtn) _fsBtn.textContent = "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"; } };
+document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "خروج" : "ملء الشاشة"; });
+["filterAllBtn","filterIncompleteBtn"].forEach(id=>{ const b = document.getElementById(id); if(b) b.onclick = ()=>{ state.sidebarFilter = b.getAttribute("data-filter"); saveState(); renderSidebar(); }; });
 
-/* ===== رندر عام ===== */
+/* ????? ??? ???? ??????? ??? ??????? */
+(function(){ const fs = state.fontSize; if(fs===1) document.body.classList.add("font-lg"); else if(fs===-1) document.body.classList.add("font-sm"); })();
+
+/* ===== ???? ??? ===== */
 function renderAll(){
   BANK = buildBank();
   renderSidebar();
@@ -3892,11 +4422,399 @@ function renderAll(){
   setProgress();
 }
 window.__examRunning = isExamStarted();
-document.body.classList.remove("font-sm","font-lg");
-if(state.fontSize===1) document.body.classList.add("font-lg");
-else if(state.fontSize===-1) document.body.classList.add("font-sm");
 renderAll();
 if(window.__examRunning) startTimer(); else showIntroModal();
+
+/* Codex Adaptive Flow 1.2 Start */
+(function(){
+  const ALL_ORDER = ["q1_circle", "q2_tf", "q3_method", "q5_nominal_ordinal", "q4_param_stat", "q6_interval_ratio", "q7_codes_vs_values", "q8_advanced_tf"];
+  const CORE_ORDER = ["q1_circle", "q2_tf", "q3_method", "q4_param_stat"];
+  const SUPPORT_ORDER = ALL_ORDER.filter((id) => !CORE_ORDER.includes(id));
+  const QUESTION_PROFILES = {
+    q1_circle: { difficulty: 1, skills: ["classification", "discrete"], remediation: ["q2_tf"], advancement: ["q3_method", "q5_nominal_ordinal"] },
+    q2_tf: { difficulty: 2, skills: ["classification", "qualitative"], remediation: ["q1_circle"], advancement: ["q3_method", "q4_param_stat"] },
+    q3_method: { difficulty: 3, skills: ["collection", "application"], remediation: ["q1_circle", "q2_tf"], advancement: ["q4_param_stat", "q7_codes_vs_values"] },
+    q4_param_stat: { difficulty: 2, skills: ["parameter", "statistic"], remediation: ["q3_method"], advancement: ["q6_interval_ratio"] },
+    q5_nominal_ordinal: { difficulty: 2, skills: ["qualitative", "scale"], remediation: ["q1_circle", "q2_tf"], advancement: ["q6_interval_ratio"] },
+    q6_interval_ratio: { difficulty: 4, skills: ["scale", "quantitative"], remediation: ["q5_nominal_ordinal", "q4_param_stat"], advancement: ["q8_advanced_tf"] },
+    q7_codes_vs_values: { difficulty: 3, skills: ["representation", "application"], remediation: ["q3_method", "q5_nominal_ordinal"], advancement: ["q8_advanced_tf"] },
+    q8_advanced_tf: { difficulty: 4, skills: ["quantitative", "parameter"], remediation: ["q4_param_stat", "q6_interval_ratio"], advancement: [] }
+  };
+  const AI_KEY_ADAPT = "stat102_ai_models_v4_" + String((location.pathname || document.title || "lesson")).replace(/[^\w]+/g, "_").slice(-80);
+  const MAX_VARIANT_REPEATS = 2;
+  const SUPPORT_LIMIT = 2;
+  const SESSION_VERSION = "mastery_only_v2";
+  const LESSON_TARGET = 0.74;
+  const LESSON_FLOOR = 0.58;
+
+  function injectAdaptiveStyles(){
+    if(document.getElementById("adaptiveFlowStyles12")) return;
+    const style = document.createElement("style");
+    style.id = "adaptiveFlowStyles12";
+    style.textContent = `
+      .side .head h3,
+      .side .sidebar-filter,
+      .side .qList{
+        display:none !important;
+      }
+      .side{
+        display:grid;
+        gap:14px;
+      }
+      .side .head{
+        justify-content:space-between;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function stableTopicKey(value){
+    return String(value || "topic").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "topic";
+  }
+
+  function clampAdaptive(value, min=0, max=1){
+    return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
+  }
+
+  function loadAdaptiveAiState(){
+    try{
+      const raw = typeof storageGet === "function" ? storageGet(AI_KEY_ADAPT) : localStorage.getItem(AI_KEY_ADAPT);
+      return raw ? JSON.parse(raw) : { topics: {} };
+    }catch(e){
+      return { topics: {} };
+    }
+  }
+
+  function validIds(list){
+    return list.filter((id) => ADAPTIVE_TEMPLATES_12.some((template) => template.id === id));
+  }
+
+  function ensureSessionState(){
+    const validCore = validIds(CORE_ORDER);
+    const validAll = validIds(ALL_ORDER);
+    const current = Array.isArray(state.order)
+      ? state.order.filter((id, index, arr) => validAll.includes(id) && arr.indexOf(id) === index)
+      : [];
+    let nextOrder = current.slice();
+
+    if(state.masteryVersion !== SESSION_VERSION || !nextOrder.length){
+      nextOrder = [...validCore];
+      state.currentIndex = 0;
+    }
+
+    validCore.forEach((id, index) => {
+      if(!nextOrder.includes(id)) nextOrder.splice(Math.min(index, nextOrder.length), 0, id);
+    });
+
+    const supportTail = nextOrder.filter((id) => !validCore.includes(id));
+    nextOrder = [...validCore, ...supportTail];
+
+    const changed = !Array.isArray(state.order)
+      || state.masteryVersion !== SESSION_VERSION
+      || state.order.length !== nextOrder.length
+      || nextOrder.some((id, index) => state.order[index] !== id)
+      || (state.masterySupportCount || 0) !== supportTail.length;
+
+    if(changed){
+      state.order = nextOrder;
+      state.masteryVersion = SESSION_VERSION;
+      state.masterySupportCount = supportTail.length;
+      if(state.currentIndex >= nextOrder.length) state.currentIndex = 0;
+      saveState();
+    }
+    return state.order;
+  }
+
+  function getActiveOrder(){
+    return ensureSessionState().slice();
+  }
+
+  function buildFromOrder(order){
+    return order.map((id) => {
+      const template = ADAPTIVE_TEMPLATES_12.find((item) => item.id === id);
+      if(!template) return null;
+      const variant = getVariant(template.id);
+      const generated = template.gen(variant);
+      return { id:template.id, title:template.title, icon:template.icon, branches:generated.branches };
+    }).filter(Boolean);
+  }
+
+  buildBank = function(){
+    const order = getActiveOrder();
+    const bank = buildFromOrder(order);
+    return bank.length ? bank : forceBuildBank(order);
+  };
+
+  function forceBuildBank(order){
+    const active = Array.isArray(order) && order.length ? order : getActiveOrder();
+    return buildFromOrder(active);
+  }
+
+  function ensureAdaptiveBankReady(){
+    let bank = buildBank();
+    if(!Array.isArray(bank) || !bank.length){
+      state.order = validIds(CORE_ORDER);
+      state.currentIndex = 0;
+      saveState();
+      bank = forceBuildBank(state.order);
+    }
+    BANK = Array.isArray(bank) ? bank : [];
+    if(state.currentIndex >= BANK.length) state.currentIndex = 0;
+    return BANK;
+  }
+
+  function concealSidebarQuestions(){
+    const list = document.getElementById("qList");
+    if(list) list.innerHTML = "";
+    const heading = document.querySelector(".side .head h3");
+    if(heading) heading.style.display = "none";
+    const filter = document.querySelector(".sidebar-filter");
+    if(filter) filter.style.display = "none";
+  }
+
+  function getQuestionById(qid){
+    return Array.isArray(BANK) ? BANK.find((question) => question.id === qid) : null;
+  }
+
+  function getCurrentQuestionId(){
+    return BANK && BANK[state.currentIndex] ? BANK[state.currentIndex].id : null;
+  }
+
+  function baseScoreFromRecord(record){
+    if(record.status === "correct") return record.attempts <= 1 ? 0.88 : 0.74;
+    if(record.status === "locked") return 0.22;
+    if(record.status === "wrong1") return 0.42;
+    if(record.attempts > 0) return 0.48;
+    return 0.5;
+  }
+
+  function getQuestionSignal(qid){
+    const profile = QUESTION_PROFILES[qid] || { difficulty: 2, skills: [], remediation: [], advancement: [] };
+    const record = ensureBranchRec(qid, 0);
+    const aiState = loadAdaptiveAiState();
+    const model = aiState && aiState.topics ? aiState.topics[stableTopicKey(qid)] : null;
+    const fallback = baseScoreFromRecord(record);
+    const attemptCount = Math.max(record.attempts || 0, model && typeof model.attempts === "number" ? model.attempts : 0);
+    const ensemble = clampAdaptive(model && typeof model.ensemble === "number" ? model.ensemble : fallback);
+    const mastery = clampAdaptive(model && typeof model.mastery === "number" ? model.mastery : fallback);
+    const lr = clampAdaptive(model && typeof model.lr === "number" ? model.lr : ensemble);
+    const nbScore = clampAdaptive(model && typeof model.nbScore === "number" ? model.nbScore : ensemble);
+    const knn = clampAdaptive(model && typeof model.knn === "number" ? model.knn : ensemble);
+    const readiness = clampAdaptive((ensemble * 0.42) + (mastery * 0.28) + (lr * 0.15) + (knn * 0.10) + (nbScore * 0.05));
+    const struggle = clampAdaptive(((1 - readiness) * 0.55) + Math.min(0.22, attemptCount * 0.08) + (record.status === "locked" ? 0.25 : (record.status === "wrong1" ? 0.12 : 0)));
+    return { qid, record, model, profile, attemptCount, ensemble, mastery, lr, nbScore, knn, readiness, struggle };
+  }
+
+  function metricIds(ids){
+    const source = (Array.isArray(ids) && ids.length ? ids : getActiveOrder()).filter((id) => ALL_ORDER.includes(id));
+    const answered = source.filter((id) => {
+      const record = ensureBranchRec(id, 0);
+      return (record.attempts || 0) > 0 || record.status !== "new";
+    });
+    return answered.length ? answered : source;
+  }
+
+  function lessonReadiness(ids){
+    const source = metricIds(ids);
+    if(!source.length) return 0.5;
+    return source.reduce((sum, id) => sum + getQuestionSignal(id).readiness, 0) / source.length;
+  }
+
+  function sharesSkill(sourceId, targetId){
+    const sourceSkills = (QUESTION_PROFILES[sourceId] && QUESTION_PROFILES[sourceId].skills) || [];
+    const targetSkills = (QUESTION_PROFILES[targetId] && QUESTION_PROFILES[targetId].skills) || [];
+    return sourceSkills.some((skill) => targetSkills.includes(skill));
+  }
+
+  function maxDifficulty(){
+    return Math.max(...Object.values(QUESTION_PROFILES).map((profile) => profile.difficulty || 1), 1);
+  }
+
+  function desiredDifficulty(signal){
+    const overall = lessonReadiness(CORE_ORDER);
+    if(signal.readiness < 0.45 || overall < 0.45) return Math.max(1, (signal.profile.difficulty || 2) - 1);
+    if(signal.readiness > 0.78 && overall > 0.7) return Math.min(maxDifficulty(), (signal.profile.difficulty || 2) + 1);
+    return signal.profile.difficulty || 2;
+  }
+
+  function shouldRepeatCurrent(signal){
+    return typeof swapQuestion === "function"
+      && signal.record.status !== "correct"
+      && signal.attemptCount < MAX_VARIANT_REPEATS
+      && (signal.record.status === "locked" || signal.struggle > 0.63 || signal.readiness < 0.46);
+  }
+
+  function completed(ids){
+    return ids.every((id) => {
+      const question = getQuestionById(id);
+      return !!question && isQuestionComplete(question);
+    });
+  }
+
+  function weakestSignal(ids){
+    const source = metricIds(ids);
+    if(!source.length) return null;
+    return source.map((id) => getQuestionSignal(id)).sort((a, b) => (a.readiness - b.readiness) || (b.struggle - a.struggle))[0] || null;
+  }
+
+  function meetsMasteryTarget(){
+    const coreIds = validIds(CORE_ORDER);
+    if(!coreIds.length || !completed(coreIds)) return false;
+    const average = lessonReadiness(coreIds);
+    const lowest = Math.min(...coreIds.map((id) => getQuestionSignal(id).readiness));
+    return average >= LESSON_TARGET && lowest >= LESSON_FLOOR;
+  }
+
+  function getRemainingCandidates(currentId){
+    return getActiveOrder().filter((id) => {
+      if(id === currentId) return false;
+      const question = getQuestionById(id);
+      return !!question && !isQuestionComplete(question);
+    });
+  }
+
+  function scoreCandidate(currentSignal, candidateId){
+    const signal = getQuestionSignal(candidateId);
+    const question = getQuestionById(candidateId);
+    if(!question || isQuestionComplete(question)) return -1;
+    const targetDifficulty = desiredDifficulty(currentSignal);
+    const difficultyGap = Math.abs((signal.profile.difficulty || 2) - targetDifficulty);
+    const difficultyFit = clampAdaptive(1 - (difficultyGap * 0.38));
+    const weaknessNeed = 1 - signal.readiness;
+    const unseenBonus = signal.attemptCount === 0 ? 0.18 : 0.04;
+    const sameSkillBonus = sharesSkill(currentSignal.qid, candidateId) ? (currentSignal.readiness < 0.62 ? 0.24 : 0.10) : 0;
+    const remediationBonus = (currentSignal.profile.remediation || []).includes(candidateId) ? 0.16 : 0;
+    const advancementBonus = (currentSignal.profile.advancement || []).includes(candidateId) ? (currentSignal.readiness >= 0.7 ? 0.18 : 0.06) : 0;
+    return (weaknessNeed * 0.40) + (difficultyFit * 0.22) + unseenBonus + sameSkillBonus + remediationBonus + advancementBonus;
+  }
+
+  function scoreSupportCandidate(focusSignal, candidateId){
+    const signal = getQuestionSignal(candidateId);
+    const sameSkillBonus = sharesSkill(focusSignal.qid, candidateId) ? 0.34 : 0;
+    const remediationBonus = (focusSignal.profile.remediation || []).includes(candidateId) ? 0.28 : 0;
+    const advancementBonus = (focusSignal.profile.advancement || []).includes(candidateId) ? 0.12 : 0;
+    const difficultyGap = Math.abs((signal.profile.difficulty || 2) - Math.min(maxDifficulty(), (focusSignal.profile.difficulty || 2) + 1));
+    const difficultyFit = clampAdaptive(1 - (difficultyGap * 0.35));
+    return ((1 - focusSignal.readiness) * 0.36) + (difficultyFit * 0.22) + sameSkillBonus + remediationBonus + advancementBonus;
+  }
+
+  function selectSupportCandidate(focusId){
+    const focusSignal = getQuestionSignal(focusId);
+    const active = getActiveOrder();
+    const available = SUPPORT_ORDER.filter((id) => !active.includes(id));
+    if(!available.length) return null;
+    return available.slice().sort((a, b) => scoreSupportCandidate(focusSignal, b) - scoreSupportCandidate(focusSignal, a))[0] || null;
+  }
+
+  function appendSupportQuestion(focusId){
+    if((state.masterySupportCount || 0) >= SUPPORT_LIMIT) return null;
+    const targetId = selectSupportCandidate(focusId);
+    if(!targetId) return null;
+    state.order = [...getActiveOrder(), targetId];
+    state.masterySupportCount = (state.masterySupportCount || 0) + 1;
+    saveState();
+    return targetId;
+  }
+
+  function chooseNextAdaptiveId(){
+    const currentId = getCurrentQuestionId();
+    if(!currentId) return null;
+    const currentSignal = getQuestionSignal(currentId);
+    const remaining = getRemainingCandidates(currentId);
+    if(!remaining.length) return null;
+    return remaining.slice().sort((a, b) => scoreCandidate(currentSignal, b) - scoreCandidate(currentSignal, a))[0] || null;
+  }
+
+  function moveToQuestion(targetId){
+    const bank = ensureAdaptiveBankReady();
+    const targetIndex = bank.findIndex((question) => question.id === targetId);
+    if(targetIndex < 0) return false;
+    state.currentIndex = targetIndex;
+    saveState();
+    renderAll();
+    return true;
+  }
+
+  const originalRenderSidebar = renderSidebar;
+  renderSidebar = function(){
+    ensureAdaptiveBankReady();
+    const result = originalRenderSidebar.apply(this, arguments);
+    concealSidebarQuestions();
+    return result;
+  };
+
+  const originalRenderMain = renderMain;
+  renderMain = function(){
+    const bank = ensureAdaptiveBankReady();
+    const wrap = document.getElementById("mainContent");
+    if(!bank.length){
+      if(wrap) wrap.innerHTML = '<div style="padding:24px;font-weight:900;color:#0f2a3b">يتم تجهيز الأسئلة، أعد تحميل الصفحة مرة واحدة.</div>';
+      return;
+    }
+    return originalRenderMain.apply(this, arguments);
+  };
+
+  const originalNext = next;
+  next = function(){
+    const bank = ensureAdaptiveBankReady();
+    if(!bank.length){
+      renderAll();
+      return;
+    }
+
+    const currentId = getCurrentQuestionId();
+    const currentSignal = currentId ? getQuestionSignal(currentId) : null;
+    if(currentId && currentSignal && shouldRepeatCurrent(currentSignal)){
+      swapQuestion(currentId);
+      BANK = ensureAdaptiveBankReady();
+      moveToQuestion(currentId);
+      return;
+    }
+
+    const targetId = chooseNextAdaptiveId();
+    if(targetId && moveToQuestion(targetId)) return;
+
+    if(completed(getActiveOrder())){
+      if(meetsMasteryTarget()){
+        showResultsModal();
+        return;
+      }
+      const focus = weakestSignal(CORE_ORDER) || weakestSignal(getActiveOrder());
+      const supportId = focus ? appendSupportQuestion(focus.qid) : null;
+      if(supportId){
+        BANK = ensureAdaptiveBankReady();
+        moveToQuestion(supportId);
+        return;
+      }
+      if(focus && typeof swapQuestion === "function" && focus.attemptCount < MAX_VARIANT_REPEATS){
+        swapQuestion(focus.qid);
+        BANK = ensureAdaptiveBankReady();
+        moveToQuestion(focus.qid);
+        return;
+      }
+      showResultsModal();
+      return;
+    }
+
+    return originalNext.apply(this, arguments);
+  };
+
+  ensureSessionState();
+  BANK = ensureAdaptiveBankReady();
+  if(!BANK.length){
+    state.order = validIds(CORE_ORDER);
+    state.currentIndex = 0;
+    saveState();
+    BANK = forceBuildBank(state.order);
+  }
+  if(state.currentIndex >= BANK.length) state.currentIndex = 0;
+  injectAdaptiveStyles();
+  saveState();
+  renderAll();
+})();
+/* Codex Adaptive Flow 1.2 End */
+
+
 
 
 /* Codex Unified AI Logic Start */
@@ -4210,7 +5128,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_5_1_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_1_2_ai_models_v1";
   try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
@@ -4635,55 +5553,36 @@ if(window.__examRunning) startTimer(); else showIntroModal();
       var ans = 0, ok = 0;
       var errs = { conceptual: 0, computational: 0, application: 0 };
       try{
-        if(typeof state === "undefined" || !state || !state.answers) return { answered: 0, correct: 0, errs: errs };
-        var _qMap = {};
-        if(Array.isArray(BANK)){
-          BANK.forEach(function(_q){ if(_q && _q.id != null) _qMap[String(_q.id)] = _q; });
-        }
-        Object.keys(state.answers).forEach(function(_qid){
-          var _bySlot = state.answers[_qid];
-          if(!_bySlot || typeof _bySlot !== "object") return;
-          var _q = _qMap[String(_qid)] || null;
-          Object.keys(_bySlot).forEach(function(_biKey){
-            var _stored = _bySlot[_biKey];
-            if(!_stored || typeof _stored !== "object") return;
-            var _bi = parseInt(_biKey, 10);
-            if(isNaN(_bi)) _bi = 0;
-            var _b = (_q && Array.isArray(_q.branches) && _q.branches[_bi]) ? _q.branches[_bi] : null;
-            var _parts = (_b && Array.isArray(_b.parts)) ? _b.parts : null;
-            var _attemptsBranch = 1;
-            try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_qid, _bi) || 1); } }catch(_e){}
-            var _outcome = null;
-            try{ if(typeof _getOutcome === "function"){ _outcome = _getOutcome(_qid, _bi); } }catch(_e){}
-            if(_parts){
+        if(Array.isArray(BANK) && typeof state !== "undefined" && state && state.answers){
+          BANK.forEach(function(_q){
+            var _branches = Array.isArray(_q.branches) ? _q.branches : [];
+            _branches.forEach(function(_b, _bi){
+              var _parts = Array.isArray(_b.parts) ? _b.parts : [];
+              var _stored = (state.answers && state.answers[_q.id] && state.answers[_q.id][_bi]) ? state.answers[_q.id][_bi] : null;
+              if(!_stored) return;
+              var _attemptsBranch = 1;
+              try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_q.id, _bi) || 1); } }catch(_e){}
               _parts.forEach(function(_p){
-                if(!_p) return;
-                var _val = _stored[_p.key];
-                if(_val === undefined || _val === null || _val === "") return;
+                if(!_p || _stored[_p.key] === undefined || _stored[_p.key] === null || _stored[_p.key] === "") return;
                 ans++;
                 var _isOk = false;
                 try{
                   var _corr = _b.answers ? _b.answers[_p.key] : undefined;
-                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _val, _corr) : { ok:false };
+                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _stored[_p.key], _corr) : { ok:false };
                   _isOk = !!(_chk && _chk.ok);
                 }catch(_e){}
                 if(_isOk){ ok++; return; }
                 var _kind = "application";
-                if(_p.type === "mcq" || _p.type === "text"){ _kind = "conceptual"; }
-                else if(_p.type === "number"){ _kind = _attemptsBranch > 1 ? "computational" : "application"; }
+                if(_p.type === "mcq" || _p.type === "text"){
+                  _kind = "conceptual";
+                } else if(_p.type === "number"){
+                  _kind = _attemptsBranch > 1 ? "computational" : "application";
+                }
                 errs[_kind] = (errs[_kind] || 0) + 1;
               });
-            } else {
-              Object.keys(_stored).forEach(function(_k){
-                var _val = _stored[_k];
-                if(_val === undefined || _val === null || _val === "") return;
-                ans++;
-                if(_outcome === "correct"){ ok++; return; }
-                if(_outcome === "wrong"){ errs.application = (errs.application || 0) + 1; }
-              });
-            }
+            });
           });
-        });
+        }
       }catch(_e){}
       return { answered: ans, correct: ok, errs: errs };
     })();
@@ -5031,9 +5930,9 @@ if(window.__examRunning) startTimer(); else showIntroModal();
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_5_1_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["q1", "q3", "q5"];
-  const MASTERY_PROFILES_UNIFIED = {"q1": {"supports": ["q2", "q3", "q4", "q5"]}, "q2": {"supports": ["q3", "q4", "q5", "q6"]}, "q3": {"supports": ["q4", "q5", "q6", "q1"]}, "q4": {"supports": ["q5", "q6", "q1", "q2"]}, "q5": {"supports": ["q6", "q1", "q2", "q3"]}, "q6": {"supports": ["q1", "q2", "q3", "q4"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_1_2_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["q1_circle", "q2_tf", "q3_method", "q4_param_stat"];
+  const MASTERY_PROFILES_UNIFIED = {"q1_circle": {"supports": ["q2_tf", "q3_method", "q4_param_stat", "q5_nominal_ordinal"]}, "q2_tf": {"supports": ["q3_method", "q4_param_stat", "q5_nominal_ordinal", "q6_interval_ratio"]}, "q3_method": {"supports": ["q4_param_stat", "q5_nominal_ordinal", "q6_interval_ratio", "q7_codes_vs_values"]}, "q4_param_stat": {"supports": ["q5_nominal_ordinal", "q6_interval_ratio", "q7_codes_vs_values", "q8_advanced_tf"]}, "q5_nominal_ordinal": {"supports": ["q6_interval_ratio", "q7_codes_vs_values", "q8_advanced_tf", "q1_circle"]}, "q6_interval_ratio": {"supports": ["q7_codes_vs_values", "q8_advanced_tf", "q1_circle", "q2_tf"]}, "q7_codes_vs_values": {"supports": ["q8_advanced_tf", "q1_circle", "q2_tf", "q3_method"]}, "q8_advanced_tf": {"supports": ["q1_circle", "q2_tf", "q3_method", "q4_param_stat"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}
@@ -5984,6 +6883,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
 </style>
 </body>
 </html>
+
 
 
 

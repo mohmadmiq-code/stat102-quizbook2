@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 4.3 الانحدار الخطي البسيط</title>
+  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 4.1 الارتباط ومعامل ارتباط بيرسون</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -723,9 +723,7 @@
     }
 
 /* Fix: render KaTeX left-to-right even in RTL pages */
-.katex, .katex-display{ direction:ltr; unicode-bidi:embed; }
-
-/* Codex Unified AI Help Start */
+.katex, .katex-display{ direction:ltr; unicode-bidi:embed; }/* Codex Unified AI Help Start */
     .branchHead{
       flex-wrap:wrap;
       align-items:center;
@@ -1231,7 +1229,6 @@
       50%{transform:scale(1.14);box-shadow:0 0 26px rgba(103,232,249,.98)}
     }
 /* Codex Unified AI Help End */
-
 /* Codex Adaptive Mastery Start */
     .mainhead div:first-child{font-size:0;}
     .mainhead div:first-child::after{content:"سؤال تكيفي";font-size:14px;font-weight:900;color:#0f2a3b;}
@@ -1273,7 +1270,6 @@
         overflow-wrap:anywhere;
       }
     }/* Codex Adaptive Mastery End */
-
 /* Codex AI Models Panel Start */
     .wrap{
       direction:ltr;
@@ -1585,6 +1581,582 @@
       50%{transform:scale(1.14);box-shadow:0 0 26px rgba(103,232,249,.98)}
     }
 /* Codex AI Models Panel End */
+
+/* ═══════════════════════════════════════════════
+   تصميم جامعي — نظام ألوان رسمي
+═══════════════════════════════════════════════ */
+:root{
+  --uni-gold: #C8972A;
+  --uni-gold-light: #FDF6E3;
+  --uni-gold-border: rgba(200,151,42,.25);
+  --uni-green: #1a6b3c;
+}
+
+/* شريط علوي — هوية أكاديمية */
+.topbar{
+  background:linear-gradient(135deg,#0b3c5d 0%,#154360 40%,#0d3349 100%) !important;
+  border-bottom:3px solid var(--uni-gold);
+}
+.topbar.scrolled{
+  box-shadow:0 4px 30px rgba(11,60,93,.45) !important;
+}
+
+/* شريط ذهبي دقيق تحت الـ topbar */
+.topbar::after{
+  content:"";
+  position:absolute;
+  bottom:-3px; left:0; right:0;
+  height:3px;
+  background:linear-gradient(90deg,transparent,var(--uni-gold),transparent);
+  opacity:.6;
+}
+
+/* Cards — حدود أكاديمية */
+.card{
+  border-top:3px solid var(--brand) !important;
+  border-radius:18px;
+}
+
+/* Section titles — طراز أكاديمي */
+.mainhead{
+  background:linear-gradient(180deg,#f0f7ff 0%,#ffffff 100%);
+  border-bottom:2px solid var(--uni-gold-border);
+}
+.mainhead::after{
+  content:"";
+  display:block;
+  position:absolute;
+  bottom:0; left:20px; right:20px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--uni-gold),transparent);
+  opacity:.5;
+}
+.mainhead{ position:relative; }
+
+/* شارة الجامعة على السؤال */
+.pill{
+  background:linear-gradient(135deg,var(--uni-gold-light),#fff8e7);
+  color:#8B6914;
+  border-color:var(--uni-gold-border);
+  font-weight:900;
+}
+
+/* ═══════════════════════════════════════════════
+   تحسين شاشة الإجابة الصحيحة
+═══════════════════════════════════════════════ */
+.choice.goodField{
+  background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%) !important;
+  border-color:#16a34a !important;
+  border-width:2px !important;
+  color:#15803d !important;
+  box-shadow:0 0 0 4px rgba(22,163,74,.12), 0 4px 14px rgba(22,163,74,.1) !important;
+  position:relative;
+}
+.choice.goodField::after{
+  content:"✓ صحيح";
+  position:absolute;
+  left:14px; top:50%;
+  transform:translateY(-50%);
+  font-size:11px;font-weight:900;
+  color:#15803d;
+  background:#dcfce7;
+  padding:3px 8px;border-radius:6px;
+  border:1px solid rgba(22,163,74,.3);
+}
+.choice.badField{
+  background:linear-gradient(135deg,#fff5f5 0%,#fee2e2 100%) !important;
+  border-color:#dc2626 !important;
+  border-width:2px !important;
+  color:#b91c1c !important;
+  box-shadow:0 0 0 4px rgba(220,38,38,.1) !important;
+  position:relative;
+}
+.choice.badField::after{
+  content:"✗ خطأ";
+  position:absolute;
+  left:14px; top:50%;
+  transform:translateY(-50%);
+  font-size:11px;font-weight:900;
+  color:#b91c1c;
+  background:#fee2e2;
+  padding:3px 8px;border-radius:6px;
+  border:1px solid rgba(220,38,38,.25);
+}
+input.goodField, textarea.goodField{
+  border-color:#16a34a !important;
+  background:linear-gradient(135deg,#f0fdf4,#dcfce7) !important;
+  box-shadow:0 0 0 3px rgba(22,163,74,.15) !important;
+}
+input.badField, textarea.badField{
+  border-color:#dc2626 !important;
+  background:linear-gradient(135deg,#fff5f5,#fee2e2) !important;
+  box-shadow:0 0 0 3px rgba(220,38,38,.12) !important;
+}
+
+/* ═══════════════════════════════════════════════
+   تطوير صفحة النتائج
+═══════════════════════════════════════════════ */
+.scoreCard{
+  border-radius:20px !important;
+  background:linear-gradient(135deg,#0b3c5d 0%,#154360 60%,#1a6b3c 100%) !important;
+  border:none !important;
+  color:#fff !important;
+  padding:24px !important;
+  box-shadow:0 20px 40px rgba(11,60,93,.25) !important;
+  position:relative;
+  overflow:hidden;
+}
+.scoreCard::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 20px);
+  pointer-events:none;
+}
+.scoreCard::after{
+  content:"";
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--uni-gold),#fde68a,var(--uni-gold));
+}
+.scoreBig{
+  font-size:24px !important;
+  font-weight:900 !important;
+  color:#fff !important;
+  position:relative;
+}
+.scoreSub{ color:rgba(255,255,255,.8) !important; position:relative; }
+.score-bar-wrap{
+  background:rgba(255,255,255,.15) !important;
+  height:10px !important;
+  border-radius:999px;
+  position:relative;
+}
+.score-bar-correct{
+  background:linear-gradient(90deg,#34d399,#a7f3d0) !important;
+}
+
+/* بطاقات النتائج */
+.resultCard{
+  border-radius:16px !important;
+  border:1px solid var(--line) !important;
+  box-shadow:0 4px 16px rgba(15,23,42,.06) !important;
+  overflow:hidden;
+  transition:var(--transition);
+}
+.resultCard:hover{
+  border-color:var(--brand) !important;
+  box-shadow:0 8px 24px rgba(3,105,161,.1) !important;
+  transform:translateY(-1px);
+}
+/* رأس بطاقة النتيجة */
+.resultCard > div:first-child{
+  background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
+  padding:14px 16px 12px !important;
+  border-bottom:1px solid var(--line);
+  margin-bottom:0 !important;
+}
+
+.tag.good{
+  background:linear-gradient(135deg,#dcfce7,#f0fdf4) !important;
+  border-color:rgba(22,163,74,.3) !important;
+  color:#15803d !important;
+  font-weight:900;
+  padding:6px 14px;
+}
+.tag.bad{
+  background:linear-gradient(135deg,#fee2e2,#fff5f5) !important;
+  border-color:rgba(220,38,38,.3) !important;
+  color:#b91c1c !important;
+  font-weight:900;
+  padding:6px 14px;
+}
+
+/* صفوف الأجزاء */
+.partRow{
+  border-radius:10px !important;
+  border:1px solid var(--line) !important;
+  background:#f8fbff !important;
+  padding:12px 16px !important;
+  font-size:13px;
+  transition:var(--transition);
+}
+.partRow:hover{ background:#eef6ff !important; border-color:rgba(3,105,161,.2) !important; }
+
+/* أزرار النتيجة */
+.scoreCard .btn.primary{
+  background:linear-gradient(135deg,var(--uni-gold),#b07d20) !important;
+  border:none !important;
+  box-shadow:0 4px 14px rgba(200,151,42,.35) !important;
+  color:#fff !important;
+  position:relative;
+}
+.scoreCard .btn.primary:hover{
+  background:linear-gradient(135deg,#d4a43a,var(--uni-gold)) !important;
+  transform:translateY(-2px) !important;
+  box-shadow:0 8px 20px rgba(200,151,42,.45) !important;
+}
+:root{
+  --shadow-sm: 0 1px 2px rgba(15,23,42,.04), 0 2px 8px rgba(15,23,42,.06);
+  --shadow:    0 4px 6px rgba(15,23,42,.04), 0 10px 28px rgba(15,23,42,.08);
+  --shadow-lg: 0 20px 25px rgba(15,23,42,.08), 0 40px 60px rgba(15,23,42,.12);
+}
+/* Topbar — Glass أقوى */
+.topbar{
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+/* Scroll-linked shadow على الـ topbar */
+.topbar.scrolled{ box-shadow:0 4px 30px rgba(15,23,42,.3); }
+
+/* Cards — ضلع علوي ملون + hover أجمل */
+.card{ border-top:3px solid var(--brand); }
+.card:hover{ box-shadow:0 12px 36px rgba(15,23,42,.11); transform:translateY(-1px); }
+
+/* Progress bar — shimmer متحرك */
+.progress{
+  height:8px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.07);
+}
+.progress > div{
+  background-size:200% 100%;
+  animation:progressShimmer 2.4s linear infinite;
+  background-image:linear-gradient(90deg, #0369a1 0%, #38bdf8 50%, #0369a1 100%);
+}
+@keyframes progressShimmer{
+  0%{background-position:100% 0}
+  100%{background-position:-100% 0}
+}
+
+/* Question number badge */
+.qtitle .qnum{
+  background:linear-gradient(135deg, var(--brand), var(--brand2));
+  color:#fff;
+  border:none;
+  box-shadow:0 6px 16px rgba(3,105,161,.3);
+  font-size:17px;
+  width:44px; height:44px;
+  border-radius:14px;
+}
+
+/* MCQ choices — تحسين التفاعل */
+.choice{
+  position:relative;
+  transition:all .2s cubic-bezier(.4,0,.2,1);
+  border-width:2px;
+}
+.choice:hover{ transform:translateX(-3px); box-shadow:0 4px 14px rgba(3,105,161,.12); }
+.choice.goodField{
+  box-shadow:0 0 0 3px rgba(5,150,105,.18);
+  animation:correctPop .3s ease;
+}
+.choice.badField{ box-shadow:0 0 0 3px rgba(220,38,38,.15); }
+@keyframes correctPop{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.02)}
+  100%{transform:scale(1)}
+}
+
+/* Difficulty tags */
+.btag{ letter-spacing:.04em; text-transform:uppercase; font-size:11px; border-radius:8px; }
+
+/* Timer */
+.timerBar{
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.06em;
+  font-size:16px;
+  padding:8px 18px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:14px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+/* AI Model cards — hover مع خط سفلي */
+.aiModelCard{
+  transition:transform .2s, box-shadow .2s;
+  cursor:default;
+}
+.aiModelCard::after{
+  content:"";
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:3px;
+  background:linear-gradient(90deg, var(--brand), #38bdf8);
+  transform:scaleX(0);
+  transition:transform .3s;
+  transform-origin:right;
+  border-radius:0 0 4px 4px;
+}
+.aiModelCard:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(15,23,42,.1); }
+.aiModelCard:hover::after{ transform:scaleX(1); }
+
+/* ═══════════════════════════════════════════════
+   النماذج الخمسة الجديدة — CSS
+═══════════════════════════════════════════════ */
+
+/* قسم النماذج الموسّع */
+.aiExtSection{
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+  padding:16px;
+  box-shadow:0 10px 24px rgba(15,23,42,.06);
+  display:grid;
+  gap:12px;
+}
+
+/* ١. منحنى النسيان */
+.forgettingCard{
+  display:grid;
+  gap:10px;
+}
+.forgettingTopicRow{
+  display:grid;
+  grid-template-columns:auto 1fr auto auto;
+  gap:8px;
+  align-items:center;
+}
+.forgettingTopicName{font-size:11px;font-weight:900;color:#24455f}
+.forgettingBar{height:8px;border-radius:999px;border:1px solid #dbe7f2;background:#edf4fb;overflow:hidden;}
+.forgettingFill{height:100%;border-radius:inherit;transition:width .5s ease;}
+.forgettingPct{font-size:11px;font-weight:900;min-width:36px;text-align:left;direction:ltr;}
+.forgettingReview{
+  font-size:10px;font-weight:900;padding:3px 7px;border-radius:6px;white-space:nowrap;
+}
+.forgettingReview.now{background:#fee2e2;color:#dc2626;border:1px solid rgba(220,38,38,.2)}
+.forgettingReview.soon{background:#fef3c7;color:#d97706;border:1px solid rgba(217,119,6,.2)}
+.forgettingReview.ok{background:#d1fae5;color:#059669;border:1px solid rgba(5,150,105,.2)}
+
+/* ٢. IRT — قدرة الطالب */
+.irtCard{
+  display:grid;
+  gap:12px;
+}
+.irtTheta{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.irtThetaNum{
+  font-size:28px;
+  font-weight:900;
+  color:var(--brand2);
+  direction:ltr;
+  white-space:nowrap;
+}
+.irtThetaSub{font-size:12px;font-weight:800;color:var(--muted);line-height:1.6}
+.irtScale{
+  position:relative;
+  height:12px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#dc2626 0%,#d97706 25%,#0369a1 50%,#059669 75%,#0284c7 100%);
+  overflow:visible;
+  margin:4px 0;
+}
+.irtPointer{
+  position:absolute;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:18px;height:18px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid var(--brand);
+  box-shadow:0 2px 8px rgba(3,105,161,.35);
+  transition:left .5s ease;
+}
+.irtLabels{
+  display:flex;
+  justify-content:space-between;
+  font-size:10px;
+  font-weight:900;
+  color:var(--muted);
+  direction:ltr;
+}
+.irtSE{
+  font-size:11px;
+  font-weight:800;
+  color:var(--muted);
+  background:#f1f5f9;
+  border-radius:8px;
+  padding:6px 10px;
+  text-align:center;
+}
+
+/* ٣. محلل نمط الأخطاء */
+.errorPatternCard{display:grid;gap:10px}
+.errorTypeRow{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:12px;
+  border:1px solid var(--line);
+  background:#f8fbff;
+}
+.errorTypeBadge{
+  font-size:11px;font-weight:900;padding:4px 10px;border-radius:8px;white-space:nowrap;
+}
+.errorTypeBadge.conceptual{background:#fee2e2;color:#dc2626;border:1px solid rgba(220,38,38,.2)}
+.errorTypeBadge.computational{background:#fef3c7;color:#d97706;border:1px solid rgba(217,119,6,.2)}
+.errorTypeBadge.application{background:#ede9fe;color:#7c3aed;border:1px solid rgba(124,58,237,.2)}
+.errorTypeBadge.none{background:#d1fae5;color:#059669;border:1px solid rgba(5,150,105,.2)}
+.errorTypeDetail{flex:1;min-width:0}
+.errorTypeName{font-size:12px;font-weight:900;color:var(--ink);margin-bottom:2px}
+.errorTypeAdvice{font-size:11px;font-weight:800;color:var(--muted);line-height:1.5}
+.errorTypeCount{font-size:18px;font-weight:900;color:var(--brand2);flex:0 0 auto}
+.errorBarWrap{display:flex;gap:3px;height:6px;border-radius:999px;overflow:hidden;background:#edf4fb}
+.errorBarSeg{height:100%;border-radius:999px;transition:width .5s ease}
+
+/* ٤. معايرة الثقة */
+.calibCard{display:grid;gap:12px}
+.calibMatrix{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.calibCell{
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#f8fbff;
+  padding:10px 8px;
+  text-align:center;
+}
+.calibCellVal{font-size:20px;font-weight:900;color:var(--brand2)}
+.calibCellLabel{font-size:10px;font-weight:900;color:var(--muted);margin-top:3px;line-height:1.4}
+.calibDiag{
+  font-size:12px;font-weight:800;line-height:1.8;
+  padding:10px 12px;border-radius:12px;
+  background:#f1f5f9;border:1px solid var(--line);
+  color:#334155;
+}
+.calibScore{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:8px 12px;border-radius:10px;
+  font-size:12px;font-weight:900;
+}
+.calibScore.good{background:#d1fae5;color:#059669}
+.calibScore.warn{background:#fef3c7;color:#d97706}
+.calibScore.bad{background:#fee2e2;color:#dc2626}
+
+/* ٥. توقع الدرجة */
+.gradeCard{display:grid;gap:12px}
+.gradeBig{
+  display:flex;align-items:center;gap:16px;
+  padding:16px;border-radius:16px;
+  border:2px solid var(--line);
+}
+.gradeLabel{font-size:22px;font-weight:900}
+.gradeRange{font-size:13px;font-weight:800;color:var(--muted);margin-top:2px}
+.gradeTrajectory{
+  display:grid;gap:6px;
+}
+.gradeTrajectoryRow{
+  display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;
+  font-size:11px;font-weight:900;
+}
+.gradeTrajectoryBar{height:8px;border-radius:999px;background:#edf4fb;overflow:hidden;border:1px solid #dbe7f2}
+.gradeTrajectoryFill{height:100%;border-radius:inherit;transition:width .6s ease}
+.gradeTip{
+  font-size:12px;font-weight:800;line-height:1.8;color:#334155;
+  padding:10px 12px;border-radius:12px;background:#f1f5f9;border:1px solid var(--line);
+}
+
+/* Section titles للأقسام الجديدة */
+.aiExtSectionTitle{
+  font-size:13px;font-weight:900;color:var(--ink);
+  display:flex;align-items:center;gap:8px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--line);
+}
+.aiExtSectionTitle::before{
+  content:"";width:4px;height:18px;border-radius:2px;
+  background:linear-gradient(180deg,var(--brand),#38bdf8);
+  flex:0 0 auto;
+}
+
+/* شارة النموذج */
+.aiExtModelBadge{
+  font-size:10px;font-weight:900;letter-spacing:.05em;
+  padding:3px 8px;border-radius:6px;
+  background:rgba(3,105,161,.08);border:1px solid rgba(3,105,161,.18);
+  color:var(--brand2);margin-right:auto;
+}
+
+/* ═══════════════════════════════════════════════
+   تحسين المودالات — صحيح / تنبيه / الإجابة الصحيحة
+═══════════════════════════════════════════════ */
+.modal-success-body{
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; padding:36px 24px; gap:16px;
+}
+.modal-success-orb{
+  width:88px; height:88px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #bbf7d0, #dcfce7);
+  border:3px solid rgba(22,163,74,.25);
+  display:grid; place-items:center; font-size:42px;
+  box-shadow:0 0 0 12px rgba(22,163,74,.07), 0 14px 32px rgba(22,163,74,.18);
+  animation:successPop .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes successPop{
+  0%{transform:scale(.4);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+.modal-success-title{
+  font-size:24px; font-weight:900; color:#15803d;
+  animation:fadeUpIn .35s .1s ease both;
+}
+.modal-success-badge{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:7px 16px; border-radius:999px;
+  background:linear-gradient(135deg,#dcfce7,#f0fdf4);
+  border:1px solid rgba(22,163,74,.3);
+  font-size:13px; font-weight:900; color:#166534;
+  animation:fadeUpIn .35s .18s ease both;
+}
+.modal-success-badge::before{
+  content:""; width:8px; height:8px; border-radius:50%;
+  background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.8);
+  animation:aiModelsPulse 1.8s infinite;
+}
+.modal-success-stars{
+  display:flex; gap:8px; font-size:22px;
+  animation:fadeUpIn .35s .26s ease both;
+}
+.modal-success-note{
+  font-size:13px; font-weight:700; color:#166534;
+  background:#f0fdf4; border:1px solid rgba(22,163,74,.2);
+  border-radius:12px; padding:10px 16px; line-height:1.7;
+  animation:fadeUpIn .35s .34s ease both;
+  max-width:300px;
+}
+@keyframes fadeUpIn{
+  0%{opacity:0;transform:translateY(12px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+
+/* Warning Modal */
+.modal-warn-body{
+  display:flex; gap:14px; align-items:flex-start;
+  padding:24px;
+}
+.modal-warn-icon{
+  width:52px; height:52px; flex:0 0 auto;
+  border-radius:14px;
+  background:linear-gradient(135deg,#fef3c7,#fde68a);
+  border:1px solid rgba(217,119,6,.22);
+  display:grid; place-items:center; font-size:24px;
+}
+.modal-warn-title{ font-size:16px; font-weight:900; color:#92400e; margin-bottom:6px; }
+.modal-warn-text{ font-size:14px; font-weight:700; color:#78350f; line-height:1.75; }
+
+/* تحسين modal عام */
+.modal .box{ border-radius:22px !important; box-shadow:0 30px 70px rgba(15,23,42,.2) !important; }
+.modal .box .mh{
+  background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
+  border-bottom:2px solid var(--line);
+  padding:16px 20px;
+}
+.modal .box .mh b{ font-size:16px; font-weight:900; }
 
 
 
@@ -2204,7 +2776,7 @@ input.badField, textarea.badField{
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">4.3 الانحدار الخطي البسيط <span class="sep">|</span> Simple Linear Regression</div>
+          <div class="s">4.1 الارتباط ومعامل ارتباط بيرسون <span class="sep">|</span> Correlation & Pearson r</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
@@ -2229,7 +2801,7 @@ input.badField, textarea.badField{
 
     <aside class="card side">
       <div class="head">
-        <h3>مسار الأسئلة</h3>
+        <h3>بنك الأسئلة</h3>
         <button class="btn small" id="resetBtn" aria-label="إعادة تعيين الاختبار">إعادة</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
@@ -2291,9 +2863,9 @@ function seededRand(seedStr){
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
 /* ===== حالة الصفحة (تُحفظ فقط عند ضغط حفظ الإجابة) ===== */
-const STATE_KEY = "stat102_4_3_state_v2";
+const STATE_KEY = "stat102_4_1_state_v2";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_4_3_timerEnd_v2";
+const TIMER_KEY = "stat102_4_1_timerEnd_v2";
 // Safe storage wrapper (works even if localStorage is blocked)
 const __storage = (function(){
   try{
@@ -2336,7 +2908,15 @@ function startTimer(){
     el.textContent = "الوقت المتبقي: " + m + ":" + (s<10?"0":"") + s;
     el.classList.remove("warn","done");
     if(rem <= 60) el.classList.add("warn");
-    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">دقيقة واحدة متبقية — احفظ إجاباتك إن لم تكن محفوظة.</p>"); }
+    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", `
+      <div class="modal-warn-body">
+        <div class="modal-warn-icon">⏰</div>
+        <div>
+          <div class="modal-warn-title">دقيقة واحدة متبقية</div>
+          <div class="modal-warn-text">احفظ إجاباتك إن لم تكن محفوظة بعد.</div>
+        </div>
+      </div>
+    `); }
     if(rem === 0){
       if(timerInterval) clearInterval(timerInterval);
       timerInterval = null;
@@ -2390,7 +2970,7 @@ function showIntroModal(){
       <p style="font-weight:800;margin:14px 0 6px;">تعليمات الاختبار:</p>
       <ul style="margin:0;padding-right:20px;">
         <li>يمكنك <b>تبديل السؤال</b> لاستبداله بسؤال آخر.</li>
-        <li>سينقلك الاختبار حسب مستوى الإتقان، وتبقى تفاصيل المسار مخفية حتى يظل التركيز على السؤال الحالي.</li>
+        <li>سينقلك النظام حسب الإتقان، ولا تُعرض قائمة الأسئلة للمحافظة على عشوائية المسار.</li>
         <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك طلب <b>مساعدة</b> أو إظهار الإجابة الصحيحة حسب نظام المحاولات.</li>
         <li>عند انتهاء الوقت يُقفل الاختبار تلقائياً وتظهر النتيجة.</li>
       </ul>
@@ -2515,347 +3095,437 @@ function typesetMath(root){
   }catch(e){}
 }
 
-/* ===== مسار الأسئلة (الوحدة 4 | 4.3) ===== */
-
-function lessonTable(headers, rows, rtl=true){
-  const dir = rtl ? 'rtl' : 'ltr';
-  return `
-    <table class="ftable" style="direction:${dir}">
-      <thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
-      <tbody>${rows.map(row=>`<tr>${row.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
-    </table>
-  `;
-}
-
-const REGRESSION_SELFTEST_POOL = [
-  {
-    s:"يمثّل المعامل b في معادلة الانحدار:",
-    options:["قيمة المتغير التابع عند X=0","متوسط قيم Y","معامل الارتباط","ميل خط الانحدار"],
-    a:"ميل خط الانحدار"
-  },
-  {
-    s:"يمثّل المعامل a في معادلة الانحدار:",
-    options:["المقطع من المحور Y","الانحراف المعياري لـ X","معامل الارتباط","ميل خط الانحدار"],
-    a:"المقطع من المحور Y"
-  },
-  {
-    s:"يُفسَّر ميل خط الانحدار على أنه:",
-    options:["التغير النسبي في Y","متوسط الفروق بين القيم","مقدار التغير المتوقع في Y عند زيادة X وحدة واحدة","درجة قوة العلاقة فقط"],
-    a:"مقدار التغير المتوقع في Y عند زيادة X وحدة واحدة"
-  },
-  {
-    s:"إذا كان ميل خط الانحدار سالبًا، فإن العلاقة بين المتغيرين تكون:",
-    options:["طردية","عكسية","ضعيفة","غير خطية"],
-    a:"عكسية"
-  },
-  {
-    s:"إذا كان معامل ارتباط بريسون بين متغيرين يساوي صفرًا، فإن ميل خط الانحدار يكون:",
-    options:["موجبًا","سالبًا","صفرًا","صغيرًا نسبيًا"],
-    a:"صفرًا"
-  },
-  {
-    s:"تُحسب قيمة المقطع a عادةً باستخدام:",
-    options:["المتوسطات الحسابية للمتغيرين","معامل الارتباط فقط","القيم المنعزلة","الانحرافات فقط"],
-    a:"المتوسطات الحسابية للمتغيرين"
-  },
-  {
-    s:"تاريخيًا، يعود مصطلح الانحدار إلى أعمال:",
-    options:["كارل بريسون","فرانسيس غالتون","رونالد فيشر","أدولف كيتليه"],
-    a:"فرانسيس غالتون"
-  },
-  {
-    s:"أي العبارات التالية صحيحة؟",
-    options:["الانحدار لا يعتمد على البيانات","الانحدار لا يصلح لتقدير قيمة للمتغير التابع","الانحدار الخطي البسيط يقيس الارتباط فقط","الانحدار الخطي يحوّل العلاقة إلى نموذج"],
-    a:"الانحدار الخطي يحوّل العلاقة إلى نموذج"
-  },
-  {
-    s:"عند استخدام نموذج الانحدار الخطي البسيط، فإن التقدير يكون أكثر موثوقية عندما:",
-    options:["تكون العلاقة خطية قوية","تكون البيانات قليلة","تكون الوحدات مختلفة","يكون التشتت كبيرًا"],
-    a:"تكون العلاقة خطية قوية"
-  },
-  {
-    s:"يُستخدم الانحدار الخطي البسيط أساسًا من أجل:",
-    options:["قياس تشتت البيانات","اختبار استقلال المتغيرات","وصف العلاقة الخطية وتقدير قيم أحد المتغيرين","مقارنة متوسطات عينتين"],
-    a:"وصف العلاقة الخطية وتقدير قيم أحد المتغيرين"
-  }
-];
-
-const REGRESSION_TF_POOL = [
-  {s:"يستخدم خط الانحدار البسيط لتقدير قيم المتغير التابع اعتمادًا على قيم المتغير المستقل.", a:"صح"},
-  {s:"يمثل ميل خط الانحدار مقدار التغير المتوقع في Y عند تغير X وحدة واحدة.", a:"صح"},
-  {s:"خط الانحدار الخطي البسيط يمر بجميع نقاط لوحة الانتشار.", a:"خطأ"},
-  {s:"إشارة ميل خط الانحدار تتفق دائمًا مع إشارة معامل ارتباط بريسون بين المتغيرين.", a:"صح"},
-  {s:"يعتمد حساب ميل خط الانحدار على انحرافات قيم كل متغير عن متوسطه.", a:"صح"},
-  {s:"يمكن النظر إلى خط الانحدار الخطي البسيط على أنه أفضل تمثيل خطي لاتجاه النقاط في لوحة الانتشار.", a:"صح"},
-  {s:"لا يتأثر ميل خط الانحدار بوحدات القياس المستخدمة للمتغيرين.", a:"خطأ"},
-  {s:"إذا كان معامل ارتباط بريسون يساوي صفرًا، فإن ميل خط الانحدار يكون صفرًا أيضًا.", a:"صح"},
-  {s:"إذا ضُربت جميع قيم المتغير المستقل في ثابت موجب، فإن ميل خط الانحدار يتغير بينما تبقى إشارته كما هي.", a:"صح"},
-  {s:"يُحسب مقطع خط الانحدار بسهولة باستخدام المتوسطات الحسابية للمتغيرين دون الحاجة إلى صيغة مطوّلة.", a:"صح"}
-];
-
-const REGRESSION_FILL_POOL = [
-  {stem:"يُسمّى المتغير الذي يُستخدم لتقدير قيم متغير آخر في نموذج الانحدار الخطي ____، بينما يسمى المتغير الذي يتم تقدير قيمه ____.", options:["المتغير المستقل / المتغير التابع","المتغير التابع / المتغير المستقل","المتغير الوصفي / المتغير الاسمي","المتغير العشوائي / المتغير الثابت"], a:"المتغير المستقل / المتغير التابع"},
-  {stem:"إذا كانت العلاقة بين المتغيرين طردية قوية، فإن قيمة معامل الارتباط تكون ____ ويكون ميل خط الانحدار ____.", options:["سالبة / سالبًا","موجبة / موجبًا","صفرية / صفرًا","عشوائية / صغيرًا"], a:"موجبة / موجبًا"},
-  {stem:"إذا كان معامل ارتباط بريسون بين متغيرين يساوي صفرًا، فإن ميل خط الانحدار يساوي ____.", options:["واحدًا","الصفر","قيمة سالبة","قيمة موجبة صغيرة"], a:"الصفر"},
-  {stem:"تمثل القيمة \\(\\hat{Y}\\) في نموذج الانحدار الخطي ____ للمتغير التابع عند قيمة معينة من المتغير المستقل.", options:["القيمة المقدرة","القيمة الحقيقية دائمًا","الانحراف المعياري","المتوسط الحسابي"], a:"القيمة المقدرة"},
-  {stem:"تعتمد إشارة ميل خط الانحدار على إشارة معامل ارتباط ____ بين المتغيرين.", options:["سبيرمان","بريسون","التحديد","الالتواء"], a:"بريسون"},
-  {stem:"يعتمد حساب ميل خط الانحدار في صيغته الكاملة على مجموع حاصل ضرب ____ المتغيرين عن متوسطهما.", options:["انحرافات قيم","رتب","وحدات قياس","فروق المتوسطات"], a:"انحرافات قيم"},
-  {stem:"يُستخدم الانحدار الخطي البسيط لوصف العلاقة بين متغيرين ____ من خلال تمثيل هذه العلاقة بـ ____.", options:["كميين / خط مستقيم","رتبيين / منحنى","اسميين / جدول تكراري","نوعيين / مخطط دائري"], a:"كميين / خط مستقيم"},
-  {stem:"يُحسب مقطع خط الانحدار a عادةً باستخدام ____ الحسابية للمتغيرين المستقل والتابع.", options:["الرتب","المتوسطات","الدرجات المعيارية","الانحرافات"], a:"المتوسطات"},
-  {stem:"يُحسب ميل خط الانحدار في إحدى صيغه المختصرة باستخدام العلاقة ____.", options:["\\( b = r\\dfrac{S_y}{S_x} \\)","\\( a = r\\dfrac{S_x}{S_y} \\)","\\( r^2 = a+b \\)","\\( b = x+y \\)"], a:"\\( b = r\\dfrac{S_y}{S_x} \\)"}
-];
-
+/* ===== بنك الأسئلة (الوحدة 4 | 4.1) ===== */
 const TEMPLATES = [
   {
-    id:"q1_regression_selftest_pool",
+    id:"q1_circle_pool",
     icon:"①",
-    title:"اختبار ذاتي — مفاهيم الانحدار الخطي البسيط",
+    title:"ضع دائرة — مفاهيم الارتباط وبيرسون",
     gen:(variant)=>{
-      const r = seededRand("q1_regression_selftest_pool|"+variant);
-      const items = REGRESSION_SELFTEST_POOL.map(x=>({...x}));
+      const r = seededRand("q1_circle_pool|"+variant);
+
+      const fmt = (v)=> (v>=0 ? "+" : "") + (Math.round(v*100)/100).toFixed(2);
+      const pickR = ()=>{
+        const mag = randInt(r, 25, 95)/100; // 0.25..0.95
+        const sign = (randInt(r,0,1)===0) ? -1 : 1;
+        return sign*mag;
+      };
+      const pickNiceR = ()=>{
+        const choices = [0.2,0.4,0.5,0.6,0.7,0.8,0.9];
+        const v = choices[randInt(r,0,choices.length-1)];
+        const sign = (randInt(r,0,1)===0) ? -1 : 1;
+        return sign*v;
+      };
+
+      // 10 بنود (سيتم اختيار 4 عشوائياً)
+      const POOL = [
+        ()=>{ // مدى r
+          return {
+            s:"قيمة معامل ارتباط بيرسون r تقع دائمًا ضمن المدى:",
+            options:["[-2, +2]","[-1, +1]","[0, +1]","(-∞, +∞)"],
+            a:"[-1, +1]"
+          };
+        },
+        ()=>{ // تفسير الإشارة
+          const rv = pickR();
+          const signText = rv>0 ? "موجب" : "سلبي";
+          return {
+            s:`إذا كانت قيمة معامل الارتباط r = ${fmt(rv)} فإن اتجاه العلاقة الخطية يكون:`,
+            options:["موجب","سلبي","لا يمكن تحديد الاتجاه","لا توجد علاقة خطية بالضرورة"],
+            a: signText
+          };
+        },
+        ()=>{ // التماثل
+          return {
+            s:"أي عبارة صحيحة عن معامل ارتباط بيرسون؟",
+            options:[
+              "r(X,Y) = r(Y,X)",
+              "r(X,Y) = -r(Y,X)",
+              "r(X,Y) يعتمد على ترتيب المتغيرين دائمًا",
+              "لا يمكن حساب r إلا إذا كان X هو المتغير المستقل"
+            ],
+            a:"r(X,Y) = r(Y,X)"
+          };
+        },
+        ()=>{ // وحدات القياس
+          return {
+            s:"إذا غيّرنا وحدة قياس X من (متر) إلى (سنتيمتر)، فإن قيمة r:",
+            options:["تزداد دائمًا","تنخفض دائمًا","لا تتغير","تصبح غير معرّفة"],
+            a:"لا تتغير"
+          };
+        },
+        ()=>{ // التحويلات الخطية (ضرب ثابت موجب)
+          const k = randInt(r,2,6);
+          return {
+            s:`إذا كان r(X,Y)=0.55، فما أثر ضرب جميع قيم X في ثابت موجب ${k}؟`,
+            options:["تتغير قيمة r","لا تتغير قيمة r","تنعكس إشارة r فقط","تصبح r = 0"],
+            a:"لا تتغير قيمة r"
+          };
+        },
+        ()=>{ // ضرب ثابت سالب
+          const k = randInt(r,2,6);
+          return {
+            s:`إذا كان r(X,Y)=0.55، فما أثر ضرب جميع قيم Y في ثابت سالب -${k}؟`,
+            options:["لا تتغير قيمة r","تنعكس إشارة r فقط","تتغير قيمة r وقيمتها المطلقة دائمًا","تصبح r = 1"],
+            a:"تنعكس إشارة r فقط"
+          };
+        },
+        ()=>{ // r=0
+          return {
+            s:"إذا كانت قيمة معامل الارتباط r = 0، فهذا يعني بالضرورة:",
+            options:[
+              "عدم وجود علاقة خطية بين المتغيرين",
+              "عدم وجود أي علاقة بين المتغيرين مطلقًا",
+              "وجود علاقة سببية قوية",
+              "أن جميع النقاط تقع على خط مستقيم"
+            ],
+            a:"عدم وجود علاقة خطية بين المتغيرين"
+          };
+        },
+        ()=>{ // بيانات متزاوجة
+          return {
+            s:"أي حالة تُعد مناسبة لاستخدام معامل ارتباط بيرسون؟",
+            options:[
+              "بيانات كمية متزاوجة (X,Y) لكل فرد/ملاحظة",
+              "جدول تكراري لفئات متغير واحد فقط",
+              "بيانات نوعية (أسماء/ألوان) فقط",
+              "مقارنة متوسطات مجموعتين دون بيانات متزاوجة"
+            ],
+            a:"بيانات كمية متزاوجة (X,Y) لكل فرد/ملاحظة"
+          };
+        },
+        ()=>{ // عدم التعريف عند انعدام التشتت
+          return {
+            s:"يصبح معامل ارتباط بيرسون غير معرّف عادةً عندما:",
+            options:[
+              "تكون |r| أكبر من 1",
+              "يكون الانحراف المعياري لأحد المتغيرين Sx=0 أو Sy=0",
+              "يكون عدد المشاهدات n كبيرًا",
+              "تكون العلاقة موجبة"
+            ],
+            a:"يكون الانحراف المعياري لأحد المتغيرين Sx=0 أو Sy=0"
+          };
+        }
+      ];
+
+      // بناء البنود واختيار 4 عشوائياً
+      const items = POOL.map(f=>f());
       shuffleInPlace(items, r);
       const picked = items.slice(0,4);
-      const parts = picked.map((it,i)=>({type:"mcq", key:"mcq"+(i+1), label:(i+1)+") "+it.s, options:it.options}));
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"mcq"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+
       const answers = {};
-      picked.forEach((it,i)=> answers["mcq"+(i+1)] = it.a);
+      picked.forEach((it,i)=>{ answers["mcq"+(i+1)] = it.a; });
+
       return {
-        branches:[{
-          level:"متوسط",
-          prompt:"اختر الإجابة الصحيحة لكل بند:",
-          parts,
-          answers,
-          explain:[
-            "يركز الفصل 4.3 على أن الانحدار الخطي البسيط يحول العلاقة الخطية بين متغيرين كميين إلى نموذج كمي للتفسير والتقدير.",
-            "ويمثل b الميل، ويمثل a المقطع من المحور Y، وتكون الثقة بالتقدير أعلى عندما تكون العلاقة الخطية قوية."
-          ],
-          solutionSteps:[
-            "حدّد هل البند يسأل عن معنى الميل أو المقطع أو الغرض من الانحدار أو شرط جودة التقدير.",
-            "اختر البديل المطابق للنص الوارد في الاختبار الذاتي 4.3."
-          ]
-        }]
+        branches:[
+          {
+            level:"متوسط",
+            prompt:"ضع دائرة حول الإجابة الصحيحة لكل بند (يتم اختيار 4 بنود عشوائياً من أصل 10):",
+            parts,
+            answers,
+            explain:[
+              "تذكّر أن \\(r\\) يقيس اتجاه وقوة العلاقة *الخطية* بين متغيرين كميين متزاوجين.",
+              "لا تتأثر \\(r\\) بتغيير الوحدات أو بإضافة ثابت، بينما ضرب أحد المتغيرين بثابت سالب يعكس الإشارة فقط."
+            ],
+            solutionSteps:[
+              "حدّد الفكرة المطلوبة: مدى \\(r\\)، الإشارة، التحويلات الخطية، أو شروط التعريف.",
+              "اختر البديل الذي يطابق الخاصية الرياضية الصحيحة لمعامل بيرسون."
+            ]
+          }
+        ]
       };
     }
   },
   {
-    id:"q2_regression_tf_pool",
+    id:"q2_pearson_props_9",
     icon:"②",
-    title:"تمارين 4.3 — صح/خطأ",
+    title:"خصائص معامل ارتباط بيرسون — صح/خطأ (9 عبارات)",
     gen:(variant)=>{
-      const r = seededRand("q2_regression_tf_pool|"+variant);
-      const items = REGRESSION_TF_POOL.map(x=>({...x}));
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,5);
-      const parts = picked.map((it,i)=>({type:"mcq", key:"tf"+(i+1), label:(i+1)+") "+it.s, options:["صح","خطأ"]}));
+      const r = seededRand("q2_pearson_props_9|"+variant);
+
+      const POOL = [
+        {s:"قيمة معامل ارتباط بيرسون r محصورة دائمًا بين -1 و +1.", a:"صح"},
+        {s:"معامل الارتباط متماثل: r(X,Y) = r(Y,X).", a:"صح"},
+        {s:"تغيير وحدة قياس أحد المتغيرين (مثلًا من متر إلى سم) يغيّر قيمة r.", a:"خطأ"},
+        {s:"إضافة ثابت لكل قيم X لا تؤثر على قيمة r.", a:"صح"},
+        {s:"ضرب قيم أحد المتغيرين في ثابت سالب لا يغيّر إشارة r.", a:"خطأ"},
+        {s:"يعتمد r على البيانات المتزاوجة؛ أي تغيير في ربط قيم X بقيم Y المناظرة قد يغيّر r.", a:"صح"},
+        {s:"إذا كان |r| = 1 وكان لكل من المتغيرين انحراف معياري غير صفري، فإن جميع النقاط تقع على خط مستقيم.", a:"صح"},
+        {s:"إذا كان r = 0 فهذا يعني عدم وجود أي علاقة بين المتغيرين مطلقًا.", a:"خطأ"},
+        {s:"إذا كان الانحراف المعياري لأحد المتغيرين يساوي صفرًا فإن معامل الارتباط يكون غير معرّف (Undefined).", a:"صح"}
+      ];
+
+      const parts = POOL.map((it,i)=>({
+        type:"mcq",
+        key:"tf"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["صح","خطأ"]
+      }));
       const answers = {};
-      picked.forEach((it,i)=> answers["tf"+(i+1)] = it.a);
+      POOL.forEach((it,i)=>{ answers["tf"+(i+1)] = it.a; });
+
       return {
-        branches:[{
-          level:"متوسط",
-          prompt:"حدّد صحة كل عبارة:",
-          parts,
-          answers,
-          explain:[
-            "يوضح الفصل أن خط الانحدار لا يمر بجميع النقاط بالضرورة، بل يمثل أفضل اتجاه عام للبيانات.",
-            "كما يوضح أن الميل يتأثر بوحدات القياس، وأن إشارته ترتبط بإشارة معامل بريسون."
-          ],
-          solutionSteps:[
-            "قارن كل عبارة بالتعريفات والملاحظات الأساسية في الفصل 4.3.",
-            "انتبه خصوصًا لعبارات: يمر بجميع النقاط، لا يتأثر بالوحدات، وارتباط الميل بمعامل بريسون."
-          ]
-        }]
+        branches:[
+          {
+            level:"متوسط",
+            prompt:"حدّد (صح/خطأ) لكل عبارة من خصائص معامل ارتباط بيرسون:",
+            parts,
+            answers,
+            explain:[
+              "خصائص بيرسون تشمل: المدى \\([-1,1]\\)، التماثل، عدم الاعتماد على الوحدات، والثبات تحت التحويلات الخطية.",
+              "تذكّر: \\(r=0\\) يعني غياب الارتباط *الخطي* فقط، وقد توجد علاقة غير خطية.",
+              "إذا كان أحد المتغيرين ثابتًا (\\(S_X=0\\) أو \\(S_Y=0\\)) فإن \\(r\\) غير معرّف."
+            ],
+            solutionSteps:[
+              "اربط كل عبارة بخاصية محددة من خصائص بيرسون.",
+              "انتبِه لعبارات (السببية) و(لا توجد علاقة مطلقًا) فهي غالبًا خاطئة عند الحديث عن \\(r\\)."
+            ]
+          }
+        ]
       };
     }
   },
   {
-    id:"q3_regression_fill_pool",
+    id:"q3_compute_r",
     icon:"③",
-    title:"تمارين 4.3 — أكمل العبارة",
+    title:"حساب معامل ارتباط بيرسون r",
     gen:(variant)=>{
-      const r = seededRand("q3_regression_fill_pool|"+variant);
-      const items = REGRESSION_FILL_POOL.map(x=>({...x}));
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,4);
-      const parts = picked.map((it,i)=>({type:"mcq", key:"fill"+(i+1), label:(i+1)+") "+it.stem, options:it.options}));
-      const answers = {};
-      picked.forEach((it,i)=> answers["fill"+(i+1)] = it.a);
+      const r = seededRand("q3_compute_r|"+variant);
+
+      const baseX = [1,2,3,4,5,6];
+      const baseYs = [
+        [2,3,5,4,6,7],
+        [1,3,2,5,4,6],
+        [10,12,9,14,13,15]
+      ];
+      const y0 = baseYs[randInt(r,0,baseYs.length-1)];
+
+      const ax = randInt(r, 1, 4);
+      const bx = randInt(r, 0, 12);
+      const ay = randInt(r, 1, 4);
+      const by = randInt(r, -6, 10);
+      const flip = (randInt(r,0,1)===0) ? 1 : -1;
+
+      const X = baseX.map(v=>v*ax + bx);
+      const Y = y0.map(v=>flip*(v*ay) + by);
+
+      const n = X.length;
+      const sum = (arr)=>arr.reduce((a,b)=>a+b,0);
+      const sumsq = (arr)=>arr.reduce((a,b)=>a+b*b,0);
+      const sumxy = (x,y)=>x.reduce((a,_,i)=>a + x[i]*y[i], 0);
+
+      const SX = sum(X), SY = sum(Y), SXX = sumsq(X), SYY = sumsq(Y), SXY = sumxy(X,Y);
+
+      const num = (n*SXY) - (SX*SY);
+      const den1 = Math.sqrt((n*SXX) - (SX*SX));
+      const den2 = Math.sqrt((n*SYY) - (SY*SY));
+      const rVal = (den1===0 || den2===0) ? 0 : (num/(den1*den2));
+      const rAns = Math.round(rVal*100)/100; // منزلتين
+
+      const prompt = `
+لدينا \\(n=${n}\\) أزواج من البيانات (X,Y). استُخرجت المجاميع التالية:
+<div class="dataGrid">
+n = ${n}
+ΣX = ${SX}
+ΣY = ${SY}
+ΣX² = ${SXX}
+ΣY² = ${SYY}
+ΣXY = ${SXY}
+</div>
+احسب معامل ارتباط بيرسون \\(r\\) (قَرِّب إلى منزلتين):
+`.trim();
+
+      return {
+        branches:[
+          {
+            level:"متقدم",
+            prompt,
+            parts:[
+              {type:"num", key:"r", label:"قيمة r (إلى منزلتين):", placeholder:"مثال: 0.75 أو -0.75"}
+            ],
+            answers:{ r: rAns },
+            formula:["الصيغة [4-1] (الكتاب): \\( r = \\dfrac{1}{n-1} \\sum_{i=1}^n \\dfrac{x_i-\\bar{x}}{S_x}\\,\\dfrac{y_i-\\bar{y}}{S_y} \\) (لـ \\(S_x>0,\\,S_y>0\\)، وإلا \\(r=0\\)).","الصيغة [4-2] (الكتاب): \\( r = \\dfrac{\\sum x_i y_i - n\\bar{x}\\bar{y}}{\\sqrt{\\sum x_i^2 - n\\bar{x}^2}\\;\\sqrt{\\sum y_i^2 - n\\bar{y}^2}} \\) (باستخدام المتوسطات).","الصيغة [4-3] (الكتاب): \\( r = \\dfrac{n\\sum x_i y_i - (\\sum x_i)(\\sum y_i)}{\\sqrt{n\\sum x_i^2-(\\sum x_i)^2}\\;\\sqrt{n\\sum y_i^2-(\\sum y_i)^2}} \\) (بالبيانات الخام فقط)."],
+            explain:[
+              "استخدم مباشرة الصيغة [4-3] من الكتاب لأن المعطى مجاميع (n, ΣX, ΣY, ΣX², ΣY², ΣXY).",
+              "تحقق أن \\(|r|\\le 1\\)."
+            ],
+            solutionSteps:[
+              "الصيغة [4-3] من الكتاب مناسبة عند توفر المجاميع فقط (بدون حساب المتوسطات).",
+              "عوّض القيم المعطاة في البسط: \\(n\\cdot\\Sigma XY - (\\Sigma X)(\\Sigma Y)\\) وفي المقام: \\(\\sqrt{n\\Sigma X^2-(\\Sigma X)^2}\\) و \\(\\sqrt{n\\Sigma Y^2-(\\Sigma Y)^2}\\).",
+              "احسب \\(r\\) وقرّبه إلى منزلتين عشريتين."
+            ]}
+        ]
+      };
+    }
+  },
+  {
+    id:"q4_scatter_plot",
+    icon:"④",
+    title:"لوحة الانتشار — تفسير الرسم",
+    gen:(variant)=>{
+      const r = seededRand("q4_scatter_plot|"+variant);
+
+      function makeSVG(points){
+        const W=520, H=320, pad=50;
+        const xmin=0, xmax=10, ymin=0, ymax=10;
+        const xScale=(x)=> pad + (x-xmin)*(W-2*pad)/(xmax-xmin);
+        const yScale=(y)=> H-pad - (y-ymin)*(H-2*pad)/(ymax-ymin);
+
+        const dots = points.map(p=>`<circle cx="${xScale(p[0]).toFixed(1)}" cy="${yScale(p[1]).toFixed(1)}" r="5" fill="#0c4a6e" opacity="0.9"/>`).join("");
+        const grid = Array.from({length:11},(_,i)=>{
+          const x=xScale(i), y=yScale(i);
+          return `
+            <line x1="${x}" y1="${pad}" x2="${x}" y2="${H-pad}" stroke="#e2e8f0" />
+            <line x1="${pad}" y1="${y}" x2="${W-pad}" y2="${y}" stroke="#e2e8f0" />
+          `;
+        }).join("");
+
+        return `
+<svg viewBox="0 0 ${W} ${H}" aria-label="لوحة انتشار">
+  ${grid}
+  <line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#0f172a" stroke-width="2"/>
+  <line x1="${pad}" y1="${H-pad}" x2="${pad}" y2="${pad}" stroke="#0f172a" stroke-width="2"/>
+  <text x="${W-pad}" y="${H-pad+28}" font-size="16" fill="#0f172a">X</text>
+  <text x="${pad-28}" y="${pad}" font-size="16" fill="#0f172a">Y</text>
+  ${dots}
+</svg>
+        `.trim();
+      }
+
+      const kind = randInt(r,0,2);
+      let points, answer;
+      if(kind===0){
+        points = [[1,1.2],[2,2.0],[3,3.4],[4,4.1],[5,5.2],[6,6.3],[7,7.1],[8,8.0],[9,9.2]];
+        answer = "علاقة موجبة خطية (كلما زاد X زاد Y)";
+      }else if(kind===1){
+        points = [[1,9.0],[2,8.1],[3,7.3],[4,6.2],[5,5.0],[6,4.1],[7,3.1],[8,2.0],[9,1.2]];
+        answer = "علاقة سالبة خطية (كلما زاد X قل Y)";
+      }else{
+        points = [[1,2.0],[2,3.0],[3,4.5],[4,6.7],[5,8.2],[6,8.5],[7,7.4],[8,5.8],[9,3.6]];
+        answer = "علاقة غير خطية (منحنية)";
+      }
+
+      const svg = makeSVG(points);
+
+      return {
+        branches:[
+          {
+            level:"متوسط",
+            prompt:`أمامك لوحة انتشار (Scatter Plot):<div class="chartBox" style="margin-top:12px">${svg}</div>
+اختر الوصف الأدق للعلاقة بين المتغيرين:`,
+            parts:[
+              {
+                type:"mcq",
+                key:"sp1",
+                label:"الوصف الصحيح:",
+                options:[
+                  "علاقة موجبة خطية (كلما زاد X زاد Y)",
+                  "علاقة سالبة خطية (كلما زاد X قل Y)",
+                  "لا يوجد أي نمط إطلاقًا",
+                  "علاقة غير خطية (منحنية)"
+                ]
+              }
+            ],
+            answers:{ sp1: answer },
+            explain:[
+              "لوحة الانتشار تساعد على استكشاف شكل العلاقة قبل حساب \\(r\\).",
+              "بيرسون يقيس الارتباط الخطي؛ لذا قد لا يلتقط العلاقات غير الخطية حتى لو كان هناك نمط واضح."
+            ],
+            solutionSteps:[
+              "انظر لاتجاه انتشار النقاط: صعود ⟵ موجب، هبوط ⟵ سالب.",
+              "إن كان النمط منحنيًا/غير مستقيم فالعلاقة غير خطية."
+            ]
+          }
+        ]
+      };
+    }
+  },
+  {
+    id:"q5_r_context_interpretation",
+    icon:"⑤",
+    title:"تفسير r في سياق تطبيقي",
+    gen:(variant)=>{
+      const r = seededRand("q5_r_context_interpretation|"+variant);
+      const cases = [
+        {x:"ساعات المذاكرة", y:"درجة الاختبار", val:0.82, desc:"ارتباط خطي طردي قوي", sign:"الإشارة موجبة؛ كلما زاد المتغير الأول يميل المتغير الثاني للزيادة خطيًا"},
+        {x:"عدد الغيابات", y:"درجة الاختبار", val:-0.74, desc:"ارتباط خطي عكسي قوي", sign:"الإشارة سالبة؛ كلما زاد المتغير الأول يميل المتغير الثاني للانخفاض خطيًا"},
+        {x:"زمن الانتظار", y:"رضا المستفيد", val:-0.42, desc:"ارتباط خطي عكسي متوسط", sign:"الإشارة سالبة؛ الزيادة في المتغير الأول تقترن بانخفاض خطي متوسط في الثاني"},
+        {x:"عدد ساعات النوم", y:"مستوى التركيز", val:0.31, desc:"ارتباط خطي طردي ضعيف", sign:"الإشارة موجبة لكنها تشير إلى علاقة خطية ضعيفة"}
+      ];
+      const c = cases[randInt(r,0,cases.length-1)];
+      const fmt = (v)=> (v>=0?"+":"") + (Math.round(v*100)/100).toFixed(2);
       return {
         branches:[{
           level:"متوسط",
-          prompt:"أكمل العبارات الآتية باختيار البديل الأنسب:",
-          parts,
-          answers,
-          explain:[
-            "تعتمد هذه البنود على المفردات الأساسية للفصل: المتغير المستقل، المتغير التابع، القيمة المقدرة \\(\\hat{Y}\\)، المتوسطات، وصيغ الميل.",
-            "كما تؤكد أن الانحدار الخطي البسيط يخص متغيرين كميين وتمثيل العلاقة بخط مستقيم."
+          prompt:`في دراسة عن العلاقة بين <b>${c.x}</b> و<b>${c.y}</b>، كانت قيمة معامل ارتباط بيرسون \\(r=${fmt(c.val)}\\). أجب عن البنود الآتية دون افتراض السببية من الارتباط وحده.`,
+          parts:[
+            {type:"mcq", key:"desc", label:"الوصف الأدق لقيمة r:", options:["ارتباط خطي طردي قوي","ارتباط خطي عكسي قوي","ارتباط خطي عكسي متوسط","ارتباط خطي طردي ضعيف"]},
+            {type:"mcq", key:"sign", label:"ما معنى إشارة r في هذا السياق؟", options:[c.sign,"الإشارة لا علاقة لها باتجاه العلاقة","الإشارة تثبت السببية مباشرة","الإشارة تحدد حجم العينة فقط"]},
+            {type:"mcq", key:"causal", label:"هل تكفي قيمة r لإثبات أن المتغير الأول سبب تغير المتغير الثاني؟", options:["نعم، لأن |r| كبير دائمًا يعني السببية","لا، الارتباط لا يثبت السببية وحده","نعم، إذا كانت إشارة r موجبة فقط","لا، لأن معامل بيرسون لا يقيس الاتجاه"]}
           ],
-          solutionSteps:[
-            "اقرأ الجملة كاملة وحدّد نوع المعلومة المطلوبة: تعريف، صيغة، أو تفسير.",
-            "اختر العبارة التي تطابق تمارين 4.3 حرفيًا أو معنًى مباشرًا."
-          ]
+          answers:{desc:c.desc, sign:c.sign, causal:"لا، الارتباط لا يثبت السببية وحده"},
+          formula:["معامل بيرسون \\(r\\) يصف اتجاه وقوة العلاقة الخطية بين متغيرين كميين متزاوجين."],
+          explain:["حدّد الاتجاه من إشارة \\(r\\)، وحدّد القوة من مقدار \\(|r|\\).", "الارتباط يصف علاقة خطية ولا يثبت السببية وحده."],
+          solutionSteps:["استخرج الاتجاه من الإشارة: موجب طردي وسالب عكسي.", "قارن مقدار \\(|r|\\) لوصف القوة التقريبية للعلاقة الخطية.", "افصل بين معنى الارتباط ومعنى السببية عند التفسير."]
         }]
       };
     }
   },
   {
-    id:"q4_example_431_summary_stats",
-    icon:"④",
-    title:"الميل والمقطع والتقدير من الإحصاءات",
-    gen:(variant)=>{
-      const r = seededRand("q4_slope_intercept|"+variant);
-      const xbar = randInt(r,50,90);
-      const ybar = randInt(r,10,40);
-      const sx = randInt(r,15,35) + randInt(r,10,99)/100;
-      const sy = randInt(r,2,8) + randInt(r,10,99)/100;
-      const rVal = (randInt(r,55,92)/100) * (randInt(r,0,1)===0?1:-1);
-      const rAbs = Math.abs(rVal);
-      const b = Math.round(rVal * sy / sx * 10000) / 10000;
-      const a = Math.round((ybar - b * xbar) * 1000) / 1000;
-      const askX = xbar + randInt(r,5,20);
-      const yhat = Math.round((a + b * askX) * 1000) / 1000;
-      const r2 = Math.round(rVal * rVal * 1000) / 1000;
-      return {
-        branches:[{
-          level:"متقدم",
-          prompt:`لديك القيم التالية: \\(\\bar{x}=${xbar}\\)، \\(\\bar{y}=${ybar}\\)، \\(S_x=${sx.toFixed(2)}\\)، \\(S_y=${sy.toFixed(2)}\\)، \\(r=${rVal.toFixed(3)}\\). احسب المطلوب:`,
-          parts:[
-            {type:"num", key:"b", label:"معامل الانحدار \\(b\\):", placeholder:"مثال: "+b},
-            {type:"num", key:"a", label:"المقطع \\(a\\):", placeholder:"مثال: "+a},
-            {type:"num", key:"yhat", label:"القيمة المقدرة \\(\\hat{Y}\\) عند \\(X="+askX+"\\):", placeholder:"مثال: "+yhat},
-            {type:"num", key:"r2", label:"معامل التحديد \\(r^2\\):", placeholder:"مثال: "+r2}
-          ],
-          answers:{b:b,a:a,yhat:yhat,r2:r2},
-          formula:[
-            "الصيغة [4-7]: \\( b = r\\dfrac{S_y}{S_x} \\)",
-            "الصيغة [4-8]: \\( a = \\bar{y} - b\\bar{x} \\)",
-            "معامل التحديد: \\( r^2 \\)"
-          ],
-          explain:[
-            "احسب الميل من الصيغة [4-7]، ثم المقطع من [4-8].",
-            "عوّض في معادلة الانحدار \\(\\hat{Y}=a+bX\\) للتقدير، ثم ربّع \\(r\\) لمعامل التحديد."
-          ],
-          solutionSteps:[
-            "الميل: \\(b = r \\times S_y / S_x\\).",
-            "المقطع: \\(a = \\bar{y} - b \\times \\bar{x}\\).",
-            "التقدير: \\(\\hat{Y} = a + b \\times "+askX+"\\)، ومعامل التحديد \\(r^2 = r \\times r\\)."
-          ]
-        }]
-      };
-    }
-  },
-  {
-    id:"q5_example_432_formula_46",
-    icon:"⑤",
-    title:"معادلة الانحدار من المجاميع",
-    gen:(variant)=>{
-      const r = seededRand("q5_regression_sums|"+variant);
-      const cases = [
-        {n:6, SX:450, SY:90, SXY:7130, SX2:37850, xbar:75, ybar:15},
-        {n:5, SX:300, SY:125, SXY:8200, SX2:19800, xbar:60, ybar:25},
-        {n:6, SX:360, SY:180, SXY:11400, SX2:23000, xbar:60, ybar:30},
-        {n:5, SX:400, SY:100, SXY:8500, SX2:34000, xbar:80, ybar:20},
-        {n:7, SX:490, SY:210, SXY:15200, SX2:37100, xbar:70, ybar:30},
-        {n:6, SX:300, SY:240, SXY:12800, SX2:16400, xbar:50, ybar:40},
-        {n:5, SX:350, SY:75, SXY:5600, SX2:26250, xbar:70, ybar:15}
-      ];
-      const c = cases[randInt(r,0,cases.length-1)];
-      const num = c.n*c.SXY - c.SX*c.SY;
-      const den = c.n*c.SX2 - c.SX*c.SX;
-      const b = Math.round((num/den)*1000)/1000;
-      const a = Math.round((c.ybar - b*c.xbar)*100)/100;
-      const askX = c.xbar + randInt(r,5,15);
-      const yhat = Math.round((a + b*askX)*100)/100;
-      const table = lessonTable(
-        ["المقدار","القيمة"],
-        [["n",String(c.n)],["ΣX",String(c.SX)],["ΣY",String(c.SY)],["ΣXY",String(c.SXY)],["ΣX²",String(c.SX2)]]
-      );
-      return {
-        branches:[{
-          level:"متقدم",
-          prompt:`لديك المجاميع التالية:${table}<div class="hint">استخدم الصيغة [4-6] لإيجاد الميل، ثم أكمل بناء معادلة الانحدار. علمًا بأن \\(\\bar{x}=${c.xbar}\\) و\\(\\bar{y}=${c.ybar}\\).</div>`,
-          parts:[
-            {type:"num", key:"b", label:"قيمة \\(b\\) من الصيغة [4-6]:", placeholder:"مثال: "+b},
-            {type:"num", key:"a", label:"قيمة المقطع \\(a\\):", placeholder:"مثال: "+a},
-            {type:"num", key:"yhat", label:"القيمة المقدرة \\(\\hat{Y}\\) عند \\(X="+askX+"\\):", placeholder:"مثال: "+yhat},
-            {type:"mcq", key:"interp", label:"تفسير الميل:", options:["كل زيادة وحدة واحدة في X تقابل زيادة تقديرية في Y بمقدار b تقريبًا","كل زيادة وحدة واحدة في Y تقابل زيادة X بمقدار b","المقطع a هو قوة الارتباط","معامل التحديد يساوي الميل دائمًا"]}
-          ],
-          answers:{b:b, a:a, yhat:yhat, interp:"كل زيادة وحدة واحدة في X تقابل زيادة تقديرية في Y بمقدار b تقريبًا"},
-          formula:[
-            "الصيغة [4-6]: \\( b = \\dfrac{n\\sum x_i y_i - (\\sum x_i)(\\sum y_i)}{n\\sum x_i^2 - (\\sum x_i)^2} \\)",
-            "الصيغة [4-8]: \\( a = \\bar{y} - b\\bar{x} \\)",
-            "معادلة الانحدار: \\(\\hat{Y}=a+bX\\)"
-          ],
-          explain:["عوّض المجاميع في الصيغة [4-6] للميل، ثم استخدم المتوسطين للمقطع."],
-          solutionSteps:[
-            "البسط: \\(n \\times \\sum XY - \\sum X \\times \\sum Y\\)، والمقام: \\(n \\times \\sum X^2 - (\\sum X)^2\\).",
-            "احسب \\(b\\)، ثم \\(a = \\bar{y} - b\\bar{x}\\).",
-            "عند \\(X="+askX+"\\): \\(\\hat{Y} = a + b \\times "+askX+"\\)."
-          ]
-        }]
-      };
-    }
-  },  {
-    id:"q7_regression_estimation_context",
-    icon:"⑦",
-    title:"تقدير وتفسير — نموذج انحدار جاهز",
-    gen:(variant)=>{
-      const r = seededRand("q7_regression_estimation_context|"+variant);
-      const cases = [
-        {x:"ساعات التدريب", y:"درجة الأداء", a:12.5, b:1.8, askX:6, outsideX:14, range:"من 0 إلى 8", slope:"كل زيادة ساعة تدريب واحدة تقابل زيادة تقديرية في درجة الأداء بمقدار 1.8"},
-        {x:"عدد الغيابات", y:"درجة الاختبار", a:85, b:-2.4, askX:10, outsideX:20, range:"من 0 إلى 12", slope:"كل زيادة غياب واحد تقابل انخفاضًا تقديريًا في درجة الاختبار بمقدار 2.4"},
-        {x:"عدد التمارين المحلولة", y:"درجة الاختبار", a:48, b:3.25, askX:8, outsideX:18, range:"من 2 إلى 10", slope:"كل زيادة تمرين واحد تقابل زيادة تقديرية في درجة الاختبار بمقدار 3.25"}
-      ];
-      const c = cases[randInt(r,0,cases.length-1)];
-      const yhat = Math.round((c.a + c.b*c.askX)*100)/100;
-      return {
-        branches:[{
-          level:"متقدم",
-          prompt:`نموذج الانحدار بين <b>${c.x}</b> و<b>${c.y}</b> هو: \\(\\hat{Y}=${c.a}${c.b>=0?"+":""}${c.b}X\\). وكان نطاق قيم \\(X\\) في البيانات الأصلية ${c.range}.`,
-          parts:[
-            {type:"num", key:"yhat", label:`القيمة المقدرة \\(\\hat{Y}\\) عند \\(X=${c.askX}\\):`, placeholder:"مثال: 23.30"},
-            {type:"mcq", key:"slope", label:"تفسير الميل في هذا السياق:", options:[c.slope,"المقطع a يقيس قوة الارتباط فقط","كل زيادة في Y تسبب تغير X بالمقدار نفسه","قيمة الميل لا تتأثر بوحدات القياس"]},
-            {type:"mcq", key:"outside", label:`تقدير \\(Y\\) عند \\(X=${c.outsideX}\\) يُعد:`, options:["استقراء خارج نطاق البيانات ويحتاج حذرًا","تقديرًا مضمون الدقة دائمًا","حسابًا لمعامل الارتباط","غير ممكن لأن الميل لا يستخدم في التقدير"]}
-          ],
-          answers:{yhat:yhat, slope:c.slope, outside:"استقراء خارج نطاق البيانات ويحتاج حذرًا"},
-          formula:["معادلة الانحدار: \\(\\hat{Y}=a+bX\\)", "التقدير خارج نطاق بيانات \\(X\\) الأصلية يسمى استقراءً ويُفسَّر بحذر."],
-          explain:["عوّض قيمة \\(X\\) المطلوبة في نموذج الانحدار لإيجاد القيمة المقدرة.", "فسّر الميل بوصفه التغير المتوقع في \\(Y\\) عند زيادة \\(X\\) وحدة واحدة، مع الانتباه للإشارة."],
-          solutionSteps:["عوّض قيمة \\(X\\) داخل \\(\\hat{Y}=a+bX\\).", "اقرأ إشارة الميل: موجبة تعني زيادة تقديرية، وسالبة تعني انخفاضًا تقديريًا.", "قارن قيمة \\(X\\) الجديدة بنطاق البيانات الأصلي قبل الثقة بالتقدير."]
-        }]
-      };
-    }
-  },  {
-    id:"q6_exercise_422_constant_y",
+    id:"q6_smart_transform",
     icon:"⑥",
-    title:"حالة خاصة — Y ثابتة",
+    title:"أثر التحويلات الخطية على r",
     gen:(variant)=>{
-      const r = seededRand("q6_constant_y|"+variant);
-      const n = randInt(r,4,6);
-      const yConst = randInt(r,1,9);
-      const xVals = [];
-      for(let i=0;i<n;i++) xVals.push(randInt(r,1,10));
-      const table = lessonTable(
-        ["القيمة",...Array.from({length:n},(_,i)=>String(i+1))],
-        [["X",...xVals.map(String)],["Y",...Array(n).fill(String(yConst))]]
-      );
+      const r = seededRand("q6_smart_transform|"+variant);
+
+      const vals = [0.32,0.45,0.58,0.67,0.74,0.83];
+      const r0 = vals[randInt(r,0,vals.length-1)] * ((randInt(r,0,1)===0)?1:-1);
+
+      const a = randInt(r,2,6);       // موجب
+      const b = randInt(r,-10,10);    // إضافة
+      const c = -randInt(r,2,6);      // سالب
+      const d = randInt(r,-10,10);
+
+      const rNew = -r0;
+
+      const fmt = (v)=> (v>=0?"+":"") + (Math.round(v*100)/100).toFixed(2);
+      const correctOpt = fmt(rNew);
+      const wrongPool = [fmt(r0), "0.00", "1.00", "-1.00"];
+      const options = [correctOpt, ...wrongPool.filter(w=> w !== correctOpt).slice(0,3)];
+
       return {
-        branches:[{
-          level:"متقدم",
-          prompt:`لديك البيانات التالية:${table}<div class="hint">بما أن قيم Y كلها ثابتة، ففكّر في أثر ذلك على التشتت والميل وجدوى النموذج.</div>`,
-          parts:[
-            {type:"num", key:"b", label:"قيمة الميل \\(b\\):", placeholder:"مثال: 0"},
-            {type:"num", key:"a", label:"قيمة المقطع \\(a\\):", placeholder:"مثال: "+yConst},
-            {type:"mcq", key:"useful", label:"هل معادلة مستقيم الانحدار مجدية لهذه البيانات؟", options:["نعم؛ لأنها تفسر تغيرًا واضحًا في Y","لا؛ لأن Y ثابتة فلا يوجد تباين يفسره النموذج","نعم؛ لأن قيمة a موجبة","لا؛ لأن X تحتوي قيم قليلة فقط"]}
-          ],
-          answers:{b:0,a:yConst,useful:"لا؛ لأن Y ثابتة فلا يوجد تباين يفسره النموذج"},
-          explain:[
-            "عندما تكون قيم Y ثابتة فإن التشتت منعدم، فيصبح النموذج \\(\\hat{Y}="+yConst+"\\) أفقيًا بميل صفري.",
-            "لا توجد فائدة تفسيرية للانحدار؛ لأن المتغير المستقل لا يفسر تغيرًا في Y."
-          ],
-          solutionSteps:[
-            "لاحظ أن جميع قيم Y تساوي "+yConst+"، إذن \\(\\bar{y}="+yConst+"\\) ولا يوجد تغير.",
-            "الميل صفري، والمعادلة \\(\\hat{Y}="+yConst+"\\).",
-            "احكم على الجدوى من خلال غياب التباين في المتغير التابع."
-          ]
-        }]
+        branches:[
+          {
+            level:"متقدم",
+            prompt:`إذا كان \\(r(X,Y) = ${fmt(r0)}\\).
+عرّفنا متغيرين جديدين: \\(X' = ${a}X ${b>=0?"+":"-"} ${Math.abs(b)}\\) و \\(Y' = ${c}Y ${d>=0?"+":"-"} ${Math.abs(d)}\\).
+ما قيمة \\(r(X',Y')\\)؟`,
+            parts:[
+              {
+                type:"mcq",
+                key:"ans",
+                label:"اختر الإجابة:",
+                options
+              }
+            ],
+            answers:{ ans: fmt(rNew) },
+            explain:[
+              "إضافة ثابت لأي متغير لا تغيّر \\(r\\).",
+              "الضرب في ثابت موجب لا يغيّر \\(r\\)، أما الضرب في ثابت سالب فيعكس الإشارة فقط."
+            ],
+            solutionSteps:[
+              "حدّد إشارة معاملات الضرب: \\(a>0\\) و \\(c<0\\).",
+              "إذن الإشارة تنعكس مرة واحدة: \\(r' = -r\\)."
+            ]
+          }
+        ]
       };
     }
   }
@@ -2913,14 +3583,14 @@ function buildQuestionById(id){
   return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
 }
 
-const MASTERY_VERSION = "stat102_4_3_mastery_v1";
-const MASTERY_CORE = ["q1_regression_selftest_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46"];
+const MASTERY_VERSION = "stat102_4_1_mastery_v2";
+const MASTERY_CORE = ["q1_circle_pool", "q3_compute_r", "q5_r_context_interpretation"];
 const MASTERY_PROFILES = {
-  q1_regression_selftest_pool:{supports:["q2_regression_tf_pool","q3_regression_fill_pool","q7_regression_estimation_context"]},
-  q4_example_431_summary_stats:{supports:["q5_example_432_formula_46","q7_regression_estimation_context","q6_exercise_422_constant_y"]},
-  q5_example_432_formula_46:{supports:["q7_regression_estimation_context","q4_example_431_summary_stats","q6_exercise_422_constant_y"]},
-  q7_regression_estimation_context:{supports:["q5_example_432_formula_46","q2_regression_tf_pool","q3_regression_fill_pool"]},
-  q6_exercise_422_constant_y:{supports:["q2_regression_tf_pool","q3_regression_fill_pool","q7_regression_estimation_context"]}
+  q1_circle_pool:{supports:["q2_pearson_props_9","q4_scatter_plot","q6_smart_transform"]},
+  q3_compute_r:{supports:["q5_r_context_interpretation","q2_pearson_props_9","q6_smart_transform"]},
+  q5_r_context_interpretation:{supports:["q4_scatter_plot","q2_pearson_props_9","q6_smart_transform"]},
+  q4_scatter_plot:{supports:["q1_circle_pool","q5_r_context_interpretation","q2_pearson_props_9"]},
+  q6_smart_transform:{supports:["q2_pearson_props_9","q5_r_context_interpretation","q3_compute_r"]}
 };
 
 function normalizeAdaptiveOrder(order){
@@ -3511,7 +4181,15 @@ function handleSaveBranch(q, branch, bi){
 
   const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
   if(!okFilled){
-    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الخانات المطلوبة ثم اضغط (حفظ الإجابة).</div>`);
+    openModal("تنبيه", `
+      <div class="modal-warn-body">
+        <div class="modal-warn-icon">⚠️</div>
+        <div>
+          <div class="modal-warn-title">خانات غير مكتملة</div>
+          <div class="modal-warn-text">أكمل جميع الخانات المطلوبة ثم اضغط <b>حفظ الإجابة</b>.</div>
+        </div>
+      </div>
+    `);
     return;
   }
 
@@ -3528,6 +4206,15 @@ function handleSaveBranch(q, branch, bi){
   applyFieldFeedback(q.id, bi, grade);
     disableBranchInputs(q.id, bi);
     setProgress(); renderSidebar();
+    openModal("تم الحفظ", `
+      <div class="modal-success-body">
+        <div class="modal-success-orb">✓</div>
+        <div class="modal-success-title">إجابة صحيحة!</div>
+        <div class="modal-success-badge">أحسنت — واصل التقدم</div>
+        <div class="modal-success-stars">⭐ ⭐ ⭐</div>
+        <div class="modal-success-note">تم حفظ إجابتك بنجاح. انتقل للسؤال التالي أو راجع إجابتك في لوحة النتائج.</div>
+      </div>
+    `);
     return;
   }
 
@@ -3552,7 +4239,25 @@ function handleSaveBranch(q, branch, bi){
 }
 
 /* ===== عرض الصفحة الرئيسية ===== */
-
+/* Codex Adaptive Save Hook Start */
+(function(){
+  const originalHandleSaveBranch = handleSaveBranch;
+  handleSaveBranch = function(q, branch, bi){
+    originalHandleSaveBranch(q, branch, bi);
+    if(typeof maybeQueueAdaptiveSupport === "function"){
+      const rec = ensureBranchRec(q.id, bi);
+      if(rec && rec.status === "locked"){
+        const added = maybeQueueAdaptiveSupport(q);
+        if(added){
+          BANK = buildBank();
+          setProgress();
+          renderSidebar();
+        }
+      }
+    }
+  };
+})();
+/* Codex Adaptive Save Hook End */
 function renderMain(){
   BANK = buildBank();
   const i = state.currentIndex;
@@ -3750,7 +4455,7 @@ function listIncomplete(){
 function tryShowResults(){
   if(typeof ensureSupportForWeakQuestions === "function" && ensureSupportForWeakQuestions()){
     renderAll();
-    openModal("متابعة الإتقان", `<div style="font-weight:900;line-height:1.9">تمت إضافة سؤال دعم بناءً على الأداء. أكمل السؤال الجديد ثم ستظهر النتيجة.</div>`);
+    openModal("متابعة الإتقان", `<div style="font-weight:900;line-height:1.9">تمت إضافة سؤال دعم من بنك الأسئلة بناءً على الأداء. أكمل السؤال الجديد ثم ستظهر النتيجة.</div>`);
     return;
   }
   const p = setProgress();
@@ -3780,57 +4485,84 @@ function computeScore(){
 function showResultsModal(){
   BANK = buildBank();
   const s = computeScore();
+  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
+  const wrongPct   = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
+
+  /* تحديد مستوى النتيجة */
+  const level = correctPct >= 90 ? { label:"ممتاز",      icon:"🏆", color:"#059669" }
+              : correctPct >= 75 ? { label:"جيد جداً",   icon:"🎯", color:"#0369a1" }
+              : correctPct >= 60 ? { label:"جيد",         icon:"📘", color:"#d97706" }
+              :                    { label:"يحتاج مراجعة",icon:"📚", color:"#dc2626" };
 
   const cards = BANK.map((q,qi)=>{
-    const complete = isQuestionComplete(q);
-    const correctQ = complete && isQuestionCorrect(q);
+    const complete  = isQuestionComplete(q);
+    const correctQ  = complete && isQuestionCorrect(q);
 
     let inner = `
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <div style="font-weight:900">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
-        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"✓ صحيح":"× غير صحيح"}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;background:linear-gradient(180deg,#f8fbff,#fff);border-bottom:1px solid var(--line)">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <div style="width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:${correctQ?'#dcfce7':'#fee2e2'};border:1px solid ${correctQ?'rgba(22,163,74,.25)':'rgba(220,38,38,.2)'};flex:0 0 auto;font-size:15px">${correctQ?'✓':'✗'}</div>
+          <div style="font-weight:900;font-size:14px">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
+        </div>
+        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"صحيح":"غير صحيح"}</span>
       </div>
+      <div style="padding:12px 16px;display:grid;gap:8px">
     `;
 
     q.branches.forEach((branch,bi)=>{
-      const rec = ensureBranchRec(q.id,bi);
+      const rec  = ensureBranchRec(q.id,bi);
       const grade = gradeBranch(q, branch, bi, rec.saved||{});
-      const keys = collectPartKeys(branch);
+      const keys  = collectPartKeys(branch);
 
-      inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
+      inner += `<div style="font-weight:900;color:#0f2a3b;font-size:12px;margin-top:4px;padding:6px 10px;background:#f1f5f9;border-radius:8px;border-right:3px solid var(--brand)">(${escapeHtml(branch.level)})</div>`;
       keys.forEach(k=>{
-        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "—";
-        const correctVal = branch.answers[k];
-        const ok = grade.byKey[k];
+        const student     = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "—";
+        const correctVal  = branch.answers[k];
+        const ok          = grade.byKey[k];
         const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
 
         inner += `
-          <div class="partRow">
-            <div><b>الجزء:</b> ${escapeHtml(k)}</div>
-            <div><b>إجابتك:</b> ${escapeHtml(String(student))}</div>
-            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
+          <div class="partRow" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start">
+            <div>
+              <div style="font-size:11px;font-weight:900;color:var(--muted);margin-bottom:4px">${escapeHtml(k)}</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                <span style="font-size:13px;font-weight:700;color:var(--ink)">إجابتك: <b>${escapeHtml(String(student))}</b></span>
+                ${!ok ? `<span style="font-size:13px;font-weight:700;color:#059669">الصحيح: <b>${escapeHtml(String(correctText))}</b></span>` : ""}
+              </div>
+            </div>
+            <span class="tag ${ok?"good":"bad"}" style="align-self:center;white-space:nowrap">${ok?"✓ صحيح":"✗ خطأ"}</span>
           </div>`;
       });
     });
 
+    inner += `</div>`;
     return `<div class="resultCard">${inner}</div>`;
   }).join("");
 
-  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
-  const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
-  openModal("النتيجة", `
-    <div class="scoreCard" style="margin-bottom:14px">
-      <div>
-        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} — ${s.pct}%</div>
-        <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
-        <div class="scoreSub">تم تصحيح كل جزء بشكل مستقل.</div>
+  openModal("نتائج الاختبار", `
+    <div class="scoreCard" style="margin-bottom:20px">
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+        <div>
+          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,.7);margin-bottom:6px">نتيجة اختبار الارتباط</div>
+          <div class="scoreBig">${level.icon} ${s.correct} من ${s.total} — ${s.pct}%</div>
+          <div style="margin:14px 0 4px">
+            <div class="score-bar-wrap">
+              <div class="score-bar-correct" style="width:${correctPct.toFixed(1)}%"></div>
+            </div>
+          </div>
+          <div class="scoreSub">${s.correct} إجابة صحيحة · ${s.total-s.correct} تحتاج مراجعة</div>
+        </div>
+        <div style="text-align:center;flex:0 0 auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:16px 20px;backdrop-filter:blur(4px)">
+          <div style="font-size:36px;line-height:1">${level.icon}</div>
+          <div style="font-size:15px;font-weight:900;color:#fff;margin-top:6px">${level.label}</div>
+        </div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
-        <button class="btn primary" onclick="window.__resetAll(); closeModal();">إعادة المحاولة</button>
+      <div style="position:relative;display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+        <button class="btn primary" onclick="window.print()">🖨️ طباعة النتيجة</button>
+        <button class="btn primary" onclick="window.__resetAll(); closeModal();">🔄 إعادة المحاولة</button>
       </div>
     </div>
-    ${cards}
+    <div style="display:grid;gap:10px">${cards}</div>
   `);
 }
 window.__resetAll = resetAll;
@@ -3858,10 +4590,7 @@ function renderAll(){
 }
 window.__examRunning = isExamStarted();
 renderAll();
-if(window.__examRunning) startTimer(); else showIntroModal();
-
-
-/* Codex Unified AI Logic Start */
+if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Unified AI Logic Start */
 (function(){
   function aiEscape(value){
     return value == null ? "" : String(value);
@@ -4168,11 +4897,9 @@ if(window.__examRunning) startTimer(); else showIntroModal();
     }
   });
 })();
-/* Codex Unified AI Logic End */
-
-/* Codex AI Models Logic Start */
+/* Codex Unified AI Logic End *//* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_4_3_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_4_1_ai_models_v1";
   try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
@@ -4597,55 +5324,36 @@ if(window.__examRunning) startTimer(); else showIntroModal();
       var ans = 0, ok = 0;
       var errs = { conceptual: 0, computational: 0, application: 0 };
       try{
-        if(typeof state === "undefined" || !state || !state.answers) return { answered: 0, correct: 0, errs: errs };
-        var _qMap = {};
-        if(Array.isArray(BANK)){
-          BANK.forEach(function(_q){ if(_q && _q.id != null) _qMap[String(_q.id)] = _q; });
-        }
-        Object.keys(state.answers).forEach(function(_qid){
-          var _bySlot = state.answers[_qid];
-          if(!_bySlot || typeof _bySlot !== "object") return;
-          var _q = _qMap[String(_qid)] || null;
-          Object.keys(_bySlot).forEach(function(_biKey){
-            var _stored = _bySlot[_biKey];
-            if(!_stored || typeof _stored !== "object") return;
-            var _bi = parseInt(_biKey, 10);
-            if(isNaN(_bi)) _bi = 0;
-            var _b = (_q && Array.isArray(_q.branches) && _q.branches[_bi]) ? _q.branches[_bi] : null;
-            var _parts = (_b && Array.isArray(_b.parts)) ? _b.parts : null;
-            var _attemptsBranch = 1;
-            try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_qid, _bi) || 1); } }catch(_e){}
-            var _outcome = null;
-            try{ if(typeof _getOutcome === "function"){ _outcome = _getOutcome(_qid, _bi); } }catch(_e){}
-            if(_parts){
+        if(Array.isArray(BANK) && typeof state !== "undefined" && state && state.answers){
+          BANK.forEach(function(_q){
+            var _branches = Array.isArray(_q.branches) ? _q.branches : [];
+            _branches.forEach(function(_b, _bi){
+              var _parts = Array.isArray(_b.parts) ? _b.parts : [];
+              var _stored = (state.answers && state.answers[_q.id] && state.answers[_q.id][_bi]) ? state.answers[_q.id][_bi] : null;
+              if(!_stored) return;
+              var _attemptsBranch = 1;
+              try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_q.id, _bi) || 1); } }catch(_e){}
               _parts.forEach(function(_p){
-                if(!_p) return;
-                var _val = _stored[_p.key];
-                if(_val === undefined || _val === null || _val === "") return;
+                if(!_p || _stored[_p.key] === undefined || _stored[_p.key] === null || _stored[_p.key] === "") return;
                 ans++;
                 var _isOk = false;
                 try{
                   var _corr = _b.answers ? _b.answers[_p.key] : undefined;
-                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _val, _corr) : { ok:false };
+                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _stored[_p.key], _corr) : { ok:false };
                   _isOk = !!(_chk && _chk.ok);
                 }catch(_e){}
                 if(_isOk){ ok++; return; }
                 var _kind = "application";
-                if(_p.type === "mcq" || _p.type === "text"){ _kind = "conceptual"; }
-                else if(_p.type === "number"){ _kind = _attemptsBranch > 1 ? "computational" : "application"; }
+                if(_p.type === "mcq" || _p.type === "text"){
+                  _kind = "conceptual";
+                } else if(_p.type === "number"){
+                  _kind = _attemptsBranch > 1 ? "computational" : "application";
+                }
                 errs[_kind] = (errs[_kind] || 0) + 1;
               });
-            } else {
-              Object.keys(_stored).forEach(function(_k){
-                var _val = _stored[_k];
-                if(_val === undefined || _val === null || _val === "") return;
-                ans++;
-                if(_outcome === "correct"){ ok++; return; }
-                if(_outcome === "wrong"){ errs.application = (errs.application || 0) + 1; }
-              });
-            }
+            });
           });
-        });
+        }
       }catch(_e){}
       return { answered: ans, correct: ok, errs: errs };
     })();
@@ -4988,294 +5696,6 @@ if(window.__examRunning) startTimer(); else showIntroModal();
   })();
 })();
 /* Codex AI Models Logic End */
-/* Codex Universal Adaptive Flow Start */
-(function(){
-  if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
-
-  const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_4_3_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["q1_regression_selftest_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46"];
-  const MASTERY_PROFILES_UNIFIED = {"q1_regression_selftest_pool": {"supports": ["q2_regression_tf_pool", "q3_regression_fill_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46"]}, "q2_regression_tf_pool": {"supports": ["q3_regression_fill_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46", "q7_regression_estimation_context"]}, "q3_regression_fill_pool": {"supports": ["q4_example_431_summary_stats", "q5_example_432_formula_46", "q7_regression_estimation_context", "q6_exercise_422_constant_y"]}, "q4_example_431_summary_stats": {"supports": ["q5_example_432_formula_46", "q7_regression_estimation_context", "q6_exercise_422_constant_y", "q1_regression_selftest_pool"]}, "q5_example_432_formula_46": {"supports": ["q7_regression_estimation_context", "q6_exercise_422_constant_y", "q1_regression_selftest_pool", "q2_regression_tf_pool"]}, "q7_regression_estimation_context": {"supports": ["q6_exercise_422_constant_y", "q1_regression_selftest_pool", "q2_regression_tf_pool", "q3_regression_fill_pool"]}, "q6_exercise_422_constant_y": {"supports": ["q1_regression_selftest_pool", "q2_regression_tf_pool", "q3_regression_fill_pool", "q4_example_431_summary_stats"]}};
-
-  function adaptiveSaveState(){
-    try{ if(typeof saveState === "function") saveState(); }catch(e){}
-  }
-
-  function adaptiveIds(){
-    const seen = new Set();
-    return ADAPTIVE_SOURCE.map(t=>t && t.id).filter(id=>{
-      if(!id || seen.has(id)) return false;
-      seen.add(id);
-      return true;
-    });
-  }
-
-  function adaptiveTemplateById(id){
-    return ADAPTIVE_SOURCE.find(t=>t && t.id === id) || TEMPLATES.find(t=>t && t.id === id) || null;
-  }
-
-  function adaptiveNormalizeOrder(order){
-    const ids = adaptiveIds();
-    const seen = new Set();
-    return (Array.isArray(order) ? order : []).filter(id=>{
-      if(!ids.includes(id) || seen.has(id)) return false;
-      seen.add(id);
-      return true;
-    });
-  }
-
-  function adaptiveRng(seed){
-    if(typeof seededRand === "function"){
-      try{ return seededRand(seed); }catch(e){}
-    }
-    return Math.random;
-  }
-
-  function adaptiveShuffle(arr, seed){
-    const r = adaptiveRng(seed);
-    const copy = arr.slice();
-    if(typeof shuffleInPlace === "function"){
-      try{ return shuffleInPlace(copy, r); }catch(e){}
-    }
-    for(let i=copy.length-1;i>0;i--){
-      const j = Math.floor(r() * (i + 1));
-      const temp = copy[i];
-      copy[i] = copy[j];
-      copy[j] = temp;
-    }
-    return copy;
-  }
-
-  function adaptiveCore(ids){
-    const core = MASTERY_CORE_UNIFIED.filter(id=>ids.includes(id));
-    return core.length ? core : ids.slice(0, Math.min(3, ids.length));
-  }
-
-  function adaptiveBuildQuestionById(id){
-    const t = adaptiveTemplateById(id);
-    if(!t || typeof t.gen !== "function") return null;
-    const v = (typeof getVariant === "function") ? getVariant(t.id) : 0;
-    const g = t.gen(v) || {};
-    const obj = { id:t.id, title:t.title, icon:t.icon, branches:g.branches || [] };
-    if(g.sharedGraph != null) obj.sharedGraph = g.sharedGraph;
-    return obj;
-  }
-
-  function adaptiveEnsureState(){
-    const ids = adaptiveIds();
-    if(!ids.length) return [];
-    const core = adaptiveCore(ids);
-    let active = adaptiveNormalizeOrder(state.activeOrder);
-    if(state.masteryVersion !== MASTERY_VERSION_UNIFIED || !active.length){
-      active = adaptiveShuffle(core, "mastery-core|" + MASTERY_VERSION_UNIFIED + "|" + Date.now() + "|" + Math.random());
-      state.masteryVersion = MASTERY_VERSION_UNIFIED;
-      state.masterySupportCount = 0;
-      state.masterySupportLog = [];
-      state.masterySupportSources = {};
-    }
-    state.masterySupportLog = Array.isArray(state.masterySupportLog) ? state.masterySupportLog : [];
-    state.masterySupportSources = state.masterySupportSources && typeof state.masterySupportSources === "object" ? state.masterySupportSources : {};
-    state.activeOrder = active;
-    state.order = active.slice();
-    if(state.currentIndex == null || state.currentIndex < 0) state.currentIndex = 0;
-    if(state.currentIndex >= active.length) state.currentIndex = Math.max(0, active.length - 1);
-    adaptiveSaveState();
-    return active;
-  }
-
-  function adaptiveBuildBank(){
-    const order = adaptiveEnsureState();
-    const bank = order.map(adaptiveBuildQuestionById).filter(Boolean);
-    if(bank.length) return bank;
-    const ids = adaptiveIds();
-    state.activeOrder = ids.slice(0, Math.min(3, ids.length));
-    state.order = state.activeOrder.slice();
-    adaptiveSaveState();
-    return state.activeOrder.map(adaptiveBuildQuestionById).filter(Boolean);
-  }
-
-  function adaptiveStatus(q){
-    if(!q) return "not_started";
-    if(typeof getQuestionStatus === "function"){
-      try{ return getQuestionStatus(q); }catch(e){}
-    }
-    if(typeof isQuestionComplete === "function"){
-      try{
-        if(!isQuestionComplete(q)) return "not_started";
-        if(typeof isQuestionCorrect === "function" && isQuestionCorrect(q)) return "completed_correct";
-        return "completed_wrong";
-      }catch(e){}
-    }
-    return "not_started";
-  }
-
-  function adaptiveComplete(q){
-    if(typeof isQuestionComplete === "function"){ try{ return !!isQuestionComplete(q); }catch(e){} }
-    if(typeof isQuestionDone === "function"){ try{ return !!isQuestionDone(q); }catch(e){} }
-    const st = adaptiveStatus(q);
-    return st === "completed_correct" || st === "completed_wrong";
-  }
-
-  function adaptiveCorrect(q){
-    if(typeof isQuestionCorrect === "function"){ try{ return !!isQuestionCorrect(q); }catch(e){} }
-    return adaptiveStatus(q) === "completed_correct";
-  }
-
-  function adaptiveWrong(q){
-    if(typeof isQuestionWrong === "function"){ try{ return !!isQuestionWrong(q); }catch(e){} }
-    return adaptiveStatus(q) === "completed_wrong";
-  }
-
-  function adaptiveChooseSupportId(sourceId){
-    const active = adaptiveEnsureState();
-    const ids = adaptiveIds();
-    const pools = [];
-    if(sourceId && MASTERY_PROFILES_UNIFIED[sourceId]) pools.push(MASTERY_PROFILES_UNIFIED[sourceId].supports || []);
-    pools.push(MASTERY_CORE_UNIFIED.filter(id=>id !== sourceId));
-    pools.push(ids);
-    for(const pool of pools){
-      for(const id of pool){
-        if(ids.includes(id) && !active.includes(id)) return id;
-      }
-    }
-    return null;
-  }
-
-  function adaptiveAddSupport(sourceId, reason){
-    const active = adaptiveEnsureState();
-    const key = sourceId || "general";
-    state.masterySupportSources = state.masterySupportSources || {};
-    if((state.masterySupportSources[key] || 0) >= 1) return null;
-    const nextId = adaptiveChooseSupportId(sourceId);
-    if(!nextId) return null;
-    /* تبديل السؤال تلقائياً (variant جديد + مسح كامل) */
-    if(typeof bumpVariant === "function") try{ bumpVariant(nextId); }catch(e){}
-    if(typeof clearAnswersForQuestion === "function") try{ clearAnswersForQuestion(nextId); }catch(e){}
-    active.push(nextId);
-    state.activeOrder = active;
-    state.order = active.slice();
-    state.masterySupportSources[key] = (state.masterySupportSources[key] || 0) + 1;
-    state.masterySupportCount = (state.masterySupportCount || 0) + 1;
-    state.masterySupportLog = state.masterySupportLog || [];
-    state.masterySupportLog.push({ source:key, support:nextId, reason:reason || "mastery", at:Date.now() });
-    adaptiveSaveState();
-    return nextId;
-  }
-
-  function adaptiveActiveQuestions(){
-    const active = new Set(adaptiveEnsureState());
-    return (Array.isArray(BANK) ? BANK : []).filter(q=>active.has(q.id));
-  }
-
-  function adaptiveEnsureSupportForWeakQuestions(){
-    if(!window.__examRunning) return false;
-    if(!Array.isArray(BANK) || !BANK.length) BANK = adaptiveBuildBank();
-    const activeQuestions = adaptiveActiveQuestions();
-    const done = activeQuestions.filter(adaptiveComplete);
-    const wrong = done.filter(adaptiveWrong);
-    let added = false;
-    wrong.forEach(q=>{ if(adaptiveAddSupport(q.id, "wrong")) added = true; });
-    if(!added && done.length > 0 && done.length === activeQuestions.length && adaptiveEnsureState().length < adaptiveIds().length){
-      const correctCount = done.filter(adaptiveCorrect).length;
-      if((correctCount / done.length) < 0.85){
-        const anchor = wrong[0] || done.find(q=>!adaptiveCorrect(q)) || done[done.length - 1];
-        if(adaptiveAddSupport(anchor && anchor.id, "mastery-threshold")) added = true;
-      }
-    }
-    if(added) BANK = adaptiveBuildBank();
-    return added;
-  }
-
-  function adaptiveAfterSave(q){
-    if(!q || !window.__examRunning) return;
-    if(adaptiveWrong(q)){
-      const added = adaptiveAddSupport(q.id, "wrong");
-      if(added){
-        BANK = adaptiveBuildBank();
-        try{ if(typeof setProgress === "function") setProgress(); }catch(e){}
-        try{ if(typeof renderSidebar === "function") renderSidebar(); }catch(e){}
-      }
-    }
-  }
-
-  function adaptiveWrapSavers(){
-    if(typeof handleSaveBranch === "function" && !handleSaveBranch.__codexUniversalAdaptiveWrapped){
-      const original = handleSaveBranch;
-      handleSaveBranch = function(q, branch, bi){
-        const result = original.apply(this, arguments);
-        try{ adaptiveAfterSave(q); }catch(e){}
-        return result;
-      };
-      handleSaveBranch.__codexUniversalAdaptiveWrapped = true;
-    }
-    if(typeof saveBranchAnswer === "function" && !saveBranchAnswer.__codexUniversalAdaptiveWrapped){
-      const original = saveBranchAnswer;
-      saveBranchAnswer = function(q, branch, bi, branchCard, saveBtn){
-        const result = original.apply(this, arguments);
-        try{ adaptiveAfterSave(q); }catch(e){}
-        return result;
-      };
-      saveBranchAnswer.__codexUniversalAdaptiveWrapped = true;
-    }
-  }
-
-  try{ buildBank = adaptiveBuildBank; }catch(e){}
-  try{ window.ensureAdaptiveState = adaptiveEnsureState; }catch(e){}
-  try{ window.ensureSupportForWeakQuestions = adaptiveEnsureSupportForWeakQuestions; }catch(e){}
-  try{ window.maybeQueueAdaptiveSupport = function(q){ if(!q) return null; return adaptiveWrong(q) ? adaptiveAddSupport(q.id, "wrong") : null; }; }catch(e){}
-
-  const originalNext = (typeof next === "function") ? next : null;
-  next = function(){
-    if(!Array.isArray(BANK) || !BANK.length) BANK = adaptiveBuildBank();
-    if(adaptiveEnsureSupportForWeakQuestions()){
-      try{ if(typeof renderAll === "function") renderAll(); }catch(e){}
-    }
-    const start = Math.min((state.currentIndex || 0) + 1, BANK.length);
-    for(let i=start;i<BANK.length;i++){
-      if(!adaptiveComplete(BANK[i])){ state.currentIndex = i; adaptiveSaveState(); renderAll(); return; }
-    }
-    for(let i=0;i<BANK.length;i++){
-      if(!adaptiveComplete(BANK[i])){ state.currentIndex = i; adaptiveSaveState(); renderAll(); return; }
-    }
-    if(typeof tryShowResults === "function") return tryShowResults();
-    if(originalNext) return originalNext.apply(this, arguments);
-  };
-
-  prev = function(){
-    if(!Array.isArray(BANK) || !BANK.length) BANK = adaptiveBuildBank();
-    for(let i=(state.currentIndex || 0)-1;i>=0;i--){
-      if(BANK[i]){ state.currentIndex = i; adaptiveSaveState(); renderAll(); return; }
-    }
-  };
-
-  tryShowResults = function(){
-    try{ if(typeof syncAllInputs === "function") syncAllInputs(); }catch(e){}
-    let p = null;
-    try{ if(typeof setProgress === "function") p = setProgress(); }catch(e){}
-    if(p && !p.doneAll){
-      if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
-    }
-    if(typeof showResultsModal === "function") return showResultsModal();
-    if(typeof showResults === "function") return showResults();
-  };
-
-  adaptiveWrapSavers();
-  if(typeof setProgress === "function" && !setProgress.__codexUniversalMasteryWrapped){
-    const originalSetProgress = setProgress;
-    setProgress = function(){
-      const result = originalSetProgress.apply(this, arguments);
-      const qCountEl = document.getElementById("qCount");
-      if(qCountEl) qCountEl.textContent = "\u2014";
-      return result;
-    };
-    setProgress.__codexUniversalMasteryWrapped = true;
-  }
-  BANK = adaptiveBuildBank();
-  if(state.currentIndex >= BANK.length) state.currentIndex = Math.max(0, BANK.length - 1);
-  adaptiveSaveState();
-  try{ if(typeof renderAll === "function") renderAll(); }catch(e){}
-})();
-/* Codex Universal Adaptive Flow End */
 </script>
 
 
