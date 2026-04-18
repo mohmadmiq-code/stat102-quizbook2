@@ -4636,7 +4636,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
     const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
 
     const bs       = brierScore();
-    const calibDx  = calibDiagnosis();
+    var calibDx_old = calibDiagnosis();
     var __partStats = (function(){
       var ans = 0, ok = 0;
       var errs = { conceptual: 0, computational: 0, application: 0 };
@@ -4677,6 +4677,14 @@ if(window.__examRunning) startTimer(); else showIntroModal();
     const totalAtt = __partStats.answered;
     const totalOk  = __partStats.correct;
     const examAttempts = Math.max(1, (aiModelsState && aiModelsState.examAttempts) ? aiModelsState.examAttempts : 1);
+    var calibDx = (function(){
+      if(totalAtt === 0) return { text:"لم تبدأ الإجابة بعد — ابدأ أول سؤال لعرض التقييم.", cls:"" };
+      var pct = totalOk / totalAtt;
+      if(pct >= 0.85) return { text:"🎯 أداء ممتاز — استمر في هذا المستوى!", cls:"good" };
+      if(pct >= 0.60) return { text:"✓ أداء جيد مع مجال للتحسين.", cls:"good" };
+      if(pct >= 0.40) return { text:"⚠️ أداء متوسط — ركّز على المفاهيم التي أخطأت فيها.", cls:"warn" };
+      return { text:"⚠️ أداء ضعيف — راجع المادة بتمعّن وأعد المحاولة.", cls:"bad" };
+    })();
     const completion = (function(){
       try{
         if(!Array.isArray(BANK) || !BANK.length) return 0;
@@ -4849,6 +4857,13 @@ if(window.__examRunning) startTimer(); else showIntroModal();
             <span>مفاهيمي: ${ec.conceptual||0}</span>
             <span>حسابي: ${ec.computational||0}</span>
             <span>تطبيقي: ${ec.application||0}</span>
+          </div>` : (totalAtt === 0 ?
+          `<div class="errorTypeRow">
+            <span class="errorTypeBadge none" style="background:#e0e7ff;color:#1e40af;border-color:rgba(30,64,175,.2)">لم تبدأ بعد</span>
+            <div class="errorTypeDetail">
+              <div class="errorTypeName">لا توجد بيانات بعد</div>
+              <div class="errorTypeAdvice">ابدأ الإجابة لتظهر لوحة تشخيص الأخطاء.</div>
+            </div>
           </div>` :
           `<div class="errorTypeRow">
             <span class="errorTypeBadge none">لا أخطاء</span>
@@ -4856,7 +4871,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
               <div class="errorTypeName">أداء مثالي حتى الآن</div>
               <div class="errorTypeAdvice">لم تُسجَّل أخطاء — استمر في هذا المستوى!</div>
             </div>
-          </div>`}
+          </div>`)}
         </div>
       </div>
 
