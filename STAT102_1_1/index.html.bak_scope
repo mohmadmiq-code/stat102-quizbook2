@@ -2353,15 +2353,14 @@ function startTimer(){
 
 function resetAll(){
   try{
-    var _k = (typeof window !== "undefined" && window.AI_MODELS_KEY) ? window.AI_MODELS_KEY : null;
+    var _k = (typeof AI_MODELS_KEY !== "undefined") ? AI_MODELS_KEY : null;
     if(_k){
-      var _raw = null;
-      try{ _raw = localStorage.getItem(_k); }catch(_e){ _raw = null; }
       var _s = null;
-      if(_raw){ try{ _s = JSON.parse(_raw); }catch(_e){ _s = null; } }
-      if(!_s || typeof _s !== "object") _s = {};
-      _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
-      try{ localStorage.setItem(_k, JSON.stringify(_s)); }catch(_e){}
+      try{ _s = JSON.parse(localStorage.getItem(_k) || "null"); }catch(_e){}
+      if(_s && typeof _s === "object"){
+        _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
+        localStorage.setItem(_k, JSON.stringify(_s));
+      }
     }
   }catch(_e){}
   state.currentIndex = 0;
@@ -5060,7 +5059,6 @@ if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Adaptive F
 /* Codex AI Models Logic Start */
 (function(){
   const AI_MODELS_KEY = "stat102_1_1_ai_models_v1";
-  try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
     try{
@@ -5429,21 +5427,14 @@ if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Adaptive F
   }
 
   function ensureAiModelsPanelMount(){
+    const rail = document.querySelector(".aiResultsRail");
+    if(!rail) return null;
     let panel = document.getElementById("aiModelsPanel");
     if(panel) return panel;
-    let host = document.querySelector(".aiResultsRail");
-    if(!host){
-      host = document.querySelector(".wrap")
-          || document.querySelector("main")
-          || document.body;
-    }
-    if(!host) return null;
     panel = document.createElement("div");
     panel.id = "aiModelsPanel";
     panel.className = "aiModelsPanel";
-    try{ host.appendChild(panel); }catch(_e){
-      try{ document.body.appendChild(panel); }catch(_e2){ return null; }
-    }
+    rail.appendChild(panel);
     return panel;
   }
 

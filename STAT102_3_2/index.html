@@ -2305,6 +2305,18 @@ function startTimer(){
 }
 
 function resetAll(){
+  try{
+    var _k = (typeof window !== "undefined" && window.AI_MODELS_KEY) ? window.AI_MODELS_KEY : null;
+    if(_k){
+      var _raw = null;
+      try{ _raw = localStorage.getItem(_k); }catch(_e){ _raw = null; }
+      var _s = null;
+      if(_raw){ try{ _s = JSON.parse(_raw); }catch(_e){ _s = null; } }
+      if(!_s || typeof _s !== "object") _s = {};
+      _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
+      try{ localStorage.setItem(_k, JSON.stringify(_s)); }catch(_e){}
+    }
+  }catch(_e){}
   state.currentIndex = 0;
   state.answers = {};
   state.grading = {};
@@ -2722,7 +2734,7 @@ function meanGroupedGen(v){
   const mean = num/N;
   const meanRounded = Math.round(mean*100)/100;
 
-  const rows = classes.map((c,i)=>`<tr><td>${c[0]}â€“${c[1]}</td><td>${f[i]}</td></tr>`).join("");
+  const rows = classes.map((c,i)=>`<tr><td>${c[0]}–${c[1]}</td><td>${f[i]}</td></tr>`).join("");
   const promptHtml = `
     <div style="font-weight:900;margin-bottom:10px">الجدول التالي يوضح فئات العمر وتكراراتها:</div>
     <table class="ftable" style="max-width:520px">
@@ -2896,7 +2908,7 @@ function modeGroupedGen(v){
   const classes = Array.from({length:k}, (_,i)=>{
     const a = start + i*C;
     const b = a + C;
-    return {a,b,label:`${a}â€“${b}`};
+    return {a,b,label:`${a}–${b}`};
   });
 
   // تكرارات أحادية القمة لضمان فئة منوالية واحدة فقط
@@ -3059,10 +3071,10 @@ function histPolygonGen(v){
 
   const target = (n%2===0) ? (n/2) : ((n+1)/2);
   const medianIdx = cum.findIndex(c=>c>target);
-  const medianClass = `${classes[medianIdx][0]}â€“${classes[medianIdx][1]}`;
+  const medianClass = `${classes[medianIdx][0]}–${classes[medianIdx][1]}`;
 
   const modalIdx = peak;
-  const modalClass = `${classes[modalIdx][0]}â€“${classes[modalIdx][1]}`;
+  const modalClass = `${classes[modalIdx][0]}–${classes[modalIdx][1]}`;
 
   const W = 860, H = 290, pad = 70;
   const plotW = W - pad*2;
@@ -3075,7 +3087,7 @@ function histPolygonGen(v){
   function xOf(i){ return pad + i*bw; }
   function midOf(i){ return pad + i*bw + bw/2; }
 
-  const xLabels = classes.map(c=>`${c[0]}â€“${c[1]}`);
+  const xLabels = classes.map(c=>`${c[0]}–${c[1]}`);
 
   // Histogram (touching bars)
   let rects = "";
@@ -3131,10 +3143,10 @@ function histPolygonGen(v){
   </svg>`;
 
   // Table with empty cumulative column (inputs inline)
-  const cumInput = (i)=>`<input class="inlineInput" data-key="cum${i}" inputmode="numeric" autocomplete="off" placeholder="â€”" style="width:92px;border:2px solid #000;border-radius:14px;padding:10px 12px;font-weight:900;background:#fff;text-align:center" />`;
+  const cumInput = (i)=>`<input class="inlineInput" data-key="cum${i}" inputmode="numeric" autocomplete="off" placeholder="—" style="width:92px;border:2px solid #000;border-radius:14px;padding:10px 12px;font-weight:900;background:#fff;text-align:center" />`;
   const tableRows = classes.map((c,i)=>`
     <tr>
-      <td><span class="ltr">${c[0]}â€“${c[1]}</span></td>
+      <td><span class="ltr">${c[0]}–${c[1]}</span></td>
       <td>${freqs[i]}</td>
       <td>${cumInput(i)}</td>
     </tr>
@@ -3774,7 +3786,7 @@ function renderMain(){
     const btns=el("div",{class:"branchBtns"},[
       saveBtn,
       el("button",{class:"btn small ai-help-btn", onclick:()=>showHelp(q, b), title:"مساعد ذكاء اصطناعي"},[
-        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["âœ¦"]),
+        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["✦"]),
         "مساعدة"
       ])
     ]);
@@ -3797,7 +3809,7 @@ function showExplain(q, b){
   const lvl = (b.level || b.difficulty || b.name || "").toString();
   const list = (Array.isArray(b.explain) ? b.explain : []).map(s=>`<li>${escapeHtml(s)}</li>`).join("");
   const html = `
-    <div style="font-weight:900;margin-bottom:8px">${escapeHtml(q.title)} â€” (${escapeHtml(lvl)})</div>
+    <div style="font-weight:900;margin-bottom:8px">${escapeHtml(q.title)} — (${escapeHtml(lvl)})</div>
     ${list ? `<ul style="margin:0;padding-right:18px">${list}</ul>` : ``}
   `;
   openModal("شرح السؤال", html);
@@ -3808,7 +3820,7 @@ function showMethod(q, b){
   const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
   let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
   if(lvl.trim().toLowerCase()==="undefined") lvl="";
-  const head = lvl ? `${escapeHtml(q.title)} â€” <span class="badge small">${escapeHtml(lvl)}</span>` : `${escapeHtml(q.title)}`;
+  const head = lvl ? `${escapeHtml(q.title)} — <span class="badge small">${escapeHtml(lvl)}</span>` : `${escapeHtml(q.title)}`;
   const html = `
     <div class="methodHead">${head}</div>
     <ul class="methodList">${items}</ul>
@@ -3830,7 +3842,7 @@ function showHelp(q, b){
     ? `<div style="font-weight:900;margin:12px 0 6px">القانون/ملاحظات</div><ul style="margin:0;padding-right:18px;line-height:2">${b.formula.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
     : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
   openModal("مساعدة", `
-    <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">${title}${level?` <span style="font-size:13px;color:var(--muted)">â€” (${escapeHtml(level)})</span>`:""}</div>
+    <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">${title}${level?` <span style="font-size:13px;color:var(--muted)">— (${escapeHtml(level)})</span>`:""}</div>
     <div style="background:var(--brand-light);border:1px solid rgba(3,105,161,.22);border-radius:14px;padding:14px 16px;margin-bottom:10px">
       <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">الفكرة</div>
       ${explainHtml}
@@ -3897,7 +3909,7 @@ function _showCorrectModal(q, b, wrongItems){
   }).join("");
 
   const html = `
-    <div style="font-weight:900;margin-bottom:6px">${title}${lvl?` â€” (${escapeHtml(lvl)})`:""}</div>
+    <div style="font-weight:900;margin-bottom:6px">${title}${lvl?` — (${escapeHtml(lvl)})`:""}</div>
     ${methodItems}
     <div style="margin:10px 0 6px;font-weight:900">الإجابة الصحيحة</div>
     <ul style="margin:0;padding-right:18px">${list}</ul>
@@ -4117,7 +4129,7 @@ function showResults(){
         const correctVal = b.answers[p.key];
         const need2 = (p.label||"").includes("نسبي") || (p.label||"").includes("مئوية");
 
-        let studentText = "â€”";
+        let studentText = "—";
         if((student??"").toString().trim()!==""){
           if(p.type==="mcq" || p.type==="text"){
             studentText = escapeHtml(String(student));
@@ -4698,14 +4710,14 @@ window.addEventListener("load", ()=>{
         <div class="ai-help-grid">
           <div class="ai-help-section">
             <div class="ai-help-section-head">
-              <span class="ai-help-chip-icon">âœ¦</span>
+              <span class="ai-help-chip-icon">✦</span>
               <span>كيف تفكر في السؤال؟</span>
             </div>
             <div class="ai-help-body">${explainHtml}</div>
           </div>
           <div class="ai-help-section">
             <div class="ai-help-section-head">
-              <span class="ai-help-chip-icon">âˆ‘</span>
+              <span class="ai-help-chip-icon">∑</span>
               <span>ما القانون أو المسار؟</span>
             </div>
             <div class="ai-help-body">${formulaHtml}</div>
@@ -4775,6 +4787,7 @@ window.addEventListener("load", ()=>{
 /* Codex AI Models Logic Start */
 (function(){
   const AI_MODELS_KEY = "stat102_3_2_ai_models_v1";
+  try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
     try{
@@ -4803,12 +4816,13 @@ window.addEventListener("load", ()=>{
     return {
       events: [],
       topics: {},
-      lastTopic: "â€”",
+      lastTopic: "—",
       /* ── النماذج الخمسة الجديدة ── */
       irtTheta: 0,          /* قدرة الطالب IRT */
       irtSE: 1.0,           /* خطأ معياري IRT */
       irtN: 0,              /* عدد التقديرات */
       errorCounts: { conceptual:0, computational:0, application:0 }, /* أنماط الأخطاء */
+      examAttempts: 1,      /* عدد مرات خوض الاختبار كاملاً */
       confidenceEvents: [], /* لحساب Brier Score */
       forgettingDays: {},   /* آخر مراجعة لكل موضوع (timestamp) */
       forgettingStability:{} /* قوة الذاكرة لكل موضوع */
@@ -4959,15 +4973,19 @@ window.addEventListener("load", ()=>{
     application:   { label:"خطأ تطبيقي",   badge:"application",   advice:"راجع كيفية تطبيق الصيغة على البيانات" },
     none:          { label:"لا أخطاء",      badge:"none",          advice:"أداء ممتاز، استمر!" }
   };
-  function classifyError(correct, attempts, mastery){
+  function classifyError(correct, attempts, mastery, branch){
     if(correct) return "none";
-    /* تصنيف مبني على الإتقان والمحاولات */
-    if(mastery < 0.35) return "conceptual";    /* إتقان منخفض = خطأ مفاهيمي */
-    if(attempts > 2)   return "computational"; /* محاولات عديدة = خطأ حسابي */
-    return "application";                       /* غير ذلك = خطأ تطبيقي */
+    var parts = (branch && Array.isArray(branch.parts)) ? branch.parts : [];
+    var hasChoice = parts.some(function(p){ return p && (p.type === "mcq" || p.type === "text"); });
+    var hasNumber = parts.some(function(p){ return p && p.type === "number"; });
+    if(hasChoice && !hasNumber) return "conceptual";
+    if(hasNumber && !hasChoice) return attempts > 1 ? "computational" : "application";
+    if(mastery < 0.35) return "conceptual";
+    if(attempts > 2)   return "computational";
+    return "application";
   }
-  function updateErrorPattern(correct, attempts, model){
-    const errType = classifyError(correct, attempts, model.mastery);
+  function updateErrorPattern(correct, attempts, model, branch){
+    const errType = classifyError(correct, attempts, model.mastery, branch);
     model.errorType = errType;
     if(!aiModelsState.errorCounts) aiModelsState.errorCounts = { conceptual:0, computational:0, application:0 };
     if(errType !== "none") aiModelsState.errorCounts[errType] = (aiModelsState.errorCounts[errType] || 0) + 1;
@@ -5088,9 +5106,9 @@ window.addEventListener("load", ()=>{
     /* ── النماذج الخمسة الجديدة ── */
     updateForgetting(model, correct);
     updateIRT(correct, model);
-    updateErrorPattern(correct, attempts || 1, model);
+    updateErrorPattern(correct, attempts || 1, model, branch);
     updateConfidenceCalib(correct, model);
-    /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    /* ────────────────────────── */
     aiModelsState.events.push({
       topicKey: meta.key,
       topicLabel: meta.label,
@@ -5138,14 +5156,21 @@ window.addEventListener("load", ()=>{
   }
 
   function ensureAiModelsPanelMount(){
-    const rail = document.querySelector(".aiResultsRail");
-    if(!rail) return null;
     let panel = document.getElementById("aiModelsPanel");
     if(panel) return panel;
+    let host = document.querySelector(".aiResultsRail");
+    if(!host){
+      host = document.querySelector(".wrap")
+          || document.querySelector("main")
+          || document.body;
+    }
+    if(!host) return null;
     panel = document.createElement("div");
     panel.id = "aiModelsPanel";
     panel.className = "aiModelsPanel";
-    rail.appendChild(panel);
+    try{ host.appendChild(panel); }catch(_e){
+      try{ document.body.appendChild(panel); }catch(_e2){ return null; }
+    }
     return panel;
   }
 
@@ -5168,18 +5193,76 @@ window.addEventListener("load", ()=>{
     const thetaLbl = irtThetaLabel(theta);
     const thetaPct = clamp((theta + 3) / 6, 0, 1) * 100; /* 0% = -3, 100% = +3 */
 
-    const domErr   = dominantErrorType();
-    const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
-    const ec       = aiModelsState.errorCounts || {};
+    const ec       = (__partStats && __partStats.errs) ? __partStats.errs : { conceptual:0, computational:0, application:0 };
     const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
+    var domErr     = "none";
+    (function(){
+      var best = 0;
+      ["conceptual","computational","application"].forEach(function(_k){
+        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
+      });
+      if(errTotal === 0) domErr = "none";
+    })();
+    const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
 
     const bs       = brierScore();
     const calibDx  = calibDiagnosis();
-    const totalAtt = (aiModelsState.events||[]).length;
-    const totalOk  = (aiModelsState.events||[]).filter(e=>e.correct).length;
-    const completion = topics.length
-      ? clamp(topics.filter(t=>t.attempts>0).length / Math.max(1, topics.length), 0, 1)
-      : 0;
+    var __partStats = (function(){
+      var ans = 0, ok = 0;
+      var errs = { conceptual: 0, computational: 0, application: 0 };
+      try{
+        if(Array.isArray(BANK) && typeof state !== "undefined" && state && state.answers){
+          BANK.forEach(function(_q){
+            var _branches = Array.isArray(_q.branches) ? _q.branches : [];
+            _branches.forEach(function(_b, _bi){
+              var _parts = Array.isArray(_b.parts) ? _b.parts : [];
+              var _stored = (state.answers && state.answers[_q.id] && state.answers[_q.id][_bi]) ? state.answers[_q.id][_bi] : null;
+              if(!_stored) return;
+              var _attemptsBranch = 1;
+              try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_q.id, _bi) || 1); } }catch(_e){}
+              _parts.forEach(function(_p){
+                if(!_p || _stored[_p.key] === undefined || _stored[_p.key] === null || _stored[_p.key] === "") return;
+                ans++;
+                var _isOk = false;
+                try{
+                  var _corr = _b.answers ? _b.answers[_p.key] : undefined;
+                  var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _stored[_p.key], _corr) : { ok:false };
+                  _isOk = !!(_chk && _chk.ok);
+                }catch(_e){}
+                if(_isOk){ ok++; return; }
+                var _kind = "application";
+                if(_p.type === "mcq" || _p.type === "text"){
+                  _kind = "conceptual";
+                } else if(_p.type === "number"){
+                  _kind = _attemptsBranch > 1 ? "computational" : "application";
+                }
+                errs[_kind] = (errs[_kind] || 0) + 1;
+              });
+            });
+          });
+        }
+      }catch(_e){}
+      return { answered: ans, correct: ok, errs: errs };
+    })();
+    const totalAtt = __partStats.answered;
+    const totalOk  = __partStats.correct;
+    const examAttempts = Math.max(1, (aiModelsState && aiModelsState.examAttempts) ? aiModelsState.examAttempts : 1);
+    const completion = (function(){
+      try{
+        if(!Array.isArray(BANK) || !BANK.length) return 0;
+        var tot = 0, done = 0;
+        for(var _i=0; _i<BANK.length; _i++){
+          var _q = BANK[_i];
+          var _bs = (_q && Array.isArray(_q.branches) && _q.branches.length) ? _q.branches : [{}];
+          for(var _bi=0; _bi<_bs.length; _bi++){
+            tot++;
+            var _out = (typeof _getOutcome === 'function') ? _getOutcome(_q.id, _bi) : null;
+            if(_out === 'correct' || _out === 'wrong') done++;
+          }
+        }
+        return tot > 0 ? Math.max(0, Math.min(1, done / tot)) : 0;
+      }catch(_e){ return 0; }
+    })();
     const grade    = predictGrade(ensemble, bkt, lr_avg, completion);
 
     /* ── بناء HTML لوحة منحنى النسيان ── */
@@ -5355,16 +5438,16 @@ window.addEventListener("load", ()=>{
         <div class="calibCard">
           <div class="calibMatrix">
             <div class="calibCell">
-              <div class="calibCellVal">${totalAtt}</div>
-              <div class="calibCellLabel">إجمالي المحاولات</div>
+              <div class="calibCellVal">${examAttempts}</div>
+              <div class="calibCellLabel">محاولات الاختبار كاملاً</div>
             </div>
             <div class="calibCell">
               <div class="calibCellVal" style="color:#059669">${totalOk}</div>
-              <div class="calibCellLabel">إجابات صحيحة</div>
+              <div class="calibCellLabel">الأجزاء الصحيحة (من ${totalAtt})</div>
             </div>
             <div class="calibCell">
               <div class="calibCellVal" style="color:${totalAtt>0?(totalOk/totalAtt>=0.7?'#059669':totalOk/totalAtt>=0.4?'#d97706':'#dc2626'):'var(--muted)'}">
-                ${totalAtt > 0 ? Math.round((totalOk/totalAtt)*100)+"%" : "â€”"}
+                ${totalAtt > 0 ? Math.round((totalOk/totalAtt)*100)+"%" : "—"}
               </div>
               <div class="calibCellLabel">نسبة النجاح</div>
             </div>
@@ -5475,7 +5558,7 @@ window.addEventListener("load", ()=>{
   wrapRenderAll();
   renderAiModelsPanel();
 
-  /* â”€â”€ Scroll-linked topbar shadow â”€â”€ */
+  /* ── Scroll-linked topbar shadow ── */
   (function(){
     const tb = document.querySelector('.topbar');
     if(!tb) return;
@@ -5778,7 +5861,7 @@ window.addEventListener("load", ()=>{
 
 <!-- ═══ نظام الزر العائم الدائري ═══ -->
 <style>
-/* â”€â”€ Overlay â”€â”€ */
+/* ── Overlay ── */
 .fab-overlay{
   position:fixed;inset:0;
   background:rgba(15,23,42,.25);
@@ -5788,7 +5871,7 @@ window.addEventListener("load", ()=>{
 }
 .fab-overlay.show{opacity:1;pointer-events:all}
 
-/* â”€â”€ Drawer panels â”€â”€ */
+/* ── Drawer panels ── */
 .fab-drawer{
   position:fixed;top:0;left:0;bottom:0;
   width:min(360px,92vw);
@@ -6030,7 +6113,7 @@ window.addEventListener("load", ()=>{
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="5" rx="2.5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><rect x="2" y="10" width="20" height="5" rx="2.5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><rect x="2" y="17" width="20" height="4" rx="2" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/></svg>
       بنك الأسئلة
     </h2>
-    <button class="fab-drawer-close" onclick="closeFabSystem()">âœ•</button>
+    <button class="fab-drawer-close" onclick="closeFabSystem()">✕</button>
   </div>
   <div class="fab-drawer-body">
     <div id="drawerQuestionsInner"></div>
@@ -6048,7 +6131,7 @@ window.addEventListener("load", ()=>{
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="rgba(255,255,255,.8)"/></svg>
       التحليل الذكي | AI Analysis
     </h2>
-    <button class="fab-drawer-close" onclick="closeFabSystem()">âœ•</button>
+    <button class="fab-drawer-close" onclick="closeFabSystem()">✕</button>
   </div>
   <div class="fab-drawer-body" id="drawerAIBody">
     <div id="drawerAIInner"></div>

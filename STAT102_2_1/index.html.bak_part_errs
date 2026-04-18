@@ -2355,15 +2355,14 @@ function startTimer(){
 
 function resetAll(){
   try{
-    var _k = (typeof window !== "undefined" && window.AI_MODELS_KEY) ? window.AI_MODELS_KEY : null;
+    var _k = (typeof AI_MODELS_KEY !== "undefined") ? AI_MODELS_KEY : null;
     if(_k){
-      var _raw = null;
-      try{ _raw = localStorage.getItem(_k); }catch(_e){ _raw = null; }
       var _s = null;
-      if(_raw){ try{ _s = JSON.parse(_raw); }catch(_e){ _s = null; } }
-      if(!_s || typeof _s !== "object") _s = {};
-      _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
-      try{ localStorage.setItem(_k, JSON.stringify(_s)); }catch(_e){}
+      try{ _s = JSON.parse(localStorage.getItem(_k) || "null"); }catch(_e){}
+      if(_s && typeof _s === "object"){
+        _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
+        localStorage.setItem(_k, JSON.stringify(_s));
+      }
     }
   }catch(_e){}
   state.currentIndex = 0;
@@ -4698,7 +4697,6 @@ if(window.__examRunning) startTimer(); else showIntroModal();
 /* Codex AI Models Logic Start */
 (function(){
   const AI_MODELS_KEY = "stat102_2_1_ai_models_v1";
-  try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
     try{
@@ -5067,21 +5065,14 @@ if(window.__examRunning) startTimer(); else showIntroModal();
   }
 
   function ensureAiModelsPanelMount(){
+    const rail = document.querySelector(".aiResultsRail");
+    if(!rail) return null;
     let panel = document.getElementById("aiModelsPanel");
     if(panel) return panel;
-    let host = document.querySelector(".aiResultsRail");
-    if(!host){
-      host = document.querySelector(".wrap")
-          || document.querySelector("main")
-          || document.body;
-    }
-    if(!host) return null;
     panel = document.createElement("div");
     panel.id = "aiModelsPanel";
     panel.className = "aiModelsPanel";
-    try{ host.appendChild(panel); }catch(_e){
-      try{ document.body.appendChild(panel); }catch(_e2){ return null; }
-    }
+    rail.appendChild(panel);
     return panel;
   }
 
@@ -5104,23 +5095,15 @@ if(window.__examRunning) startTimer(); else showIntroModal();
     const thetaLbl = irtThetaLabel(theta);
     const thetaPct = clamp((theta + 3) / 6, 0, 1) * 100; /* 0% = -3, 100% = +3 */
 
-    const ec       = (__partStats && __partStats.errs) ? __partStats.errs : { conceptual:0, computational:0, application:0 };
-    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
-    var domErr     = "none";
-    (function(){
-      var best = 0;
-      ["conceptual","computational","application"].forEach(function(_k){
-        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
-      });
-      if(errTotal === 0) domErr = "none";
-    })();
+    const domErr   = dominantErrorType();
     const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
+    const ec       = aiModelsState.errorCounts || {};
+    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
 
     const bs       = brierScore();
     const calibDx  = calibDiagnosis();
     var __partStats = (function(){
       var ans = 0, ok = 0;
-      var errs = { conceptual: 0, computational: 0, application: 0 };
       try{
         if(Array.isArray(BANK) && typeof state !== "undefined" && state && state.answers){
           BANK.forEach(function(_q){
@@ -5129,31 +5112,20 @@ if(window.__examRunning) startTimer(); else showIntroModal();
               var _parts = Array.isArray(_b.parts) ? _b.parts : [];
               var _stored = (state.answers && state.answers[_q.id] && state.answers[_q.id][_bi]) ? state.answers[_q.id][_bi] : null;
               if(!_stored) return;
-              var _attemptsBranch = 1;
-              try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_q.id, _bi) || 1); } }catch(_e){}
               _parts.forEach(function(_p){
                 if(!_p || _stored[_p.key] === undefined || _stored[_p.key] === null || _stored[_p.key] === "") return;
                 ans++;
-                var _isOk = false;
                 try{
                   var _corr = _b.answers ? _b.answers[_p.key] : undefined;
                   var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _stored[_p.key], _corr) : { ok:false };
-                  _isOk = !!(_chk && _chk.ok);
+                  if(_chk && _chk.ok) ok++;
                 }catch(_e){}
-                if(_isOk){ ok++; return; }
-                var _kind = "application";
-                if(_p.type === "mcq" || _p.type === "text"){
-                  _kind = "conceptual";
-                } else if(_p.type === "number"){
-                  _kind = _attemptsBranch > 1 ? "computational" : "application";
-                }
-                errs[_kind] = (errs[_kind] || 0) + 1;
               });
             });
           });
         }
       }catch(_e){}
-      return { answered: ans, correct: ok, errs: errs };
+      return { answered: ans, correct: ok };
     })();
     const totalAtt = __partStats.answered;
     const totalOk  = __partStats.correct;

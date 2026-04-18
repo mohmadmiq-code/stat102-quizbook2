@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 2.1 تنظيم البيانات الخام</title>
+  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.1 مقاييس النزعة المركزية</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -546,67 +546,14 @@
     .modal{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;}
     .modal.show{display:flex;animation:modalFadeIn .2s ease}
     @keyframes modalFadeIn{from{opacity:0}to{opacity:1}}
-    .modal .box{width:min(900px, calc(100vw - 40px));max-width:calc(100vw - 40px);background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow: var(--shadow-lg);overflow:hidden;animation:modalSlide .25s ease;}
+    .modal .box{width:min(900px, 100%);background:var(--card);border-radius:20px;border:1px solid var(--line);box-shadow: var(--shadow-lg);overflow:hidden;animation:modalSlide .25s ease;}
     @keyframes modalSlide{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
     .modal .box .mh{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--line-soft);}
     .modal .box .mh b{font-size:16px;font-weight:800;color:var(--ink)}
     .modal .box .mb{padding:20px 22px;color:var(--ink-soft);line-height:1.9;max-height:70vh;overflow:auto;}
-    @media (max-width: 560px){
-      .modal{align-items:flex-start;justify-content:flex-start;direction:ltr;padding:12px;overflow:auto;}
-      .modal .box{direction:rtl;width:min(366px, calc(100vw - 24px));max-width:min(366px, calc(100vw - 24px));border-radius:16px;margin:10px 0;}
-      .modal .box .mh{padding:14px;gap:10px;flex-direction:column-reverse;align-items:stretch;}
-      .modal .box .mh b{text-align:center;}
-      .modal .box .mh .btn{width:100%;justify-content:center;}
-      .modal .box .mb{padding:16px 14px;max-height:none;overflow:visible;}
-    }
 
-    .stemleaf{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:18px;
-      background:linear-gradient(180deg, var(--line-soft), var(--card));
-      margin-top:14px;
-    }
-    .stemleaf .slRow{
-      display:grid;
-      grid-template-columns: 110px 12px 1fr;
-      gap:12px;
-      align-items:center;
-      margin-top:12px;
-      font-weight:800;
-      direction:ltr;
-    }
-    .stemleaf .sep{
-      width:12px;height:46px;border-radius:10px;background:var(--line);
-      display:grid; place-items:center; color:var(--muted);
-      font-weight:800;
-    }
-    .stemleaf .stem{
-      border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);
-      text-align:center;font-family: ui-monospace, monospace;
-    }
-    .stemleaf .leaves{
-      border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);
-      font-family: ui-monospace, monospace;
-      text-align:left; white-space:nowrap; overflow:auto;
-    }
-
-    .tableScroll{
-      width:100%;
-      max-width:100%;
-      overflow-x:auto;
-      overflow-y:hidden;
-      -webkit-overflow-scrolling:touch;
-      margin-top:14px;
-      border-radius:14px;
-      direction:ltr;
-    }
-    .tableScroll table.ftable{
-      margin-top:0;
-    }
     table.ftable{
       width:100%;
-      min-width:520px;
       border-collapse:collapse;
       overflow:hidden;
       border-radius:14px;
@@ -616,9 +563,7 @@
       direction:ltr;
       box-shadow: var(--shadow-sm);
     }
-    table.ftable.wide{min-width:680px;}
     .ftable th{
-      direction:rtl;
       background: linear-gradient(135deg, var(--brand), var(--brand2));
       color:#fff;
       padding:12px 10px;
@@ -650,94 +595,66 @@
       font-family:var(--font);
     }
 
-    .charts{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:18px;
-      background: linear-gradient(180deg, var(--line-soft), var(--card));
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:16px;
-      align-items:start;
-    }
-    @media (max-width: 860px){ .charts{grid-template-columns:1fr;} }
-    .chartBox{
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:var(--card);
-      padding:16px;
-      overflow:hidden;
-      transition: var(--transition);
-    }
-    .chartBox:hover{box-shadow: var(--shadow-sm)}
-    .chartTitle{font-weight:800;color:var(--ink);margin-bottom:10px;font-size:14px}
-    .chartNote{color:var(--muted);font-weight:600;font-size:12px;margin-top:10px;line-height:1.5}
-    svg{display:block;width:100%;height:auto}
+    /* --- 3.1 specific: Math, method panel, niceTable, inline inputs, feedback --- */
+.mathInline{direction:ltr; unicode-bidi:embed; display:inline-block;}
+.mathBlock{direction:ltr; unicode-bidi:embed;}
+.katex,.katex-display{direction:ltr; unicode-bidi:embed;}
+.katex{font-size:1.06em}
 
-    .hint{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
-    .dataGrid{font-family:ui-monospace, monospace;font-size:14px;padding:12px;background:var(--line-soft);border-radius:10px;margin:10px 0;border:1px solid var(--line);direction:ltr;text-align:left}
-    .smallMuted{color:var(--muted);font-size:14px;font-weight:600}
+.methodHead{font-weight:900;margin-bottom:10px}
+.methodList{margin:0;padding-right:18px;line-height:2}
+.methodLine{direction:rtl;unicode-bidi:isolate}
+.methodLine .mathInline{direction:ltr;unicode-bidi:embed}
 
-    input:focus, textarea:focus, select:focus{
-      outline:none;
-      border-color:var(--brand);
-      box-shadow: 0 0 0 3px rgba(3,105,161,.15);
-    }
-    .cellWrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-    .cellHint{font-size:11px;color:var(--muted);font-weight:600}
+.niceTable{width:100%;border-collapse:separate;border-spacing:0;direction:ltr}
+.niceTable th,.niceTable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:center}
+.niceTable thead th{background:var(--brand-light);font-weight:900}
+.niceTable tbody tr:last-child td{border-bottom:none}
 
-    .mcqGroup{display:flex;flex-direction:column;gap:10px;margin-top:12px;align-items:stretch}
-    .choice{
-      display:flex; align-items:center; gap:12px;
-      border:2px solid var(--line);
-      border-radius:14px;
-      padding:12px 16px;
-      font-weight:700;
-      color:var(--ink);
-      cursor:pointer;
-      background:var(--card);
-      transition: var(--transition);
-    }
-    .choice:hover{
-      border-color:var(--brand);
-      background:var(--brand-light);
-      transform:translateX(-2px);
-      box-shadow: var(--shadow-sm);
-    }
-    .choice input{width:18px; height:18px; margin:0; accent-color:var(--brand)}
-    .choice.badField{border-color:var(--bad); background:var(--bad-bg); color:var(--bad)}
-    .choice.goodField{border-color:var(--good); background:var(--good-bg); color:var(--good)}
+input.inlineInput, textarea.inlineInput{
+  min-width:92px !important;
+  width:92px !important;
+  padding:10px 10px !important;
+  border:2px solid var(--line) !important;
+  background:var(--card) !important;
+  text-align:center;
+}
+.ltr{direction:ltr; unicode-bidi:embed; display:inline-block;}
+.hint{margin-top:8px;font-size:13px;color:var(--muted);font-weight:800}
+select option{direction:ltr;unicode-bidi:embed;}
 
-    input.badField, textarea.badField{border-color:var(--bad) !important; background:var(--bad-bg) !important}
-    input.goodField, textarea.goodField{border-color:var(--good) !important; background:var(--good-bg) !important}
+table.ftable, table.niceTable{ direction:ltr; }
+table.ftable th, table.ftable td, table.niceTable th, table.niceTable td{ text-align:center; }
+table.ftable th, table.niceTable th{ white-space:nowrap; }
 
-    .chartTip{position:fixed; z-index:10000; pointer-events:none; background:var(--ink); color:#fff; padding:12px 14px; border-radius:12px; box-shadow: var(--shadow-lg); font-weight:700; font-size:12px; max-width:280px; line-height:1.5}
-    .graphs{display:grid; gap:16px;}
-    .svgInteractive .barSeg,.svgInteractive .pieSeg{cursor:pointer; transition: var(--transition)}
-    .svgInteractive .barSeg:hover,.svgInteractive .pieSeg:hover{opacity:.9}
-    .svgInteractive .barSeg.selected, .svgInteractive .pieSeg.selected, .svgInteractive .polyDot.selected, .svgInteractive .ogDot.selected{stroke:var(--brand); stroke-width:3}
+input.is-wrong, textarea.is-wrong, select.is-wrong{
+  border-color:var(--bad) !important;
+  box-shadow:0 0 0 4px rgba(220,38,38,.12) !important;
+  background:var(--card) !important;
+}
+input.is-wrong-strong, textarea.is-wrong-strong, select.is-wrong-strong{
+  border-color:var(--bad) !important;
+  box-shadow:0 0 0 4px rgba(220,38,38,.12) !important;
+  background:var(--bad-bg) !important;
+}
+input.is-right, textarea.is-right, select.is-right{
+  border-color:var(--good) !important;
+  box-shadow:0 0 0 4px rgba(5,150,105,.15) !important;
+}
 
-    .katex,.katex-display,.mathInline,.mathBlock{direction:ltr;unicode-bidi:embed;}
-    .mathInline{display:inline-block;}
-    .mathBlock{display:block;}
-    .katex-display{overflow-x:auto; overflow-y:hidden;}
-    .rtlText{ direction:rtl; unicode-bidi:plaintext; }
-    .ltr{ direction:ltr; unicode-bidi:bidi-override; }
-    body.font-sm{ font-size: 90%; }
-    body.font-lg{ font-size: 110%; }
-    .unsaved-dot{ width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0; }
-    .sidebar-filter{ display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap; }
-    .sidebar-filter .btn.small{ padding:6px 10px;font-size:12px; }
-    .score-bar-wrap{ height:12px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0;display:flex; }
-    .score-bar-correct{ height:100%;background:linear-gradient(90deg,var(--good),var(--accent));border-radius:999px;transition:width .3s; }
-    .score-bar-wrong{ height:100%;background:var(--line);border-radius:0 999px 999px 0; }
-    @media print{
-      body * { visibility: hidden; }
-      .modal.show, .modal.show * { visibility: visible; }
-      .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; }
-      .modal .box { box-shadow: none; border: 1px solid #ccc; }
-    }
+.katex,.katex-display,.mathInline,.mathBlock{direction:ltr;unicode-bidi:embed;}
+.mathInline{display:inline-block;}
+.mathBlock{display:block;}
+.katex-display{overflow-x:auto; overflow-y:hidden;}
+.rtlText{ direction:rtl; unicode-bidi:plaintext; }
+  body.font-sm{ font-size: 90%; }
+  body.font-lg{ font-size: 110%; }
+  .unsaved-dot{ width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0; }
+  .sidebar-filter{ display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap; }
+  .score-bar-wrap{ height:12px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0;display:flex; }
+  .score-bar-correct{ height:100%;background:linear-gradient(90deg,var(--good),var(--accent));border-radius:999px;transition:width .3s; }
+  .score-bar-wrong{ height:100%;background:var(--line);border-radius:0 999px 999px 0; }
+  @media print{ body * { visibility: hidden; } .modal.show, .modal.show * { visibility: visible; } .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; } .modal .box { box-shadow: none; border: 1px solid #ccc; } }
 
 /* Codex Unified AI Help Start */
     .branchHead{
@@ -2218,7 +2135,7 @@ input.badField, textarea.badField{
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">2.1 تنظيم البيانات الخام <span class="sep">|</span> Organizing and Representing Raw Data</div>
+          <div class="s">3.1 مقاييس النزعة المركزية <span class="sep">|</span> Measures of Central Tendency</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
@@ -2244,10 +2161,10 @@ input.badField, textarea.badField{
     <aside class="card side">
       <div class="head">
         <h3>مسار الأسئلة</h3>
-        <button class="btn small" id="resetBtn" aria-label="إعادة تعيين الاختبار">إعادة</button>
+        <button class="btn small" id="resetBtn">إعادة</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="font-weight:900;color:#0f2a3b" id="progressText">تم حل 0 سؤال</div>
+        <div style="font-weight:900;color:var(--ink)" id="progressText">تم حل 0 سؤال</div>
         <div style="flex:1" class="progress"><div id="progressBar"></div></div>
       </div>
       <div class="sidebar-filter">
@@ -2276,8 +2193,9 @@ input.badField, textarea.badField{
   </div>
 
 
+
 <script>
-/* ===== أدوات عشوائية (Seeded RNG) ===== */
+
 function xmur3(str){
   let h = 1779033703 ^ str.length;
   for (let i = 0; i < str.length; i++) {
@@ -2304,11 +2222,18 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-/* ===== حالة الصفحة (تُحفظ فقط عند ضغط حفظ الإجابة) ===== */
-const STATE_KEY = "stat102_2_1_state_v12";
+const STATE_KEY = "stat102_3_1_state_v12";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_2_1_timerEnd_v12";
-const state = loadState() || { currentIndex: 0, variants: {}, branches: {}, order: null, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
+const TIMER_KEY = "stat102_3_1_timerEnd_v12";
+let state = loadState() || { currentIndex: 0, answers: {}, grading: {}, variants: {}, order: null, attempts: {}, saveAttempts: {}, locks: {}, outcomes: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
+state.attempts = state.attempts || {};
+state.saveAttempts = state.saveAttempts || {};
+state.locks = state.locks || {};
+state.outcomes = state.outcomes || {};
+state.timerEnded = !!state.timerEnded;
+state.dirty = state.dirty || {};
+state.sidebarFilter = state.sidebarFilter || "all";
+if(state.fontSize==null) state.fontSize = 0;
 function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
 function loadState(){ try{ const s = JSON.parse(localStorage.getItem(STATE_KEY)); if(s){ s.timerEnded = !!s.timerEnded; if(!s.dirty) s.dirty = {}; if(!s.sidebarFilter) s.sidebarFilter = "all"; if(s.fontSize==null) s.fontSize = 0; } return s; }catch(e){ return null; } }
 
@@ -2355,20 +2280,23 @@ function startTimer(){
 
 function resetAll(){
   try{
-    var _k = (typeof window !== "undefined" && window.AI_MODELS_KEY) ? window.AI_MODELS_KEY : null;
+    var _k = (typeof AI_MODELS_KEY !== "undefined") ? AI_MODELS_KEY : null;
     if(_k){
-      var _raw = null;
-      try{ _raw = localStorage.getItem(_k); }catch(_e){ _raw = null; }
       var _s = null;
-      if(_raw){ try{ _s = JSON.parse(_raw); }catch(_e){ _s = null; } }
-      if(!_s || typeof _s !== "object") _s = {};
-      _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
-      try{ localStorage.setItem(_k, JSON.stringify(_s)); }catch(_e){}
+      try{ _s = JSON.parse(localStorage.getItem(_k) || "null"); }catch(_e){}
+      if(_s && typeof _s === "object"){
+        _s.examAttempts = (Number(_s.examAttempts) || 0) + 1;
+        localStorage.setItem(_k, JSON.stringify(_s));
+      }
     }
   }catch(_e){}
   state.currentIndex = 0;
-  state.variants = {};
-  state.branches = {};
+  state.answers = {};
+  state.grading = {};
+  state.attempts = {};
+  state.saveAttempts = {};
+  state.locks = {};
+  state.outcomes = {};
   state.order = null;
   delete state.masteryVersion;
   state.masterySupportCount = 0;
@@ -2377,6 +2305,10 @@ function resetAll(){
   state.sidebarFilter = "all";
   state.fontSize = 0;
   localStorage.removeItem(TIMER_KEY);
+  state.variants = state.variants || {};
+  (TEMPLATES||[]).forEach(t=>{
+    state.variants[t.id] = (state.variants[t.id]||0) + 1;
+  });
   saveState();
   location.reload();
 }
@@ -2400,10 +2332,7 @@ function showIntroModal(){
     <button class="btn primary" id="startExamBtn" style="font-size:16px;padding:12px 24px;">بدء الاختبار</button>
   `;
   openModal("بداية الاختبار", html);
-  document.getElementById("startExamBtn").onclick = function(){
-    closeModal();
-    if(typeof window.__startExam === "function") window.__startExam();
-  };
+  document.getElementById("startExamBtn").onclick = function(){ closeModal(); if(window.__startExam) window.__startExam(); };
 }
 window.__startExam = function(){
   window.__examRunning = true;
@@ -2414,21 +2343,261 @@ window.__startExam = function(){
   setTimeout(function(){ renderAll(); }, 0);
 };
 
-function ensureBranchRec(qid, bi){
-  if(!state.branches[qid]) state.branches[qid] = {};
-  if(!state.branches[qid][bi]) state.branches[qid][bi] = { attempts: 0, status: "new", saved: {} };
-  return state.branches[qid][bi];
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[ظھ%]/g,"%"); }
+function nearlyEqual(a,b,eps=1e-2){ if(a==null||b==null) return false; if(Number.isNaN(a)||Number.isNaN(b)) return false; return Math.abs(a-b)<=eps; }
+function formatNumber(x){
+  const n = Number(x);
+  if(Number.isNaN(n)) return String(x);
+  if(Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+  return (Math.round(n*100)/100).toFixed(2);
 }
-function clearQuestionState(qid){
-  if(state.branches[qid]) delete state.branches[qid];
+
+function fmt2(x){
+  const n=Number(x);
+  if(!isFinite(n)) return String(x??'');
+  return n.toFixed(2);
+}
+
+
+function typesetMath(container){
+  const run = ()=>{
+    if(window.renderMathInElement){
+      window.renderMathInElement(container, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "\\[", right: "\\]", display: true},
+          {left: "\\(", right: "\\)", display: false}
+        ],
+        throwOnError: false
+      });
+      return true;
+    }
+    return false;
+  };
+  if(!run()){
+    let tries=0;
+    const t=setInterval(()=>{
+      tries++;
+      if(run() || tries>30) clearInterval(t);
+    }, 120);
+  }
+}
+
+function storeAnswer(qid, bIndex, key, value){
+  if(!state.answers[qid]) state.answers[qid] = {};
+  if(!state.answers[qid][bIndex]) state.answers[qid][bIndex] = {};
+  state.answers[qid][bIndex][key] = value;
   saveState();
 }
 
-/* ===== أدوات مساعدة ===== */
-const SVG_TAGS = new Set(["svg","g","path","rect","line","circle","text","defs","linearGradient","stop","polyline","polygon"]);
+function _ensureAttempts(){
+  state.attempts = state.attempts || {};
+}
+function _incAttempt(qid, bi, key){
+  _ensureAttempts();
+  if(!state.attempts[qid]) state.attempts[qid] = {};
+  if(!state.attempts[qid][bi]) state.attempts[qid][bi] = {};
+  state.attempts[qid][bi][key] = (state.attempts[qid][bi][key] || 0) + 1;
+  saveState();
+  return state.attempts[qid][bi][key];
+}
+function _clearAttempt(qid, bi, key){
+  if(state.attempts && state.attempts[qid] && state.attempts[qid][bi] && state.attempts[qid][bi][key]!=null){
+    delete state.attempts[qid][bi][key];
+    saveState();
+  }
+}
+
+function _ensureSaveAttempts(){
+  state.saveAttempts = state.saveAttempts || {};
+}
+function _incSaveAttempt(qid, bi){
+  _ensureSaveAttempts();
+  if(!state.saveAttempts[qid]) state.saveAttempts[qid] = {};
+  state.saveAttempts[qid][bi] = (state.saveAttempts[qid][bi] || 0) + 1;
+  saveState();
+  return state.saveAttempts[qid][bi];
+}
+function _getSaveAttempt(qid, bi){
+  _ensureSaveAttempts();
+  return (state.saveAttempts[qid] && state.saveAttempts[qid][bi]) ? state.saveAttempts[qid][bi] : 0;
+}
+function _clearSaveAttempt(qid, bi){
+  if(state.saveAttempts && state.saveAttempts[qid] && state.saveAttempts[qid][bi]!=null){
+    delete state.saveAttempts[qid][bi];
+    saveState();
+  }
+}
+
+function _ensureLocks(){
+  state.locks = state.locks || {};
+}
+function _isBranchLocked(qid, bi){
+  if(!window.__examRunning) return true;
+  _ensureLocks();
+  return !!(state.locks[qid] && state.locks[qid][bi]);
+}
+function _setBranchLocked(qid, bi, locked){
+  _ensureLocks();
+  if(!state.locks[qid]) state.locks[qid] = {};
+  if(locked) state.locks[qid][bi] = true;
+  else delete state.locks[qid][bi];
+  saveState();
+}
+
+function _ensureOutcomes(){ state.outcomes = state.outcomes || {}; }
+function _setOutcome(qid, bi, val){
+  _ensureOutcomes();
+  if(!state.outcomes[qid]) state.outcomes[qid] = {};
+  if(val==null) delete state.outcomes[qid][bi];
+  else state.outcomes[qid][bi] = val;
+  saveState();
+}
+function _getOutcome(qid, bi){
+  _ensureOutcomes();
+  return (state.outcomes[qid] && state.outcomes[qid][bi]) ? state.outcomes[qid][bi] : null;
+}
+
+function _clearMarks(inp){
+  if(!inp || !inp.classList) return;
+  inp.classList.remove("is-wrong","is-wrong-strong","is-right");
+}
+function _mark(inp, kind){
+  _clearMarks(inp);
+  if(!inp || !inp.classList) return;
+  if(kind==="wrong1") inp.classList.add("is-wrong");
+  else if(kind==="wrong2") inp.classList.add("is-wrong-strong");
+  else if(kind==="right") inp.classList.add("is-right");
+}
+function _getBranch(qid, bi){
+  // BANK reflects current variants; ensure it's fresh
+  BANK = buildBank();
+  const q = BANK.find(x=>x.id===qid);
+  if(!q) return null;
+  return q.branches && q.branches[bi]!=null ? q.branches[bi] : null;
+}
+function instantCheckInput(qid, bi, key, inp){
+  if(!inp) return;
+  const raw = (inp.value ?? "").toString().trim();
+  if(raw===""){
+    _clearMarks(inp);
+    _clearAttempt(qid, bi, key);
+    return;
+  }
+  const b = _getBranch(qid, bi);
+  if(!b || !b.answers) return;
+  const correct = b.answers[key];
+  if(correct===undefined || correct===null) return;
+
+  const part = (b.parts||[]).find(p=>p.key===key) || {};
+  let ok = false;
+  if(part.type==="mcq" || part.type==="text"){
+    ok = normalizeText(raw) === normalizeText(correct);
+  }else{
+    ok = nearlyEqual(Number(raw), Number(correct), 1e-2);
+  }
+
+  if(ok){
+    _mark(inp, "right");
+    _clearAttempt(qid, bi, key);
+  }else{
+    const n = _incAttempt(qid, bi, key);
+    _mark(inp, n>=2 ? "wrong2" : "wrong1");
+    // لا تفتح نافذة المساعدة تلقائياً—الطالب يضغط "مساعدة" إذا احتاج.
+  }
+}
+
+
+function bindInlineInputs(root, qid, bi){
+  if(!root) return;
+  const nodes = root.querySelectorAll("input.inlineInput, textarea.inlineInput");
+  nodes.forEach(inp=>{
+    const key = inp.getAttribute("data-key");
+    if(!key) return;
+    const stored = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][key] : "";
+    if(inp.type==="number"){
+      inp.value = (stored ?? "");
+    }else{
+      inp.value = (stored ?? "");
+    }
+    inp.dataset.qid = qid;
+    inp.dataset.bi = String(bi);
+    if(_isBranchLocked(qid, bi)){
+      inp.disabled = true;
+    }
+    const handler = ()=>{ /* لا يتم التخزين إلا عند الضغط على زر حفظ الإجابة */ };
+    inp.addEventListener("input", ()=>{ _clearMarks(inp); handler(); });
+    inp.addEventListener("change", ()=>{ _clearMarks(inp); handler(); });
+    inp.addEventListener("blur", ()=>{ handler(); });
+  });
+}
+function clearAnswersForQuestion(qid){
+  if(state.answers[qid]) delete state.answers[qid];
+  if(state.grading[qid]) delete state.grading[qid];
+  if(state.attempts && state.attempts[qid]) delete state.attempts[qid];
+  if(state.saveAttempts && state.saveAttempts[qid]) delete state.saveAttempts[qid];
+  if(state.locks && state.locks[qid]) delete state.locks[qid];
+  if(state.outcomes && state.outcomes[qid]) delete state.outcomes[qid];
+  saveState();
+}
+function getVariant(qid){ if(state.variants[qid]==null) state.variants[qid]=0; return state.variants[qid]; }
+function bumpVariant(qid){ if(state.variants[qid]==null) state.variants[qid]=0; state.variants[qid]++; saveState(); }
+
+function collectPartKeys(q,b){
+  const keys = [];
+  (b.parts||[]).forEach(p=>keys.push(p.key));
+  return keys;
+}
+function _branchHasParts(b){ return (b.parts||[]).length>0; }
+
+function getQuestionStatus(q){
+  if(!window.__examRunning) return "not_started";
+  const qid = q.id;
+  let anyProgress = false;
+  let allComplete = true;
+  let allCorrect = true;
+  let anyPart = false;
+
+  q.branches.forEach((b,bi)=>{
+    if(!_branchHasParts(b)) return;
+    anyPart = true;
+
+    const locked = _isBranchLocked(qid, bi);
+    const out = _getOutcome(qid, bi);
+    const saved = (_getSaveAttempt(qid, bi) > 0) || (state.answers[qid] && state.answers[qid][bi]);
+
+    if(saved) anyProgress = true;
+
+    if(!locked){
+      allComplete = false;
+      allCorrect = false;
+      return;
+    }
+    if(out !== "correct") allCorrect = false;
+  });
+
+  if(!anyPart) return "completed_correct";
+  if(allComplete) return allCorrect ? "completed_correct" : "completed_wrong";
+  if(anyProgress) return "in_progress";
+  return "not_started";
+}
+
+function isQuestionDone(q){
+  const st = getQuestionStatus(q);
+  return st === "completed_correct" || st === "completed_wrong";
+}
+
+function listIncomplete(){
+  const arr=[];
+  BANK.forEach((q,i)=>{
+    if(!isQuestionDone(q)) arr.push({i:i+1, title:q.title});
+  });
+  return arr;
+}
+
 function el(tag, attrs={}, children=[]){
-  const isSvg = SVG_TAGS.has(String(tag).toLowerCase());
-  const node = isSvg ? document.createElementNS("http://www.w3.org/2000/svg", tag) : document.createElement(tag);
+  const node = document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
     if(k==="class") node.className=v;
     else if(k==="html") node.innerHTML=v;
@@ -2442,54 +2611,6 @@ function el(tag, attrs={}, children=[]){
   });
   return node;
 }
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
-function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[ظھ%]/g,"%"); }
-function parseNumberLoose(v){
-  if(v==null) return NaN;
-  const s = String(v).replace(/[٬،]/g,",").replace(/[%٪]/g,"").trim();
-  if(!s) return NaN;
-  const n = Number(s);
-  return Number.isFinite(n) ? n : NaN;
-}
-function nearlyEqual(a,b,eps=1e-2){
-  if(a==null||b==null) return false;
-  if(!Number.isFinite(a) || !Number.isFinite(b)) return false;
-  return Math.abs(a-b) <= eps;
-}
-function roundTo(x, d=2){
-  const n = Number(x);
-  if(!Number.isFinite(n)) return String(x);
-  const m = Math.pow(10,d);
-  return (Math.round(n*m)/m).toFixed(d);
-}
-function formatNumber(x){
-  const n = Number(x);
-  if(!Number.isFinite(n)) return String(x);
-  if(Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
-  return roundTo(n, 2);
-}
-function parseNumberList(s){
-  if(s==null) return [];
-  const raw = String(s).replace(/[،]/g, ",").trim();
-  if(!raw) return [];
-  return raw.split(",").map(x=>x.trim()).filter(Boolean).map(x=>Number(x)).filter(x=>Number.isFinite(x)).sort((a,b)=>a-b);
-}
-function sameNumberList(a,b){
-  const A=parseNumberList(a), B=parseNumberList(b);
-  if(A.length!==B.length) return false;
-  for(let i=0;i<A.length;i++){
-    if(Math.abs(A[i]-B[i])>1e-9) return false;
-  }
-  return true;
-}
-
-function latexFix(s){
-  if(s==null) return "";
-  // Reduce doubled backslashes produced by JS string escaping
-  return String(s).replace(/\\\\/g, "\\");
-}
-
-/* ===== نافذة منبثقة ===== */
 function openModal(title, html){
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalBody").innerHTML = html;
@@ -2501,685 +2622,665 @@ window.closeModal = closeModal;
 document.getElementById("closeModal").onclick = closeModal;
 document.getElementById("modal").addEventListener("click", (e)=>{ if(e.target.id==="modal") closeModal(); });
 
-function typesetMath(root){
-  if(!root) return;
-  try{
-    if(window.renderMathInElement){
-      window.renderMathInElement(root, {
-        delimiters: [
-          {left: "\\(", right: "\\)", display: false},
-          {left: "\\[", right: "\\]", display: true}
+
+
+const LAT = { mean:"\\bar{x}", median:"\\tilde{x}", mode:"\\hat{x}" };
+
+function meanRawGen(v){
+  const r = seededRand("mean_raw|"+v);
+  const n = (randInt(r, 7, 11) | 1);
+  const xs = Array.from({length:n}, ()=>randInt(r, 2, 10));
+  const sum = xs.reduce((a,b)=>a+b,0);
+  const mean = sum/n;
+  const meanRounded = Math.round(mean*100)/100;
+
+  const prompt = `البيانات: ${xs.join("، ")}<br>احسب \\( \\bar{x} \\) المتوسط الحسابي.`;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:[
+          "نستخدم قانون المتوسط الحسابي للبيانات غير المجمعة:",
+          `\\( ${LAT.mean} = \\frac{\\sum_{i=1}^{n} x_i}{n} \\)`,
+          "حيث \\(n\\) عدد القيم، و \\(\\sum x_i\\) مجموع القيم."
         ],
-        throwOnError: false
-      });
-    }
-  }catch(e){}
+        promptHtml: `<div style="font-weight:900">${prompt}</div>`,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) المتوسط الحسابي`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `عدد القيم: \\( n = ${n} \\).`,
+          `مجموع القيم: \\( \\sum x_i = ${xs.join(" + ")} = ${sum} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${sum}}{${n}} = ${meanRounded} \\]`
+        ]
+      }
+    ]
+  };
 }
 
-/* ===== مسار الأسئلة (من ملف 2.1) ===== */
+function meanFromFreqTableGen(v){
+  const r = seededRand("mean_freq|"+v);
+  const x = [0,1,2,3,4];
+  let f = x.map(()=>randInt(r, 2, 14));
+  f[0]=randInt(r,2,6); f[4]=randInt(r,2,6);
+  const n = f.reduce((a,b)=>a+b,0);
+  const num = x.reduce((a,xi,i)=>a+xi*f[i],0);
+  const mean = num/n;
+
+  const rows = x.map((xi,i)=>`<tr><td>${xi}</td><td>${f[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">الجدول الآتي يوضح القيمة \\(x\\) وتكرارها \\(f\\):</div>
+    <table class="ftable" style="max-width:520px">
+      <thead><tr><th>القيمة \\(x\\)</th><th>التكرار \\(f\\)</th></tr></thead>
+      <tbody>${rows}<tr><td><b>\\(\\sum f\\)</b></td><td><b>${n}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">احسب \\( ${LAT.mean} \\) المتوسط.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:["استخدم العلاقة الخاصة بالمتوسط للجداول التكرارية."],
+        promptHtml,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) المتوسط`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `\\[ ${LAT.mean} = \\frac{\\sum_{i=1}^{n} x_i\\, f_i}{\\sum_{i=1}^{n} f_i} \\]`,
+          `نحسب حاصل ضرب كل قيمة في تكرارها: ${x.map((xi,i)=> (xi+"×"+f[i]+"="+(xi*f[i]))).join("، ")}.`,
+          `ثم نجمع نواتج الضرب: \\( \\sum x_i f_i = ${x.map((xi,i)=> (xi*f[i])).join(" + ")} = ${num} \\).`,
+          `ونجمع التكرارات: \\( \\sum f_i = ${f.join(" + ")} = ${n} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${num}}{${n}} = ${Math.round(mean*100)/100} \\]`
+]
+      }
+    ]
+  };
+}
+
+function meanGroupedGen(v){
+  const r = seededRand("mean_grouped|"+v);
+  const classes = [[20,25],[25,30],[30,35],[35,40],[40,45]];
+  let f = classes.map(()=>randInt(r, 8, 34));
+  f = f.map(x=>Math.max(6, Math.round(x/2)));
+  const mids = classes.map(c=>(c[0]+c[1])/2);
+  const N = f.reduce((a,b)=>a+b,0);
+  const products = mids.map((m,i)=>m*f[i]);
+  const num = products.reduce((a,b)=>a+b,0);
+  const mean = num/N;
+  const meanRounded = Math.round(mean*100)/100;
+
+  const rows = classes.map((c,i)=>`<tr><td>${c[0]}–${c[1]}</td><td>${f[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">الجدول التالي يوضح فئات العمر وتكراراتها:</div>
+    <table class="ftable" style="max-width:520px">
+      <thead><tr><th>الفئة</th><th>التكرار \\(f\\)</th></tr></thead>
+      <tbody>${rows}<tr><td><b>المجموع</b></td><td><b>${N}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">احسب \\( ${LAT.mean} \\) المتوسط التقريبي باستخدام مراكز الفئات.</div>
+  `;
+
+  const midsTxt = classes.map((c,i)=>`${c[0]}–${c[1]} ⇒ ${mids[i]}`).join("، ");
+  const prodTxt = classes.map((c,i)=>`${mids[i]}×${f[i]}=${products[i]}`).join("، ");
+  const sumFtxt = f.join(" + ");
+  const sumProdTxt = products.join(" + ");
+
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:[
+          "للبيانات المجمعة نستخدم مراكز الفئات (منتصف كل فئة) بدل القيم الأصلية.",
+          `\\( x_i = \\frac{حد\\,الفئة\\,الأدنى + حد\\,الفئة\\,الأعلى}{2} \\)`,
+          `ثم: \\( ${LAT.mean} = \\frac{\\sum x_i f_i}{\\sum f_i} \\).`
+        ],
+        promptHtml,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) المتوسط التقريبي`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `مراكز الفئات: ${midsTxt}.`,
+          `نحسب \\(x_i f_i\\) لكل فئة: ${prodTxt}.`,
+          `مجموع التكرارات: \\( \\sum f_i = ${sumFtxt} = ${N} \\).`,
+          `مجموع \\(x_i f_i\\): \\( \\sum x_i f_i = ${sumProdTxt} = ${num} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${num}}{${N}} = ${meanRounded} \\]`
+        ]
+      }
+    ]
+  };
+}
+
+function medianRawGen(v){
+  const r = seededRand("median_raw|"+v);
+  const even = (v % 2 === 1);
+  const base = even ? randInt(r, 6, 10) : (randInt(r, 7, 11) | 1);
+  const n = even ? (base % 2 === 0 ? base : base+1) : base;
+  const xs = Array.from({length:n}, ()=>randInt(r, 10, 99));
+  const sorted = [...xs].sort((a,b)=>a-b);
+  let med;
+  if(n%2===1){
+    med = sorted[(n-1)/2];
+  }else{
+    med = (sorted[n/2 - 1] + sorted[n/2]) / 2;
+  }
+  const promptHtml = `
+    <div style="font-weight:900">البيانات: ${xs.join("، ")}<br>بعد ترتيبها تصاعدياً، احسب \\( ${LAT.median} \\) الوسيط.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:["رتّب القيم تصاعدياً ثم حدّد موقع/موقعين المنتصف."],
+        formula:[
+          `إذا كان \\(n\\) فردياً: موقع الوسيط \\( k=\\frac{n+1}{2} \\)، والوسيط هو القيمة في هذا الموقع بعد الترتيب.`,
+          `إذا كان \\(n\\) زوجياً: \\( ${LAT.median}=\\frac{x_{(n/2)}+x_{(n/2+1)}}{2} \\).`
+        ],
+        promptHtml,
+        parts:[{key:"med", type:"number", label:`\\( ${LAT.median} \\) الوسيط`, step:"0.5"}],
+        answers:{med},
+        method:[
+          "رتّب البيانات تصاعدياً.",
+          `البيانات المرتبة: ${sorted.join("، ")}.`,
+          n%2===1
+            ? `\\(n=${n}\\) فردي ⇒ \\(k=\\frac{n+1}{2}=${(n+1)/2}\\) ⇒ \\( ${LAT.median} = ${med} \\).`
+            : `\\(n=${n}\\) زوجي ⇒ القيمتان في الموقعين \\(\\frac{n}{2}=${n/2}\\) و \\(\\frac{n}{2}+1=${n/2+1}\\) هما ${sorted[n/2-1]} و ${sorted[n/2]} ⇒ \\( ${LAT.median} = \\frac{${sorted[n/2-1]}+${sorted[n/2]}}{2} = ${med} \\).`
+        ]
+      }
+    ]
+  };
+}
+
+function medianFreqGen(v){
+  const r = seededRand("median_freq|"+v);
+  const x = [2,3,5,6,7];
+  let f = [randInt(r,8,15), randInt(r,12,20), randInt(r,6,12), randInt(r,2,6), randInt(r,1,4)];
+  const n = f.reduce((a,b)=>a+b,0);
+  let cum = [];
+  let s = 0;
+  for(let i=0;i<f.length;i++){ s += f[i]; cum.push(s); }
+
+  const k = (n%2===1) ? (n+1)/2 : (n/2);
+  const idxK = cum.findIndex(c=>c>=k);
+  const exactHalf = (n%2===0 && cum[idxK]===k);
+
+  let med;
+  if(n%2===1){
+    med = x[idxK];
+  }else{
+    med = exactHalf ? (x[idxK] + x[idxK+1]) / 2 : x[idxK];
+  }
+  const rows = x.map((xi,i)=>`<tr><td>${xi}</td><td>${f[i]}</td><td>${cum[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">جدول تكراري (مع التكرار المتجمع الصاعد):</div>
+    <table class="ftable" style="max-width:640px">
+      <thead><tr><th>القيمة</th><th>التكرار \\(f\\)</th><th>التكرار المتجمع الصاعد</th></tr></thead>
+      <tbody>${rows}<tr><td><b>المجموع</b></td><td colspan="2"><b>${n}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">احسب \\( ${LAT.median} \\) الوسيط.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:["حدّد قيمة k ثم استخدم عمود التكرار المتجمع لتحديد الوسيط."],
+        promptHtml,
+        parts:[{key:"med", type:"number", label:`\\( ${LAT.median} \\) الوسيط`, step:"0.5"}],
+        answers:{med},
+        method:[
+          `مجموع التكرارات: \\( n = ${n} \\).`,
+          `نحدد قيمة المركز: \\( k = ${k} \\).`,
+          `التكرار المتجمع الصاعد: ${cum.join("، ")}.`,
+          exactHalf
+            ? `لأن التكرار المتجمع يساوي \\(k\\) تمامًا عند القيمة ${x[idxK]}، فإن الوسيط هو متوسط القيمتين ${x[idxK]} و ${x[idxK+1]}.`
+            : `أول تكرار متجمع صاعد \\(\\ge k\\) يقع عند القيمة ${x[idxK]}، لذا يكون الوسيط هذه القيمة.`,
+          exactHalf
+            ? `\\( ${LAT.median} = \\frac{${x[idxK]}+${x[idxK+1]}}{2} = ${med} \\).`
+            : `\\( ${LAT.median} = ${med} \\).`
+        ]
+      }
+    ]
+  };
+}
+
+function modeRawGen(v){
+  const r = seededRand("mode_raw|"+v);
+  const n = randInt(r, 8, 12);
+  let xs = Array.from({length:n}, ()=>randInt(r, 2, 11));
+  // enforce a mode (maybe bimodal sometimes)
+  const a = randInt(r, 3, 9);
+  const b = randInt(r, 3, 9);
+  xs[0]=a; xs[3]=a; xs[5]=a;
+  if(v%3===2){
+    xs[1]=b; xs[6]=b; xs[7]=b; // make two modes sometimes
+  }
+  const freq = {};
+  xs.forEach(x=>freq[x]=(freq[x]||0)+1);
+  const maxf = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k=>freq[k]===maxf).map(Number).sort((x,y)=>x-y);
+  const correct = modes.length===1 ? String(modes[0]) : modes.join("، ");
+  const promptHtml = `
+    <div style="font-weight:900">البيانات: ${xs.join("، ")}<br>حدِّد \\( ${LAT.mode} \\) المنوال.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:["المنوال هو القيمة الأكثر تكراراً."],
+        promptHtml,
+        parts:[{key:"mode", type:"text", label:`\\( ${LAT.mode} \\) المنوال`, placeholder:"اكتب القيمة (أو قيمتين إذا كان منوالان)"}],
+        answers:{mode: correct},
+        method:[
+          `\\( ${LAT.mode} \\) هو القيمة (أو القيم) الأكثر تكراراً.`,
+          `التكرارات: ${Object.keys(freq).map(Number).sort((a,b)=>a-b).map(k=>`${k}→${freq[k]}`).join("، ")}.`,
+          `أكبر تكرار = ${maxf}، إذن \\( ${LAT.mode} = ${correct} \\).`
+        ]
+      }
+    ]
+  };
+}
+
+function modeGroupedGen(v){
+  const r = seededRand("mode_grouped|"+v);
+
+  // الفئات كما هي مكتوبة في الجدول (مثال: 4–10 ثم 10–16)
+  const C = 6;
+  const k = 6;
+  const start = randInt(r, 4, 14);
+  const classes = Array.from({length:k}, (_,i)=>{
+    const a = start + i*C;
+    const b = a + C;
+    return {a,b,label:`${a}–${b}`};
+  });
+
+  // تكرارات أحادية القمة لضمان فئة منوالية واحدة فقط
+  const modalIndex = randInt(r, 1, k-2);
+  let freqs;
+  while(true){
+    const peakF = randInt(r, 18, 28);
+    freqs = Array.from({length:k}, ()=>0);
+    freqs[modalIndex] = peakF;
+
+    let cur = peakF;
+    for(let i=modalIndex-1;i>=0;i--){
+      cur -= randInt(r, 2, 6);
+      freqs[i] = cur;
+    }
+
+    cur = peakF;
+    for(let i=modalIndex+1;i<k;i++){
+      cur -= randInt(r, 2, 6);
+      freqs[i] = cur;
+    }
+
+    if(freqs.every(f=>f>=2)) break;
+  }
+
+  // تأكيد الشرط: f_m > f_prev و f_m >= f_next
+  if(freqs[modalIndex] <= freqs[modalIndex-1]) freqs[modalIndex] = freqs[modalIndex-1] + 1;
+  if(freqs[modalIndex] < freqs[modalIndex+1]) freqs[modalIndex+1] = freqs[modalIndex] - 1;
+
+  const fPrev  = freqs[modalIndex-1];
+  const fModal = freqs[modalIndex];
+  const fNext  = freqs[modalIndex+1];
+
+  const Lhat = classes[modalIndex].a;
+  const d1 = fModal - fPrev;
+  const d2 = fModal - fNext;
+  const mode = Lhat + (d1 / (d1 + d2)) * C;
+  const modeRounded = Math.round(mode*100)/100;
+
+  const tableRows = classes.map((c,i)=>`
+    <tr>
+      <td class="r"><span class="ltr">${c.label}</span></td>
+      <td class="c">${freqs[i]}</td>
+    </tr>
+  `).join("");
+
+  const promptHtml = `
+    <div class="subTitle">جدول توزيع تكراري</div>
+    <div class="qText">
+      من الجدول الآتي، حدد قيمة المنوال \\( ${LAT.mode} \\).
+    </div>
+    <div class="niceTableWrap">
+      <table class="niceTable">
+        <thead>
+          <tr><th class="r">الفئة</th><th class="c">التكرار</th></tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  const explain = [
+    "نحدد الفئة المنوالية: تكرارها أكبر من تكرار الفئة السابقة، وأكبر أو يساوي تكرار الفئة اللاحقة.",
+    `\\[ ${LAT.mode} = \\hat{L} + \\frac{d_1}{d_1 + d_2} \\, C \\]`,
+    "حيث:",
+    `\\(\\hat{L}\\) حدّ أدنى للفئة المنوالية.`,
+    `\\(d_1\\) = (تكرار الفئة المنوالية − تكرار الفئة السابقة).`,
+    `\\(d_2\\) = (تكرار الفئة المنوالية − تكرار الفئة اللاحقة).`,
+    `\\(C\\) سعة الفئة.`
+  ];
+
+  const method = [
+    `الفئة المنوالية: ${classes[modalIndex].label} (تكرارها ${fModal}).`,
+    `لأن ${fModal} > ${fPrev} و ${fModal} >= ${fNext}.`,
+    `\\(\\hat{L} = ${Lhat}\\)، \\(C = ${C}\\).`,
+    `\\(d_1 = ${fModal} - ${fPrev} = ${d1}\\).`,
+    `\\(d_2 = ${fModal} - ${fNext} = ${d2}\\).`,
+    `\\[ ${LAT.mode} = ${Lhat} + \\frac{${d1}}{${d1}+${d2}} \\times ${C} = ${modeRounded} \\]`
+  ];
+
+  return {
+    id:"mode_grouped",
+    title:"المنوال",
+    branches:[
+      {
+        name:"سهل",
+        level:"سهل",
+        difficulty:"سهل",
+        explain,
+        promptHtml,
+        parts:[
+          {key:"mode", type:"number", label:`قيمة المنوال \\( ${LAT.mode} \\)`, placeholder:"مثال: 31.5"}
+        ],
+        answers:{ mode: modeRounded },
+        method
+      }
+    ]
+  };
+}
+
+
+function chooseMeasureGen(v){
+  const r = seededRand("choose|"+v);
+  const xs = Array.from({length:7}, ()=>randInt(r, 6, 20));
+  xs.push(randInt(r, 60, 90)); // outlier
+  const promptHtml = `
+    <div style="font-weight:900">البيانات: ${xs.join("، ")}<br>اختر المقياس الأنسب لتمثيلها.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:["عند وجود قيمة متطرفة، نختار المقياس الأقل تأثراً."],
+        promptHtml,
+        parts:[{key:"best", type:"mcq", label:"المقياس الأنسب", options:[`المتوسط الحسابي`,`الوسيط`,`المنوال`]} ],
+        answers:{best:`الوسيط`},
+        method:[
+          `عند وجود قيمة متطرفة فإن المتوسط \\( \\bar{x} \\) يتأثر بها أكثر.`,
+          `الوسيط \\( \\tilde{x} \\) أقل تأثراً بالقيم المتطرفة.`,
+          "لذلك يكون الاختيار الصحيح هو: الوسيط."
+        ]
+      }
+    ]
+  };
+}
+
+function histPolygonGen(v){
+  const r = seededRand("histpoly|"+v);
+
+  const w = 5;
+  const k = 6;
+  const start = randInt(r, 10, 14);
+  const classes = Array.from({length:k}, (_,i)=>[start+i*w, start+(i+1)*w]);
+
+  // بناء تكرارات أحادية القمة لضمان منوال واحد فقط
+  const peak = randInt(r, 1, k-2);
+  let freqs = Array.from({length:k}, ()=>0);
+  const peakF = randInt(r, 18, 26);
+  freqs[peak] = peakF;
+
+  // يسار القمة: تزايد حتى القمة (أقل منها دائماً)
+  for(let i=peak-1;i>=0;i--){
+    const dec = randInt(r, 2, 6);
+    freqs[i] = Math.max(2, freqs[i+1] - dec);
+  }
+  // يمين القمة: تناقص بعد القمة (أقل منها دائماً)
+  for(let i=peak+1;i<k;i++){
+    const dec = randInt(r, 2, 6);
+    freqs[i] = Math.max(2, freqs[i-1] - dec);
+  }
+
+  // تأكيد الشرط: تكرار القمة أكبر من السابق واللاحق
+  freqs[peak] = Math.max(freqs[peak], freqs[peak-1]+1, freqs[peak+1]+1);
+
+  const maxF = freqs[peak];
+  const n = freqs.reduce((a,b)=>a+b,0);
+
+  const cum = [];
+  freqs.reduce((acc, f, i)=>{ cum[i]=acc+f; return cum[i]; }, 0);
+
+  const target = (n%2===0) ? (n/2) : ((n+1)/2);
+  const medianIdx = cum.findIndex(c=>c>target);
+  const medianClass = `${classes[medianIdx][0]}–${classes[medianIdx][1]}`;
+
+  const modalIdx = peak;
+  const modalClass = `${classes[modalIdx][0]}–${classes[modalIdx][1]}`;
+
+  const W = 860, H = 290, pad = 70;
+  const plotW = W - pad*2;
+  const plotH = H - pad*2;
+  const bw = plotW / k;
+  const xStart = pad - bw/2;
+  const xEnd = W - pad + bw/2;
+
+  function yOf(val){ return pad + (plotH - (val/maxF)*plotH); }
+  function xOf(i){ return pad + i*bw; }
+  function midOf(i){ return pad + i*bw + bw/2; }
+
+  const xLabels = classes.map(c=>`${c[0]}–${c[1]}`);
+
+  // Histogram (touching bars) + التكرار فوق كل عمود
+  let rects = "";
+  let histFreqLabels = "";
+  for(let i=0;i<k;i++){
+    const x = xOf(i);
+    const y = yOf(freqs[i]);
+    const h = (pad+plotH) - y;
+    rects += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="0" ry="0" fill="rgba(0,140,255,0.18)" stroke="rgba(0,100,180,0.55)" stroke-width="2"></rect>`;
+    histFreqLabels += `<text x="${midOf(i)}" y="${y-8}" text-anchor="middle" font-size="14" font-weight="bold" fill="rgba(0,80,140,0.95)" direction="ltr">${freqs[i]}</text>`;
+  }
+
+  let xText = "";
+  for(let i=0;i<k;i++){
+    xText += `<text x="${midOf(i)}" y="${H-pad+22}" text-anchor="middle" font-size="14" direction="ltr">${xLabels[i]}</text>`;
+  }
+
+  // grid
+  let yGrid = "";
+  const ticks = 5;
+  for(let t=0;t<=ticks;t++){
+    const vTick = Math.round((maxF/ticks)*t);
+    const y = yOf(vTick);
+    yGrid += `<line x1="${xStart}" y1="${y}" x2="${xEnd}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"></line>`;
+    yGrid += `<text x="${pad-10}" y="${y+5}" text-anchor="end" font-size="12" fill="rgba(0,0,0,0.55)" direction="ltr">${vTick}</text>`;
+  }
+
+  const histSvg = `
+  <svg viewBox="0 0 ${W} ${H}" width="100%" height="260" aria-label="Histogram">
+    ${yGrid}
+    <line x1="${xStart}" y1="${pad+plotH}" x2="${xEnd}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <line x1="${xStart}" y1="${pad}" x2="${xStart}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    ${rects}
+    ${histFreqLabels}
+    ${xText}
+  </svg>`;
+
+  // Polygon + التكرار فوق كل نقطة
+  let pts = classes.map((_,i)=>`${midOf(i)},${yOf(freqs[i])}`).join(" ");
+  const axisY = (pad+plotH);
+  const leftMid = xStart;
+  const rightMid = xEnd;
+  const ptsClosed = `${leftMid},${axisY} ` + pts + ` ${rightMid},${axisY}`;
+  let dots = "";
+  let polyFreqLabels = "";
+  for(let i=0;i<k;i++){
+    const cy = yOf(freqs[i]);
+    dots += `<circle cx="${midOf(i)}" cy="${cy}" r="5.5" fill="rgba(0,90,160,0.85)"></circle>`;
+    polyFreqLabels += `<text x="${midOf(i)}" y="${cy-10}" text-anchor="middle" font-size="14" font-weight="bold" fill="rgba(0,80,140,0.95)" direction="ltr">${freqs[i]}</text>`;
+  }
+  const polySvg = `
+  <svg viewBox="0 0 ${W} ${H}" width="100%" height="260" aria-label="Frequency Polygon">
+    ${yGrid}
+    <line x1="${xStart}" y1="${pad+plotH}" x2="${xEnd}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <line x1="${xStart}" y1="${pad}" x2="${xStart}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <polyline points="${ptsClosed}" fill="none" stroke="rgba(0,90,160,0.85)" stroke-width="3" stroke-linejoin="round"></polyline>
+    ${dots}
+    ${polyFreqLabels}
+    ${xText}
+  </svg>`;
+
+  // Table with empty cumulative column (inputs inline)
+  const cumInput = (i)=>`<input class="inlineInput" data-key="cum${i}" inputmode="numeric" autocomplete="off" placeholder="—" style="width:92px;border:2px solid #000;border-radius:14px;padding:10px 12px;font-weight:900;background:#fff;text-align:center" />`;
+  const tableRows = classes.map((c,i)=>`
+    <tr>
+      <td><span class="ltr">${c[0]}–${c[1]}</span></td>
+      <td>${freqs[i]}</td>
+      <td>${cumInput(i)}</td>
+    </tr>
+  `).join("");
+
+  const tableHtml = `
+  <div class="card" style="margin-top:12px;padding:14px 14px 8px">
+    <div style="font-weight:900;margin:2px 0 10px">أكمل عمود التكرار المتجمع الصاعد:</div>
+    <table class="niceTable">
+      <thead>
+        <tr>
+          <th>الفئة</th>
+          <th>التكرار</th>
+          <th>التكرار المتجمع الصاعد</th>
+        </tr>
+      </thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+  </div>`;
+
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:["اقرأ المدرج التكراري ثم أكمل التكرار المتجمع الصاعد وحدد الفئة الوسيطية."],
+        promptHtml: `
+          <div class="card" style="padding:16px">
+            <div style="font-weight:900;margin-bottom:8px">الرسم المدرج التكراري</div>
+            ${histSvg}
+          </div>
+          ${tableHtml}
+        `,
+        parts:[
+          {key:"cum0", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum1", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum2", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum3", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum4", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum5", type:"number", inline:true, label:"", step:"1"},
+          {key:"medianClass", type:"mcq", label:"الفئة الوسيطية", options:xLabels}
+        ],
+        answers:{
+          cum0:cum[0], cum1:cum[1], cum2:cum[2], cum3:cum[3], cum4:cum[4], cum5:cum[5],
+          medianClass: medianClass
+        },
+        method:[
+          "نحسب التكرار المتجمع الصاعد بجمع التكرارات تدريجياً.",
+          `مجموع التكرارات: \\( n = ${n} \\).`,
+          `نصف المجموع (قيمة المركز): \\( ${target} \\).`,
+          `التكرار المتجمع الصاعد: ${cum.join("، ")}.`,
+          `أول تكرار متجمع صاعد أكبر من \\( ${target} \\) هو \\( ${cum[medianIdx]} \\) عند الفئة: ${medianClass}.`
+        ]
+      },
+      {
+        level:"متوسط",
+        explain:["اقرأ المضلع التكراري ثم حدد الفئة المنوالية والتكرار الأكبر."],
+        promptHtml: `
+          <div class="card" style="padding:16px">
+            <div style="font-weight:900;margin-bottom:8px">المضلع التكراري</div>
+            ${polySvg}
+          </div>
+        `,
+        parts:[
+          {key:"modalClass", type:"mcq", label:"الفئة المنوالية", options:xLabels},
+          {key:"maxF", type:"number", label:"التكرار الأكبر", step:"1"}
+        ],
+        answers:{ modalClass, maxF },
+        method:[
+          "من الرسم: حدِّد أعلى نقطة في المضلع التكراري.",
+          `أكبر تكرار هو \\( ${maxF} \\) عند الفئة: ${modalClass}.`,
+          `إذن الفئة المنوالية: ${modalClass}، والتكرار الأكبر = ${maxF}.`
+        ]
+      }
+    ]
+  };
+}
+
+
+function miscMcqGen(v){
+  const r = seededRand("misc_mcq|"+v);
+  const sh = (arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; };
+  const clamp = (x,a,b)=>Math.max(a, Math.min(b,x));
+
+  const wTheory = randInt(r, 1, 3);
+  const wPrac = randInt(r, 2, 6);
+  const pTheory = randInt(r, 70, 95);
+  const pPrac = randInt(r, 70, 95);
+  const overall = Math.round((wTheory*pTheory + wPrac*pPrac)/(wTheory+wPrac));
+
+  const opt1 = overall;
+  const opt2 = clamp(overall + randInt(r, 3, 8), 0, 100);
+  const opt3 = clamp(overall - randInt(r, 3, 8), 0, 100);
+  const opt4 = clamp(overall + randInt(r, 10, 18), 0, 100);
+  const optsA = sh([opt1,opt2,opt3,opt4]).map(x=>`${x}%`);
+
+  const optionsB = sh(["0","9","3","10"]);
+
+  const promptA = `
+    <div class="card" style="padding:14px">
+      <div style="font-weight:900;margin-bottom:8px">إذا كان الاختبار مكوّنًا من قسمين: نظري وعملي، وكان وزن النظري = ${wTheory} ووزن العملي = ${wPrac}،</div>
+      <div style="font-weight:900;margin-bottom:8px">وحصل طالب على ${pTheory}% في النظري و ${pPrac}% في العملي؛ احسب النسبة المئوية الكلية.</div>
+    </div>
+  `;
+
+  const promptB = `
+    <div class="card" style="padding:14px">
+      <div style="font-weight:900;margin-bottom:8px">لمجموعة مشاهدات عددها 10، إذا علمت أن \\\(\\sum_{i=1}^{10} (x_i-\\bar{x})^2 = 9\\\) فإن:</div>
+      <div style="font-weight:900">\\\(\\sum_{i=1}^{10} (x_i-\\bar{x})\\\) يساوي:</div>
+    </div>
+  `;
+
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:["احسب المتوسط المرجّح باستخدام الأوزان ثم اختر الإجابة الصحيحة."],
+        promptHtml: promptA,
+        parts:[{key:"wavg", type:"mcq", label:"الإجابة", options:optsA}],
+        answers:{wavg:`${overall}%`},
+        method:[
+          "النسبة الكلية = المتوسط المرجّح للأوزان.",
+          `المعطيات: \\(w_T=${wTheory},\; P_T=${pTheory},\; w_P=${wPrac},\; P_P=${pPrac}\\).`,
+          `\\[ \\text{Overall} = \\frac{${wTheory}\\times${pTheory} + ${wPrac}\\times${pPrac}}{${wTheory}+${wPrac}} = ${overall} \\]`
+        ]
+      },
+      {
+        level:"سهل",
+        explain:["خاصية مهمة: مجموع الانحرافات عن المتوسط يساوي صفرًا."],
+        promptHtml: promptB,
+        parts:[{key:"devsum", type:"mcq", label:"الإجابة", options:optionsB}],
+        answers:{devsum:"0"},
+        method:[
+          "لأي بيانات: مجموع الانحرافات عن المتوسط يساوي صفرًا.",
+          `\\[ \\sum (x_i-\\bar{x}) = 0 \\]`
+        ]
+      }
+    ]
+  };
+}
+
 const TEMPLATES = [
-  {
-    id:"q1",
-    title:"الجدول التكراري: فصائل الدم",
-    icon:"▦",
-    gen: (v)=>{
-      const r = seededRand("q1|"+v);
-      const N = randInt(r, 44, 60);
-      let A = randInt(r, 14, Math.min(26, N-12));
-      let B = randInt(r, 10, Math.min(22, N-A-8));
-      let AB = randInt(r, 4, Math.min(10, N-A-B-4));
-      let O = N - (A+B+AB);
-      if(O<3){ AB = Math.max(4, AB-2); O = N-(A+B+AB); }
-      if(O<3){ B = Math.max(8, B-2); O = N-(A+B+AB); }
-      if(O<3){ A = Math.max(10, A-2); O = N-(A+B+AB); }
-
-      const rel = (x)=> x/N;
-      const pct = (x)=> (x/N)*100;
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["أكمل خلايا فصيلة O فقط: التكرار، التكرار النسبي، والنسبة المئوية."],
-            formula:[
-              "\\\\( r = \\frac{f}{N} \\\\)",
-              "\\\\( \\\\% = r \\times 100 \\\\)"
-            ],
-            prompt:`أكمل خلايا فصيلة O فقط في الجدول التكراري التالي (\\\\(N=${N}\\\\)):`,
-
-            customUI:"freqTable",
-            table:{
-              headers:["فصيلة الدم","التكرار","التكرار النسبي","النسبة المئوية"],
-              rows:[
-                {label:"A", fixed:[String(A), rel(A).toFixed(3), pct(A).toFixed(1)+"%"]},
-                {label:"B", fixed:[String(B), rel(B).toFixed(3), pct(B).toFixed(1)+"%"]},
-                {label:"AB", fixed:[String(AB), rel(AB).toFixed(3), pct(AB).toFixed(1)+"%"]},
-                {label:"O", inputs:["o_freq","o_rel","o_pct"]},
-                {label:"Total", fixed:[String(N), "1", "100%"]}
-              ]
-            },
-            parts:[],
-            answers:{ o_freq:O, o_rel:rel(O), o_pct:pct(O) },
-            solutionSteps:[
-              `أولاً: تكرار فصيلة \\\\(O\\\\) = \\\\(N - (A+B+AB)\\\\) = ${N} - (${A}+${B}+${AB}) = ${O}.`,
-              `ثانياً: التكرار النسبي لفصيلة \\\\(O\\\\) = \\\\(\\frac{f}{N}\\\\) = \\\\(\\frac{${O}}{${N}}\\\\) = ${rel(O).toFixed(3)}.`,
-              `ثالثاً: النسبة المئوية = \\\\(r\\times 100\\\\) = ${rel(O).toFixed(3)} \\times 100 = ${pct(O).toFixed(1)}\\\\%.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["اختر الفصيلة ذات أكبر تكرار، ثم الفصيلة ذات أقل تكرار."],
-            formula:["الأكثر شيوعاً = أكبر تكرار.","الأقل تكراراً = أصغر تكرار."],
-            prompt:"من نفس الجدول: ما الفصيلة الأكثر شيوعاً؟ وما الفصيلة الأقل تكراراً؟",
-            parts:[
-              {key:"most", type:"mcq", label:"الأكثر شيوعاً", options:["A","B","AB","O"]},
-              {key:"least", type:"mcq", label:"الأقل تكراراً", options:["A","B","AB","O"]}
-            ],
-            answers:{
-              most:(()=>{
-                const m = Math.max(A,B,AB,O);
-                return (m===A?"A": m===B?"B": m===AB?"AB":"O");
-              })(),
-              least:(()=>{
-                const m = Math.min(A,B,AB,O);
-                return (m===A?"A": m===B?"B": m===AB?"AB":"O");
-              })()
-            },
-            solutionSteps:[
-              `تكرارات الفصائل: \\\\(A=${A}\\\\), \\\\(B=${B}\\\\), \\\\(AB=${AB}\\\\), \\\\(O=${O}\\\\).`,
-              `الأكثر شيوعاً هي الفصيلة ذات أكبر تكرار ⇒ ${(()=>{const m=Math.max(A,B,AB,O); return (m===A?"A":m===B?"B":m===AB?"AB":"O");})()}.`,
-              `الأقل تكراراً هي الفصيلة ذات أصغر تكرار ⇒ ${(()=>{const m=Math.min(A,B,AB,O); return (m===A?"A":m===B?"B":m===AB?"AB":"O");})()}.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["احسب نسبة (A أو B) معاً كنسبة مئوية من إجمالي العينة."],
-            formula:["\\\\( \\\\% = \\frac{f}{N}\\times 100 \\\\)"],
-            prompt:"احسب النسبة المئوية لحاملي الفصائل (A أو B) معاً.",
-            parts:[{key:"pctAB", type:"number", label:"النسبة المئوية (%)", step:"0.1"}],
-            answers:{ pctAB: ((A+B)/N)*100 },
-            solutionSteps:[
-              `نجمع تكراري \\\\(A\\\\) و \\\\(B\\\\): \\\\(f = ${A}+${B} = ${A+B}\\\\).`,
-              `النسبة المئوية = \\\\(\\frac{f}{N}\\times 100\\\\) = \\\\(\\frac{${A+B}}{${N}}\\times 100\\\\) = ${(((A+B)/N)*100).toFixed(1)}\\\\%.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q2",
-    title:"الجدول التكراري (مخالفات مرورية)",
-    icon:"≡",
-    gen:(v)=>{
-      const r = seededRand("q2|"+v);
-      const N = 60;
-      const f0 = randInt(r, 10, 16);
-      const f4 = randInt(r, 4, 8);
-      const f3 = randInt(r, 7, 12);
-      let f1 = randInt(r, 14, 22);
-      let f2 = N - (f0+f1+f3+f4);
-      if(f2<10){ f1 = Math.max(12, f1-2); f2 = N-(f0+f1+f3+f4); }
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["احسب التكرار النسبي للقيمة 1: اقسم تكرار (1) على N."],
-            formula:["\\\\( r = \\frac{f}{N} \\\\)"],
-            prompt:`عينة حجمها \\(N=${N}\\)، وكانت تكرارات عدد المخالفات (0–4) كما يلي: 0: ${f0}، 1: ${f1}، 2: ${f2}، 3: ${f3}، 4: ${f4}. اكتب التكرار النسبي للقيمة 1.`,
-            parts:[{key:"rel1", type:"number", label:"التكرار النسبي للقيمة 1", step:"0.001"}],
-            answers:{ rel1: f1/N },
-            solutionSteps:[
-              `التكرار النسبي للقيمة \\\\(1\\\\) هو: \\\\(r = \\frac{f}{N} = \\frac{${f1}}{${N}}\\\\).`,
-              `إذن \\\\(r\\\\) = ${(f1/N).toFixed(3)}.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["حوّل تكرار القيمة 0 إلى نسبة مئوية من N."],
-            formula:["\\\\( \\\\% = \\frac{f}{N}\\times 100 \\\\)"],
-            prompt:"لنفس البيانات: اكتب النسبة المئوية للقيمة 0.",
-            parts:[{key:"pct0", type:"number", label:"النسبة المئوية للقيمة 0 (%)", step:"0.1"}],
-            answers:{ pct0: (f0/N)*100 },
-            solutionSteps:[
-              `النسبة المئوية للقيمة \\\\(0\\\\): \\\\(\\\\% = \\frac{f}{N}\\times 100 = \\frac{${f0}}{${N}}\\times 100\\\\).`,
-              `إذن = ${((f0/N)*100).toFixed(1)}\\\\%.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["زاوية القطاع = (التكرار ÷ N) × 360. احسب للقيمتين 2 و 4."],
-            formula:["\\\\( \\\\theta = \\frac{f}{N}\\times 360 \\\\)"],
-            prompt:"إذا مُثِّلت البيانات بـ (القطاعات الدائرية): احسب زاوية قطاع القيمة 2، وزاوية قطاع القيمة 4.",
-            parts:[
-              {key:"theta2", type:"number", label:"زاوية قطاع (2) بالدرجات", step:"0.1"},
-              {key:"theta4", type:"number", label:"زاوية قطاع (4) بالدرجات", step:"0.1"}
-            ],
-            answers:{ theta2:(f2/N)*360, theta4:(f4/N)*360 },
-            solutionSteps:[
-              `زاوية قطاع القيمة \\\\(2\\\\): \\\\(\\\\theta_2 = \\frac{${f2}}{${N}}\\times 360\\\\) = ${(((f2/N)*360)).toFixed(1)}.`,
-              `زاوية قطاع القيمة \\\\(4\\\\): \\\\(\\\\theta_4 = \\frac{${f4}}{${N}}\\times 360\\\\) = ${(((f4/N)*360)).toFixed(1)}.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q3",
-    title:"الرسم بالأعمدة والقطاعات الدائرية",
-    icon:"◑",
-    gen:(v)=>{
-      const r = seededRand("q3|"+v);
-      const cats = ["الإدارة العامة","الاقتصاد","الموارد البشرية","الإدارة المالية","التسويق"];
-      let counts = cats.map(()=>randInt(r, 4, 14));
-      const sum = counts.reduce((a,b)=>a+b,0);
-      const target = 36;
-      const scale = target / sum;
-      counts = counts.map(c=>Math.max(2, Math.round(c*scale)));
-      let N = counts.reduce((a,b)=>a+b,0);
-      while(N<36){ counts[randInt(r,0,counts.length-1)]++; N++; }
-      while(N>36){ const idx = randInt(r,0,counts.length-1); if(counts[idx]>2){ counts[idx]--; N--; } }
-
-      const idxMax = counts.indexOf(Math.max(...counts));
-      const idxPick = randInt(r,0,counts.length-1);
-      const idxPick2 = (idxPick+2)%counts.length;
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["اختر الفئة ذات أعلى عمود (وأكبر قطاع)."],
-            formula:["أكبر فئة = أعلى عمود في الرسم (وأكبر قطاع في الدائرة)."],
-            prompt:`البيانات التالية (\\\\(N=${N}\\\\)) ممثلة في (الرسم بالأعمدة) و(القطاعات الدائرية) أدناه. أي فئة لها أكبر تكرار؟`,
-            customUI:"charts",
-            chartData:{ cats, counts, N },
-            parts:[{key:"maxCat", type:"mcq", label:"الفئة الأكبر", options:cats}],
-            answers:{ maxCat: cats[idxMax] },
-            solutionSteps:[
-              `نقارن ارتفاع الأعمدة/حجم القطاعات: أكبر تكرار هو ${Math.max(...counts)}.`,
-              `إذن الفئة الأكبر هي: ${cats[idxMax]}.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["احسب زاوية قطاع الفئة المطلوبة باستخدام (التكرار ÷ N) × 360."],
-            formula:["\\\\( \\\\theta = \\frac{f}{N}\\times 360 \\\\)"],
-            prompt:`احسب زاوية قطاع الفئة: (${cats[idxPick]}) في (القطاعات الدائرية).`,
-            customUI:"charts",
-            chartData:{ cats, counts, N },
-            parts:[{key:"thetaPick", type:"number", label:"الزاوية (درجة)", step:"1"}],
-            answers:{ thetaPick: Math.round((counts[idxPick]/N)*360) },
-            solutionSteps:[
-              `تكرار الفئة (${cats[idxPick]}) هو \\\\(f=${counts[idxPick]}\\\\).`,
-              `زاوية القطاع: \\\\(\\\\theta = \\frac{${counts[idxPick]}}{${N}}\\times 360\\\\) = ${Math.round((counts[idxPick]/N)*360)}.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["احسب التكرار النسبي لفئة، والنسبة المئوية لفئة أخرى من نفس البيانات."],
-            formula:[
-              "\\\\( r = \\frac{f}{N} \\\\)",
-              "\\\\( \\\\% = r\\times 100 \\\\)"
-            ],
-            prompt:`احسب: (1) التكرار النسبي للفئة (${cats[idxPick2]}) (2) النسبة المئوية للفئة (${cats[idxPick]}).`,
-            customUI:"charts",
-            chartData:{ cats, counts, N },
-            parts:[
-              {key:"relA", type:"number", label:`التكرار النسبي لـ ${cats[idxPick2]}`, step:"0.001"},
-              {key:"pctB", type:"number", label:`النسبة المئوية لـ ${cats[idxPick]} (%)`, step:"0.1"}
-            ],
-            answers:{ relA: counts[idxPick2]/N, pctB:(counts[idxPick]/N)*100 },
-            solutionSteps:[
-              `التكرار النسبي للفئة (${cats[idxPick2]}): \\\\(r = \\frac{${counts[idxPick2]}}{${N}}\\\\) = ${(counts[idxPick2]/N).toFixed(3)}.`,
-              `النسبة المئوية للفئة (${cats[idxPick]}): \\\\(\\\\% = \\frac{${counts[idxPick]}}{${N}}\\times 100\\\\) = ${((counts[idxPick]/N)*100).toFixed(1)}\\\\%.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q4",
-    title:"الساق والأوراق: جدول معطى",
-    icon:"⋮",
-    gen:(v)=>{
-      const r = seededRand("q4|"+v);
-      const stems = [randInt(r,0,2), randInt(r,3,4), randInt(r,5,6)].sort((a,b)=>a-b);
-      const uniq = [...new Set(stems)];
-      const rows = uniq.map(st=>{
-        const k = randInt(r,3,7);
-        const leaves = Array.from({length:k},()=>randInt(r,0,9)).sort((a,b)=>a-b);
-        return {stem:st, leaves};
-      });
-      const values = [];
-      rows.forEach(row=>row.leaves.forEach(l=>values.push(row.stem*10+l)));
-      values.sort((a,b)=>a-b);
-      const min = values[0], max = values[values.length-1];
-      const gt50 = values.filter(x=>x>50).length;
-      const stemCounts = rows.map(rw=>rw.leaves.length);
-      const mostStem = String(rows[stemCounts.indexOf(Math.max(...stemCounts))].stem);
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["اقرأ أصغر قيمة وأكبر قيمة مباشرة من جدول الساق والأوراق."],
-            formula:["الساق = العشرات، الورقة = الآحاد."],
-            prompt:"من جدول الساق والأوراق التالي (الساق على اليسار)، اكتب أصغر قيمة وأكبر قيمة.",
-            customUI:"stemleaf",
-            stemleaf: rows,
-            parts:[
-              {key:"min", type:"number", label:"أصغر قيمة", step:"1"},
-              {key:"max", type:"number", label:"أكبر قيمة", step:"1"}
-            ],
-            answers:{min, max},
-            solutionSteps:[
-              `الأصغر هو أول قيمة عند قراءة الجدول ⇒ ${min}.`,
-              `الأكبر هو آخر قيمة عند قراءة الجدول ⇒ ${max}.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["الساق الأكثر تكراراً هو الذي يحتوي أكبر عدد من الأوراق."],
-            formula:["الأكثر تكراراً = أكبر عدد من الأوراق."],
-            prompt:"من نفس الجدول: ما الساق (العشرات) الأكثر تكراراً؟",
-            customUI:"stemleaf",
-            stemleaf: rows,
-            parts:[{key:"mostStem", type:"mcq", label:"الساق الأكثر تكراراً", options: rows.map(x=>String(x.stem))}],
-            answers:{mostStem},
-            solutionSteps:[
-              `نقارن عدد الأوراق في كل ساق ثم نختار الأكبر.`,
-              `الساق الأكثر تكراراً هو: ${mostStem}.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["احسب عدد القيم التي أكبر من 50 بالعدّ من الجدول."],
-            formula:["نعد القيم الأكبر من 50 مباشرة من الجدول."],
-            prompt:"من نفس الجدول: كم عدد القيم التي تزيد عن 50؟",
-            customUI:"stemleaf",
-            stemleaf: rows,
-            parts:[{key:"gt50", type:"number", label:"عدد القيم > 50", step:"1"}],
-            answers:{gt50},
-            solutionSteps:[
-              `نعد القيم التي تزيد عن 50 من الجدول.`,
-              `العدد = ${gt50}.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q5",
-    title:"الساق والأوراق: استخراج القيم",
-    icon:"↧",
-    gen:(v)=>{
-      const r = seededRand("q5|"+v);
-      const stem = randInt(r, 2, 7);
-      const leaves = Array.from({length:randInt(r,3,5)},()=>randInt(r,0,9)).sort((a,b)=>a-b);
-      const vals = leaves.map(l=>stem*10+l);
-      const valsStr = vals.join(",");
-
-      const stem2 = randInt(r,1,6);
-      const leaves2 = Array.from({length:randInt(r,2,4)},()=>randInt(r,0,9)).sort((a,b)=>a-b);
-      const leaves3 = Array.from({length:randInt(r,2,4)},()=>randInt(r,0,9)).sort((a,b)=>a-b);
-      const n = leaves2.length + leaves3.length;
-
-      const aStem = randInt(r, 1, 6);
-      const aLeaves = [randInt(r,0,9), randInt(r,0,9)].sort((a,b)=>a-b);
-      const bStem = aStem + 1;
-      const bLeaves = [randInt(r,0,9)];
-      const min = aStem*10 + aLeaves[0];
-      const max = bStem*10 + bLeaves[bLeaves.length-1];
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["حوّل كل زوج (ساق|ورقة) إلى عدد: الساق = عشرات، الورقة = آحاد."],
-            formula:["مثال: \\\\(4|1 = 41\\\\)."],
-            prompt:"من جدول الساق والأوراق التالي، اكتب القيم الأصلية.",
-            customUI:"stemleaf",
-            stemleaf:[{stem, leaves}],
-            parts:[{key:"vals", type:"text", orderInsensitive:true, label:"القيم (مفصولة بفواصل)", placeholder:"مثال: 41,42,46"}],
-            answers:{vals: valsStr},
-            solutionSteps:[
-              `نحوّل كل ورقة إلى قيمة: الساق = ${stem} (عشرات) والأوراق = (${leaves.join(", ")}).`,
-              `القيم هي: ${valsStr}.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["عدد القيم يساوي عدد الأوراق في جميع الصفوف."],
-            formula:["عدد القيم = مجموع عدد الأوراق."],
-            prompt:"من جدول الساق والأوراق التالي، اكتب عدد القيم.",
-            customUI:"stemleaf",
-            stemleaf:[{stem:stem2, leaves:leaves2},{stem:stem2+1, leaves:leaves3}],
-            parts:[{key:"n", type:"number", label:"عدد القيم", step:"1"}],
-            answers:{n},
-            solutionSteps:[
-              `عدد الأوراق في الساق ${stem2} = ${leaves2.length}، وفي الساق ${stem2+1} = ${leaves3.length}.`,
-              `إذن عدد القيم = ${leaves2.length}+${leaves3.length} = ${n}.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["الأصغر هو أول قيمة في الجدول، والأكبر هو آخر قيمة."],
-            formula:["الساق = عشرات، الورقة = آحاد."],
-            prompt:"من جدول الساق والأوراق التالي، اكتب الأصغر والأكبر.",
-            customUI:"stemleaf",
-            stemleaf:[{stem:aStem, leaves:aLeaves},{stem:bStem, leaves:bLeaves}],
-            parts:[
-              {key:"min", type:"number", label:"الأصغر", step:"1"},
-              {key:"max", type:"number", label:"الأكبر", step:"1"}
-            ],
-            answers:{min, max},
-            solutionSteps:[
-              `الأصغر = ${min}.`,
-              `الأكبر = ${max}.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q6",
-    title:"جدول التكرار للتقديرات",
-    icon:"%",
-    gen:(v)=>{
-      const r = seededRand("q6|"+v);
-      const grades = ["A","B","C","D","F"];
-      const counts = [randInt(r,4,8), randInt(r,5,9), randInt(r,4,8), randInt(r,2,6), randInt(r,1,4)];
-      const N = counts.reduce((sum, item)=>sum+item, 0);
-      const pick = randInt(r, 0, grades.length-1);
-      const pick2 = (pick + 2) % grades.length;
-      const pct = (counts[pick]/N)*100;
-      const rel = counts[pick2]/N;
-      const theta = (counts[pick]/N)*360;
-      const maxIndex = counts.indexOf(Math.max(...counts));
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["التكرار المئوي = التكرار ÷ مجموع التكرارات × 100."],
-            formula:["\\\\( \\\\% = \\frac{f}{N}\\times 100 \\\\)"],
-            prompt:`البيانات الآتية تمثل تقديرات عينة من ${N} طالبًا. احسب التكرار المئوي للتقدير (${grades[pick]}).`,
-            customUI:"freqTable",
-            table:{
-              headers:["التقدير","التكرار"],
-              rows: grades.map((grade, index)=>({label:grade, fixed:[String(counts[index])]}))
-            },
-            parts:[{key:"pct", type:"number", label:`التكرار المئوي للتقدير ${grades[pick]} (%)`, step:"0.1"}],
-            answers:{pct},
-            solutionSteps:[
-              `تكرار التقدير ${grades[pick]} = ${counts[pick]} ومجموع التكرارات = ${N}.`,
-              `التكرار المئوي = \\\\(\\frac{${counts[pick]}}{${N}}\\times 100\\\\) = ${pct.toFixed(1)}\\\\%.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["التكرار النسبي = التكرار ÷ مجموع التكرارات."],
-            formula:["\\\\( r = \\frac{f}{N} \\\\)"],
-            prompt:`من جدول التقديرات نفسه: احسب التكرار النسبي للتقدير (${grades[pick2]}).`,
-            customUI:"freqTable",
-            table:{
-              headers:["التقدير","التكرار"],
-              rows: grades.map((grade, index)=>({label:grade, fixed:[String(counts[index])]}))
-            },
-            parts:[{key:"rel", type:"number", label:`التكرار النسبي للتقدير ${grades[pick2]}`, step:"0.001"}],
-            answers:{rel},
-            solutionSteps:[
-              `تكرار التقدير ${grades[pick2]} = ${counts[pick2]}.`,
-              `التكرار النسبي = \\\\(\\frac{${counts[pick2]}}{${N}}\\\\) = ${rel.toFixed(3)}.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["في القرص الدائري: زاوية القطاع = التكرار ÷ مجموع التكرارات × 360."],
-            formula:["\\\\( \\\\theta = \\frac{f}{N}\\times 360 \\\\)"],
-            prompt:`إذا مثلنا جدول التقديرات بقرص دائري، احسب زاوية قطاع التقدير (${grades[pick]}). ثم حدد التقدير الأعلى تكرارًا.`,
-            customUI:"freqTable",
-            table:{
-              headers:["التقدير","التكرار"],
-              rows: grades.map((grade, index)=>({label:grade, fixed:[String(counts[index])]}))
-            },
-            parts:[
-              {key:"theta", type:"number", label:`زاوية قطاع ${grades[pick]} بالدرجات`, step:"0.1"},
-              {key:"maxGrade", type:"mcq", label:"التقدير الأعلى تكرارًا", options:grades}
-            ],
-            answers:{theta, maxGrade:grades[maxIndex]},
-            solutionSteps:[
-              `زاوية قطاع ${grades[pick]} = \\\\(\\frac{${counts[pick]}}{${N}}\\times 360\\\\) = ${theta.toFixed(1)} درجة.`,
-              `أكبر تكرار في الجدول هو ${counts[maxIndex]}، إذن التقدير الأعلى تكرارًا هو ${grades[maxIndex]}.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q7",
-    title:"القرص الدائري من جدول نوعي",
-    icon:"◔",
-    gen:(v)=>{
-      const r = seededRand("q7|"+v);
-      const cats = ["موافق بشدة","موافق","محايد","غير موافق"];
-      const counts = [randInt(r,10,18), randInt(r,12,22), randInt(r,5,12), randInt(r,3,9)];
-      const N = counts.reduce((sum, item)=>sum+item, 0);
-      const pick = randInt(r, 0, cats.length-1);
-      const angle = Math.round((counts[pick]/N)*360);
-      const givenAngle = Math.round((counts[(pick+1)%cats.length]/N)*360);
-      const givenCount = Math.round((givenAngle/360)*N);
-      const pct = (counts[pick]/N)*100;
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["زاوية القطاع = التكرار ÷ مجموع البيانات × 360."],
-            formula:["\\\\( \\\\theta = \\frac{f}{N}\\times 360 \\\\)"],
-            prompt:`في جدول نوعي حجمه ${N}، تكرار فئة (${cats[pick]}) يساوي ${counts[pick]}. احسب زاوية قطاعها في القرص الدائري.`,
-            parts:[{key:"angle", type:"number", label:"زاوية القطاع", step:"1"}],
-            answers:{angle},
-            solutionSteps:[
-              `زاوية القطاع = \\\\(\\frac{${counts[pick]}}{${N}}\\times 360\\\\) = ${angle} درجة.`
-            ]
-          },
-          {
-            level:"متوسط",
-            explain:["إذا عرفت زاوية القطاع، يمكن حساب تكراره من: التكرار = الزاوية ÷ 360 × مجموع البيانات."],
-            formula:["\\\\( f = \\frac{\\\\theta}{360}\\times N \\\\)"],
-            prompt:`إذا كان مجموع البيانات ${N}، وقياس زاوية أحد قطاعات القرص الدائري ${givenAngle} درجة تقريبًا، فما تكرار هذا القطاع؟`,
-            parts:[{key:"count", type:"number", label:"التكرار التقريبي", step:"1"}],
-            answers:{count:givenCount},
-            solutionSteps:[
-              `التكرار = \\\\(\\frac{${givenAngle}}{360}\\times ${N}\\\\) ≈ ${givenCount}.`
-            ]
-          },
-          {
-            level:"صعب",
-            explain:["النسبة المئوية = التكرار ÷ مجموع البيانات × 100."],
-            formula:["\\\\( \\\\% = \\frac{f}{N}\\times 100 \\\\)"],
-            prompt:`من الجدول النوعي نفسه، احسب النسبة المئوية لفئة (${cats[pick]}).`,
-            parts:[{key:"pct", type:"number", label:"النسبة المئوية", step:"0.1"}],
-            answers:{pct},
-            solutionSteps:[
-              `النسبة المئوية = \\\\(\\frac{${counts[pick]}}{${N}}\\times 100\\\\) = ${pct.toFixed(1)}\\\\%.`
-            ]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q8",
-    title:"تمييز نوع البيانات والتمثيل المناسب",
-    icon:"نوع",
-    gen:(v)=>{
-      const r = seededRand("2.1|q8|"+v);
-      const cases = [
-        {label:"فصيلة الدم", type:"نوعية", graph:"أعمدة"},
-        {label:"عدد الإخوة", type:"كمية متقطعة", graph:"أعمدة"},
-        {label:"زمن الانتظار بالدقائق", type:"كمية مستمرة", graph:"مدرج تكراري"},
-        {label:"تقدير الطالب", type:"نوعية ترتيبية", graph:"أعمدة"}
-      ];
-      const picked = cases[randInt(r, 0, cases.length-1)];
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["ابدأ بسؤال: هل القيمة وصف/فئة أم رقم؟"],
-            prompt:`صنّف المتغير التالي: (${picked.label}).`,
-            parts:[{key:"type", type:"mcq", label:"نوع البيانات", options:["نوعية","كمية متقطعة","كمية مستمرة","نوعية ترتيبية"]}],
-            answers:{type:picked.type},
-            solutionSteps:[`المتغير (${picked.label}) يصنف على أنه ${picked.type}.`]
-          },
-          {
-            level:"متوسط",
-            explain:["البيانات النوعية أو المتقطعة غالباً يناسبها الأعمدة، أما المستمرة بفئات فيناسبها المدرج التكراري."],
-            prompt:`اختر التمثيل الأنسب مبدئياً للمتغير (${picked.label}).`,
-            parts:[{key:"graph", type:"mcq", label:"التمثيل المناسب", options:["أعمدة","مدرج تكراري","مضلع تكراري","ساق وأوراق"]}],
-            answers:{graph:picked.graph},
-            solutionSteps:[`التمثيل الأنسب هنا هو ${picked.graph}.`]
-          },
-          {
-            level:"صعب",
-            explain:["إذا كان المتغير نوعياً فنتعامل معه كفئات، وإذا كان كمياً مستمراً يمكن تجميعه في فئات عددية."],
-            prompt:`هل يصلح المتغير (${picked.label}) لبناء فئات عددية متصلة كما في المدرج التكراري؟`,
-            parts:[{key:"grouped", type:"mcq", label:"الإجابة", options:["نعم","لا"]}],
-            answers:{grouped:picked.type === "كمية مستمرة" ? "نعم" : "لا"},
-            solutionSteps:[picked.type === "كمية مستمرة" ? "لأنه متغير كمي مستمر، يمكن تجميعه في فئات عددية." : "لأنه ليس متغيراً كمياً مستمراً، لا يكون المدرج التكراري هو الاختيار الأول."]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q9",
-    title:"إكمال التكرار المفقود من المجموع",
-    icon:"Σ",
-    gen:(v)=>{
-      const r = seededRand("2.1|q9|"+v);
-      const cats = ["ممتاز","جيد جداً","جيد","مقبول"];
-      const counts = [randInt(r, 8, 16), randInt(r, 10, 18), randInt(r, 6, 14), randInt(r, 4, 10)];
-      const missingIndex = randInt(r, 0, cats.length-1);
-      const N = counts.reduce((sum, item)=>sum+item, 0);
-      const knownSum = counts.reduce((sum, item, index)=>sum + (index === missingIndex ? 0 : item), 0);
-      const missing = counts[missingIndex];
-      const pct = (missing/N)*100;
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["التكرار المفقود = المجموع الكلي - مجموع التكرارات المعطاة."],
-            formula:["\\\\(f_{missing}=N-\\sum f_{known}\\\\)"],
-            prompt:`في جدول تقديرات مجموع تكراراته ${N}. إذا كان مجموع التكرارات المعطاة عدا فئة (${cats[missingIndex]}) يساوي ${knownSum}، احسب تكرار هذه الفئة.`,
-            parts:[{key:"missing", type:"number", label:`تكرار ${cats[missingIndex]}`, step:"1"}],
-            answers:{missing},
-            solutionSteps:[`التكرار المفقود = ${N} - ${knownSum} = ${missing}.`]
-          },
-          {
-            level:"متوسط",
-            explain:["بعد إيجاد التكرار، النسبة المئوية = التكرار ÷ المجموع × 100."],
-            formula:["\\\\(\\\\%=\\frac{f}{N}\\times100\\\\)"],
-            prompt:`احسب النسبة المئوية لفئة (${cats[missingIndex]}) إذا كان تكرارها ${missing} من أصل ${N}.`,
-            parts:[{key:"pct", type:"number", label:"النسبة المئوية", step:"0.1"}],
-            answers:{pct},
-            solutionSteps:[`النسبة = \\\\(\\frac{${missing}}{${N}}\\times100\\\\) = ${pct.toFixed(1)}\\\\%.`]
-          },
-          {
-            level:"صعب",
-            explain:["أكبر فئة هي التي تمتلك أكبر تكرار بعد إكمال الجدول."],
-            prompt:"بعد إكمال الجدول، حدّد الفئة ذات التكرار الأكبر.",
-            customUI:"freqTable",
-            table:{
-              headers:["الفئة","التكرار"],
-              rows: cats.map((cat, index)=>({label:cat, fixed:[String(counts[index])]}))
-            },
-            parts:[{key:"top", type:"mcq", label:"أكبر فئة", options:cats}],
-            answers:{top:cats[counts.indexOf(Math.max(...counts))]},
-            solutionSteps:[`أكبر تكرار هو ${Math.max(...counts)}، إذن أكبر فئة هي ${cats[counts.indexOf(Math.max(...counts))]}.`]
-          }
-        ]
-      };
-    }
-  },
-
-  {
-    id:"q10",
-    title:"تحويل بين التكرار والنسبة",
-    icon:"هدف",
-    gen:(v)=>{
-      const r = seededRand("2.1|q10|"+v);
-      const total = randInt(r, 40, 70);
-      const freq = randInt(r, 8, 22);
-      const rel = freq/total;
-      const pct = rel*100;
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            explain:["إذا خلط الطالب بين التكرار والتكرار النسبي، نعيده إلى العلاقة الأساسية."],
-            formula:["\\\\(r=\\frac{f}{N}\\\\)"],
-            prompt:`طالب كتب التكرار النسبي مباشرة ${freq} مع أن التكرار ${freq} والمجموع ${total}. ما التكرار النسبي الصحيح؟`,
-            parts:[{key:"rel", type:"number", label:"التكرار النسبي الصحيح", step:"0.001"}],
-            answers:{rel},
-            solutionSteps:[`التكرار النسبي الصحيح = \\\\(\\frac{${freq}}{${total}}\\\\) = ${rel.toFixed(3)}.`]
-          },
-          {
-            level:"متوسط",
-            explain:["الفرق بين التكرار النسبي والنسبة المئوية هو الضرب في 100."],
-            formula:["\\\\(\\\\%=r\\times100\\\\)"],
-            prompt:`حوّل التكرار النسبي ${rel.toFixed(3)} إلى نسبة مئوية.`,
-            parts:[{key:"pct", type:"number", label:"النسبة المئوية", step:"0.1"}],
-            answers:{pct},
-            solutionSteps:[`النسبة المئوية = ${rel.toFixed(3)} × 100 = ${pct.toFixed(1)}%.`]
-          },
-          {
-            level:"صعب",
-            explain:["إذا أُعطيت النسبة والمجموع، نرجع للتكرار بضرب النسبة في المجموع."],
-            formula:["\\\\(f=\\frac{\\\\%}{100}\\times N\\\\)"],
-            prompt:`إذا كانت النسبة ${pct.toFixed(1)}% من مجموع ${total}، فكم التكرار التقريبي؟`,
-            parts:[{key:"freq", type:"number", label:"التكرار", step:"1"}],
-            answers:{freq},
-            solutionSteps:[`التكرار = \\\\(\\frac{${pct.toFixed(1)}}{100}\\times ${total}\\\\) ≈ ${freq}.`]
-          }
-        ]
-      };
-    }
-  }
+  {id:"q1_mean_raw",    title:`المتوسط الحسابي`,        icon:"μ", gen: meanRawGen},
+  {id:"q2_mean_freq",   title:`المتوسط من جدول تكراري`, icon:"∑", gen: meanFromFreqTableGen},
+  {id:"q3_mean_group",  title:`المتوسط لبيانات مجمعة`,  icon:"▤", gen: meanGroupedGen},
+  {id:"q4_median_raw",  title:`الوسيط`,                 icon:"◐", gen: medianRawGen},
+  {id:"q6_mode_raw",    title:`المنوال`,                icon:"◉", gen: modeGroupedGen},
+  {id:"q7_choose",      title:`اختيار المقياس الأنسب`,  icon:"★", gen: chooseMeasureGen},
+  {id:"q8_histpoly",    title:`الرسم المدرج/المضلع التكراري`, icon:"▃", gen: histPolygonGen},
+  {id:"misc_mcq",       title:`أسئلة متنوعة`,           icon:"⋯", gen: miscMcqGen}
 ];
-
-function randomToken(){
-  return String(Date.now()) + "_" + Math.floor(Math.random()*1000000);
-}
-function getVariant(qid){
-  if(state.variants[qid]==null){
-    state.variants[qid] = randomToken();
-    saveState();
-  }
-  return state.variants[qid];
-}
-function bumpVariant(qid){
-  state.variants[qid] = randomToken();
-  saveState();
-}
 
 function shuffleInPlace(arr, r){
   for(let i=arr.length-1;i>0;i--){
@@ -3192,21 +3293,13 @@ function shuffleInPlace(arr, r){
 }
 function ensureOrder(){
   const ids = TEMPLATES.map(t=>t.id);
-  const ok = Array.isArray(state.order)
-    && state.order.length === ids.length
-    && ids.every(id=>state.order.includes(id));
+  const ok = Array.isArray(state.order) && state.order.length === ids.length && ids.every(id=>state.order.includes(id));
   if(!ok){
     const r = seededRand("order|"+Date.now()+"|"+Math.random());
     state.order = shuffleInPlace([...ids], r);
     saveState();
   }
   return state.order;
-}
-function reshuffleOrder(){
-  const ids = TEMPLATES.map(t=>t.id);
-  const r = seededRand("order|"+Date.now()+"|"+Math.random());
-  state.order = shuffleInPlace([...ids], r);
-  saveState();
 }
 
 function buildBank(){
@@ -3218,122 +3311,31 @@ function buildBank(){
     return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
   });
 }
-
 let BANK = buildBank();
+if(BANK.length===0){ console.error('BANK is empty'); }
 
-/* ===== قراءة مفاتيح الإجابات لكل فرع ===== */
-function collectPartKeys(branch){
-  const keys=[];
-  (branch.parts||[]).forEach(p=>keys.push(p.key));
-  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
-    branch.table.rows.forEach(r=>(r.inputs||[]).forEach(k=>keys.push(k)));
-  }
-  return keys;
-}
 
-/* ===== تقييم فرع ===== */
-function gradeBranch(q, branch, bi, savedObj){
-  const result = { okAll: true, byKey: {} };
-
-  // parts
-  (branch.parts||[]).forEach(p=>{
-    const studentRaw = (savedObj && savedObj[p.key] != null) ? savedObj[p.key] : "";
-    const correct = branch.answers[p.key];
-    let ok=false;
-    if(p.type==="mcq"){
-      ok = normalizeText(studentRaw) === normalizeText(correct);
-    }else if(p.type==="text"){
-      if(p.orderInsensitive) ok = sameNumberList(studentRaw, correct);
-      else ok = normalizeText(studentRaw) === normalizeText(correct);
-    }else{
-      ok = nearlyEqual(parseNumberLoose(studentRaw), Number(correct), 1e-2);
-    }
-    result.byKey[p.key]=ok;
-    if(!ok) result.okAll=false;
-  });
-
-  // freq table
-  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
-    branch.table.rows.forEach(r=>{
-      (r.inputs||[]).forEach(k=>{
-        const studentRaw = (savedObj && savedObj[k] != null) ? savedObj[k] : "";
-        const correct = branch.answers[k];
-        const ok = nearlyEqual(parseNumberLoose(studentRaw), Number(correct), 1e-2);
-        result.byKey[k]=ok;
-        if(!ok) result.okAll=false;
-      });
-    });
-  }
-
-  return result;
-}
-
-/* ===== حالة الإنجاز ===== */
-function isBranchComplete(qid, bi){
-  const rec = ensureBranchRec(qid, bi);
-  return rec.status==="correct" || rec.status==="locked" || !window.__examRunning;
-}
-function isQuestionComplete(q){
-  return q.branches.every((b,bi)=>isBranchComplete(q.id, bi));
-}
-function isQuestionCorrect(q){
-  return q.branches.every((b,bi)=>ensureBranchRec(q.id,bi).status==="correct");
-}
-function isQuestionWrong(q){
-  return q.branches.some((b,bi)=>ensureBranchRec(q.id,bi).status==="locked");
-}
-
-function setProgress(){
-  const completed = BANK.filter(q=>isQuestionComplete(q)).length;
-  const visibleCompleted = window.__examRunning ? completed : 0;
-    const qCountEl = document.getElementById("qCount");
-  const qNoEl = document.getElementById("qNo");
-  if(qCountEl) qCountEl.textContent = BANK.length;
-  if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
-  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
-  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
-
-  const pill = document.getElementById("statusPill");
-  const q = BANK[state.currentIndex];
-  if(isQuestionComplete(q)){
-    if(isQuestionCorrect(q)){
-      pill.textContent="مكتمل";
-      pill.className="pill";
-    }else{
-      pill.textContent="مكتمل (إجابة غير صحيحة)";
-      pill.className="pill warn";
-    }
-  }else{
-    pill.textContent="غير مكتمل";
-    pill.className="pill warn";
-  }
-
-  const showBtn = document.getElementById("showResultsBtn");
-  const nextBtnSide = document.getElementById("nextBtnSide");
-  showBtn.disabled = (completed !== BANK.length) || !window.__examRunning;
-  if(nextBtnSide) nextBtnSide.disabled = !window.__examRunning;
-
-  return {completed, doneAll: (completed === BANK.length)};
-}
-
+function markDirty(qid){ state.dirty[qid]=true; saveState(); renderSidebar(); }
 function renderSidebar(){
   const list=document.getElementById("qList");
   list.innerHTML="";
-  state.dirty = state.dirty || {};
   const filter = state.sidebarFilter || "all";
   const toShow = BANK.map((q,i)=>({q,i})).filter(({q,i})=>{
-    if(filter==="incomplete") return !isQuestionComplete(q);
+    if(filter==="incomplete") return !isQuestionDone(q);
     return true;
   });
   toShow.forEach(({q,i})=>{
-    const complete = isQuestionComplete(q);
-    const correct = complete && isQuestionCorrect(q);
-    const dotClass = !complete ? "" : (correct ? "done" : "bad");
-    const badge = !complete
-      ? el("span",{class:"badge warn"},["غير مكتمل"])
-      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"مكتمل":"مكتمل (خطأ)"]);
+    const st = getQuestionStatus(q);
+    let dotClass = "";
+    if(st==="completed_correct") dotClass = "done";
+    else if(st==="completed_wrong") dotClass = "bad";
+    else if(st==="in_progress") dotClass = "progress";
+    let badge;
+    if(st==="completed_correct") badge = el("span",{class:"badge good"},["مكتمل"]);
+    else if(st==="completed_wrong") badge = el("span",{class:"badge bad"},["مكتمل"]);
+    else badge = el("span",{class:"badge warn"},["غير مكتمل"]);
     const unsaved = state.dirty[q.id];
-    const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
+    const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{state.currentIndex=i;saveState();renderAll();}},[
       el("div",{class:"left"},[
         unsaved ? el("div",{class:"unsaved-dot", title:"إجابة غير محفوظة"},[]) : null,
         el("div",{class:"dot "+dotClass}),
@@ -3350,401 +3352,43 @@ function renderSidebar(){
     const btn=document.getElementById(id);
     if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
   });
+  typesetMath(list);
 }
 
-/* ===== واجهات مخصصة ===== */
-function renderFreqTable(q, branch, bi){
-  const rec = ensureBranchRec(q.id, bi);
-  const t = branch.table;
-  const table = el("table",{class:"ftable" + ((t.headers || []).length >= 4 ? " wide" : "")},[]);
-  const thead = el("thead",{},[]);
-  thead.appendChild(el("tr",{}, t.headers.map(h=>el("th",{},[h]))));
-  table.appendChild(thead);
+function setProgress(){
+  let completed=0;
+  BANK.forEach(q=>{ if(isQuestionDone(q)) completed++; });
 
-  const tbody = el("tbody",{},[]);
-  t.rows.forEach((row)=>{
-    const tr = el("tr",{},[]);
-    tr.appendChild(el("td",{},[row.label]));
-    if(row.fixed){
-      row.fixed.forEach(val=> tr.appendChild(el("td",{},[val])));
-    }else if(row.inputs){
-      row.inputs.forEach((k)=>{
-        const savedVal = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "";
-        const inp = el("input",{class:"cellInput", type:"text", value: savedVal},[]);
-        inp.setAttribute("data-qid", q.id);
-        inp.setAttribute("data-bi", String(bi));
-        inp.setAttribute("data-key", k);
-        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
-        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
+    const qCountEl = document.getElementById("qCount");
+  const qNoEl = document.getElementById("qNo");
+  if(qCountEl) qCountEl.textContent = BANK.length;
+  if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
+  const visibleCompleted = window.__examRunning ? completed : 0;
+  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
+  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
 
-        tr.appendChild(el("td",{},[inp]));
-      });
-    }
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody);
-  return el("div",{class:"tableScroll"},[table]);
+  const pill = document.getElementById("statusPill");
+  const doneAll = (completed===BANK.length);
+  pill.textContent = doneAll ? "مكتمل" : "غير مكتمل";
+  pill.className = "pill" + (doneAll ? "" : " warn");
+
+  const showBtn = document.getElementById("showResultsBtn");
+  const nextBtnSide = document.getElementById("nextBtnSide");
+  showBtn.disabled = !doneAll || !window.__examRunning;
+  if(nextBtnSide) nextBtnSide.disabled = !window.__examRunning;
+  return {completed, doneAll};
 }
 
-function piePaths(counts, cx, cy, r){
-  const total = counts.reduce((a,b)=>a+b,0);
-  let a0 = -Math.PI/2;
-  const paths = [];
-  for(let i=0;i<counts.length;i++){
-    const frac = counts[i]/total;
-    const a1 = a0 + frac*2*Math.PI;
-    const x0 = cx + r*Math.cos(a0), y0 = cy + r*Math.sin(a0);
-    const x1 = cx + r*Math.cos(a1), y1 = cy + r*Math.sin(a1);
-    const large = (a1-a0) > Math.PI ? 1 : 0;
-    const d = `M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} Z`;
-    paths.push({d, frac, a0, a1});
-    a0 = a1;
-  }
-  return paths;
-}
-
-function renderChartsInteractive(branch){
-  const {cats, counts, N} = branch.chartData;
-  const max = Math.max(...counts);
-
-  const outer = el("div",{class:"charts"},[]);
-  const tip = el("div",{class:"chartTip"},[]);
-  tip.style.display="none";
-  document.body.appendChild(tip);
-
-  function showTip(x,y,html){
-    tip.innerHTML = html;
-    tip.style.left = (x+12)+"px";
-    tip.style.top  = (y+12)+"px";
-    tip.style.display="block";
-  }
-  function hideTip(){ tip.style.display="none"; }
-
-  // Bar chart (SVG)
-  const w=520, h=260, pad=34, bw=56, gap=22, x0=24, baseY=h-54;
-  const barSvg = el("svg",{viewBox:`0 0 ${w} ${h}`, class:"svgInteractive", "aria-label":"الرسم بالأعمدة"},[]);
-  barSvg.appendChild(el("rect",{x:"0",y:"0",width:String(w),height:String(h),rx:"14",fill:"#ffffff"}));
-  barSvg.appendChild(el("line",{x1:String(pad),y1:String(baseY),x2:String(w-pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
-  barSvg.appendChild(el("line",{x1:String(pad),y1:String(pad),x2:String(pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
-
-  const barGroup = el("g",{},[]);
-  counts.forEach((c,i)=>{
-    const bh = (c/max) * (baseY - pad);
-    const x = x0 + i*(bw+gap);
-    const y = baseY - bh;
-
-    const rect = el("rect",{x:String(x),y:String(y),width:String(bw),height:String(bh),rx:"10",ry:"10",
-      fill:"rgba(10,94,168,.22)", stroke:"rgba(10,94,168,.45)", "stroke-width":"1.5", class:"barSeg", "data-i":String(i)},[]);
-    rect.addEventListener("mousemove",(ev)=>{
-      const pct = (c/N)*100;
-      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">التكرار: ${c}</div><div>النسبة: ${pct.toFixed(1)}%</div>`);
-    });
-    rect.addEventListener("mouseleave", hideTip);
-    rect.addEventListener("click", ()=>{
-      barSvg.querySelectorAll(".barSeg").forEach(n=>n.classList.remove("selected"));
-      rect.classList.add("selected");
-      info.innerHTML = `<div><b>الفئة:</b> ${escapeHtml(cats[i])}</div>
-                        <div><b>التكرار:</b> ${c}</div>
-                        <div><b>التكرار النسبي:</b> ${(c/N).toFixed(3)}</div>
-                        <div><b>النسبة المئوية:</b> ${((c/N)*100).toFixed(1)}%</div>
-                        <div><b>زاوية القطاع:</b> ${Math.round((c/N)*360)}°</div>`;
-    });
-    barGroup.appendChild(rect);
-
-    barGroup.appendChild(el("text",{x:String(x+bw/2),y:String(y-8),"text-anchor":"middle","font-size":"12","font-weight":"900",fill:"#0f2a3b"},[String(c)]));
-    barGroup.appendChild(el("text",{x:String(x+bw/2),y:String(baseY+18),"text-anchor":"middle","font-size":"10","font-weight":"800",fill:"#2a4c66"},[cats[i]]));
-  });
-  barSvg.appendChild(barGroup);
-
-  const barBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["الرسم بالأعمدة"]),
-    el("div",{class:"svgWrap"},[barSvg]),
-    el("div",{class:"chartNote"},[`N = ${N} — مرّر المؤشر فوق العمود أو اضغط لتثبيت التفاصيل.`])
-  ]);
-
-  // Pie chart (SVG)
-  const pcw=320, pch=260, cx=150, cy=130, pr=92;
-  const pieSvg = el("svg",{viewBox:`0 0 ${pcw} ${pch}`, class:"svgInteractive", "aria-label":"القطاعات الدائرية"},[]);
-  pieSvg.appendChild(el("rect",{x:"0",y:"0",width:String(pcw),height:String(pch),rx:"14",fill:"#ffffff"}));
-
-  const pie = piePaths(counts, cx, cy, pr);
-  pie.forEach((seg,i)=>{
-    const c = counts[i];
-    const path = el("path",{d:seg.d, fill:`rgba(30,167,255,${0.12+0.08*i})`, stroke:"rgba(10,94,168,.25)", "stroke-width":"1.5", class:"pieSeg", "data-i":String(i)},[]);
-    path.addEventListener("mousemove",(ev)=>{
-      const angle = (c/N)*360;
-      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">التكرار: ${c}</div><div>الزاوية: ${angle.toFixed(1)}°</div>`);
-    });
-    path.addEventListener("mouseleave", hideTip);
-    path.addEventListener("click", ()=>{
-      pieSvg.querySelectorAll(".pieSeg").forEach(n=>n.classList.remove("selected"));
-      path.classList.add("selected");
-      info.innerHTML = `<div><b>الفئة:</b> ${escapeHtml(cats[i])}</div>
-                        <div><b>التكرار:</b> ${c}</div>
-                        <div><b>التكرار النسبي:</b> ${(c/N).toFixed(3)}</div>
-                        <div><b>النسبة المئوية:</b> ${((c/N)*100).toFixed(1)}%</div>
-                        <div><b>زاوية القطاع:</b> ${Math.round((c/N)*360)}°</div>`;
-    });
-    pieSvg.appendChild(path);
-  });
-  pieSvg.appendChild(el("circle",{cx:String(cx),cy:String(cy),r:String(pr),fill:"none",stroke:"#dbe7f2","stroke-width":"2"}));
-
-  const pieBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["القطاعات الدائرية"]),
-    el("div",{class:"svgWrap"},[pieSvg]),
-    el("div",{class:"chartNote"},[`اضغط على القطاع لإظهار تفاصيله.`])
-  ]);
-
-  const info = el("div",{class:"chartInfo", html:`<div style="font-weight:900;color:#0f2a3b;margin-bottom:6px">تفاصيل العنصر المحدد</div><div style="color:#5b6b7a;font-weight:800">اضغط على عمود/قطاع.</div>`});
-  const infoBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["لوحة التفاصيل"]),
-    info
-  ]);
-
-  outer.appendChild(barBox);
-  outer.appendChild(pieBox);
-  outer.appendChild(infoBox);
-
-  // clean tooltip on destroy via navigation
-  outer._disposeTip = ()=>{ try{ tip.remove(); }catch(e){} };
-
-  return outer;
-}
-
-function renderStemLeaf(branch){
-  return el("div",{class:"stemleaf"},[
-    ...(branch.stemleaf||[]).map(r=> el("div",{class:"slRow"},[
-      el("div",{class:"stem"},[String(r.stem)]),
-      el("div",{class:"sep"},["|"]),
-      el("div",{class:"leaves"},[(r.leaves||[]).join("  ")])
-    ]))
-  ]);
-}
-
-/* ===== قراءة المدخلات من DOM بدون حفظ ===== */
-function readBranchInputs(qid, bi, branch){
-  const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
-  const saved = {};
-  const keys = collectPartKeys(branch);
-
-  let ok=true;
-  keys.forEach(k=>{
-    const node = container ? container.querySelector(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${k}"]`) : null;
-    let val = "";
-    if(node){
-      if(node.type==="radio"){
-        const checked = container.querySelector(`input[type="radio"][data-qid="${qid}"][data-bi="${bi}"][data-key="${k}"]:checked`);
-        val = checked ? checked.value : "";
-      }else{
-        val = node.value ?? "";
-      }
-    }
-    saved[k] = val;
-    if(String(val).trim()==="") ok=false;
-  });
-
-  return {saved, okFilled: ok};
-}
-
-function applyFieldFeedback(qid, bi, grade){
-  const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
-  if(!container) return;
-
-  const q = BANK.find(x=>x.id===qid);
-  const branch = (q && q.branches) ? q.branches[bi] : null;
-  const rec = ensureBranchRec(qid, bi);
-  const saved = rec.saved || {};
-  const status = rec.status;
-
-  Object.entries(grade.byKey||{}).forEach(([k,ok])=>{
-    const nodes = container.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${k}"]`);
-    nodes.forEach(n=>{
-      if(n.type==="radio"){
-        const wrap = n.closest(".choice");
-        if(!wrap) return;
-
-        // reset
-        wrap.classList.remove("badField","goodField","revealCorrect");
-
-        const sel = normalizeText(saved[k] != null ? saved[k] : "");
-        const val = normalizeText(n.value != null ? n.value : "");
-        const corr = (branch && branch.answers) ? normalizeText(branch.answers[k] != null ? branch.answers[k] : "") : "";
-
-        // highlight only the selected option
-        if(sel && val===sel){
-          wrap.classList.add(ok ? "goodField" : "badField");
-        }
-
-        // on second wrong (locked): reveal the correct option only
-        if(status==="locked" && corr && val===corr){
-          wrap.classList.add("goodField","revealCorrect");
-        }
-      }else{
-        const hasVal = (saved[k] != null && String(saved[k]).trim() !== "");
-        n.classList.remove("badField","goodField");
-        if(hasVal){
-          n.classList.add(ok ? "goodField" : "badField");
-        }
-      }
-    });
-  });
-}
-
-function disableBranchInputs(qid, bi){
-  const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
-  if(!container) return;
-  container.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key]`).forEach(n=>{
-    if(n.type==="radio") n.disabled = true;
-    else n.disabled = true;
-  });
-  const saveBtn = container.querySelector(`[data-save-btn="${qid}::${bi}"]`);
-  if(saveBtn) saveBtn.disabled = true;
-}
-
-/* ===== المساعدة والإجابة الصحيحة ===== */
-function openHelp(q, branch){
-  const explainHtml = (branch.explain && branch.explain.length)
-    ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المطلوب قبل التعويض.</div>";
-  const formulaHtml = (branch.formula && branch.formula.length)
-    ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
-
-  openModal("مساعدة", `
-    <div class="ai-help-panel">
-      <div class="ai-help-hero">
-        <div class="ai-help-orb"><span></span></div>
-        <div class="ai-help-copy">
-          <div class="ai-help-kicker">HELP</div>
-          <div class="ai-help-title">${escapeHtml(q.title)} <span style="font-size:13px;color:rgba(255,255,255,.7)">(${escapeHtml(branch.level)})</span></div>        </div>
-      </div>
-      <div class="ai-help-grid">
-        <div class="ai-help-section">
-          <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">✦</span>
-            <span>كيف تفكر في السؤال؟</span>
-          </div>
-          <div class="ai-help-body">${explainHtml}</div>
-        </div>
-        <div class="ai-help-section">
-          <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">∑</span>
-            <span>ما القانون أو المسار؟</span>
-          </div>
-          <div class="ai-help-body">${formulaHtml}</div>
-        </div>
-      </div>
-    </div>
-  `);
-}
-
-function openCorrectAnswer(q, branch, bi){
-  const steps = (branch.solutionSteps && branch.solutionSteps.length)
-    ? `<div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>
-       <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
-    : "";
-
-  // List correct values for parts
-  const correctList = [];
-  (branch.parts||[]).forEach(p=>{
-    const val = (p.type==="mcq") ? branch.answers[p.key] : formatNumber(branch.answers[p.key]);
-    correctList.push(`<li><b>${escapeHtml(p.label)}:</b> ${escapeHtml(String(val))}</li>`);
-  });
-  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
-    branch.table.rows.forEach(r=>{
-      (r.inputs||[]).forEach(k=>{
-        correctList.push(`<li><b>قيمة</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
-      });
-    });
-  }
-  const correctHtml = correctList.length
-    ? `<div style="font-weight:900;margin:12px 0 6px">الإجابة الصحيحة</div>
-       <ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
-    : "";
-
-  openModal("الإجابة الصحيحة", `
-    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} — (${escapeHtml(branch.level)})</div>
-    ${steps}
-    ${correctHtml}
-    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">تم إظهار الإجابة الصحيحة. لتجنّب حفظ الحل، يمكنك توليد نسخة جديدة.</div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button><button class="btn small" onclick="closeModal()">لاحقًا</button></div>
-  `);
-  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
-  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
-}
-
-function promptOpenCorrectAnswer(q, branch, bi){
-  openModal("انتهت المحاولات", `
-    <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
-    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
-    <button class="btn primary" id="showAnswerAfterAttemptsBtn">إظهار الإجابة</button>
-  `);
-  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
-  if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
-}
-
-function markDirty(qid){ state.dirty = state.dirty || {}; state.dirty[qid]=true; saveState(); renderSidebar(); }
-
-/* ===== حفظ الإجابة (المنطق المتفق عليه) ===== */
-function handleSaveBranch(q, branch, bi){
-  const rec = ensureBranchRec(q.id, bi);
-
-  // إذا كان مغلق/صحيح فلا حفظ
-  if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
-
-  const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
-  if(!okFilled){
-    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الخانات المطلوبة ثم اضغط (حفظ الإجابة).</div>`);
-    return;
-  }
-
-  // سجل المحاولة والحفظ
-  rec.attempts = (rec.attempts || 0) + 1;
-  rec.saved = saved;
-  delete state.dirty[q.id];
-  saveState();
-
-  const grade = gradeBranch(q, branch, bi, rec.saved);
-  if(grade.okAll){
-    rec.status = "correct";
-    saveState();
-  applyFieldFeedback(q.id, bi, grade);
-    disableBranchInputs(q.id, bi);
-    setProgress(); renderSidebar();
-    return;
-  }
-
-  // خطأ
-  if(rec.attempts === 1){
-    rec.status = "wrong1";
-    saveState();
-  applyFieldFeedback(q.id, bi, grade);
-    setProgress(); renderSidebar();
-    // افتح المساعدة تلقائياً (بدون طريقة الحل)
-    openHelp(q, branch);
-    return;
-  }
-
-  // المحاولة الثانية: إظهار الإجابة الصحيحة وإغلاق التعديل
-  rec.status = "locked";
-  saveState();
-  applyFieldFeedback(q.id, bi, grade);
-  disableBranchInputs(q.id, bi);
-  setProgress(); renderSidebar();
-  promptOpenCorrectAnswer(q, branch, bi);
-}
-
-/* ===== عرض الصفحة الرئيسية ===== */
 function renderMain(){
   BANK = buildBank();
-  const i = state.currentIndex;
-  const q = BANK[i];
-  const wrap = document.getElementById("mainContent");
-  wrap.innerHTML = "";
+  const i=state.currentIndex;
+  const q=BANK[i];
+  const wrap=document.getElementById("mainContent");
+  wrap.innerHTML="";
 
   const p = setProgress();
 
-  const titleRow = el("div",{class:"qtitleRow"},[
+  const titleRow=el("div",{class:"qtitleRow"},[
     el("div",{class:"qtitle"},[
       el("div",{class:"qnum"},[String(i+1)]),
       el("div",{},[q.title])
@@ -3757,119 +3401,295 @@ function renderMain(){
     ])
   ]);
 
-  const branches = el("div",{class:"branches"},[]);
-  q.branches.forEach((branch, bi)=>{
-    const tagClass=(branch.level==="سهل")?"easy":(branch.level==="متوسط"?"med":"hard");
-    const rec = ensureBranchRec(q.id, bi);
-
-    const branchCard = el("div",{class:"branch"},[]);
-    const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
-      ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},
-        [rec.status==="correct" ? "صحيح" : "خطأ"])
-      : null;
-
-    const head = el("div",{class:"branchHead"},[
-      el("span",{class:`btag ${tagClass}`},[branch.level]),
-      statusTag
+  const branches=el("div",{class:"branches"},[]);
+  q.branches.forEach((b,bi)=>{
+    const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
+    let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
+    if(lvl.trim().toLowerCase()==="undefined") lvl="";
+    const tagClass=(lvl==="سهل")?"easy":(lvl==="متوسط"?"med":(lvl==="صعب"?"hard":""));
+    const branchCard=el("div",{class:"branch"},[]);
+    const head=el("div",{class:"branchHead"},[
+      ...(lvl ? [el("span",{class:`btag ${tagClass||"easy"}`},[lvl])] : [])
     ]);
-const body = el("div",{class:"branchBody"},[]);
-    body.innerHTML = latexFix(branch.prompt).replace(/\n/g,"<br/>");
-    typesetMath(body);
-
-    if(branch.customUI==="stemleaf"){ body.appendChild(renderStemLeaf(branch)); }
-    if(branch.customUI==="freqTable"){ body.appendChild(renderFreqTable(q, branch, bi)); }
-    if(branch.customUI==="charts"){
-      const ch = renderChartsInteractive(branch);
-      body.appendChild(ch);
+    const body=el("div",{class:"branchBody"},[]);
+    if(b.promptHtml){
+      body.innerHTML = b.promptHtml;
+    }else{
+      body.innerHTML = escapeHtml(b.prompt).replace(/\n/g,"<br/>");
     }
 
-    const parts = el("div",{class:"parts"},[]);
-    (branch.parts||[]).forEach(p=>{
-      const row = el("div",{class:"part"},[]);
-      const label = el("div",{class:"label"},[p.label]);
-      const inputWrap = el("div",{class:"inputWrap"},[]);
-      const savedVal = (rec.saved && rec.saved[p.key]!=null) ? rec.saved[p.key] : "";
+    const parts=el("div",{class:"parts"},[]);
+    (b.parts||[]).forEach(pp=>{
+      if(pp.inline) return;
+      const row=el("div",{class:"part"},[]);
+      const label=pp.labelHtml ? el("div",{class:"label", html: pp.labelHtml},[]) : el("div",{class:"label"},[pp.label]);
+      const inputWrap=el("div",{class:"inputWrap"},[]);
+      const stored = (state.answers[q.id] && state.answers[q.id][bi]) ? state.answers[q.id][bi][pp.key] : "";
 
-      if(p.type==="mcq"){
-        const group = el("div",{class:"mcqGroup"},[]);
-        (p.options||[]).forEach((op,idx)=>{
-          const id = `${q.id}_${bi}_${p.key}_${idx}`;
-          const radio = el("input",{type:"radio", id, name:`${q.id}_${bi}_${p.key}`, value:op},[]);
-          radio.setAttribute("data-qid", q.id);
-          radio.setAttribute("data-bi", String(bi));
-          radio.setAttribute("data-key", p.key);
-          if(String(savedVal)===String(op)) radio.checked = true;
-          radio.onchange = ()=>{ markDirty(q.id); };
-          if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
-
-          const lab = el("label",{class:"choice", for:id},[
-            radio,
-            el("span",{},[op])
-          ]);
-          group.appendChild(lab);
-        });
-        inputWrap.appendChild(group);
-      }else if(p.type==="text"){
-        const ta = el("textarea",{placeholder:p.placeholder||""},[]);
-        ta.setAttribute("data-qid", q.id);
-        ta.setAttribute("data-bi", String(bi));
-        ta.setAttribute("data-key", p.key);
-        ta.value = savedVal;
-        ta.oninput = ()=>{ ta.classList.remove("badField","goodField"); markDirty(q.id); };
-        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) ta.disabled = true;
-        inputWrap.appendChild(ta);
+      let input;
+      if(pp.type==="mcq"){
+        input=el("select",{},[
+          el("option",{value:""},["اختر..."]),
+          ...(pp.options||[]).map(op=>el("option",{value:op},[op]))
+        ]);
+        input.setAttribute("data-qid", q.id);
+        input.setAttribute("data-bi", String(bi));
+        input.setAttribute("data-key", pp.key);
+        input.value = stored ?? "";
+        input.onchange=()=>{ markDirty(q.id); };
+      }else if(pp.type==="text"){
+        input=el("textarea",{placeholder:pp.placeholder||""},[]);
+        input.setAttribute("data-qid", q.id);
+        input.setAttribute("data-bi", String(bi));
+        input.setAttribute("data-key", pp.key);
+        input.value = stored ?? "";
+        input.oninput=()=>{ markDirty(q.id); };
       }else{
-        const inp = el("input",{type:"text", inputmode:"decimal", placeholder:p.placeholder||""},[]);
-        inp.setAttribute("data-qid", q.id);
-        inp.setAttribute("data-bi", String(bi));
-        inp.setAttribute("data-key", p.key);
-        inp.value = savedVal;
-        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
-        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
-        inputWrap.appendChild(inp);
+        input=el("input",{type:"number", step:pp.step||"1", placeholder:pp.placeholder||""},[]);
+        input.setAttribute("data-qid", q.id);
+        input.setAttribute("data-bi", String(bi));
+        input.setAttribute("data-key", pp.key);
+        input.value = stored ?? "";
+        input.oninput=()=>{ markDirty(q.id); };
       }
 
+      inputWrap.appendChild(input);
+      // مسح التلوين عند التعديل (التقييم يتم عند الضغط على زر "حفظ الإجابة")
+      input.addEventListener("input", ()=>_clearMarks(input));
+      input.addEventListener("change", ()=>_clearMarks(input));
+
+      // قفل الحقول بعد الحفظ النهائي (صحيح أو بعد إظهار الإجابة الصحيحة)
+      if(_isBranchLocked(q.id, bi)){
+        input.disabled = true;
+      }
+
+      // إرشاد التقريب للقيم النسبية/المئوية
+      const lbl = (pp.label||"");
+      if(pp.type==="number" && (lbl.includes("نسبي") || lbl.includes("مئوية"))){
+        const txt = lbl.includes("مئوية") ? "قرّب إلى منزلتين عشريتين (بدون علامة %)." : "قرّب إلى منزلتين عشريتين.";
+        inputWrap.appendChild(el("div",{class:"hint"},[txt]));
+      }
       row.appendChild(label);
       row.appendChild(inputWrap);
       parts.appendChild(row);
     });
 
-    const btns = el("div",{class:"branchBtns"},[
-      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["حفظ الإجابة"]),
-      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"مساعد ذكاء اصطناعي"},[
+    const locked = _isBranchLocked(q.id, bi);
+    const saveBtn = el("button",{class:"btn primary small"},[locked?"محفوظ":"حفظ الإجابة"]);
+    saveBtn.disabled = locked;
+    saveBtn.onclick = ()=>saveBranchAnswer(q, b, bi, branchCard, saveBtn);
+
+    const btns=el("div",{class:"branchBtns"},[
+      saveBtn,
+      el("button",{class:"btn small ai-help-btn", onclick:()=>showHelp(q, b), title:"مساعد ذكاء اصطناعي"},[
         el("span",{class:"ai-help-glyph","aria-hidden":"true"},["✦"]),
         "مساعدة"
       ])
     ]);
-    if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
-      const sb = btns.querySelector(`[data-save-btn="${q.id}::${bi}"]`);
-      if(sb) sb.disabled = true;
-    }
 
-    const container = el("div",{"data-branch-container":`${q.id}::${bi}`},[]);
-    container.appendChild(head);
-    container.appendChild(body);
-    if((branch.parts||[]).length>0){ typesetMath(parts); container.appendChild(parts);}
-    container.appendChild(btns);
-
-    branchCard.appendChild(container);
+    branchCard.appendChild(head);
+    branchCard.appendChild(body);
+    if((b.parts||[]).length>0) branchCard.appendChild(parts);
+    branchCard.appendChild(btns);
+    bindInlineInputs(branchCard, q.id, bi);
     branches.appendChild(branchCard);
-
-    // Apply feedback if already saved
-    if(rec.saved && (rec.status==="wrong1")){
-      const grade = gradeBranch(q, branch, bi, rec.saved);
-    }
   });
 
   wrap.appendChild(titleRow);
   wrap.appendChild(branches);
   typesetMath(wrap);
+
 }
 
-/* ===== تبديل السؤال ===== */
+function showExplain(q, b){
+  const lvl = (b.level || b.difficulty || b.name || "").toString();
+  const list = (Array.isArray(b.explain) ? b.explain : []).map(s=>`<li>${escapeHtml(s)}</li>`).join("");
+  const html = `
+    <div style="font-weight:900;margin-bottom:8px">${escapeHtml(q.title)} — (${escapeHtml(lvl)})</div>
+    ${list ? `<ul style="margin:0;padding-right:18px">${list}</ul>` : ``}
+  `;
+  openModal("شرح السؤال", html);
+}
+
+function showMethod(q, b){
+  const items = (b.method||["اتبع الخطوات المناسبة للحل."]).map(s=>`<li><div class="methodLine">${s}</div></li>`).join("");
+  const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
+  let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
+  if(lvl.trim().toLowerCase()==="undefined") lvl="";
+  const head = lvl ? `${escapeHtml(q.title)} — <span class="badge small">${escapeHtml(lvl)}</span>` : `${escapeHtml(q.title)}`;
+  const html = `
+    <div class="methodHead">${head}</div>
+    <ul class="methodList">${items}</ul>
+  `;
+  openModal("طريقة الحل", html);
+}
+
+function showHelp(q, b){
+  /* prefer the non-revealing AI help panel */
+  if(typeof window.__openUnifiedAiHelp === "function") return window.__openUnifiedAiHelp(q, b);
+  const title = escapeHtml(q.title||"");
+  const levelRaw = (b.level ?? b.difficulty ?? b.name ?? "");
+  let level = (levelRaw===undefined||levelRaw===null) ? "" : String(levelRaw);
+  if(level.trim().toLowerCase()==="undefined") level="";
+  const explainHtml = (b.explain && b.explain.length)
+    ? `<ul style="margin:0;padding-right:18px;line-height:2">${b.explain.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المقياس المطلوب قبل أي تعويض.</div>";
+  const lawList = (b.formula && b.formula.length) ? b.formula : [];
+  const lawHtml = lawList.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:2">${lawList.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>استخدم القانون العام المناسب لنوع السؤال ثم عوّض القيم من المعطيات.</div>";
+  openModal("مساعدة", `
+    <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">
+      ${title}${level?` <span style="font-size:13px;color:var(--muted)">— (${escapeHtml(level)})</span>`:""}
+    </div>
+    <div style="background:var(--brand-light);border:1px solid rgba(3,105,161,.22);border-radius:14px;padding:14px 16px;margin-bottom:10px;">
+      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">الفكرة</div>
+      ${explainHtml}
+    </div>
+    <div style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px 16px;">
+      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">القانون</div>
+      ${lawHtml}
+    </div>
+    <div style="margin-top:10px;color:var(--muted);font-weight:700">لن يتم عرض الجواب النهائي.</div>
+  `);
+}
+
+function _checkPart(part, studentRaw, correct){
+  const raw = (studentRaw ?? "").toString().trim();
+  if(raw==="") return {ok:false, empty:true};
+  if(part.type==="mcq" || part.type==="text"){
+    return {ok: normalizeText(raw) === normalizeText(correct), empty:false};
+  }
+  return {ok: nearlyEqual(Number(raw), Number(correct), 1e-2), empty:false};
+}
+
+function _lockBranchInputs(branchCard, qid, bi){
+  const nodes = branchCard.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key]`);
+  nodes.forEach(n=>{ n.disabled = true; });
+}
+
+function _showCorrectModal(q, b, wrongItems){
+  const title = escapeHtml(q.title||"");
+  const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
+  let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
+  if(lvl.trim().toLowerCase()==="undefined") lvl="";
+
+  const methodItems = (b.method && b.method.length)
+    ? `<div style="margin:10px 0 6px;font-weight:900">طريقة الحل</div>
+       <ul style="margin:0;padding-right:18px">${b.method.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : "";
+
+  const list = wrongItems.map(it=>{
+    const label = it.labelHtml ? it.labelHtml : escapeHtml(it.label||it.key);
+    const val = (typeof it.correct === "number") ? formatNumber(it.correct) : escapeHtml(it.correct);
+    return `<li style="margin:8px 0"><div style="font-weight:900">${label}</div><div style="margin-top:4px;color:#0b2b4c;font-weight:900">${val}</div></li>`;
+  }).join("");
+
+  const html = `
+    <div style="font-weight:900;margin-bottom:6px">${title}${lvl?` — (${escapeHtml(lvl)})`:""}</div>
+    ${methodItems}
+    <div style="margin:10px 0 6px;font-weight:900">الإجابة الصحيحة</div>
+    <ul style="margin:0;padding-right:18px">${list}</ul>
+    <div style="margin-top:10px;color:#5b6b7a;font-weight:800">تم إظهار الإجابة الصحيحة. لتجنّب الحفظ المباشر للحل، سيتم توليد نسخة جديدة من السؤال.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button>
+      <button class="btn small" onclick="closeModal()">لاحقًا</button>
+    </div>
+  `;
+  openModal("الإجابة الصحيحة", html);
+  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
+  if(regenBtn){
+    regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
+  }
+}
+
+function _promptShowCorrectModal(q, b, wrongItems){
+  openModal("انتهت المحاولات", `
+    <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">إظهار الإجابة</button>
+  `);
+  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
+  if(btn) btn.onclick = ()=>_showCorrectModal(q, b, wrongItems);
+}
+
+function saveBranchAnswer(q, b, bi, branchCard, saveBtn){
+  const qid = q.id;
+  if(_isBranchLocked(qid, bi)) return;
+
+  const parts = (b.parts||[]);
+  const results = [];
+  let hasEmpty = false;
+
+  parts.forEach(p=>{
+    const key = p.key;
+    const inp = branchCard.querySelector(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${key}"]`);
+    if(!inp) return;
+    const student = (inp.value ?? "").toString();
+    const correct = b.answers ? b.answers[key] : undefined;
+    const chk = _checkPart(p, student, correct);
+    if(chk.empty) hasEmpty = true;
+    results.push({key, part:p, inp, correct, ...chk});
+  });
+
+  if(hasEmpty){
+    openModal("تنبيه", `<div style="font-weight:900">أكمل إدخال الإجابة ثم اضغط زر حفظ الإجابة.</div>`);
+    return;
+  }
+
+  // تخزين الإجابة عند الضغط على زر الحفظ فقط (الانتقال لا يسبب تخزينًا)
+  if(!state.answers[qid]) state.answers[qid] = {};
+  if(!state.answers[qid][bi]) state.answers[qid][bi] = {};
+  results.forEach(r=>{
+    state.answers[qid][bi][r.key] = (r.inp && r.inp.value!=null) ? r.inp.value : "";
+  });
+  delete state.dirty[qid];
+  saveState();
+
+  const wrong = results.filter(r=>!r.ok);
+  const right = results.filter(r=>r.ok);
+
+  right.forEach(r=>_mark(r.inp, "right"));
+
+  if(wrong.length===0){
+    _clearSaveAttempt(qid, bi);
+    _setOutcome(qid, bi, "correct");
+    _setBranchLocked(qid, bi, true);
+    _lockBranchInputs(branchCard, qid, String(bi));
+    if(saveBtn) saveBtn.disabled = true;
+    setProgress();
+    renderSidebar();
+    return;
+  }
+
+  const n = _incSaveAttempt(qid, bi);
+  if(n<=1){
+    wrong.forEach(r=>_mark(r.inp, "wrong1"));
+    _setOutcome(qid, bi, null);
+    showHelp(q, b);
+  }else{
+    wrong.forEach(r=>_mark(r.inp, "wrong2"));
+    const wrongItems = wrong.map(r=>({
+      key:r.key,
+      label: r.part.label,
+      labelHtml: r.part.labelHtml,
+      correct: r.correct
+    }));
+    _setOutcome(qid, bi, "wrong");
+    _setBranchLocked(qid, bi, true);
+    _lockBranchInputs(branchCard, qid, String(bi));
+    if(saveBtn) saveBtn.disabled = true;
+    _promptShowCorrectModal(q, b, wrongItems);
+  }
+
+  setProgress();
+  renderSidebar();
+}
+
+
 function swapQuestion(qid){
   bumpVariant(qid);
-  clearQuestionState(qid);
+  clearAnswersForQuestion(qid);
   const t = TEMPLATES.find(x=>x.id===qid);
   if(t){
     const v = getVariant(t.id);
@@ -3881,509 +3701,453 @@ function swapQuestion(qid){
   saveState();
   renderAll();
 }
+function next(){ if(state.currentIndex < BANK.length-1){state.currentIndex++;saveState();renderAll();} else tryShowResults(); }
+function prev(){ if(state.currentIndex>0){state.currentIndex--;saveState();renderAll();} }
 
-/* ===== التنقل ===== */
-function next(){
-  if(state.currentIndex < BANK.length-1){
-    state.currentIndex++;
-    saveState();
-    renderAll();
-  }else{
-    tryShowResults();
-  }
-}
-function prev(){
-  if(state.currentIndex>0){
-    state.currentIndex--;
-    saveState();
-    renderAll();
-  }
-}
-
-/* ===== النتيجة (نافذة منبثقة) ===== */
-function listIncomplete(){
-  const arr=[];
-  BANK.forEach((q,i)=>{
-    if(!isQuestionComplete(q)) arr.push({i:i+1, title:q.title});
+function gradeAll(){
+  state.grading = {};
+  BANK.forEach((q)=>{
+    const qid=q.id;
+    state.grading[qid] = {};
+    q.branches.forEach((b,bi)=>{
+      state.grading[qid][bi] = {};
+      (b.parts||[]).forEach(p=>{
+        const student = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][p.key] : "";
+        const correct = b.answers[p.key];
+        let ok=false;
+        if(p.type==="mcq"){
+          ok = normalizeText(student) === normalizeText(correct);
+        }else if(p.type==="text"){
+          ok = normalizeText(student) === normalizeText(correct);
+        }else{
+          ok = nearlyEqual(Number(student), Number(correct), 1e-2);
+        }
+        state.grading[qid][bi][p.key] = ok;
+      });
+    });
   });
-  return arr;
+  saveState();
+}
+function computeScore(){
+  let correct=0,total=0;
+  BANK.forEach(q=>{
+    const qid=q.id;
+    q.branches.forEach((b,bi)=>{
+      const keys = collectPartKeys(q,b);
+      keys.forEach(k=>{
+        total++;
+        const ok = state.grading[qid] && state.grading[qid][bi] ? state.grading[qid][bi][k] : false;
+        if(ok) correct++;
+      });
+    });
+  });
+  return {correct,total};
 }
 
 function tryShowResults(){
+  syncAllInputs();
   const p = setProgress();
   if(!p.doneAll){
     if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
   }
-  showResultsModal();
+  showResults();
+}
+window.__goToQ = function(idx){
+  closeModal();
+  state.currentIndex = idx;
+  saveState();
+  renderAll();
 }
 
-function computeScore(){
-  let total=0, correct=0;
-  BANK.forEach(q=>{
-    q.branches.forEach((branch,bi)=>{
-      const rec = ensureBranchRec(q.id,bi);
-      const keys = collectPartKeys(branch);
-      const grade = gradeBranch(q, branch, bi, rec.saved||{});
-      keys.forEach(k=>{
-        total++;
-        if(grade.byKey[k]) correct++;
-      });
-    });
-  });
-  const pct = total? (correct/total)*100 : 0;
-  return {correct,total,pct:Math.round(pct*10)/10};
-}
 
-function showResultsModal(){
+function syncAllInlineInputs(){ /* لا يتم تخزين الإجابات إلا عبر زر حفظ الإجابة */ }
+
+function syncAllInputs(){ /* لا يتم تخزين الإجابات إلا عبر زر حفظ الإجابة */ }
+
+
+function showResults(){
+  syncAllInlineInputs();
   BANK = buildBank();
+  gradeAll();
   const s = computeScore();
-
-  const cards = BANK.map((q,qi)=>{
-    const complete = isQuestionComplete(q);
-    const correctQ = complete && isQuestionCorrect(q);
-
-    let inner = `
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <div style="font-weight:900">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
-        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"✓ صحيح":"× غير صحيح"}</span>
-      </div>
-    `;
-
-    q.branches.forEach((branch,bi)=>{
-      const rec = ensureBranchRec(q.id,bi);
-      const grade = gradeBranch(q, branch, bi, rec.saved||{});
-      const keys = collectPartKeys(branch);
-
-      inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
-      keys.forEach(k=>{
-        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "—";
-        const correctVal = branch.answers[k];
-        const ok = grade.byKey[k];
-        const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
-
-        inner += `
-          <div class="partRow">
-            <div><b>الجزء:</b> ${escapeHtml(k)}</div>
-            <div><b>إجابتك:</b> ${escapeHtml(String(student))}</div>
-            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
-          </div>`;
-      });
-    });
-
-    return `<div class="resultCard">${inner}</div>`;
-  }).join("");
+  const pct = Math.round((s.correct/s.total)*1000)/10;
 
   const correctPct = s.total ? (s.correct/s.total)*100 : 0;
   const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
-  openModal("النتيجة", `
-    <div class="scoreCard" style="margin-bottom:14px">
+  const header = `
+    <div class="scoreCard">
       <div>
-        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} — ${s.pct}%</div>
+        <div class="scoreBig">النتيجة: ${s.correct} من ${s.total} — ${pct}%</div>
         <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
-        <div class="scoreSub">تم تصحيح كل جزء بشكل مستقل.</div>
+        <div class="scoreSub">توضيح: تم تصحيح كل جزء بشكل مستقل.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
-        <button class="btn primary" onclick="window.__resetAll(); closeModal();">إعادة المحاولة</button>
+        <button class="btn small" onclick="resetAll(); closeModal();">إعادة تعيين</button>
       </div>
     </div>
-    ${cards}
-  `);
-}
-window.__resetAll = resetAll;
+  `;
 
-/* ===== أزرار الشريط الجانبي ===== */
+  const qCards = BANK.map((q,i)=>{
+    const qid = q.id;
+    const st = getQuestionStatus(q);
+    const isCorrect = (st === "completed_correct");
+    let card = `
+      <div class="resultCard">
+        <div class="rt">
+          <div style="font-weight:900">سؤال ${i+1}: ${escapeHtml(q.title||"")}</div>
+          <span class="tag ${isCorrect?"good":"bad"}">${isCorrect?"صحيح":"غير صحيح"}</span>
+        </div>
+    `;
+
+    q.branches.forEach((b,bi)=>{
+      const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
+      let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
+      if(lvl.trim().toLowerCase()==="undefined") lvl="";
+      if(lvl.trim()!==""){
+        card += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(lvl)})</div>`;
+      }
+
+      (b.parts||[]).forEach(p=>{
+        const student = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][p.key] : "";
+        const correctVal = b.answers[p.key];
+        const need2 = (p.label||"").includes("نسبي") || (p.label||"").includes("مئوية");
+
+        let studentText = "—";
+        if((student??"").toString().trim()!==""){
+          if(p.type==="mcq" || p.type==="text"){
+            studentText = escapeHtml(String(student));
+          }else{
+            studentText = need2 ? fmt2(student) : formatNumber(student);
+          }
+        }
+
+        const correctText = (p.type==="mcq" || p.type==="text")
+          ? escapeHtml(String(correctVal))
+          : (need2 ? fmt2(correctVal) : formatNumber(correctVal));
+
+        const ok = state.grading[qid] && state.grading[qid][bi] ? state.grading[qid][bi][p.key] : false;
+
+        card += `
+          <div class="partRow">
+            <div><b>الجزء:</b> ${escapeHtml(p.label||p.key||"")}</div>
+            <div><b>إجابتك:</b> ${studentText}</div>
+            <div><b>الصحيح:</b> ${correctText} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
+          </div>
+        `;
+      });
+    });
+
+    card += `</div>`;
+    return card;
+  }).join("");
+
+  const footer = `
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start">
+      <button class="btn primary" onclick="closeModal()">إغلاق</button>
+    </div>
+  `;
+
+  openModal("النتيجة", `<div class="resultWrap">${header}${qCards}${footer}</div>`);
+}
+
+
 document.getElementById("nextBtnSide").onclick = next;
 document.getElementById("showResultsBtn").onclick = tryShowResults;
 document.getElementById("resetBtn").onclick = function(){ if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) resetAll(); };
-
 var _fsb=document.getElementById("fontSmallBtn"); if(_fsb) _fsb.onclick = ()=>{ state.fontSize = Math.max(-1, (state.fontSize||0)-1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fbb=document.getElementById("fontBigBtn"); if(_fbb) _fbb.onclick = ()=>{ state.fontSize = Math.min(1, (state.fontSize||0)+1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick = function(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen().then(function(){ if(_fsBtn) _fsBtn.textContent = "\u062e\u0631\u0648\u062c"; }); } else { document.exitFullscreen(); if(_fsBtn) _fsBtn.textContent = "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"; } };
 document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "خروج" : "ملء الشاشة"; });
 ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{ const b = document.getElementById(id); if(b) b.onclick = ()=>{ state.sidebarFilter = b.getAttribute("data-filter"); saveState(); renderSidebar(); }; });
-
-/* تطبيق حجم الخط المحفوظ عند التحميل */
 (function(){ const fs = state.fontSize; if(fs===1) document.body.classList.add("font-lg"); else if(fs===-1) document.body.classList.add("font-sm"); })();
 
-/* ===== رندر عام ===== */
-function renderAll(){
-  BANK = buildBank();
-  renderSidebar();
-  renderMain();
-  setProgress();
-}
-window.__examRunning = isExamStarted();
-renderAll();
-if(window.__examRunning) startTimer(); else showIntroModal();
-/* Codex Adaptive Flow 2.1 Start */
+function renderAll(){ renderMain(); renderSidebar(); setProgress(); }
+window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); renderAll(); if(window.__examRunning) startTimer(); else showIntroModal(); });/* Codex Adaptive Mastery Start */
 (function(){
-  const ALL_ORDER = ["q1", "q3", "q4", "q2", "q5", "q6", "q7", "q8", "q9", "q10"];
-  const CORE_ORDER = ["q1", "q3", "q4"];
-  const SUPPORT_ORDER = ALL_ORDER.filter((id) => !CORE_ORDER.includes(id));
-  const QUESTION_PROFILES = {
-    q1: { difficulty: 1, skills: ["frequency", "relative"], remediation: ["q2", "q6", "q9", "q10"], advancement: ["q3"] },
-    q2: { difficulty: 2, skills: ["relative", "percent", "pie"], remediation: ["q1", "q10"], advancement: ["q7"] },
-    q3: { difficulty: 3, skills: ["bar", "pie", "percent"], remediation: ["q1", "q2", "q8"], advancement: ["q7"] },
-    q4: { difficulty: 2, skills: ["stemleaf", "reading"], remediation: ["q5"], advancement: ["q5"] },
-    q5: { difficulty: 3, skills: ["stemleaf", "values"], remediation: ["q4"], advancement: [] },
-    q6: { difficulty: 2, skills: ["frequency", "percent"], remediation: ["q1"], advancement: ["q7"] },
-    q7: { difficulty: 4, skills: ["pie", "percent", "application"], remediation: ["q2", "q6"], advancement: [] },
-    q8: { difficulty: 2, skills: ["data-type", "graph-choice"], remediation: ["q3"], advancement: [] },
-    q9: { difficulty: 2, skills: ["frequency", "missing-frequency", "percent"], remediation: ["q1", "q6"], advancement: ["q10"] },
-    q10: { difficulty: 2, skills: ["relative", "percent", "remediation"], remediation: ["q1", "q2"], advancement: [] }
-  };
-  const AI_KEY_ADAPT = "stat102_ai_models_v4_" + String((location.pathname || document.title || "lesson")).replace(/[^\w]+/g, "_").slice(-80);
-  const MAX_VARIANT_REPEATS = 2;
+  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_1";
+  const MASTERY_VERSION = "chapter3_mastery_3_1_v2";
+  const CORE_ORDER = ["q1_mean_raw","q2_mean_freq","q4_median_raw"];
+  const ALL_ORDER = ["q1_mean_raw","q2_mean_freq","q3_mean_group","q4_median_raw","q6_mode_raw","q7_choose","q8_histpoly","misc_mcq"];
+  const QUESTION_PROFILES = {"q1_mean_raw":{"skills":["mean","raw","central"],"remediation":["q2_mean_freq","misc_mcq"],"advancement":["q3_mean_group"]},"q2_mean_freq":{"skills":["mean","frequency","central"],"remediation":["q1_mean_raw"],"advancement":["q3_mean_group"]},"q3_mean_group":{"skills":["mean","grouped","frequency"],"remediation":["q2_mean_freq"],"advancement":[]},"q4_median_raw":{"skills":["median","position","central"],"remediation":["misc_mcq"],"advancement":["q6_mode_raw"]},"q6_mode_raw":{"skills":["mode","central"],"remediation":["q4_median_raw"],"advancement":["q7_choose"]},"q7_choose":{"skills":["measure-choice","central"],"remediation":["q1_mean_raw","q4_median_raw","q6_mode_raw"],"advancement":[]},"q8_histpoly":{"skills":["graph","frequency"],"remediation":["q2_mean_freq","q3_mean_group"],"advancement":[]},"misc_mcq":{"skills":["concept","central"],"remediation":["q7_choose"],"advancement":[]}};
   const SUPPORT_LIMIT = 4;
-  const SESSION_VERSION = "mastery_2_1_v2";
-  const LESSON_TARGET = 0.74;
-  const LESSON_FLOOR = 0.58;
+  const READINESS_TO_ADVANCE = 0.74;
+  const NEED_SUPPORT_BELOW = 0.62;
+  const AI_ADAPTIVE_KEY = "stat102_3_1_ai_adaptive_v1";
+
+  const originalBuildBank = buildBank;
+  const originalRenderSidebar = renderSidebar;
+  const originalRenderMain = renderMain;
+  const originalSaveBranchAnswer = saveBranchAnswer;
+  const originalNext = next;
 
   function injectAdaptiveStyles(){
-    if(document.getElementById("adaptiveFlowStyles21")) return;
+    if(document.getElementById(ADAPTIVE_STYLE_ID)) return;
     const style = document.createElement("style");
-    style.id = "adaptiveFlowStyles21";
+    style.id = ADAPTIVE_STYLE_ID;
     style.textContent = `
       .side .head h3,
       .side .sidebar-filter,
       .side .qList{display:none !important;}
       #qCount[hidden]{display:none !important;}
-      .side{display:grid;gap:14px;}
+      .side{display:grid;gap:14px;align-content:start;}
       .side .head{justify-content:space-between;}
+      .branchBody{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      .branchBody table.ftable,
+      .branchBody table.niceTable{min-width:520px;max-width:none;}
+      .branchBody table.ftable.wide,
+      .branchBody table.niceTable.wide{min-width:680px;}
+      table.ftable th, table.niceTable th{direction:rtl;}
+      .modal .box{width:min(900px, calc(100vw - 40px)) !important;max-width:calc(100vw - 40px) !important;}
+      @media (max-width: 720px){
+        .wrap,.mainGrid,.layout,.pageGrid{grid-template-columns:1fr !important;max-width:100vw;overflow-x:hidden;}
+        .aiResultsRail{order:-1;width:100%;max-width:100%;}
+        .card,.main,.side,.aiModelsPanel{max-width:100%;}
+        .qtitleRow,.mainhead,.part{align-items:stretch;}
+        .part{flex-direction:column;}
+        .part .inputWrap{width:100%;justify-content:stretch;}
+        input[type="text"],input[type="number"],textarea,select{min-width:0;width:100%;max-width:100%;}
+      }
+      @media (max-width: 560px){
+        .modal{align-items:flex-start !important;justify-content:flex-start !important;direction:ltr;padding:12px;overflow:auto;}
+        .modal .box{direction:rtl;width:min(366px, calc(100vw - 24px)) !important;max-width:min(366px, calc(100vw - 24px)) !important;border-radius:16px;margin:10px 0;}
+        .modal .box .mh{padding:14px;gap:10px;flex-direction:column-reverse;align-items:stretch;}
+        .modal .box .mh b{text-align:center;}
+        .modal .box .mh .btn{width:100%;justify-content:center;}
+        .modal .box .mb{padding:16px 14px;max-height:none;overflow:visible;}
+        .branchBody table.ftable,.branchBody table.niceTable{min-width:500px;}
+      }
     `;
     document.head.appendChild(style);
   }
 
-  function clampAdaptive(value, min=0, max=1){
-    return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
+  function uniqueValid(ids){
+    return (Array.isArray(ids) ? ids : []).filter((id, index, arr)=> id && ALL_ORDER.includes(id) && arr.indexOf(id) === index);
   }
 
-  function stableTopicKey(value){
-    return String(value || "topic").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "topic";
-  }
-
-  function loadAdaptiveAiState(){
+  function topicKey(value){
     try{
-      const raw = localStorage.getItem(AI_KEY_ADAPT);
-      return raw ? JSON.parse(raw) : { topics: {} };
+      return String(value || "topic").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "topic";
     }catch(e){
-      return { topics: {} };
+      return String(value || "topic").toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "") || "topic";
     }
   }
 
-  function validIds(list){
-    return list.filter((id) => TEMPLATES.some((template) => template.id === id));
+  function loadAiState(){
+    try{
+      const raw = (typeof storageGet === "function") ? storageGet(AI_ADAPTIVE_KEY) : localStorage.getItem(AI_ADAPTIVE_KEY);
+      if(!raw) return null;
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    }catch(e){
+      return null;
+    }
   }
 
   function ensureSessionState(){
-    const validCore = validIds(CORE_ORDER);
-    const validAll = validIds(ALL_ORDER);
-    const current = Array.isArray(state.order)
-      ? state.order.filter((id, index, arr) => validAll.includes(id) && arr.indexOf(id) === index)
-      : [];
-    let nextOrder = current.slice();
-
-    if(state.masteryVersion !== SESSION_VERSION || !nextOrder.length){
-      nextOrder = [...validCore];
-      state.currentIndex = 0;
+    const expected = uniqueValid(CORE_ORDER);
+    const needsReset = state.masteryVersion !== MASTERY_VERSION || !Array.isArray(state.order) || !state.order.length;
+    if(needsReset){
+      state.order = expected.length ? expected.slice() : uniqueValid(ALL_ORDER).slice(0, 3);
+      state.currentIndex = Math.min(state.currentIndex || 0, Math.max(0, state.order.length - 1));
+      state.masteryVersion = MASTERY_VERSION;
+      state.masterySupportCount = 0;
+      saveState();
+      return;
     }
-
-    validCore.forEach((id, index) => {
-      if(!nextOrder.includes(id)) nextOrder.splice(Math.min(index, nextOrder.length), 0, id);
-    });
-
-    const supportTail = nextOrder.filter((id) => !validCore.includes(id)).slice(0, SUPPORT_LIMIT);
-    nextOrder = [...validCore, ...supportTail];
-
-    const changed = !Array.isArray(state.order)
-      || state.masteryVersion !== SESSION_VERSION
-      || state.order.length !== nextOrder.length
-      || nextOrder.some((id, index) => state.order[index] !== id)
-      || (state.masterySupportCount || 0) !== supportTail.length;
-
-    if(changed){
-      state.order = nextOrder;
-      state.masteryVersion = SESSION_VERSION;
-      state.masterySupportCount = supportTail.length;
-      if(state.currentIndex >= nextOrder.length) state.currentIndex = 0;
+    const cleaned = uniqueValid(state.order);
+    if(cleaned.length !== state.order.length || cleaned.some((id, index)=> id !== state.order[index])){
+      state.order = cleaned.length ? cleaned : expected.slice();
+      state.currentIndex = Math.min(state.currentIndex || 0, Math.max(0, state.order.length - 1));
       saveState();
     }
-    return state.order;
+    state.masterySupportCount = Number(state.masterySupportCount || 0);
   }
 
   function getActiveOrder(){
-    return ensureSessionState().slice();
+    ensureSessionState();
+    const order = uniqueValid(state.order);
+    if(order.length) return order;
+    return uniqueValid(CORE_ORDER).length ? uniqueValid(CORE_ORDER) : uniqueValid(ALL_ORDER).slice(0, 3);
   }
 
-  function buildFromOrder(order){
-    return order.map((id) => {
-      const template = TEMPLATES.find((item) => item.id === id);
-      if(!template) return null;
-      const variant = getVariant(template.id);
-      const generated = template.gen(variant);
-      const obj = { id:template.id, title:template.title, icon:template.icon, branches:generated.branches };
-      if(generated.sharedGraph != null) obj.sharedGraph = generated.sharedGraph;
-      return obj;
+  function buildQuestionsFromOrder(order){
+    return uniqueValid(order).map((id)=>{
+      const t = TEMPLATES.find((item)=> item.id === id);
+      if(!t) return null;
+      const variant = (typeof getVariant === "function") ? getVariant(t.id) : 0;
+      const generated = t.gen(variant);
+      return { id:t.id, title:t.title, icon:t.icon, branches:generated.branches };
     }).filter(Boolean);
   }
 
-  buildBank = function(){
-    const order = getActiveOrder();
-    return buildFromOrder(order);
-  };
-
   function ensureAdaptiveBankReady(){
-    let bank = buildBank();
-    if(!Array.isArray(bank) || !bank.length){
-      state.order = validIds(CORE_ORDER);
-      state.currentIndex = 0;
+    const bank = buildQuestionsFromOrder(getActiveOrder());
+    if(!bank.length) return originalBuildBank();
+    if(state.currentIndex >= bank.length){
+      state.currentIndex = Math.max(0, bank.length - 1);
       saveState();
-      bank = buildFromOrder(state.order);
     }
-    BANK = Array.isArray(bank) ? bank : [];
-    if(state.currentIndex >= BANK.length) state.currentIndex = 0;
-    return BANK;
-  }
-
-  function concealSidebarQuestions(){
-    const list = document.getElementById("qList");
-    if(list) list.innerHTML = "";
-    const heading = document.querySelector(".side .head h3");
-    if(heading) heading.style.display = "none";
-    const filter = document.querySelector(".sidebar-filter");
-    if(filter) filter.style.display = "none";
+    return bank;
   }
 
   function getQuestionById(qid){
-    return Array.isArray(BANK) ? BANK.find((question) => question.id === qid) : null;
+    return (BANK || []).find((item)=> item.id === qid) || buildQuestionsFromOrder([qid])[0] || null;
   }
 
-  function getCurrentQuestionId(){
-    return BANK && BANK[state.currentIndex] ? BANK[state.currentIndex].id : null;
-  }
-
-  function baseScoreFromRecord(record){
-    if(record.status === "correct") return record.attempts <= 1 ? 0.88 : 0.74;
-    if(record.status === "locked") return 0.22;
-    if(record.status === "wrong1") return 0.42;
-    if(record.attempts > 0) return 0.48;
-    return 0.5;
+  function profileFor(qid){
+    return QUESTION_PROFILES[qid] || { skills:[], remediation:[], advancement:[] };
   }
 
   function getQuestionSignal(qid){
-    const profile = QUESTION_PROFILES[qid] || { difficulty: 2, skills: [], remediation: [], advancement: [] };
-    const record = ensureBranchRec(qid, 0);
-    const aiState = loadAdaptiveAiState();
-    const model = aiState && aiState.topics ? aiState.topics[stableTopicKey(qid)] : null;
-    const fallback = baseScoreFromRecord(record);
-    const attemptCount = Math.max(record.attempts || 0, model && typeof model.attempts === "number" ? model.attempts : 0);
-    const ensemble = clampAdaptive(model && typeof model.ensemble === "number" ? model.ensemble : fallback);
-    const mastery = clampAdaptive(model && typeof model.mastery === "number" ? model.mastery : fallback);
-    const lr = clampAdaptive(model && typeof model.lr === "number" ? model.lr : ensemble);
-    const nbScore = clampAdaptive(model && typeof model.nbScore === "number" ? model.nbScore : ensemble);
-    const knn = clampAdaptive(model && typeof model.knn === "number" ? model.knn : ensemble);
-    const readiness = clampAdaptive((ensemble * 0.42) + (mastery * 0.28) + (lr * 0.15) + (knn * 0.10) + (nbScore * 0.05));
-    const struggle = clampAdaptive(((1 - readiness) * 0.55) + Math.min(0.22, attemptCount * 0.08) + (record.status === "locked" ? 0.25 : (record.status === "wrong1" ? 0.12 : 0)));
-    return { qid, record, model, profile, attemptCount, readiness, struggle };
+    const q = getQuestionById(qid);
+    const profile = profileFor(qid);
+    let attempts = 0;
+    let status = "not_started";
+    if(q){
+      status = (typeof getQuestionStatus === "function") ? getQuestionStatus(q) : "not_started";
+      (q.branches || []).forEach((branch, bi)=>{
+        attempts += (typeof _getSaveAttempt === "function") ? (_getSaveAttempt(qid, bi) || 0) : 0;
+      });
+    }
+
+    const correct = status === "completed_correct";
+    const wrong = status === "completed_wrong";
+    const baseReadiness = correct ? (attempts <= 1 ? 0.9 : 0.78) : (wrong ? 0.25 : (attempts ? 0.42 : 0.52));
+    let readiness = baseReadiness;
+    let struggle = wrong ? 0.82 : (attempts ? 0.5 : 0.25);
+
+    const ai = loadAiState();
+    const model = ai && ai.topics ? ai.topics[topicKey(qid)] : null;
+    if(model){
+      const modelScore = Number(model.ensemble ?? model.lastProb ?? model.mastery ?? readiness);
+      const modelWeak = Number(model.nbWeak ?? (1 - modelScore));
+      if(isFinite(modelScore)) readiness = Math.max(0.05, Math.min(0.98, (readiness * 0.55) + (modelScore * 0.45)));
+      if(isFinite(modelWeak)) struggle = Math.max(0.02, Math.min(0.98, (struggle * 0.45) + (modelWeak * 0.55)));
+    }
+
+    return { qid, status, attempts, readiness, struggle, skills:profile.skills || [], mastered: correct && readiness >= READINESS_TO_ADVANCE };
   }
 
-  function metricIds(ids){
-    const source = (Array.isArray(ids) && ids.length ? ids : getActiveOrder()).filter((id) => ALL_ORDER.includes(id));
-    const answered = source.filter((id) => {
-      const record = ensureBranchRec(id, 0);
-      return (record.attempts || 0) > 0 || record.status !== "new";
-    });
-    return answered.length ? answered : source;
+  function isDoneId(qid){
+    const q = getQuestionById(qid);
+    return q ? isQuestionDone(q) : false;
   }
 
-  function lessonReadiness(ids){
-    const source = metricIds(ids);
-    if(!source.length) return 0.5;
-    return source.reduce((sum, id) => sum + getQuestionSignal(id).readiness, 0) / source.length;
+  function overlapScore(a, b){
+    const set = new Set(a || []);
+    return (b || []).reduce((sum, item)=> sum + (set.has(item) ? 1 : 0), 0);
   }
 
-  function sharesSkill(sourceId, targetId){
-    const sourceSkills = (QUESTION_PROFILES[sourceId] && QUESTION_PROFILES[sourceId].skills) || [];
-    const targetSkills = (QUESTION_PROFILES[targetId] && QUESTION_PROFILES[targetId].skills) || [];
-    return sourceSkills.some((skill) => targetSkills.includes(skill));
-  }
-
-  function completed(ids){
-    return ids.every((id) => {
-      const question = getQuestionById(id);
-      return !!question && isQuestionComplete(question);
-    });
-  }
-
-  function weakestSignal(ids){
-    const source = metricIds(ids);
-    if(!source.length) return null;
-    return source.map((id) => getQuestionSignal(id)).sort((a, b) => (a.readiness - b.readiness) || (b.struggle - a.struggle))[0] || null;
-  }
-
-  function meetsMasteryTarget(){
-    const coreIds = validIds(CORE_ORDER);
-    if(!coreIds.length || !completed(coreIds)) return false;
-    const average = lessonReadiness(coreIds);
-    const lowest = Math.min(...coreIds.map((id) => getQuestionSignal(id).readiness));
-    return average >= LESSON_TARGET && lowest >= LESSON_FLOOR;
-  }
-
-  function shouldRepeatCurrent(signal){
-    return typeof swapQuestion === "function"
-      && signal.record.status !== "correct"
-      && signal.attemptCount < MAX_VARIANT_REPEATS
-      && (signal.record.status === "locked" || signal.struggle > 0.63 || signal.readiness < 0.46);
-  }
-
-  function scoreSupportCandidate(focusSignal, candidateId){
-    const signal = getQuestionSignal(candidateId);
-    const sameSkillBonus = sharesSkill(focusSignal.qid, candidateId) ? 0.36 : 0;
-    const remediationBonus = (focusSignal.profile.remediation || []).includes(candidateId) ? 0.28 : 0;
-    const advancementBonus = (focusSignal.profile.advancement || []).includes(candidateId) ? 0.12 : 0;
-    return ((1 - focusSignal.readiness) * 0.42) + ((1 - signal.readiness) * 0.20) + sameSkillBonus + remediationBonus + advancementBonus;
-  }
-
-  function appendSupportQuestion(focusId){
-    if((state.masterySupportCount || 0) >= SUPPORT_LIMIT) return null;
-    const focusSignal = getQuestionSignal(focusId);
+  function candidateSupportIds(sourceId){
     const active = getActiveOrder();
-    const available = SUPPORT_ORDER.filter((id) => !active.includes(id));
-    if(!available.length) return null;
-    const targetId = available.slice().sort((a, b) => scoreSupportCandidate(focusSignal, b) - scoreSupportCandidate(focusSignal, a))[0];
-    state.order = [...active, targetId];
-    state.masterySupportCount = (state.masterySupportCount || 0) + 1;
+    const used = new Set(active);
+    const profile = profileFor(sourceId);
+    const related = ALL_ORDER
+      .filter((id)=> !used.has(id))
+      .map((id)=>({ id, score:overlapScore(profile.skills || [], profileFor(id).skills || []) }))
+      .filter((item)=> item.score > 0)
+      .sort((a,b)=> b.score - a.score)
+      .map((item)=> item.id);
+    return uniqueValid([...(profile.remediation || []), ...related, ...(profile.advancement || []), ...ALL_ORDER]).filter((id)=> !used.has(id));
+  }
+
+  function appendSupportQuestion(sourceId){
+    ensureSessionState();
+    if(Number(state.masterySupportCount || 0) >= SUPPORT_LIMIT) return null;
+    const nextId = candidateSupportIds(sourceId)[0];
+    if(!nextId) return null;
+    state.order = uniqueValid([ ...getActiveOrder(), nextId ]);
+    state.masterySupportCount = Number(state.masterySupportCount || 0) + 1;
     saveState();
-    return targetId;
+    return nextId;
   }
 
-  function shouldAppendImmediateSupport(signal, attemptsBefore, attemptsAfter){
-    return signal
-      && attemptsAfter > attemptsBefore
-      && signal.record.status !== "correct"
-      && (signal.record.status === "wrong1" || signal.record.status === "locked" || signal.readiness < 0.62 || signal.struggle > 0.48);
-  }
+  function chooseNextAdaptiveId(currentId){
+    BANK = ensureAdaptiveBankReady();
+    const order = getActiveOrder();
+    const currentIndex = order.indexOf(currentId);
+    const afterCurrent = order.slice(Math.max(0, currentIndex + 1)).find((id)=> !isDoneId(id));
+    if(afterCurrent) return afterCurrent;
 
-  function chooseNextAdaptiveId(){
-    const currentId = getCurrentQuestionId();
-    if(!currentId) return null;
-    return getActiveOrder().filter((id) => {
-      const question = getQuestionById(id);
-      return id !== currentId && question && !isQuestionComplete(question);
-    }).sort((a, b) => {
-      const currentSignal = getQuestionSignal(currentId);
-      const aScore = (1 - getQuestionSignal(a).readiness) + (sharesSkill(currentId, a) ? 0.18 : 0) + ((currentSignal.profile.advancement || []).includes(a) ? 0.12 : 0);
-      const bScore = (1 - getQuestionSignal(b).readiness) + (sharesSkill(currentId, b) ? 0.18 : 0) + ((currentSignal.profile.advancement || []).includes(b) ? 0.12 : 0);
-      return bScore - aScore;
-    })[0] || null;
-  }
+    const beforeCurrent = order.slice(0, Math.max(0, currentIndex + 1)).find((id)=> !isDoneId(id));
+    if(beforeCurrent) return beforeCurrent;
 
-  function moveToQuestion(targetId){
-    const bank = ensureAdaptiveBankReady();
-    const targetIndex = bank.findIndex((question) => question.id === targetId);
-    if(targetIndex < 0) return false;
-    state.currentIndex = targetIndex;
-    saveState();
-    renderAll();
-    return true;
-  }
-
-  const originalHandleSaveBranch = handleSaveBranch;
-  handleSaveBranch = function(q, branch, bi){
-    const recBefore = q ? ensureBranchRec(q.id, bi) : null;
-    const attemptsBefore = recBefore ? (recBefore.attempts || 0) : 0;
-    const result = originalHandleSaveBranch.apply(this, arguments);
-    if(q && window.__examRunning){
-      const signal = getQuestionSignal(q.id);
-      const attemptsAfter = signal && signal.record ? (signal.record.attempts || 0) : attemptsBefore;
-      if(shouldAppendImmediateSupport(signal, attemptsBefore, attemptsAfter)){
-        const supportId = appendSupportQuestion(q.id);
-        if(supportId){
-          BANK = ensureAdaptiveBankReady();
-          const pill = document.getElementById("statusPill");
-          if(pill) pill.textContent = "أضيف تدريب مناسب";
-          renderSidebar();
-        }
-      }
+    const signals = order.map(getQuestionSignal);
+    const weak = signals.filter((item)=> item.status !== "completed_correct" || item.readiness < NEED_SUPPORT_BELOW)
+      .sort((a,b)=> (b.struggle - a.struggle) || (a.readiness - b.readiness))[0];
+    if(weak){
+      return appendSupportQuestion(weak.qid);
     }
-    return result;
+
+    return null;
+  }
+
+  buildBank = function(){
+    return ensureAdaptiveBankReady();
   };
 
-  const originalRenderSidebar = renderSidebar;
   renderSidebar = function(){
-    ensureAdaptiveBankReady();
-    const result = originalRenderSidebar.apply(this, arguments);
-    concealSidebarQuestions();
-    return result;
+    injectAdaptiveStyles();
+    BANK = ensureAdaptiveBankReady();
+    return originalRenderSidebar.apply(this, arguments);
   };
 
-  const originalRenderMain = renderMain;
   renderMain = function(){
-    const bank = ensureAdaptiveBankReady();
-    const wrap = document.getElementById("mainContent");
-    if(!bank.length){
-      if(wrap) wrap.innerHTML = '<div style="padding:24px;font-weight:900;color:#0f2a3b">يتم تجهيز الأسئلة، أعد تحميل الصفحة مرة واحدة.</div>';
-      return;
-    }
+    injectAdaptiveStyles();
+    BANK = ensureAdaptiveBankReady();
     return originalRenderMain.apply(this, arguments);
   };
 
-  const originalNext = next;
-  next = function(){
-    const bank = ensureAdaptiveBankReady();
-    if(!bank.length){
-      renderAll();
-      return;
-    }
-    const currentId = getCurrentQuestionId();
-    const currentSignal = currentId ? getQuestionSignal(currentId) : null;
-    if(currentId && currentSignal && shouldRepeatCurrent(currentSignal)){
-      swapQuestion(currentId);
-      BANK = ensureAdaptiveBankReady();
-      moveToQuestion(currentId);
-      return;
-    }
-    const targetId = chooseNextAdaptiveId();
-    if(targetId && moveToQuestion(targetId)) return;
-    if(completed(getActiveOrder())){
-      if(meetsMasteryTarget()){
-        showResultsModal();
-        return;
+  saveBranchAnswer = function(q, b, bi, branchCard, saveBtn){
+    const qid = q && q.id;
+    const beforeAttempts = qid && (typeof _getSaveAttempt === "function") ? (_getSaveAttempt(qid, bi) || 0) : 0;
+    const beforeOutcome = qid && (typeof _getOutcome === "function") ? _getOutcome(qid, bi) : null;
+    const result = originalSaveBranchAnswer.apply(this, arguments);
+    try{
+      if(!qid || !window.__examRunning) return result;
+      const afterAttempts = (typeof _getSaveAttempt === "function") ? (_getSaveAttempt(qid, bi) || 0) : beforeAttempts;
+      const afterOutcome = (typeof _getOutcome === "function") ? _getOutcome(qid, bi) : beforeOutcome;
+      const changed = afterAttempts !== beforeAttempts || afterOutcome !== beforeOutcome;
+      if(changed){
+        const signal = getQuestionSignal(qid);
+        if(afterOutcome !== "correct" && (afterAttempts > beforeAttempts || signal.status === "completed_wrong" || signal.readiness < NEED_SUPPORT_BELOW || signal.struggle > 0.5)){
+          appendSupportQuestion(qid);
+          BANK = ensureAdaptiveBankReady();
+        }
+        setProgress();
+        renderSidebar();
       }
-      const focus = weakestSignal(CORE_ORDER) || weakestSignal(getActiveOrder());
-      const supportId = focus ? appendSupportQuestion(focus.qid) : null;
-      if(supportId){
-        BANK = ensureAdaptiveBankReady();
-        moveToQuestion(supportId);
-        return;
-      }
-      if(focus && typeof swapQuestion === "function" && focus.attemptCount < MAX_VARIANT_REPEATS){
-        swapQuestion(focus.qid);
-        BANK = ensureAdaptiveBankReady();
-        moveToQuestion(focus.qid);
-        return;
-      }
-      showResultsModal();
-      return;
-    }
-    return originalNext.apply(this, arguments);
+    }catch(e){}
+    return result;
   };
 
+  next = function(){
+    if(!window.__examRunning){
+      return originalNext.apply(this, arguments);
+    }
+    BANK = ensureAdaptiveBankReady();
+    const current = BANK[state.currentIndex];
+    const nextId = chooseNextAdaptiveId(current ? current.id : null);
+    if(nextId){
+      BANK = ensureAdaptiveBankReady();
+      const nextIndex = BANK.findIndex((item)=> item.id === nextId);
+      if(nextIndex >= 0){
+        state.currentIndex = nextIndex;
+        saveState();
+        renderAll();
+        return;
+      }
+    }
+    tryShowResults();
+  };
+
+  injectAdaptiveStyles();
   ensureSessionState();
   BANK = ensureAdaptiveBankReady();
-  if(!BANK.length){
-    state.order = validIds(CORE_ORDER);
-    state.currentIndex = 0;
-    saveState();
-    BANK = buildFromOrder(state.order);
-  }
-  if(state.currentIndex >= BANK.length) state.currentIndex = 0;
-  injectAdaptiveStyles();
-  saveState();
-  renderAll();
 })();
-/* Codex Adaptive Flow 2.1 End */
+/* Codex Adaptive Mastery End */
+
 
 
 /* Codex Unified AI Logic Start */
@@ -4697,8 +4461,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_2_1_ai_models_v1";
-  try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
+  const AI_MODELS_KEY = "stat102_3_1_ai_models_v1";
 
   function aiStoreGet(key){
     try{
@@ -5067,21 +4830,14 @@ if(window.__examRunning) startTimer(); else showIntroModal();
   }
 
   function ensureAiModelsPanelMount(){
+    const rail = document.querySelector(".aiResultsRail");
+    if(!rail) return null;
     let panel = document.getElementById("aiModelsPanel");
     if(panel) return panel;
-    let host = document.querySelector(".aiResultsRail");
-    if(!host){
-      host = document.querySelector(".wrap")
-          || document.querySelector("main")
-          || document.body;
-    }
-    if(!host) return null;
     panel = document.createElement("div");
     panel.id = "aiModelsPanel";
     panel.className = "aiModelsPanel";
-    try{ host.appendChild(panel); }catch(_e){
-      try{ document.body.appendChild(panel); }catch(_e2){ return null; }
-    }
+    rail.appendChild(panel);
     return panel;
   }
 
@@ -5104,23 +4860,15 @@ if(window.__examRunning) startTimer(); else showIntroModal();
     const thetaLbl = irtThetaLabel(theta);
     const thetaPct = clamp((theta + 3) / 6, 0, 1) * 100; /* 0% = -3, 100% = +3 */
 
-    const ec       = (__partStats && __partStats.errs) ? __partStats.errs : { conceptual:0, computational:0, application:0 };
-    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
-    var domErr     = "none";
-    (function(){
-      var best = 0;
-      ["conceptual","computational","application"].forEach(function(_k){
-        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
-      });
-      if(errTotal === 0) domErr = "none";
-    })();
+    const domErr   = dominantErrorType();
     const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
+    const ec       = aiModelsState.errorCounts || {};
+    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
 
     const bs       = brierScore();
     const calibDx  = calibDiagnosis();
     var __partStats = (function(){
       var ans = 0, ok = 0;
-      var errs = { conceptual: 0, computational: 0, application: 0 };
       try{
         if(Array.isArray(BANK) && typeof state !== "undefined" && state && state.answers){
           BANK.forEach(function(_q){
@@ -5129,31 +4877,20 @@ if(window.__examRunning) startTimer(); else showIntroModal();
               var _parts = Array.isArray(_b.parts) ? _b.parts : [];
               var _stored = (state.answers && state.answers[_q.id] && state.answers[_q.id][_bi]) ? state.answers[_q.id][_bi] : null;
               if(!_stored) return;
-              var _attemptsBranch = 1;
-              try{ if(typeof _getSaveAttempt === "function"){ _attemptsBranch = Math.max(1, _getSaveAttempt(_q.id, _bi) || 1); } }catch(_e){}
               _parts.forEach(function(_p){
                 if(!_p || _stored[_p.key] === undefined || _stored[_p.key] === null || _stored[_p.key] === "") return;
                 ans++;
-                var _isOk = false;
                 try{
                   var _corr = _b.answers ? _b.answers[_p.key] : undefined;
                   var _chk = (typeof _checkPart === "function") ? _checkPart(_p, _stored[_p.key], _corr) : { ok:false };
-                  _isOk = !!(_chk && _chk.ok);
+                  if(_chk && _chk.ok) ok++;
                 }catch(_e){}
-                if(_isOk){ ok++; return; }
-                var _kind = "application";
-                if(_p.type === "mcq" || _p.type === "text"){
-                  _kind = "conceptual";
-                } else if(_p.type === "number"){
-                  _kind = _attemptsBranch > 1 ? "computational" : "application";
-                }
-                errs[_kind] = (errs[_kind] || 0) + 1;
               });
             });
           });
         }
       }catch(_e){}
-      return { answered: ans, correct: ok, errs: errs };
+      return { answered: ans, correct: ok };
     })();
     const totalAtt = __partStats.answered;
     const totalOk  = __partStats.correct;
@@ -5484,9 +5221,9 @@ if(window.__examRunning) startTimer(); else showIntroModal();
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_2_1_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["q1", "q3", "q4"];
-  const MASTERY_PROFILES_UNIFIED = {"q1": {"supports": ["q2", "q3", "q4", "q5"]}, "q2": {"supports": ["q3", "q4", "q5", "q6"]}, "q3": {"supports": ["q4", "q5", "q6", "q7"]}, "q4": {"supports": ["q5", "q6", "q7", "q8"]}, "q5": {"supports": ["q6", "q7", "q8", "q9"]}, "q6": {"supports": ["q7", "q8", "q9", "q10"]}, "q7": {"supports": ["q8", "q9", "q10", "q1"]}, "q8": {"supports": ["q9", "q10", "q1", "q2"]}, "q9": {"supports": ["q10", "q1", "q2", "q3"]}, "q10": {"supports": ["q1", "q2", "q3", "q4"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_3_1_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["q1_mean_raw", "q2_mean_freq", "q4_median_raw"];
+  const MASTERY_PROFILES_UNIFIED = {"q1_mean_raw": {"supports": ["q2_mean_freq", "q3_mean_group", "q4_median_raw", "q6_mode_raw"]}, "q2_mean_freq": {"supports": ["q3_mean_group", "q4_median_raw", "q6_mode_raw", "q7_choose"]}, "q3_mean_group": {"supports": ["q4_median_raw", "q6_mode_raw", "q7_choose", "q8_histpoly"]}, "q4_median_raw": {"supports": ["q6_mode_raw", "q7_choose", "q8_histpoly", "misc_mcq"]}, "q6_mode_raw": {"supports": ["q7_choose", "q8_histpoly", "misc_mcq", "q1_mean_raw"]}, "q7_choose": {"supports": ["q8_histpoly", "misc_mcq", "q1_mean_raw", "q2_mean_freq"]}, "q8_histpoly": {"supports": ["misc_mcq", "q1_mean_raw", "q2_mean_freq", "q3_mean_group"]}, "misc_mcq": {"supports": ["q1_mean_raw", "q2_mean_freq", "q3_mean_group", "q4_median_raw"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}
