@@ -5601,6 +5601,25 @@ window.addEventListener("load", ()=>{
       </div>
     `;
   }
+  if(typeof renderAiModelsPanel === "function" && !renderAiModelsPanel.__safeWrapped){
+    const _renderAiModelsPanelUnsafe = renderAiModelsPanel;
+    renderAiModelsPanel = function(){
+      try{
+        return _renderAiModelsPanelUnsafe.apply(this, arguments);
+      }catch(_e){
+        const panel = ensureAiModelsPanelMount();
+        if(panel){
+          panel.innerHTML = `
+            <div class="aiInferenceCard" style="margin:12px">
+              <div class="aiSectionTitle">التحليل الذكي</div>
+              <div class="aiInferenceText">تعذر تحميل اللوحة الآن. أعد تحميل الصفحة ثم احفظ إجابة واحدة لبدء التحليل.</div>
+            </div>
+          `;
+        }
+      }
+    };
+    renderAiModelsPanel.__safeWrapped = true;
+  }
 
   function wrapHandleSaveBranch(){
     if(typeof handleSaveBranch !== "function" || handleSaveBranch.__aiModelsWrapped) return;
@@ -6423,9 +6442,20 @@ window.addEventListener("load", ()=>{
   function syncAIDrawer(){
     var inner = document.getElementById("drawerAIInner");
     if(!inner) return;
+    try{
+      if(typeof renderAiModelsPanel === "function") renderAiModelsPanel();
+    }catch(_e){}
+    var panel = document.getElementById("aiModelsPanel");
+    if(panel && panel.innerHTML && panel.innerHTML.trim()){
+      inner.innerHTML = panel.outerHTML;
+      return;
+    }
     var rail = document.querySelector(".aiResultsRail");
-    if(!rail) return;
-    inner.innerHTML = rail.innerHTML;
+    if(rail && rail.innerHTML && rail.innerHTML.trim()){
+      inner.innerHTML = rail.innerHTML;
+      return;
+    }
+    inner.innerHTML = '<div class="aiInferenceCard" style="margin:12px"><div class="aiSectionTitle">التحليل الذكي</div><div class="aiInferenceText">لا توجد بيانات بعد. احفظ إجابة واحدة على الأقل ليظهر التحليل.</div></div>';
   }
 
   /* أزرار الدرج السفلية */
@@ -6575,6 +6605,12 @@ window.addEventListener("load", ()=>{
           };
           window.AdaptiveLearning.collectStudentEvent(payload);
           runInference(payload, branchCard);
+          if(showedSolution && branchCard && typeof window._renderInlineSolution === "function"){
+            var solutionItems = (typeof window._collectSolutionItems === "function")
+              ? window._collectSolutionItems(b)
+              : [];
+            window._renderInlineSolution(q, b, branchCard, solutionItems);
+          }
         }catch(_e){}
         return out;
       };
