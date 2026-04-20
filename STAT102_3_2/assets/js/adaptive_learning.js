@@ -1,5 +1,20 @@
 (function(){
   "use strict";
+  var _aiEnabled = (typeof window !== "undefined") && (window.AI_ENABLED === true);
+  if(!_aiEnabled){
+    window.AdaptiveLearning = {
+      setStudentId           : function(){ return false; },
+      getStudentId           : function(){ return ""; },
+      ensureStudentIdentity  : function(){ return Promise.resolve(null); },
+      collectStudentEvent    : function(){ return null; },
+      updateBKT              : function(id){ return { skill_id: String(id||""), mastery: 0 }; },
+      predictMastery         : function(){ return { probability_mastered: 0.5, mastered: 0, recommended_support: "disabled" }; },
+      exportTrainingData     : function(){ return []; },
+      exportStudentTrainingData : function(){ return []; },
+      loadModelWeights       : function(){ return Promise.resolve({}); }
+    };
+    return;
+  }
   var _sk="student_training_log_v1";
   var _mk="adaptive_model_state_v1";
   var _ik="adaptive_current_student_id_v1";

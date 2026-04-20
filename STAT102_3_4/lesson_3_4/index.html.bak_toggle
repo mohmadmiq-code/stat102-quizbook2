@@ -2124,14 +2124,6 @@ input.badField, textarea.badField{
 
 
 </style>
-<script>
-/* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
-</script>
-<style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
-</style>
-<!-- AI_KILL_SWITCH -->
 </head>
 <body>
   <header class="topbar">

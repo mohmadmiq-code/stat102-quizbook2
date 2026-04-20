@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود - السنة الأولى المشتركة - STAT 102 | 1.1 المجتمع الإحصائي وطرق دراسته</title>
+  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 4.3 الانحدار الخطي البسيط</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -428,7 +428,7 @@
     .btag.easy{background:var(--good-bg);border-color:rgba(5,150,105,.25);color:var(--good)}
     .btag.med{background:var(--warn-bg);border-color:rgba(217,119,6,.25);color:var(--warn)}
     .btag.hard{background:var(--bad-bg);border-color:rgba(220,38,38,.25);color:var(--bad)}
-    .branchBody{padding:16px 18px 18px; line-height:1.85; font-size:15px; font-weight:600; color:var(--ink-soft)}
+    .branchBody{padding:16px 18px 18px; line-height:1.85; font-size:15px; font-weight:600; color:var(--ink-soft); overflow-x:auto;}
 
     .parts{display:grid; gap:12px; margin-top:16px;}
     .part{
@@ -721,6 +721,9 @@
       .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; }
       .modal .box { box-shadow: none; border: 1px solid #ccc; }
     }
+
+/* Fix: render KaTeX left-to-right even in RTL pages */
+.katex, .katex-display{ direction:ltr; unicode-bidi:embed; }
 
 /* Codex Unified AI Help Start */
     .branchHead{
@@ -2189,14 +2192,6 @@ input.badField, textarea.badField{
 
 
 </style>
-<script>
-/* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
-</script>
-<style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
-</style>
-<!-- AI_KILL_SWITCH -->
 </head>
 <body>
   <header class="topbar">
@@ -2209,7 +2204,7 @@ window.AI_ENABLED = false;
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">1.1 المجتمع الإحصائي وطرق دراسته <span class="sep">|</span> Statistical Population and Sample</div>
+          <div class="s">4.3 الانحدار الخطي البسيط <span class="sep">|</span> Simple Linear Regression</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
@@ -2235,10 +2230,10 @@ window.AI_ENABLED = false;
     <aside class="card side">
       <div class="head">
         <h3>مسار الأسئلة</h3>
-        <button class="btn small" id="resetBtn" aria-label="إعادة ضبط الاختبار">إعادة</button>
+        <button class="btn small" id="resetBtn" aria-label="إعادة تعيين الاختبار">إعادة</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="font-weight:900;color:#0f2a3b" id="progressText">تم حل 0 سؤال</div>
+        <div style="font-weight:900;color:#0f2a3b" id="progressText">0 / 0</div>
         <div style="flex:1" class="progress"><div id="progressBar"></div></div>
       </div>
       <div class="sidebar-filter">
@@ -2268,7 +2263,7 @@ window.AI_ENABLED = false;
 
 
 <script>
-/* ===== ????? ??????? (Seeded RNG) ===== */
+/* ===== أدوات عشوائية (Seeded RNG) ===== */
 function xmur3(str){
   let h = 1779033703 ^ str.length;
   for (let i = 0; i < str.length; i++) {
@@ -2295,10 +2290,10 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-/* ===== ???? ?????? (????? ??? ??? ??? ??? ???????) ===== */
-const STATE_KEY = "stat102_1_1_state_v16";
+/* ===== حالة الصفحة (تُحفظ فقط عند ضغط حفظ الإجابة) ===== */
+const STATE_KEY = "stat102_4_3_state_v2";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_1_1_timerEnd_v16";
+const TIMER_KEY = "stat102_4_3_timerEnd_v2";
 // Safe storage wrapper (works even if localStorage is blocked)
 const __storage = (function(){
   try{
@@ -2314,7 +2309,7 @@ function storageGet(key){ try{ return __storage ? __storage.getItem(key) : null;
 function storageSet(key, val){ try{ if(__storage) __storage.setItem(key, val); }catch(e){} }
 function storageRemove(key){ try{ if(__storage) __storage.removeItem(key); }catch(e){} }
 
-const state = loadState() || { currentIndex: 0, variants: {}, branches: {}, order: null, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
+const state = loadState() || { currentIndex: 0, variants: {}, branches: {}, order: null, activeOrder: null, masteryVersion: null, masterySupportCount: 0, masterySupportLog: [], masterySupportSources: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
 function saveState(){ storageSet(STATE_KEY, JSON.stringify(state)); }
 function loadState(){ try{ const s = JSON.parse(storageGet(STATE_KEY)); if(s){ s.timerEnded = !!s.timerEnded; if(!s.dirty) s.dirty = {}; if(!s.sidebarFilter) s.sidebarFilter = "all"; if(s.fontSize==null) s.fontSize = 0; } return s; }catch(e){ return null; } }
 
@@ -2341,7 +2336,7 @@ function startTimer(){
     el.textContent = "الوقت المتبقي: " + m + ":" + (s<10?"0":"") + s;
     el.classList.remove("warn","done");
     if(rem <= 60) el.classList.add("warn");
-    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">بقيت دقيقة واحدة على انتهاء الوقت.</p>"); }
+    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">دقيقة واحدة متبقية — احفظ إجاباتك إن لم تكن محفوظة.</p>"); }
     if(rem === 0){
       if(timerInterval) clearInterval(timerInterval);
       timerInterval = null;
@@ -2375,14 +2370,7 @@ function resetAll(){
   state.currentIndex = 0;
   state.variants = {};
   state.branches = {};
-  state.activeOrder = [];
-  state.masteryVersion = null;
-  state.masterySupportCount = 0;
-  state.masterySupportLog = [];
-  state.masterySupportSources = {};
   state.order = null;
-  delete state.masteryVersion;
-  state.masterySupportCount = 0;
   state.timerEnded = false;
   state.dirty = {};
   state.sidebarFilter = "all";
@@ -2398,13 +2386,13 @@ function showIntroModal(){
   const html = `
     <div style="margin-bottom:16px;line-height:1.9;">
       <p style="font-weight:800;margin-bottom:10px;">تعريف بالاختبار</p>
-      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>30 دقيقة</b>.</p>
+      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>٣٠ دقيقة</b>.</p>
       <p style="font-weight:800;margin:14px 0 6px;">تعليمات الاختبار:</p>
       <ul style="margin:0;padding-right:20px;">
-        <li>يمكن التنقل بين الأسئلة في أي وقت.</li>
-        <li>استخدم أزرار <b>السابق</b> و<b>التالي</b> أو مسار الأسئلة.</li>
-        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك فتح <b>مساعدة</b>.</li>
-        <li>لن يتم عرض الجواب النهائي مباشرة داخل المساعدة.</li>
+        <li>يمكنك <b>تبديل السؤال</b> لاستبداله بسؤال آخر.</li>
+        <li>سينقلك الاختبار حسب مستوى الإتقان، وتبقى تفاصيل المسار مخفية حتى يظل التركيز على السؤال الحالي.</li>
+        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك طلب <b>مساعدة</b> أو إظهار الإجابة الصحيحة حسب نظام المحاولات.</li>
+        <li>عند انتهاء الوقت يُقفل الاختبار تلقائياً وتظهر النتيجة.</li>
       </ul>
       <p style="margin-top:16px;color:var(--muted);font-weight:700;">اضغط <b>بدء الاختبار</b> لبدء الوقت والاختبار.</p>
     </div>
@@ -2435,7 +2423,7 @@ function clearQuestionState(qid){
   saveState();
 }
 
-/* ===== ????? ?????? ===== */
+/* ===== أدوات مساعدة ===== */
 const SVG_TAGS = new Set(["svg","g","path","rect","line","circle","text","defs","linearGradient","stop","polyline","polygon"]);
 function el(tag, attrs={}, children=[]){
   const isSvg = SVG_TAGS.has(String(tag).toLowerCase());
@@ -2454,10 +2442,10 @@ function el(tag, attrs={}, children=[]){
   return node;
 }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
-function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[%%]/g,"%"); }
+function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[٪%]/g,"%"); }
 function parseNumberLoose(v){
   if(v==null) return NaN;
-  const s = String(v).replace(/[??]/g,",").replace(/[%%]/g,"").trim();
+  const s = String(v).replace(/[٬،]/g,",").replace(/[%٪]/g,"").trim();
   if(!s) return NaN;
   const n = Number(s);
   return Number.isFinite(n) ? n : NaN;
@@ -2481,7 +2469,7 @@ function formatNumber(x){
 }
 function parseNumberList(s){
   if(s==null) return [];
-  const raw = String(s).replace(/[?]/g, ",").trim();
+  const raw = String(s).replace(/[،]/g, ",").trim();
   if(!raw) return [];
   return raw.split(",").map(x=>x.trim()).filter(Boolean).map(x=>Number(x)).filter(x=>Number.isFinite(x)).sort((a,b)=>a-b);
 }
@@ -2500,7 +2488,7 @@ function latexFix(s){
   return String(s).replace(/\\\\/g, "\\");
 }
 
-/* ===== ????? ?????? ===== */
+/* ===== نافذة منبثقة ===== */
 function openModal(title, html){
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalBody").innerHTML = html;
@@ -2527,441 +2515,345 @@ function typesetMath(root){
   }catch(e){}
 }
 
-/* ===== ??? ??????? (????? 1.1) ===== */
+/* ===== مسار الأسئلة (الوحدة 4 | 4.3) ===== */
+
+function lessonTable(headers, rows, rtl=true){
+  const dir = rtl ? 'rtl' : 'ltr';
+  return `
+    <table class="ftable" style="direction:${dir}">
+      <thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
+      <tbody>${rows.map(row=>`<tr>${row.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+    </table>
+  `;
+}
+
+const REGRESSION_SELFTEST_POOL = [
+  {
+    s:"يمثّل المعامل b في معادلة الانحدار:",
+    options:["قيمة المتغير التابع عند X=0","متوسط قيم Y","معامل الارتباط","ميل خط الانحدار"],
+    a:"ميل خط الانحدار"
+  },
+  {
+    s:"يمثّل المعامل a في معادلة الانحدار:",
+    options:["المقطع من المحور Y","الانحراف المعياري لـ X","معامل الارتباط","ميل خط الانحدار"],
+    a:"المقطع من المحور Y"
+  },
+  {
+    s:"يُفسَّر ميل خط الانحدار على أنه:",
+    options:["التغير النسبي في Y","متوسط الفروق بين القيم","مقدار التغير المتوقع في Y عند زيادة X وحدة واحدة","درجة قوة العلاقة فقط"],
+    a:"مقدار التغير المتوقع في Y عند زيادة X وحدة واحدة"
+  },
+  {
+    s:"إذا كان ميل خط الانحدار سالبًا، فإن العلاقة بين المتغيرين تكون:",
+    options:["طردية","عكسية","ضعيفة","غير خطية"],
+    a:"عكسية"
+  },
+  {
+    s:"إذا كان معامل ارتباط بريسون بين متغيرين يساوي صفرًا، فإن ميل خط الانحدار يكون:",
+    options:["موجبًا","سالبًا","صفرًا","صغيرًا نسبيًا"],
+    a:"صفرًا"
+  },
+  {
+    s:"تُحسب قيمة المقطع a عادةً باستخدام:",
+    options:["المتوسطات الحسابية للمتغيرين","معامل الارتباط فقط","القيم المنعزلة","الانحرافات فقط"],
+    a:"المتوسطات الحسابية للمتغيرين"
+  },
+  {
+    s:"تاريخيًا، يعود مصطلح الانحدار إلى أعمال:",
+    options:["كارل بريسون","فرانسيس غالتون","رونالد فيشر","أدولف كيتليه"],
+    a:"فرانسيس غالتون"
+  },
+  {
+    s:"أي العبارات التالية صحيحة؟",
+    options:["الانحدار لا يعتمد على البيانات","الانحدار لا يصلح لتقدير قيمة للمتغير التابع","الانحدار الخطي البسيط يقيس الارتباط فقط","الانحدار الخطي يحوّل العلاقة إلى نموذج"],
+    a:"الانحدار الخطي يحوّل العلاقة إلى نموذج"
+  },
+  {
+    s:"عند استخدام نموذج الانحدار الخطي البسيط، فإن التقدير يكون أكثر موثوقية عندما:",
+    options:["تكون العلاقة خطية قوية","تكون البيانات قليلة","تكون الوحدات مختلفة","يكون التشتت كبيرًا"],
+    a:"تكون العلاقة خطية قوية"
+  },
+  {
+    s:"يُستخدم الانحدار الخطي البسيط أساسًا من أجل:",
+    options:["قياس تشتت البيانات","اختبار استقلال المتغيرات","وصف العلاقة الخطية وتقدير قيم أحد المتغيرين","مقارنة متوسطات عينتين"],
+    a:"وصف العلاقة الخطية وتقدير قيم أحد المتغيرين"
+  }
+];
+
+const REGRESSION_TF_POOL = [
+  {s:"يستخدم خط الانحدار البسيط لتقدير قيم المتغير التابع اعتمادًا على قيم المتغير المستقل.", a:"صح"},
+  {s:"يمثل ميل خط الانحدار مقدار التغير المتوقع في Y عند تغير X وحدة واحدة.", a:"صح"},
+  {s:"خط الانحدار الخطي البسيط يمر بجميع نقاط لوحة الانتشار.", a:"خطأ"},
+  {s:"إشارة ميل خط الانحدار تتفق دائمًا مع إشارة معامل ارتباط بريسون بين المتغيرين.", a:"صح"},
+  {s:"يعتمد حساب ميل خط الانحدار على انحرافات قيم كل متغير عن متوسطه.", a:"صح"},
+  {s:"يمكن النظر إلى خط الانحدار الخطي البسيط على أنه أفضل تمثيل خطي لاتجاه النقاط في لوحة الانتشار.", a:"صح"},
+  {s:"لا يتأثر ميل خط الانحدار بوحدات القياس المستخدمة للمتغيرين.", a:"خطأ"},
+  {s:"إذا كان معامل ارتباط بريسون يساوي صفرًا، فإن ميل خط الانحدار يكون صفرًا أيضًا.", a:"صح"},
+  {s:"إذا ضُربت جميع قيم المتغير المستقل في ثابت موجب، فإن ميل خط الانحدار يتغير بينما تبقى إشارته كما هي.", a:"صح"},
+  {s:"يُحسب مقطع خط الانحدار بسهولة باستخدام المتوسطات الحسابية للمتغيرين دون الحاجة إلى صيغة مطوّلة.", a:"صح"}
+];
+
+const REGRESSION_FILL_POOL = [
+  {stem:"يُسمّى المتغير الذي يُستخدم لتقدير قيم متغير آخر في نموذج الانحدار الخطي ____، بينما يسمى المتغير الذي يتم تقدير قيمه ____.", options:["المتغير المستقل / المتغير التابع","المتغير التابع / المتغير المستقل","المتغير الوصفي / المتغير الاسمي","المتغير العشوائي / المتغير الثابت"], a:"المتغير المستقل / المتغير التابع"},
+  {stem:"إذا كانت العلاقة بين المتغيرين طردية قوية، فإن قيمة معامل الارتباط تكون ____ ويكون ميل خط الانحدار ____.", options:["سالبة / سالبًا","موجبة / موجبًا","صفرية / صفرًا","عشوائية / صغيرًا"], a:"موجبة / موجبًا"},
+  {stem:"إذا كان معامل ارتباط بريسون بين متغيرين يساوي صفرًا، فإن ميل خط الانحدار يساوي ____.", options:["واحدًا","الصفر","قيمة سالبة","قيمة موجبة صغيرة"], a:"الصفر"},
+  {stem:"تمثل القيمة \\(\\hat{Y}\\) في نموذج الانحدار الخطي ____ للمتغير التابع عند قيمة معينة من المتغير المستقل.", options:["القيمة المقدرة","القيمة الحقيقية دائمًا","الانحراف المعياري","المتوسط الحسابي"], a:"القيمة المقدرة"},
+  {stem:"تعتمد إشارة ميل خط الانحدار على إشارة معامل ارتباط ____ بين المتغيرين.", options:["سبيرمان","بريسون","التحديد","الالتواء"], a:"بريسون"},
+  {stem:"يعتمد حساب ميل خط الانحدار في صيغته الكاملة على مجموع حاصل ضرب ____ المتغيرين عن متوسطهما.", options:["انحرافات قيم","رتب","وحدات قياس","فروق المتوسطات"], a:"انحرافات قيم"},
+  {stem:"يُستخدم الانحدار الخطي البسيط لوصف العلاقة بين متغيرين ____ من خلال تمثيل هذه العلاقة بـ ____.", options:["كميين / خط مستقيم","رتبيين / منحنى","اسميين / جدول تكراري","نوعيين / مخطط دائري"], a:"كميين / خط مستقيم"},
+  {stem:"يُحسب مقطع خط الانحدار a عادةً باستخدام ____ الحسابية للمتغيرين المستقل والتابع.", options:["الرتب","المتوسطات","الدرجات المعيارية","الانحرافات"], a:"المتوسطات"},
+  {stem:"يُحسب ميل خط الانحدار في إحدى صيغه المختصرة باستخدام العلاقة ____.", options:["\\( b = r\\dfrac{S_y}{S_x} \\)","\\( a = r\\dfrac{S_x}{S_y} \\)","\\( r^2 = a+b \\)","\\( b = x+y \\)"], a:"\\( b = r\\dfrac{S_y}{S_x} \\)"}
+];
+
 const TEMPLATES = [
   {
-    id:"q1_tf",
-    title:"صح / خطأ - مفاهيم أساسية في المجتمع الإحصائي",
+    id:"q1_regression_selftest_pool",
+    icon:"①",
+    title:"اختبار ذاتي — مفاهيم الانحدار الخطي البسيط",
     gen:(variant)=>{
-      const r = seededRand("q1_tf|"+variant);
-      const POOL = [
-        { s:"المجتمع الإحصائي هو جميع المفردات التي نريد دراستها واستخلاص نتائج عنها.", a:"صح" },
-        { s:"يرمز عادة إلى حجم المجتمع الإحصائي بالرمز n.", a:"خطأ" },
-        { s:"المعلمة (Parameter) تصف خاصية في المجتمع الإحصائي كله.", a:"صح" },
-        { s:"الإحصاءة (Statistic) قيمة تحسب من بيانات العينة.", a:"صح" },
-        { s:"العينة الإحصائية جزء من المجتمع الإحصائي.", a:"صح" },
-        { s:"المسح الشامل يعني دراسة جزء فقط من المجتمع.", a:"خطأ" },
-        { s:"قد يكون المجتمع الإحصائي كبيرا جدا أو غير منته.", a:"صح" },
-        { s:"العينة العشوائية الجيدة تساعد على تمثيل المجتمع بصورة أفضل.", a:"صح" },
-        { s:"الدراسة بالعينة تكون غالبا أقل تكلفة وأسرع من دراسة المجتمع كله.", a:"صح" },
-        { s:"لا يمكن للعينة أن تعطينا معلومات مفيدة عن المجتمع الإحصائي.", a:"خطأ" }
-      ];
-
-      const items = POOL.slice();
+      const r = seededRand("q1_regression_selftest_pool|"+variant);
+      const items = REGRESSION_SELFTEST_POOL.map(x=>({...x}));
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,4);
+      const parts = picked.map((it,i)=>({type:"mcq", key:"mcq"+(i+1), label:(i+1)+") "+it.s, options:it.options}));
+      const answers = {};
+      picked.forEach((it,i)=> answers["mcq"+(i+1)] = it.a);
+      return {
+        branches:[{
+          level:"متوسط",
+          prompt:"اختر الإجابة الصحيحة لكل بند:",
+          parts,
+          answers,
+          explain:[
+            "يركز الفصل 4.3 على أن الانحدار الخطي البسيط يحول العلاقة الخطية بين متغيرين كميين إلى نموذج كمي للتفسير والتقدير.",
+            "ويمثل b الميل، ويمثل a المقطع من المحور Y، وتكون الثقة بالتقدير أعلى عندما تكون العلاقة الخطية قوية."
+          ],
+          solutionSteps:[
+            "حدّد هل البند يسأل عن معنى الميل أو المقطع أو الغرض من الانحدار أو شرط جودة التقدير.",
+            "اختر البديل المطابق للنص الوارد في الاختبار الذاتي 4.3."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q2_regression_tf_pool",
+    icon:"②",
+    title:"تمارين 4.3 — صح/خطأ",
+    gen:(variant)=>{
+      const r = seededRand("q2_regression_tf_pool|"+variant);
+      const items = REGRESSION_TF_POOL.map(x=>({...x}));
       shuffleInPlace(items, r);
       const picked = items.slice(0,5);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"tf"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:["صح","خطأ"]
-      }));
-
+      const parts = picked.map((it,i)=>({type:"mcq", key:"tf"+(i+1), label:(i+1)+") "+it.s, options:["صح","خطأ"]}));
       const answers = {};
-      picked.forEach((it,i)=>{ answers["tf"+(i+1)] = it.a; });
-
-      return {
-        branches:[
-          {
-            level:"سهل",
-            prompt:"حدد (صح) أو (خطأ) لكل عبارة:",
-            parts,
-            answers,
-            explain:[
-              "المجتمع الإحصائي يشمل جميع المفردات محل الدراسة.",
-              "العينة جزء من المجتمع الإحصائي وليست المجتمع كله.",
-              "المعلمة للمجتمع كله، أما الإحصاءة فتحسب من العينة."
-            ],
-            formula:[
-              "حجم المجتمع يرمز له غالبا بـ N، وحجم العينة يرمز له بـ n.",
-              "Parameter للمجتمع، وStatistic للعينة."
-            ],
-            solutionSteps:[
-              "اقرأ العبارة وحدد هل تتحدث عن المجتمع أم العينة أم نوع الدراسة.",
-              "إذا كانت العبارة صحيحة اختر صح، وإذا خالفت المفهوم اختر خطأ."
-            ]
-          }
-        ]
-      };
-    }
-  },
-  {
-    id:"q2_circle",
-    title:"اختر الإجابة الصحيحة - المجتمع والعينة",
-    gen:(variant)=>{
-      const r = seededRand("q2_circle|"+variant);
-      const POOL = [
-        {
-          s:"المقصود بالمجتمع الإحصائي هو:",
-          options:[
-            "جميع المفردات التي نرغب في دراستها",
-            "جزء صغير فقط من البيانات",
-            "قيمة تحسب من العينة",
-            "طريقة لعرض البيانات"
-          ],
-          a:"جميع المفردات التي نرغب في دراستها"
-        },
-        {
-          s:"المعلمة (Parameter) هي:",
-          options:[
-            "قيمة تصف خاصية في المجتمع كله",
-            "قيمة تحسب من عينة فقط",
-            "عدد الفئات في الجدول",
-            "أداة لتمثيل البيانات"
-          ],
-          a:"قيمة تصف خاصية في المجتمع كله"
-        },
-        {
-          s:"الإحصاءة (Statistic) هي:",
-          options:[
-            "قيمة تحسب من بيانات العينة",
-            "قيمة تصف المجتمع كله",
-            "اسم المتغير فقط",
-            "عدد مفردات المجتمع"
-          ],
-          a:"قيمة تحسب من بيانات العينة"
-        },
-        {
-          s:"المسح الشامل يعني:",
-          options:[
-            "دراسة جميع مفردات المجتمع",
-            "دراسة جزء صغير من المجتمع",
-            "استخدام الرسم البياني فقط",
-            "اختيار مفردة واحدة فقط"
-          ],
-          a:"دراسة جميع مفردات المجتمع"
-        },
-        {
-          s:"الدراسة بالعينة تعني:",
-          options:[
-            "دراسة جزء من المجتمع للاستدلال على المجتمع كله",
-            "دراسة جميع المفردات بلا استثناء",
-            "عدم جمع أي بيانات",
-            "تمثيل النتائج في جدول فقط"
-          ],
-          a:"دراسة جزء من المجتمع للاستدلال على المجتمع كله"
-        },
-        {
-          s:"من مزايا الدراسة بالعينة:",
-          options:[
-            "أقل تكلفة وأسرع في كثير من الحالات",
-            "تشترط دراسة المجتمع كله",
-            "لا تصلح للاستدلال الإحصائي",
-            "تلغي الحاجة إلى التصميم الجيد"
-          ],
-          a:"أقل تكلفة وأسرع في كثير من الحالات"
-        },
-        {
-          s:"يرمز لحجم العينة غالبا بالرمز:",
-          options:["n","N","x","P"],
-          a:"n"
-        }
-      ];
-
-      const items = POOL.slice();
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,3);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"mcq"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:it.options
-      }));
-
-      const answers = {};
-      picked.forEach((it,i)=>{ answers["mcq"+(i+1)] = it.a; });
-
-      return {
-        branches:[
-          {
-            level:"متوسط",
-            prompt:"اختر الإجابة الصحيحة لكل عبارة:",
-            parts,
-            answers,
-            explain:[
-              "ركز على الفرق بين المجتمع والعينة والمعلمة والإحصاءة.",
-              "إذا كانت العبارة تعريفية فابحث عن الخيار الذي يطابق المفهوم مباشرة."
-            ],
-            formula:[
-              "المجتمع = جميع المفردات.",
-              "العينة = جزء من المجتمع.",
-              "المعلمة للمجتمع، والإحصاءة للعينة."
-            ],
-            solutionSteps:[
-              "حدد المصطلح المطلوب أولا.",
-              "استبعد الاختيارات التي تتحدث عن مفهوم مختلف."
-            ]
-          }
-        ]
-      };
-    }
-  },
-  {
-    id:"q3_census_sample",
-    title:"تمييز المسح الشامل والعينة - مواقف تطبيقية",
-    gen:(variant)=>{
-      const r = seededRand("q3_census_sample|"+variant);
-      const POOL = [
-        { s:"باحث جمع بيانات من جميع طلاب قسم الإحصاء في الكلية.", options:["عينة","مسح شامل"], a:"مسح شامل" },
-        { s:"شركة درست آراء 200 عميل فقط من بين جميع عملائها.", options:["عينة","مسح شامل"], a:"عينة" },
-        { s:"مدرسة أحصت درجات جميع الطلاب المسجلين في الصف.", options:["عينة","مسح شامل"], a:"مسح شامل" },
-        { s:"مستشفى اختار 50 ملفا فقط من أصل 500 ملف لمراجعة الجودة.", options:["عينة","مسح شامل"], a:"عينة" },
-        { s:"جهة رسمية فحصت بيانات جميع الموظفين المسجلين لديها هذا الشهر.", options:["عينة","مسح شامل"], a:"مسح شامل" },
-        { s:"باحث اختار 120 أسرة من مدينة كبيرة لإجراء الدراسة عليها.", options:["عينة","مسح شامل"], a:"عينة" }
-      ];
-
-      const items = POOL.slice();
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,3);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"cs"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:it.options
-      }));
-
-      const answers = {};
-      picked.forEach((it,i)=>{ answers["cs"+(i+1)] = it.a; });
-
-      return {
-        branches:[
-          {
-            level:"متوسط",
-            prompt:"حدد نوع الدراسة في كل حالة:",
-            parts,
-            answers,
-            explain:[
-              "إذا شملت الدراسة جميع المفردات فهي مسح شامل.",
-              "إذا تناولت جزءا من المجتمع فقط فهي عينة."
-            ],
-            formula:[
-              "كل المجتمع = مسح شامل.",
-              "بعض المفردات فقط = عينة."
-            ],
-            solutionSteps:[
-              "ابحث في العبارة عن كلمات مثل جميع أو كل أو فقط أو جزء.",
-              "وجود جزء من المجتمع يعني عينة، ووجود جميع المفردات يعني مسحا شاملا."
-            ]
-          }
-        ]
-      };
-    }
-  },
-  {
-    id:"q4_symbols_roles",
-    title:"الرموز الإحصائية - N و n والمعلمة والإحصاءة",
-    gen:(variant)=>{
-      const r = seededRand("q4_symbols_roles|"+variant);
-      const POOL = [
-        { s:"الرمز N يستخدم غالبا للدلالة على:", options:["حجم المجتمع","حجم العينة","المتوسط الحسابي","الانحراف المعياري"], a:"حجم المجتمع" },
-        { s:"الرمز n يستخدم غالبا للدلالة على:", options:["حجم المجتمع","حجم العينة","عدد المتغيرات","عدد الفئات"], a:"حجم العينة" },
-        { s:"المتوسط المحسوب من بيانات عينة يسمى:", options:["معلمة","إحصاءة","مجتمعا","مجرد ترميز"], a:"إحصاءة" },
-        { s:"النسبة الحقيقية لجميع أفراد المجتمع تسمى:", options:["معلمة","إحصاءة","عينة","تقديرا تجريبيا"], a:"معلمة" },
-        { s:"إذا حسبنا نسبة النجاح من جميع طلاب المقرر فإن القيمة تسمى:", options:["معلمة","إحصاءة","عينة","رمزا"], a:"معلمة" },
-        { s:"إذا حسبنا متوسط درجات 40 طالبا مختارين من أصل 400 طالب فإن القيمة تسمى:", options:["معلمة","إحصاءة","مجتمعا","تعدادا"], a:"إحصاءة" }
-      ];
-
-      const items = POOL.slice();
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,3);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"sym"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:it.options
-      }));
-
-      const answers = {};
-      picked.forEach((it,i)=>{ answers["sym"+(i+1)] = it.a; });
-
+      picked.forEach((it,i)=> answers["tf"+(i+1)] = it.a);
       return {
         branches:[{
           level:"متوسط",
-          prompt:"اختر الإجابة الصحيحة لكل عبارة:",
+          prompt:"حدّد صحة كل عبارة:",
           parts,
           answers,
           explain:[
-            "فرق دائما بين ما يحسب من المجتمع كله وما يحسب من العينة فقط.",
-            "المعلمة تخص المجتمع، أما الإحصاءة فتستخرج من العينة."
-          ],
-          formula:[
-            "N = حجم المجتمع.",
-            "n = حجم العينة.",
-            "Parameter للمجتمع، وStatistic للعينة."
+            "يوضح الفصل أن خط الانحدار لا يمر بجميع النقاط بالضرورة، بل يمثل أفضل اتجاه عام للبيانات.",
+            "كما يوضح أن الميل يتأثر بوحدات القياس، وأن إشارته ترتبط بإشارة معامل بريسون."
           ],
           solutionSteps:[
-            "حدد أولا هل المعطيات تخص المجتمع كاملا أم جزءا منه.",
-            "بعد ذلك اختر الرمز أو الوصف المناسب مباشرة."
+            "قارن كل عبارة بالتعريفات والملاحظات الأساسية في الفصل 4.3.",
+            "انتبه خصوصًا لعبارات: يمر بجميع النقاط، لا يتأثر بالوحدات، وارتباط الميل بمعامل بريسون."
           ]
         }]
       };
     }
   },
   {
-    id:"q5_identify_role",
-    title:"تحديد المجتمع والعينة والمعلمة والإحصاءة",
+    id:"q3_regression_fill_pool",
+    icon:"③",
+    title:"تمارين 4.3 — أكمل العبارة",
     gen:(variant)=>{
-      const r = seededRand("q5_identify_role|"+variant);
-      const POOL = [
-        { s:"جميع مرضى مستشفى معين خلال شهر رمضان", a:"المجتمع" },
-        { s:"120 مريضا تم اختيارهم من بين جميع مرضى المستشفى للدراسة", a:"العينة" },
-        { s:"متوسط أعمار جميع موظفي الشركة", a:"معلمة" },
-        { s:"متوسط أعمار 60 موظفا مختارين من الشركة", a:"إحصاءة" },
-        { s:"جميع سيارات الأجرة المسجلة في مدينة الرياض", a:"المجتمع" },
-        { s:"نسبة التأخير المحسوبة من 80 رحلة فقط", a:"إحصاءة" }
-      ];
-
-      const items = POOL.slice();
+      const r = seededRand("q3_regression_fill_pool|"+variant);
+      const items = REGRESSION_FILL_POOL.map(x=>({...x}));
       shuffleInPlace(items, r);
-      const picked = items.slice(0,3);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"role"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:["المجتمع","العينة","معلمة","إحصاءة"]
-      }));
-
+      const picked = items.slice(0,4);
+      const parts = picked.map((it,i)=>({type:"mcq", key:"fill"+(i+1), label:(i+1)+") "+it.stem, options:it.options}));
       const answers = {};
-      picked.forEach((it,i)=>{ answers["role"+(i+1)] = it.a; });
-
+      picked.forEach((it,i)=> answers["fill"+(i+1)] = it.a);
       return {
         branches:[{
           level:"متوسط",
-          prompt:"حدد الوصف الأنسب لكل حالة:",
+          prompt:"أكمل العبارات الآتية باختيار البديل الأنسب:",
           parts,
           answers,
           explain:[
-            "المجتمع أو العينة يصفان مجموعة من المفردات، بينما المعلمة والإحصاءة تصفان قيمة عددية.",
-            "إذا كانت القيمة محسوبة من المجتمع فهي معلمة، وإذا كانت من عينة فهي إحصاءة."
-          ],
-          formula:[
-            "مجموعة كاملة = مجتمع.",
-            "جزء من المجموعة = عينة.",
-            "قيمة من المجتمع = معلمة.",
-            "قيمة من العينة = إحصاءة."
+            "تعتمد هذه البنود على المفردات الأساسية للفصل: المتغير المستقل، المتغير التابع، القيمة المقدرة \\(\\hat{Y}\\)، المتوسطات، وصيغ الميل.",
+            "كما تؤكد أن الانحدار الخطي البسيط يخص متغيرين كميين وتمثيل العلاقة بخط مستقيم."
           ],
           solutionSteps:[
-            "اسأل نفسك أولا: هل العبارة تتحدث عن مجموعة أم عن قيمة محسوبة؟",
-            "ثم حدد هل المصدر هو المجتمع كله أم عينة منه."
+            "اقرأ الجملة كاملة وحدّد نوع المعلومة المطلوبة: تعريف، صيغة، أو تفسير.",
+            "اختر العبارة التي تطابق تمارين 4.3 حرفيًا أو معنًى مباشرًا."
           ]
         }]
       };
     }
   },
   {
-    id:"q6_sample_quality",
-    title:"اختيار العينة المناسبة - تمثيل المجتمع",
+    id:"q4_example_431_summary_stats",
+    icon:"④",
+    title:"الميل والمقطع والتقدير من الإحصاءات",
     gen:(variant)=>{
-      const r = seededRand("q6_sample_quality|"+variant);
-      const POOL = [
-        {
-          s:"لدراسة رضا جميع طلاب الجامعة، أي اختيار أقرب إلى عينة ممثلة؟",
-          options:["اختيار طلاب كلية واحدة فقط","اختيار طلاب من كليات ومستويات مختلفة عشوائيا","سؤال أول 20 طالبا عند البوابة","سؤال الطلاب المتفوقين فقط"],
-          a:"اختيار طلاب من كليات ومستويات مختلفة عشوائيا"
-        },
-        {
-          s:"أي عينة قد تكون متحيزة عند دراسة استخدام النقل العام؟",
-          options:["عينة من أحياء مختلفة","عينة عشوائية من السجلات","عينة من موقف الحافلات فقط","عينة موزعة على أيام متعددة"],
-          a:"عينة من موقف الحافلات فقط"
-        },
-        {
-          s:"ما الذي يجعل العينة أكثر فائدة في تمثيل المجتمع؟",
-          options:["أن تكون كبيرة فقط دون تنظيم","أن تكون عشوائية وتمثل الفئات المهمة","أن تختار من أسهل مكان فقط","أن تقتصر على المفردات المميزة"],
-          a:"أن تكون عشوائية وتمثل الفئات المهمة"
-        },
-        {
-          s:"عند دراسة دخل الأسر في مدينة كبيرة، أي تصميم أنسب؟",
-          options:["اختيار أسر من حي واحد فقط","اختيار أسر من أحياء متعددة بشكل منظم","الاكتفاء بأقارب الباحث","اختيار الأسر ذات الدخل المرتفع فقط"],
-          a:"اختيار أسر من أحياء متعددة بشكل منظم"
-        }
-      ];
-
-      const items = POOL.slice();
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,3);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"qual"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:it.options
-      }));
-
-      const answers = {};
-      picked.forEach((it,i)=>{ answers["qual"+(i+1)] = it.a; });
-
+      const r = seededRand("q4_slope_intercept|"+variant);
+      const xbar = randInt(r,50,90);
+      const ybar = randInt(r,10,40);
+      const sx = randInt(r,15,35) + randInt(r,10,99)/100;
+      const sy = randInt(r,2,8) + randInt(r,10,99)/100;
+      const rVal = (randInt(r,55,92)/100) * (randInt(r,0,1)===0?1:-1);
+      const rAbs = Math.abs(rVal);
+      const b = Math.round(rVal * sy / sx * 10000) / 10000;
+      const a = Math.round((ybar - b * xbar) * 1000) / 1000;
+      const askX = xbar + randInt(r,5,20);
+      const yhat = Math.round((a + b * askX) * 1000) / 1000;
+      const r2 = Math.round(rVal * rVal * 1000) / 1000;
       return {
         branches:[{
-          level:"صعب",
-          prompt:"اختر القرار الأنسب في كل حالة:",
-          parts,
-          answers,
-          explain:[
-            "ليست كل عينة جيدة؛ المهم أن تمثل المجتمع وأن تقلل التحيز.",
-            "التوزيع على فئات المجتمع واختيار المفردات عشوائيا يعززان جودة الاستدلال."
+          level:"متقدم",
+          prompt:`لديك القيم التالية: \\(\\bar{x}=${xbar}\\)، \\(\\bar{y}=${ybar}\\)، \\(S_x=${sx.toFixed(2)}\\)، \\(S_y=${sy.toFixed(2)}\\)، \\(r=${rVal.toFixed(3)}\\). احسب المطلوب:`,
+          parts:[
+            {type:"num", key:"b", label:"معامل الانحدار \\(b\\):", placeholder:"مثال: "+b},
+            {type:"num", key:"a", label:"المقطع \\(a\\):", placeholder:"مثال: "+a},
+            {type:"num", key:"yhat", label:"القيمة المقدرة \\(\\hat{Y}\\) عند \\(X="+askX+"\\):", placeholder:"مثال: "+yhat},
+            {type:"num", key:"r2", label:"معامل التحديد \\(r^2\\):", placeholder:"مثال: "+r2}
           ],
+          answers:{b:b,a:a,yhat:yhat,r2:r2},
           formula:[
-            "العينة الجيدة = تمثيل مناسب + تحيز أقل.",
-            "سهولة الوصول وحدها لا تعني جودة العينة."
+            "الصيغة [4-7]: \\( b = r\\dfrac{S_y}{S_x} \\)",
+            "الصيغة [4-8]: \\( a = \\bar{y} - b\\bar{x} \\)",
+            "معامل التحديد: \\( r^2 \\)"
+          ],
+          explain:[
+            "احسب الميل من الصيغة [4-7]، ثم المقطع من [4-8].",
+            "عوّض في معادلة الانحدار \\(\\hat{Y}=a+bX\\) للتقدير، ثم ربّع \\(r\\) لمعامل التحديد."
           ],
           solutionSteps:[
-            "ابحث عن الخيار الذي يغطي فئات المجتمع المختلفة.",
-            "استبعد الاختيارات المبنية على السهولة أو على فئة واحدة فقط."
+            "الميل: \\(b = r \\times S_y / S_x\\).",
+            "المقطع: \\(a = \\bar{y} - b \\times \\bar{x}\\).",
+            "التقدير: \\(\\hat{Y} = a + b \\times "+askX+"\\)، ومعامل التحديد \\(r^2 = r \\times r\\)."
           ]
         }]
       };
     }
   },
   {
-    id:"q7_census_decision",
-    title:"متى نستخدم العينة ومتى نستخدم المسح الشامل؟",
+    id:"q5_example_432_formula_46",
+    icon:"⑤",
+    title:"معادلة الانحدار من المجاميع",
     gen:(variant)=>{
-      const r = seededRand("q7_census_decision|"+variant);
-      const POOL = [
-        { s:"عدد الموظفين في الإدارة 18 فقط والبيانات متاحة بالكامل.", options:["المسح الشامل أنسب","العينة أنسب"], a:"المسح الشامل أنسب" },
-        { s:"عدد العملاء بالآلاف والوقت محدود جدا.", options:["المسح الشامل أنسب","العينة أنسب"], a:"العينة أنسب" },
-        { s:"نريد فحص جميع ملفات شعبة صغيرة قبل اعتماد النتيجة النهائية.", options:["المسح الشامل أنسب","العينة أنسب"], a:"المسح الشامل أنسب" },
-        { s:"تكلفة جمع البيانات من جميع الأسر مرتفعة جدا.", options:["المسح الشامل أنسب","العينة أنسب"], a:"العينة أنسب" },
-        { s:"المجتمع محدود جدا ويمكن الوصول إلى كل مفرداته بسهولة.", options:["المسح الشامل أنسب","العينة أنسب"], a:"المسح الشامل أنسب" },
-        { s:"القرار مطلوب بسرعة مع بقاء مستوى دقة مقبول.", options:["المسح الشامل أنسب","العينة أنسب"], a:"العينة أنسب" }
+      const r = seededRand("q5_regression_sums|"+variant);
+      const cases = [
+        {n:6, SX:450, SY:90, SXY:7130, SX2:37850, xbar:75, ybar:15},
+        {n:5, SX:300, SY:125, SXY:8200, SX2:19800, xbar:60, ybar:25},
+        {n:6, SX:360, SY:180, SXY:11400, SX2:23000, xbar:60, ybar:30},
+        {n:5, SX:400, SY:100, SXY:8500, SX2:34000, xbar:80, ybar:20},
+        {n:7, SX:490, SY:210, SXY:15200, SX2:37100, xbar:70, ybar:30},
+        {n:6, SX:300, SY:240, SXY:12800, SX2:16400, xbar:50, ybar:40},
+        {n:5, SX:350, SY:75, SXY:5600, SX2:26250, xbar:70, ybar:15}
       ];
-
-      const items = POOL.slice();
-      shuffleInPlace(items, r);
-      const picked = items.slice(0,3);
-
-      const parts = picked.map((it,i)=>({
-        type:"mcq",
-        key:"dec"+(i+1),
-        label:(i+1)+") "+it.s,
-        options:it.options
-      }));
-
-      const answers = {};
-      picked.forEach((it,i)=>{ answers["dec"+(i+1)] = it.a; });
-
+      const c = cases[randInt(r,0,cases.length-1)];
+      const num = c.n*c.SXY - c.SX*c.SY;
+      const den = c.n*c.SX2 - c.SX*c.SX;
+      const b = Math.round((num/den)*1000)/1000;
+      const a = Math.round((c.ybar - b*c.xbar)*100)/100;
+      const askX = c.xbar + randInt(r,5,15);
+      const yhat = Math.round((a + b*askX)*100)/100;
+      const table = lessonTable(
+        ["المقدار","القيمة"],
+        [["n",String(c.n)],["ΣX",String(c.SX)],["ΣY",String(c.SY)],["ΣXY",String(c.SXY)],["ΣX²",String(c.SX2)]]
+      );
       return {
         branches:[{
-          level:"متوسط",
-          prompt:"حدد الخيار الأنسب في كل موقف:",
-          parts,
-          answers,
-          explain:[
-            "المسح الشامل يناسب المجتمعات الصغيرة أو الحالات التي تتطلب شمول كل المفردات.",
-            "العينة تناسب المجتمعات الكبيرة أو الحالات التي يقيّدها الوقت والجهد والتكلفة."
+          level:"متقدم",
+          prompt:`لديك المجاميع التالية:${table}<div class="hint">استخدم الصيغة [4-6] لإيجاد الميل، ثم أكمل بناء معادلة الانحدار. علمًا بأن \\(\\bar{x}=${c.xbar}\\) و\\(\\bar{y}=${c.ybar}\\).</div>`,
+          parts:[
+            {type:"num", key:"b", label:"قيمة \\(b\\) من الصيغة [4-6]:", placeholder:"مثال: "+b},
+            {type:"num", key:"a", label:"قيمة المقطع \\(a\\):", placeholder:"مثال: "+a},
+            {type:"num", key:"yhat", label:"القيمة المقدرة \\(\\hat{Y}\\) عند \\(X="+askX+"\\):", placeholder:"مثال: "+yhat},
+            {type:"mcq", key:"interp", label:"تفسير الميل:", options:["كل زيادة وحدة واحدة في X تقابل زيادة تقديرية في Y بمقدار b تقريبًا","كل زيادة وحدة واحدة في Y تقابل زيادة X بمقدار b","المقطع a هو قوة الارتباط","معامل التحديد يساوي الميل دائمًا"]}
           ],
+          answers:{b:b, a:a, yhat:yhat, interp:"كل زيادة وحدة واحدة في X تقابل زيادة تقديرية في Y بمقدار b تقريبًا"},
           formula:[
-            "مجتمع صغير ومتاح = مسح شامل.",
-            "مجتمع كبير أو مكلف = عينة."
+            "الصيغة [4-6]: \\( b = \\dfrac{n\\sum x_i y_i - (\\sum x_i)(\\sum y_i)}{n\\sum x_i^2 - (\\sum x_i)^2} \\)",
+            "الصيغة [4-8]: \\( a = \\bar{y} - b\\bar{x} \\)",
+            "معادلة الانحدار: \\(\\hat{Y}=a+bX\\)"
+          ],
+          explain:["عوّض المجاميع في الصيغة [4-6] للميل، ثم استخدم المتوسطين للمقطع."],
+          solutionSteps:[
+            "البسط: \\(n \\times \\sum XY - \\sum X \\times \\sum Y\\)، والمقام: \\(n \\times \\sum X^2 - (\\sum X)^2\\).",
+            "احسب \\(b\\)، ثم \\(a = \\bar{y} - b\\bar{x}\\).",
+            "عند \\(X="+askX+"\\): \\(\\hat{Y} = a + b \\times "+askX+"\\)."
+          ]
+        }]
+      };
+    }
+  },  {
+    id:"q7_regression_estimation_context",
+    icon:"⑦",
+    title:"تقدير وتفسير — نموذج انحدار جاهز",
+    gen:(variant)=>{
+      const r = seededRand("q7_regression_estimation_context|"+variant);
+      const cases = [
+        {x:"ساعات التدريب", y:"درجة الأداء", a:12.5, b:1.8, askX:6, outsideX:14, range:"من 0 إلى 8", slope:"كل زيادة ساعة تدريب واحدة تقابل زيادة تقديرية في درجة الأداء بمقدار 1.8"},
+        {x:"عدد الغيابات", y:"درجة الاختبار", a:85, b:-2.4, askX:10, outsideX:20, range:"من 0 إلى 12", slope:"كل زيادة غياب واحد تقابل انخفاضًا تقديريًا في درجة الاختبار بمقدار 2.4"},
+        {x:"عدد التمارين المحلولة", y:"درجة الاختبار", a:48, b:3.25, askX:8, outsideX:18, range:"من 2 إلى 10", slope:"كل زيادة تمرين واحد تقابل زيادة تقديرية في درجة الاختبار بمقدار 3.25"}
+      ];
+      const c = cases[randInt(r,0,cases.length-1)];
+      const yhat = Math.round((c.a + c.b*c.askX)*100)/100;
+      return {
+        branches:[{
+          level:"متقدم",
+          prompt:`نموذج الانحدار بين <b>${c.x}</b> و<b>${c.y}</b> هو: \\(\\hat{Y}=${c.a}${c.b>=0?"+":""}${c.b}X\\). وكان نطاق قيم \\(X\\) في البيانات الأصلية ${c.range}.`,
+          parts:[
+            {type:"num", key:"yhat", label:`القيمة المقدرة \\(\\hat{Y}\\) عند \\(X=${c.askX}\\):`, placeholder:"مثال: 23.30"},
+            {type:"mcq", key:"slope", label:"تفسير الميل في هذا السياق:", options:[c.slope,"المقطع a يقيس قوة الارتباط فقط","كل زيادة في Y تسبب تغير X بالمقدار نفسه","قيمة الميل لا تتأثر بوحدات القياس"]},
+            {type:"mcq", key:"outside", label:`تقدير \\(Y\\) عند \\(X=${c.outsideX}\\) يُعد:`, options:["استقراء خارج نطاق البيانات ويحتاج حذرًا","تقديرًا مضمون الدقة دائمًا","حسابًا لمعامل الارتباط","غير ممكن لأن الميل لا يستخدم في التقدير"]}
+          ],
+          answers:{yhat:yhat, slope:c.slope, outside:"استقراء خارج نطاق البيانات ويحتاج حذرًا"},
+          formula:["معادلة الانحدار: \\(\\hat{Y}=a+bX\\)", "التقدير خارج نطاق بيانات \\(X\\) الأصلية يسمى استقراءً ويُفسَّر بحذر."],
+          explain:["عوّض قيمة \\(X\\) المطلوبة في نموذج الانحدار لإيجاد القيمة المقدرة.", "فسّر الميل بوصفه التغير المتوقع في \\(Y\\) عند زيادة \\(X\\) وحدة واحدة، مع الانتباه للإشارة."],
+          solutionSteps:["عوّض قيمة \\(X\\) داخل \\(\\hat{Y}=a+bX\\).", "اقرأ إشارة الميل: موجبة تعني زيادة تقديرية، وسالبة تعني انخفاضًا تقديريًا.", "قارن قيمة \\(X\\) الجديدة بنطاق البيانات الأصلي قبل الثقة بالتقدير."]
+        }]
+      };
+    }
+  },  {
+    id:"q6_exercise_422_constant_y",
+    icon:"⑥",
+    title:"حالة خاصة — Y ثابتة",
+    gen:(variant)=>{
+      const r = seededRand("q6_constant_y|"+variant);
+      const n = randInt(r,4,6);
+      const yConst = randInt(r,1,9);
+      const xVals = [];
+      for(let i=0;i<n;i++) xVals.push(randInt(r,1,10));
+      const table = lessonTable(
+        ["القيمة",...Array.from({length:n},(_,i)=>String(i+1))],
+        [["X",...xVals.map(String)],["Y",...Array(n).fill(String(yConst))]]
+      );
+      return {
+        branches:[{
+          level:"متقدم",
+          prompt:`لديك البيانات التالية:${table}<div class="hint">بما أن قيم Y كلها ثابتة، ففكّر في أثر ذلك على التشتت والميل وجدوى النموذج.</div>`,
+          parts:[
+            {type:"num", key:"b", label:"قيمة الميل \\(b\\):", placeholder:"مثال: 0"},
+            {type:"num", key:"a", label:"قيمة المقطع \\(a\\):", placeholder:"مثال: "+yConst},
+            {type:"mcq", key:"useful", label:"هل معادلة مستقيم الانحدار مجدية لهذه البيانات؟", options:["نعم؛ لأنها تفسر تغيرًا واضحًا في Y","لا؛ لأن Y ثابتة فلا يوجد تباين يفسره النموذج","نعم؛ لأن قيمة a موجبة","لا؛ لأن X تحتوي قيم قليلة فقط"]}
+          ],
+          answers:{b:0,a:yConst,useful:"لا؛ لأن Y ثابتة فلا يوجد تباين يفسره النموذج"},
+          explain:[
+            "عندما تكون قيم Y ثابتة فإن التشتت منعدم، فيصبح النموذج \\(\\hat{Y}="+yConst+"\\) أفقيًا بميل صفري.",
+            "لا توجد فائدة تفسيرية للانحدار؛ لأن المتغير المستقل لا يفسر تغيرًا في Y."
           ],
           solutionSteps:[
-            "افحص حجم المجتمع وإمكانية الوصول لجميع مفرداته.",
-            "وازن بين الدقة المطلوبة وبين الوقت والتكلفة."
+            "لاحظ أن جميع قيم Y تساوي "+yConst+"، إذن \\(\\bar{y}="+yConst+"\\) ولا يوجد تغير.",
+            "الميل صفري، والمعادلة \\(\\hat{Y}="+yConst+"\\).",
+            "احكم على الجدوى من خلال غياب التباين في المتغير التابع."
           ]
         }]
       };
@@ -3021,16 +2913,14 @@ function buildQuestionById(id){
   return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
 }
 
-const MASTERY_VERSION = "stat102_1_1_mastery_unified_v1";
-const MASTERY_CORE = ["q1_tf", "q2_circle", "q3_census_sample"];
+const MASTERY_VERSION = "stat102_4_3_mastery_v1";
+const MASTERY_CORE = ["q1_regression_selftest_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46"];
 const MASTERY_PROFILES = {
-  q1_tf:{supports:["q4_symbols_roles", "q5_identify_role", "q6_sample_quality"]},
-  q2_circle:{supports:["q4_symbols_roles", "q5_identify_role", "q6_sample_quality"]},
-  q3_census_sample:{supports:["q4_symbols_roles", "q5_identify_role", "q6_sample_quality"]},
-  q4_symbols_roles:{supports:["q5_identify_role", "q6_sample_quality", "q7_census_decision"]},
-  q5_identify_role:{supports:["q6_sample_quality", "q7_census_decision", "q4_symbols_roles"]},
-  q6_sample_quality:{supports:["q7_census_decision", "q4_symbols_roles", "q5_identify_role"]},
-  q7_census_decision:{supports:["q4_symbols_roles", "q5_identify_role", "q6_sample_quality"]}
+  q1_regression_selftest_pool:{supports:["q2_regression_tf_pool","q3_regression_fill_pool","q7_regression_estimation_context"]},
+  q4_example_431_summary_stats:{supports:["q5_example_432_formula_46","q7_regression_estimation_context","q6_exercise_422_constant_y"]},
+  q5_example_432_formula_46:{supports:["q7_regression_estimation_context","q4_example_431_summary_stats","q6_exercise_422_constant_y"]},
+  q7_regression_estimation_context:{supports:["q5_example_432_formula_46","q2_regression_tf_pool","q3_regression_fill_pool"]},
+  q6_exercise_422_constant_y:{supports:["q2_regression_tf_pool","q3_regression_fill_pool","q7_regression_estimation_context"]}
 };
 
 function normalizeAdaptiveOrder(order){
@@ -3043,34 +2933,13 @@ function normalizeAdaptiveOrder(order){
   });
 }
 
-function adaptiveQuestionComplete(q){
-  if(!q) return false;
-  if(typeof isQuestionComplete === "function") return isQuestionComplete(q);
-  if(typeof isQuestionDone === "function") return isQuestionDone(q);
-  if(typeof getQuestionStatus === "function"){
-    const st = getQuestionStatus(q);
-    return st === "completed_correct" || st === "completed_wrong" || st === "correct" || st === "locked";
-  }
-  return false;
-}
-function adaptiveQuestionCorrect(q){
-  if(!q) return false;
-  if(typeof isQuestionCorrect === "function") return isQuestionCorrect(q);
-  if(typeof getQuestionStatus === "function"){
-    const st = getQuestionStatus(q);
-    return st === "completed_correct" || st === "correct";
-  }
-  return false;
-}
-
 function ensureAdaptiveState(){
   const ids = TEMPLATES.map(t=>t.id);
-  const fallbackCore = ids.slice(0, Math.min(3, ids.length));
   const core = MASTERY_CORE.filter(id=>ids.includes(id));
   let active = normalizeAdaptiveOrder(state.activeOrder);
   if(state.masteryVersion !== MASTERY_VERSION || active.length===0){
     const r = seededRand("mastery-core|" + Date.now() + "|" + Math.random());
-    active = shuffleInPlace([...(core.length ? core : fallbackCore)], r);
+    active = shuffleInPlace([...core], r);
     state.masteryVersion = MASTERY_VERSION;
     state.activeOrder = active;
     state.order = active.slice();
@@ -3118,27 +2987,32 @@ function addAdaptiveSupportFor(qid, reason){
   state.masterySupportSources[sourceKey] = (state.masterySupportSources[sourceKey] || 0) + 1;
   state.masterySupportCount = (state.masterySupportCount || 0) + 1;
   state.masterySupportLog = state.masterySupportLog || [];
-  state.masterySupportLog.push({from:qid || "general", added:nextId, reason:reason || "needs_support", at:Date.now()});
+  state.masterySupportLog.push({ source: sourceKey, support: nextId, reason: reason || "mastery", at: Date.now() });
   saveState();
   return nextId;
 }
 
-function maybeQueueAdaptiveSupport(q){
-  if(!q || adaptiveQuestionCorrect(q)) return null;
-  return addAdaptiveSupportFor(q.id, "locked_wrong_attempt");
+function maybeQueueAdaptiveSupport(question){
+  if(!window.__examRunning || !question) return null;
+  if(isQuestionWrong(question)) return addAdaptiveSupportFor(question.id, "wrong");
+  return null;
 }
 
 function ensureSupportForWeakQuestions(){
-  const active = ensureAdaptiveState().slice();
+  if(!window.__examRunning) return false;
+  ensureAdaptiveState();
+  const activeSet = new Set(state.activeOrder || []);
+  const activeQuestions = BANK.filter(q=>activeSet.has(q.id));
+  const done = activeQuestions.filter(q=>isQuestionComplete(q));
+  const wrong = done.filter(q=>isQuestionWrong(q));
   let added = false;
-  for(const id of active){
-    const q = buildQuestionById(id);
-    if(!q) continue;
-    if(adaptiveQuestionComplete(q) && !adaptiveQuestionCorrect(q)){
-      if(addAdaptiveSupportFor(id, "results_gate")){
-        added = true;
-        break;
-      }
+  wrong.forEach(q=>{ if(addAdaptiveSupportFor(q.id, "locked")) added = true; });
+  if(!added && done.length > 0 && done.length === activeQuestions.length && state.activeOrder.length < TEMPLATES.length){
+    const correctCount = done.filter(q=>isQuestionCorrect(q)).length;
+    const masteryRatio = correctCount / done.length;
+    if(masteryRatio < 0.85){
+      const anchor = wrong[0] || done.find(q=>!isQuestionCorrect(q)) || done[done.length-1];
+      if(addAdaptiveSupportFor(anchor && anchor.id, "mastery-threshold")) added = true;
     }
   }
   if(added) BANK = buildBank();
@@ -3158,8 +3032,7 @@ function buildBank(){
 let BANK = buildBank();
 /* Codex Adaptive Mastery End */
 
-
-/* ===== ????? ?????? ???????? ??? ??? ===== */
+/* ===== قراءة مفاتيح الإجابات لكل فرع ===== */
 function collectPartKeys(branch){
   const keys=[];
   (branch.parts||[]).forEach(p=>keys.push(p.key));
@@ -3169,7 +3042,7 @@ function collectPartKeys(branch){
   return keys;
 }
 
-/* ===== ????? ??? ===== */
+/* ===== تقييم فرع ===== */
 function gradeBranch(q, branch, bi, savedObj){
   const result = { okAll: true, byKey: {} };
 
@@ -3206,7 +3079,7 @@ function gradeBranch(q, branch, bi, savedObj){
   return result;
 }
 
-/* ===== ???? ??????? ===== */
+/* ===== حالة الإنجاز ===== */
 function isBranchComplete(qid, bi){
   const rec = ensureBranchRec(qid, bi);
   return rec.status==="correct" || rec.status==="locked" || !window.__examRunning;
@@ -3222,23 +3095,30 @@ function isQuestionWrong(q){
 }
 
 function setProgress(){
-  const completed = BANK.filter(q=>isQuestionComplete(q)).length;
-  const visibleCompleted = window.__examRunning ? completed : 0;
-    const qCountEl = document.getElementById("qCount");
+  const completed = window.__examRunning ? BANK.filter(q=>isQuestionComplete(q)).length : 0;
+  const total = Math.max(BANK.length, 1);
+  const qCountEl = document.getElementById("qCount");
   const qNoEl = document.getElementById("qNo");
-  if(qCountEl) qCountEl.textContent = BANK.length;
-  if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
-  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
-  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
+  if(qCountEl) qCountEl.textContent = "—";
+  if(qNoEl) qNoEl.textContent = String(Math.min(state.currentIndex+1, BANK.length));
+  const supportCount = state.masterySupportCount || 0;
+  const progressText = supportCount
+    ? "تم حل " + completed + " سؤال — أسئلة دعم: " + supportCount
+    : "تم حل " + completed + " سؤال";
+  document.getElementById("progressText").textContent = progressText;
+  document.getElementById("progressBar").style.width = `${Math.min(100, (completed/total)*100)}%`;
 
   const pill = document.getElementById("statusPill");
   const q = BANK[state.currentIndex];
-  if(isQuestionComplete(q)){
+  if(!window.__examRunning || !q){
+    pill.textContent="بانتظار البدء";
+    pill.className="pill warn";
+  }else if(isQuestionComplete(q)){
     if(isQuestionCorrect(q)){
       pill.textContent="مكتمل";
       pill.className="pill";
     }else{
-      pill.textContent="مكتمل (توجد أخطاء)";
+      pill.textContent="بحاجة دعم";
       pill.className="pill warn";
     }
   }else{
@@ -3273,14 +3153,14 @@ function renderSidebar(){
     const unsaved = state.dirty[q.id];
     const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
       el("div",{class:"left"},[
-        unsaved ? el("div",{class:"unsaved-dot", title:"توجد إجابة غير محفوظة"},[]) : null,
+        unsaved ? el("div",{class:"unsaved-dot", title:"إجابة غير محفوظة"},[]) : null,
         el("div",{class:"dot "+dotClass}),
         el("div",{},[
           el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
           el("div",{style:"margin-top:6px"},[badge])
         ])
       ]),
-      el("div",{class:"icon"},[q.icon])
+      el("div",{class:"icon"},["❓"])
     ].filter(Boolean));
     list.appendChild(item);
   });
@@ -3290,7 +3170,7 @@ function renderSidebar(){
   });
 }
 
-/* ===== ?????? ????? ===== */
+/* ===== واجهات مخصصة ===== */
 function renderFreqTable(q, branch, bi){
   const rec = ensureBranchRec(q.id, bi);
   const t = branch.table;
@@ -3360,7 +3240,7 @@ function renderChartsInteractive(branch){
 
   // Bar chart (SVG)
   const w=520, h=260, pad=34, bw=56, gap=22, x0=24, baseY=h-54;
-  const barSvg = el("svg",{viewBox:`0 0 ${w} ${h}`, class:"svgInteractive", "aria-label":"????? ????????"},[]);
+  const barSvg = el("svg",{viewBox:`0 0 ${w} ${h}`, class:"svgInteractive", "aria-label":"الرسم بالأعمدة"},[]);
   barSvg.appendChild(el("rect",{x:"0",y:"0",width:String(w),height:String(h),rx:"14",fill:"#ffffff"}));
   barSvg.appendChild(el("line",{x1:String(pad),y1:String(baseY),x2:String(w-pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
   barSvg.appendChild(el("line",{x1:String(pad),y1:String(pad),x2:String(pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
@@ -3375,17 +3255,17 @@ function renderChartsInteractive(branch){
       fill:"rgba(10,94,168,.22)", stroke:"rgba(10,94,168,.45)", "stroke-width":"1.5", class:"barSeg", "data-i":String(i)},[]);
     rect.addEventListener("mousemove",(ev)=>{
       const pct = (c/N)*100;
-      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">???????: ${c}</div><div>??????: ${pct.toFixed(1)}%</div>`);
+      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">التكرار: ${c}</div><div>النسبة: ${pct.toFixed(1)}%</div>`);
     });
     rect.addEventListener("mouseleave", hideTip);
     rect.addEventListener("click", ()=>{
       barSvg.querySelectorAll(".barSeg").forEach(n=>n.classList.remove("selected"));
       rect.classList.add("selected");
-      info.innerHTML = `<div><b>?????:</b> ${escapeHtml(cats[i])}</div>
-                        <div><b>???????:</b> ${c}</div>
-                        <div><b>??????? ??????:</b> ${(c/N).toFixed(3)}</div>
-                        <div><b>?????? ???????:</b> ${((c/N)*100).toFixed(1)}%</div>
-                        <div><b>????? ??????:</b> ${Math.round((c/N)*360)}�</div>`;
+      info.innerHTML = `<div><b>الفئة:</b> ${escapeHtml(cats[i])}</div>
+                        <div><b>التكرار:</b> ${c}</div>
+                        <div><b>التكرار النسبي:</b> ${(c/N).toFixed(3)}</div>
+                        <div><b>النسبة المئوية:</b> ${((c/N)*100).toFixed(1)}%</div>
+                        <div><b>زاوية القطاع:</b> ${Math.round((c/N)*360)}°</div>`;
     });
     barGroup.appendChild(rect);
 
@@ -3395,14 +3275,14 @@ function renderChartsInteractive(branch){
   barSvg.appendChild(barGroup);
 
   const barBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["????? ????????"]),
+    el("div",{class:"chartTitle"},["الرسم بالأعمدة"]),
     el("div",{class:"svgWrap"},[barSvg]),
-    el("div",{class:"chartNote"},[`N = ${N} � ???? ?????? ??? ?????? ?? ???? ?????? ????????.`])
+    el("div",{class:"chartNote"},[`N = ${N} — مرّر المؤشر فوق العمود أو اضغط لتثبيت التفاصيل.`])
   ]);
 
   // Pie chart (SVG)
   const pcw=320, pch=260, cx=150, cy=130, pr=92;
-  const pieSvg = el("svg",{viewBox:`0 0 ${pcw} ${pch}`, class:"svgInteractive", "aria-label":"???????? ????????"},[]);
+  const pieSvg = el("svg",{viewBox:`0 0 ${pcw} ${pch}`, class:"svgInteractive", "aria-label":"القطاعات الدائرية"},[]);
   pieSvg.appendChild(el("rect",{x:"0",y:"0",width:String(pcw),height:String(pch),rx:"14",fill:"#ffffff"}));
 
   const pie = piePaths(counts, cx, cy, pr);
@@ -3411,31 +3291,31 @@ function renderChartsInteractive(branch){
     const path = el("path",{d:seg.d, fill:`rgba(30,167,255,${0.12+0.08*i})`, stroke:"rgba(10,94,168,.25)", "stroke-width":"1.5", class:"pieSeg", "data-i":String(i)},[]);
     path.addEventListener("mousemove",(ev)=>{
       const angle = (c/N)*360;
-      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">???????: ${c}</div><div>???????: ${angle.toFixed(1)}�</div>`);
+      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">التكرار: ${c}</div><div>الزاوية: ${angle.toFixed(1)}°</div>`);
     });
     path.addEventListener("mouseleave", hideTip);
     path.addEventListener("click", ()=>{
       pieSvg.querySelectorAll(".pieSeg").forEach(n=>n.classList.remove("selected"));
       path.classList.add("selected");
-      info.innerHTML = `<div><b>?????:</b> ${escapeHtml(cats[i])}</div>
-                        <div><b>???????:</b> ${c}</div>
-                        <div><b>??????? ??????:</b> ${(c/N).toFixed(3)}</div>
-                        <div><b>?????? ???????:</b> ${((c/N)*100).toFixed(1)}%</div>
-                        <div><b>????? ??????:</b> ${Math.round((c/N)*360)}�</div>`;
+      info.innerHTML = `<div><b>الفئة:</b> ${escapeHtml(cats[i])}</div>
+                        <div><b>التكرار:</b> ${c}</div>
+                        <div><b>التكرار النسبي:</b> ${(c/N).toFixed(3)}</div>
+                        <div><b>النسبة المئوية:</b> ${((c/N)*100).toFixed(1)}%</div>
+                        <div><b>زاوية القطاع:</b> ${Math.round((c/N)*360)}°</div>`;
     });
     pieSvg.appendChild(path);
   });
   pieSvg.appendChild(el("circle",{cx:String(cx),cy:String(cy),r:String(pr),fill:"none",stroke:"#dbe7f2","stroke-width":"2"}));
 
   const pieBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["???????? ????????"]),
+    el("div",{class:"chartTitle"},["القطاعات الدائرية"]),
     el("div",{class:"svgWrap"},[pieSvg]),
-    el("div",{class:"chartNote"},[`???? ??? ?????? ?????? ???????.`])
+    el("div",{class:"chartNote"},[`اضغط على القطاع لإظهار تفاصيله.`])
   ]);
 
-  const info = el("div",{class:"chartInfo", html:`<div style="font-weight:900;color:#0f2a3b;margin-bottom:6px">?????? ?????? ??????</div><div style="color:#5b6b7a;font-weight:800">???? ??? ????/????.</div>`});
+  const info = el("div",{class:"chartInfo", html:`<div style="font-weight:900;color:#0f2a3b;margin-bottom:6px">تفاصيل العنصر المحدد</div><div style="color:#5b6b7a;font-weight:800">اضغط على عمود/قطاع.</div>`});
   const infoBox = el("div",{class:"chartBox"},[
-    el("div",{class:"chartTitle"},["???? ????????"]),
+    el("div",{class:"chartTitle"},["لوحة التفاصيل"]),
     info
   ]);
 
@@ -3459,7 +3339,7 @@ function renderStemLeaf(branch){
   ]);
 }
 
-/* ===== ????? ???????? ?? DOM ???? ??? ===== */
+/* ===== قراءة المدخلات من DOM بدون حفظ ===== */
 function readBranchInputs(qid, bi, branch){
   const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
   const saved = {};
@@ -3539,16 +3419,16 @@ function disableBranchInputs(qid, bi){
   if(saveBtn) saveBtn.disabled = true;
 }
 
-/* ===== ???????? ???????? ??????? ===== */
+/* ===== المساعدة والإجابة الصحيحة ===== */
 function openHelp(q, branch){
   const explainHtml = (branch.explain && branch.explain.length)
     ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>???? ?????? ???????? ?? ??? ??????? ??? ???????.</div>";
+    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المطلوب قبل التعويض.</div>";
   const formulaHtml = (branch.formula && branch.formula.length)
     ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>???? ??????? ??????? ?? ???? ???? ????.</div>";
+    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
 
-  openModal("?????? ????", `
+  openModal("مساعدة", `
     <div class="ai-help-panel">
       <div class="ai-help-hero">
         <div class="ai-help-orb"><span></span></div>
@@ -3559,15 +3439,15 @@ function openHelp(q, branch){
       <div class="ai-help-grid">
         <div class="ai-help-section">
           <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">?</span>
-            <span>??? ???? ?? ???????</span>
+            <span class="ai-help-chip-icon">✦</span>
+            <span>كيف تفكر في السؤال؟</span>
           </div>
           <div class="ai-help-body">${explainHtml}</div>
         </div>
         <div class="ai-help-section">
           <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">?</span>
-            <span>?? ??????? ?? ???????</span>
+            <span class="ai-help-chip-icon">∑</span>
+            <span>ما القانون أو المسار؟</span>
           </div>
           <div class="ai-help-body">${formulaHtml}</div>
         </div>
@@ -3575,10 +3455,9 @@ function openHelp(q, branch){
     </div>
   `);
 }
-
 function openCorrectAnswer(q, branch, bi){
   const steps = (branch.solutionSteps && branch.solutionSteps.length)
-    ? `<div style="font-weight:900;margin:10px 0 6px">????? ????</div>
+    ? `<div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>
        <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
     : "";
 
@@ -3591,31 +3470,31 @@ function openCorrectAnswer(q, branch, bi){
   if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
     branch.table.rows.forEach(r=>{
       (r.inputs||[]).forEach(k=>{
-        correctList.push(`<li><b>????</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
+        correctList.push(`<li><b>قيمة</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
       });
     });
   }
   const correctHtml = correctList.length
-    ? `<div style="font-weight:900;margin:12px 0 6px">??????? ???????</div>
+    ? `<div style="font-weight:900;margin:12px 0 6px">الإجابة الصحيحة</div>
        <ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
     : "";
 
-  openModal("??????? ???????", `
-    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} � (${escapeHtml(branch.level)})</div>
+  openModal("الإجابة الصحيحة", `
+    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} — (${escapeHtml(branch.level)})</div>
     ${steps}
     ${correctHtml}
-    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">?? ????? ??????? ???????. ?????? ??? ????? ????? ????? ???? ?????.</div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">????? ???? ????</button><button class="btn small" onclick="closeModal()">??????</button></div>
+    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">تم إظهار الإجابة الصحيحة. لتجنّب حفظ الحل، يمكنك توليد نسخة جديدة.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button><button class="btn small" onclick="closeModal()">لاحقًا</button></div>
   `);
   const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
   if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
 }
 
 function promptOpenCorrectAnswer(q, branch, bi){
-  openModal("????? ?????????", `
-    <div style="font-weight:900;margin-bottom:10px">????? ??????? ??? ??????.</div>
-    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">????? ???? ??? ???? ?????? ?????? ??? ???? ??????.</div>
-    <button class="btn primary" id="showAnswerAfterAttemptsBtn">????? ???????</button>
+  openModal("انتهت المحاولات", `
+    <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">إظهار الإجابة</button>
   `);
   const btn = document.getElementById("showAnswerAfterAttemptsBtn");
   if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
@@ -3623,20 +3502,20 @@ function promptOpenCorrectAnswer(q, branch, bi){
 
 function markDirty(qid){ state.dirty = state.dirty || {}; state.dirty[qid]=true; saveState(); renderSidebar(); }
 
-/* ===== ??? ??????? (?????? ?????? ????) ===== */
+/* ===== حفظ الإجابة (المنطق المتفق عليه) ===== */
 function handleSaveBranch(q, branch, bi){
   const rec = ensureBranchRec(q.id, bi);
 
-  // ??? ??? ????/???? ??? ???
+  // إذا كان مغلق/صحيح فلا حفظ
   if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
 
   const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
   if(!okFilled){
-    openModal("?????", `<div style="font-weight:900">???? ???? ??????? ???????? ?? ???? (??? ???????).</div>`);
+    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الخانات المطلوبة ثم اضغط (حفظ الإجابة).</div>`);
     return;
   }
 
-  // ??? ???????? ??????
+  // سجل المحاولة والحفظ
   rec.attempts = (rec.attempts || 0) + 1;
   rec.saved = saved;
   delete state.dirty[q.id];
@@ -3652,18 +3531,18 @@ function handleSaveBranch(q, branch, bi){
     return;
   }
 
-  // ???
+  // خطأ
   if(rec.attempts === 1){
     rec.status = "wrong1";
     saveState();
   applyFieldFeedback(q.id, bi, grade);
     setProgress(); renderSidebar();
-    // ???? ???????? ???????? (???? ????? ????)
+    // افتح المساعدة تلقائياً (بدون طريقة الحل)
     openHelp(q, branch);
     return;
   }
 
-  // ???????? ???????: ????? ??????? ??????? ?????? ???????
+  // المحاولة الثانية: إظهار الإجابة الصحيحة وإغلاق التعديل
   rec.status = "locked";
   saveState();
   applyFieldFeedback(q.id, bi, grade);
@@ -3672,7 +3551,7 @@ function handleSaveBranch(q, branch, bi){
   promptOpenCorrectAnswer(q, branch, bi);
 }
 
-/* ===== ??? ?????? ???????? ===== */
+/* ===== عرض الصفحة الرئيسية ===== */
 
 function renderMain(){
   BANK = buildBank();
@@ -3689,22 +3568,22 @@ function renderMain(){
       el("div",{},[q.title])
     ]),
     el("div",{class:"qmeta"},[
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["????? ??????"]),
-      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["????? ???????"]),
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["??????"]),
-      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["??????"])
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["تبديل السؤال"]),
+      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["إظهار النتيجة"]),
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["السابق"]),
+      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["التالي"])
     ])
   ]);
 
   const branches = el("div",{class:"branches"},[]);
   q.branches.forEach((branch, bi)=>{
-    const tagClass=(branch.level==="???")?"easy":(branch.level==="?????"?"med":"hard");
+    const tagClass=(branch.level==="سهل")?"easy":(branch.level==="متوسط"?"med":"hard");
     const rec = ensureBranchRec(q.id, bi);
 
     const branchCard = el("div",{class:"branch"},[]);
     const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
       ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},
-        [rec.status==="correct" ? "????" : "???"])
+        [rec.status==="correct" ? "صحيح" : "خطأ"])
       : null;
 
     const head = el("div",{class:"branchHead"},[
@@ -3712,7 +3591,8 @@ function renderMain(){
       statusTag
     ]);
 const body = el("div",{class:"branchBody"},[]);
-    body.innerHTML = latexFix(branch.prompt).replace(/\n/g,"<br/>");
+    const _p = latexFix(branch.prompt);
+    body.innerHTML = (_p.includes("<svg") || _p.includes("<canvas")) ? _p : _p.replace(/\n/g,"<br/>");
     typesetMath(body);
 
     if(branch.customUI==="stemleaf"){ body.appendChild(renderStemLeaf(branch)); }
@@ -3742,9 +3622,10 @@ const body = el("div",{class:"branchBody"},[]);
           radio.onchange = ()=>{ markDirty(q.id); };
           if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
 
+          const isInterval = /^[\[\\(].*[\]\\)]$/.test(String(op));
           const lab = el("label",{class:"choice", for:id},[
             radio,
-            el("span",{},[op])
+            el("span", isInterval ? {dir:"ltr",style:"display:inline-block"} : {},[op])
           ]);
           group.appendChild(lab);
         });
@@ -3775,10 +3656,10 @@ const body = el("div",{class:"branchBody"},[]);
     });
 
     const btns = el("div",{class:"branchBtns"},[
-      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["??? ???????"]),
-      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"????? ???? ???????"},[
-        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["?"]),
-        "?????? ????"
+      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["حفظ الإجابة"]),
+      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"مساعد ذكاء اصطناعي"},[
+        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["✦"]),
+        "مساعدة"
       ])
     ]);
     if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
@@ -3806,7 +3687,7 @@ const body = el("div",{class:"branchBody"},[]);
   typesetMath(wrap);
 }
 
-/* ===== ????? ?????? ===== */
+/* ===== تبديل السؤال ===== */
 function swapQuestion(qid){
   bumpVariant(qid);
   clearQuestionState(qid);
@@ -3822,14 +3703,14 @@ function swapQuestion(qid){
   renderAll();
 }
 
-/* ===== ?????? ===== */
+/* ===== التنقل ===== */
 function next(){
   if(typeof ensureSupportForWeakQuestions === "function" && ensureSupportForWeakQuestions()){
     saveState();
   }
   const start = Math.min(state.currentIndex + 1, BANK.length);
   for(let i=start;i<BANK.length;i++){
-    if(!adaptiveQuestionComplete(BANK[i])){
+    if(!isQuestionComplete(BANK[i])){
       state.currentIndex = i;
       saveState();
       renderAll();
@@ -3837,7 +3718,7 @@ function next(){
     }
   }
   for(let i=0;i<BANK.length;i++){
-    if(!adaptiveQuestionComplete(BANK[i])){
+    if(!isQuestionComplete(BANK[i])){
       state.currentIndex = i;
       saveState();
       renderAll();
@@ -3846,7 +3727,6 @@ function next(){
   }
   tryShowResults();
 }
-
 function prev(){
   for(let i=state.currentIndex-1;i>=0;i--){
     if(BANK[i]){
@@ -3858,8 +3738,7 @@ function prev(){
   }
 }
 
-
-/* ===== ??????? (????? ??????) ===== */
+/* ===== النتيجة (نافذة منبثقة) ===== */
 function listIncomplete(){
   const arr=[];
   BANK.forEach((q,i)=>{
@@ -3871,18 +3750,15 @@ function listIncomplete(){
 function tryShowResults(){
   if(typeof ensureSupportForWeakQuestions === "function" && ensureSupportForWeakQuestions()){
     renderAll();
-    openModal("?????? ???????", `<div style="font-weight:900;line-height:1.9">??? ????? ???? ??? ?? ??? ??????? ????? ??? ??????. ???? ?????? ?????? ?? ????? ???????.</div>`);
+    openModal("متابعة الإتقان", `<div style="font-weight:900;line-height:1.9">تمت إضافة سؤال دعم بناءً على الأداء. أكمل السؤال الجديد ثم ستظهر النتيجة.</div>`);
     return;
   }
-  if(typeof syncAllInputs === "function") syncAllInputs();
   const p = setProgress();
   if(!p.doneAll){
-    if(!confirm("???? ????? ?? ???? ????. ?? ???? ?????????")) return;
+    if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
   }
-  if(typeof showResultsModal === "function") showResultsModal();
-  else if(typeof showResults === "function") showResults();
+  showResultsModal();
 }
-
 
 function computeScore(){
   let total=0, correct=0;
@@ -3911,392 +3787,8 @@ function showResultsModal(){
 
     let inner = `
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <div style="font-weight:900">???? ${qi+1}: ${escapeHtml(q.title)}</div>
-        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"? ????":"� ??? ????"}</span>
-      </div>
-    `;
-
-    q.branches.forEach((branch,bi)=>{
-      const rec = ensureBranchRec(q.id,bi);
-      const grade = gradeBranch(q, branch, bi, rec.saved||{});
-      const keys = collectPartKeys(branch);
-
-      inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
-      keys.forEach(k=>{
-        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "�";
-        const correctVal = branch.answers[k];
-        const ok = grade.byKey[k];
-        const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
-
-        inner += `
-          <div class="partRow">
-            <div><b>?????:</b> ${escapeHtml(k)}</div>
-            <div><b>??????:</b> ${escapeHtml(String(student))}</div>
-            <div><b>??????:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"?":"�"}</span></div>
-          </div>`;
-      });
-    });
-
-    return `<div class="resultCard">${inner}</div>`;
-  }).join("");
-
-  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
-  const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
-  openModal("???????", `
-    <div class="scoreCard" style="margin-bottom:14px">
-      <div>
-        <div class="scoreBig">??????: ${s.correct} ?? ${s.total} � ${s.pct}%</div>
-        <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
-        <div class="scoreSub">?? ????? ?? ??? ???? ?????.</div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" onclick="window.print()">????? ???????</button>
-        <button class="btn primary" onclick="window.__resetAll(); closeModal();">????? ????????</button>
-      </div>
-    </div>
-    ${cards}
-  `);
-}
-function setProgress(){
-  const completed = BANK.filter(q=>isQuestionComplete(q)).length;
-  const visibleCompleted = window.__examRunning ? completed : 0;
-    const qCountEl = document.getElementById("qCount");
-  const qNoEl = document.getElementById("qNo");
-  if(qCountEl) qCountEl.textContent = BANK.length;
-  if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
-  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
-  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
-
-  const pill = document.getElementById("statusPill");
-  const q = BANK[state.currentIndex];
-  if(isQuestionComplete(q)){
-    if(isQuestionCorrect(q)){
-      pill.textContent = "مكتمل";
-      pill.className = "pill";
-    }else{
-      pill.textContent = "مكتمل (توجد أخطاء)";
-      pill.className = "pill warn";
-    }
-  }else{
-    pill.textContent = "غير مكتمل";
-    pill.className = "pill warn";
-  }
-
-  const showBtn = document.getElementById("showResultsBtn");
-  const nextBtnSide = document.getElementById("nextBtnSide");
-  showBtn.disabled = (completed !== BANK.length) || !window.__examRunning;
-  if(nextBtnSide) nextBtnSide.disabled = !window.__examRunning;
-
-  return {completed, doneAll:(completed===BANK.length)};
-}
-
-function renderSidebar(){
-  const list = document.getElementById("qList");
-  list.innerHTML = "";
-  state.dirty = state.dirty || {};
-  const filter = state.sidebarFilter || "all";
-  const toShow = BANK.map((q,i)=>({q,i})).filter(({q})=>filter==="incomplete" ? !isQuestionComplete(q) : true);
-
-  toShow.forEach(({q,i})=>{
-    const complete = isQuestionComplete(q);
-    const correct = complete && isQuestionCorrect(q);
-    const dotClass = !complete ? "" : (correct ? "done" : "bad");
-    const badge = !complete
-      ? el("span",{class:"badge warn"},["غير مكتمل"])
-      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"مكتمل":"مكتمل (خطأ)"]);
-    const unsaved = state.dirty[q.id];
-    const item = el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
-      el("div",{class:"left"},[
-        unsaved ? el("div",{class:"unsaved-dot", title:"توجد إجابة غير محفوظة"},[]) : null,
-        el("div",{class:"dot "+dotClass}),
-        el("div",{},[
-          el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
-          el("div",{style:"margin-top:6px"},[badge])
-        ])
-      ]),
-      el("div",{class:"icon"},[q.icon])
-    ].filter(Boolean));
-    list.appendChild(item);
-  });
-
-  ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{
-    const btn = document.getElementById(id);
-    if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
-  });
-}
-
-function openHelp(q, branch){
-  const explainHtml = (branch.explain && branch.explain.length)
-    ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>ابدأ بفهم المطلوب ثم حدد نوع الفكرة قبل الحل.</div>";
-  const formulaHtml = (branch.formula && branch.formula.length)
-    ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون أو القاعدة المناسبة ثم عوّض عليها.</div>";
-
-  openModal("مساعدة", `
-    <div class="ai-help-panel">
-      <div class="ai-help-hero">
-        <div class="ai-help-orb"><span></span></div>
-        <div class="ai-help-copy">
-          <div class="ai-help-kicker">HELP</div>
-          <div class="ai-help-title">${escapeHtml(q.title)} <span style="font-size:13px;color:rgba(255,255,255,.7)">(${escapeHtml(branch.level)})</span></div>        </div>
-      </div>
-      <div class="ai-help-grid">
-        <div class="ai-help-section">
-          <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">?</span>
-            <span>الفكرة</span>
-          </div>
-          <div class="ai-help-body">${explainHtml}</div>
-        </div>
-        <div class="ai-help-section">
-          <div class="ai-help-section-head">
-            <span class="ai-help-chip-icon">?</span>
-            <span>القانون</span>
-          </div>
-          <div class="ai-help-body">${formulaHtml}</div>
-        </div>
-      </div>
-    </div>
-  `);
-}
-
-function openCorrectAnswer(q, branch, bi){
-  const steps = (branch.solutionSteps && branch.solutionSteps.length)
-    ? `<div style="font-weight:900;margin:10px 0 6px">خطوات الحل</div>
-       <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
-    : "";
-
-  const correctList = [];
-  (branch.parts||[]).forEach(p=>{
-    const val = (p.type==="mcq") ? branch.answers[p.key] : formatNumber(branch.answers[p.key]);
-    correctList.push(`<li><b>${escapeHtml(p.label)}:</b> ${escapeHtml(String(val))}</li>`);
-  });
-  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
-    branch.table.rows.forEach(r=>{
-      (r.inputs||[]).forEach(k=>{
-        correctList.push(`<li><b>القيمة الصحيحة</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
-      });
-    });
-  }
-
-  const correctHtml = correctList.length
-    ? `<div style="font-weight:900;margin:12px 0 6px">الإجابات الصحيحة</div><ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
-    : "";
-
-  openModal("الإجابة الصحيحة", `
-    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} - (${escapeHtml(branch.level)})</div>
-    ${steps}
-    ${correctHtml}
-    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">يمكنك توليد نسخة جديدة من السؤال بعد الإغلاق.</div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">سؤال جديد</button><button class="btn small" onclick="closeModal()">إغلاق</button></div>
-  `);
-  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
-  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
-}
-
-function promptOpenCorrectAnswer(q, branch, bi){
-  openModal("عرض الإجابة", `
-    <div style="font-weight:900;margin-bottom:10px">انتهت المحاولات لهذا الجزء.</div>
-    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الإجابة الصحيحة.</div>
-    <button class="btn primary" id="showAnswerAfterAttemptsBtn">عرض الإجابة</button>
-  `);
-  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
-  if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
-}
-
-function handleSaveBranch(q, branch, bi){
-  const rec = ensureBranchRec(q.id, bi);
-  if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
-
-  const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
-  if(!okFilled){
-    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الحقول المطلوبة ثم احفظ الإجابة.</div>`);
-    return;
-  }
-
-  rec.attempts = (rec.attempts || 0) + 1;
-  rec.saved = saved;
-  delete state.dirty[q.id];
-  saveState();
-
-  const grade = gradeBranch(q, branch, bi, rec.saved);
-  if(grade.okAll){
-    rec.status = "correct";
-    saveState();
-    applyFieldFeedback(q.id, bi, grade);
-    disableBranchInputs(q.id, bi);
-    setProgress();
-    renderSidebar();
-    return;
-  }
-
-  if(rec.attempts === 1){
-    rec.status = "wrong1";
-    saveState();
-    applyFieldFeedback(q.id, bi, grade);
-    setProgress();
-    renderSidebar();
-    openHelp(q, branch);
-    return;
-  }
-
-  rec.status = "locked";
-  saveState();
-  applyFieldFeedback(q.id, bi, grade);
-  disableBranchInputs(q.id, bi);
-  setProgress();
-  renderSidebar();
-  promptOpenCorrectAnswer(q, branch, bi);
-}
-
-function renderMain(){
-  BANK = buildBank();
-  const i = state.currentIndex;
-  const q = BANK[i];
-  const wrap = document.getElementById("mainContent");
-  wrap.innerHTML = "";
-
-  const p = setProgress();
-
-  const titleRow = el("div",{class:"qtitleRow"},[
-    el("div",{class:"qtitle"},[
-      el("div",{class:"qnum"},[String(i+1)]),
-      el("div",{},[q.title])
-    ]),
-    el("div",{class:"qmeta"},[
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["تبديل السؤال"]),
-      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["إظهار النتيجة"]),
-      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["السابق"]),
-      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["التالي"])
-    ])
-  ]);
-
-  const branches = el("div",{class:"branches"},[]);
-  q.branches.forEach((branch, bi)=>{
-    const tagClass = (branch.level==="سهل") ? "easy" : (branch.level==="متوسط" ? "med" : "hard");
-    const rec = ensureBranchRec(q.id, bi);
-
-    const branchCard = el("div",{class:"branch"},[]);
-    const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
-      ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},
-        [rec.status==="correct" ? "صحيح" : "خطأ"])
-      : null;
-
-    const head = el("div",{class:"branchHead"},[
-      el("span",{class:`btag ${tagClass}`},[branch.level]),
-      statusTag
-    ]);
-    const body = el("div",{class:"branchBody"},[]);
-    body.innerHTML = latexFix(branch.prompt).replace(/\n/g,"<br/>");
-    typesetMath(body);
-
-    if(branch.customUI==="stemleaf"){ body.appendChild(renderStemLeaf(branch)); }
-    if(branch.customUI==="freqTable"){ body.appendChild(renderFreqTable(q, branch, bi)); }
-    if(branch.customUI==="charts"){ body.appendChild(renderChartsInteractive(branch)); }
-
-    const parts = el("div",{class:"parts"},[]);
-    (branch.parts||[]).forEach(p=>{
-      const row = el("div",{class:"part"},[]);
-      if(p.type==="mcq") row.classList.add("mcqPart");
-      const label = el("div",{class:"label"},[p.label]);
-      const inputWrap = el("div",{class:"inputWrap"},[]);
-      const savedVal = (rec.saved && rec.saved[p.key]!=null) ? rec.saved[p.key] : "";
-
-      if(p.type==="mcq"){
-        const group = el("div",{class:"mcqGroup"},[]);
-        (p.options||[]).forEach((op,idx)=>{
-          const id = `${q.id}_${bi}_${p.key}_${idx}`;
-          const radio = el("input",{type:"radio", id, name:`${q.id}_${bi}_${p.key}`, value:op},[]);
-          radio.setAttribute("data-qid", q.id);
-          radio.setAttribute("data-bi", String(bi));
-          radio.setAttribute("data-key", p.key);
-          if(String(savedVal)===String(op)) radio.checked = true;
-          radio.onchange = ()=>{ markDirty(q.id); };
-          if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
-          group.appendChild(el("label",{class:"choice", for:id},[radio, el("span",{},[op])]));
-        });
-        inputWrap.appendChild(group);
-      }else if(p.type==="text"){
-        const ta = el("textarea",{placeholder:p.placeholder||""},[]);
-        ta.setAttribute("data-qid", q.id);
-        ta.setAttribute("data-bi", String(bi));
-        ta.setAttribute("data-key", p.key);
-        ta.value = savedVal;
-        ta.oninput = ()=>{ ta.classList.remove("badField","goodField"); markDirty(q.id); };
-        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) ta.disabled = true;
-        inputWrap.appendChild(ta);
-      }else{
-        const inp = el("input",{type:"text", inputmode:"decimal", placeholder:p.placeholder||""},[]);
-        inp.setAttribute("data-qid", q.id);
-        inp.setAttribute("data-bi", String(bi));
-        inp.setAttribute("data-key", p.key);
-        inp.value = savedVal;
-        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
-        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
-        inputWrap.appendChild(inp);
-      }
-
-      row.appendChild(label);
-      row.appendChild(inputWrap);
-      parts.appendChild(row);
-    });
-
-    const btns = el("div",{class:"branchBtns"},[
-      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["حفظ الإجابة"]),
-      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"فتح المساعدة"},[
-        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["?"]),
-        "مساعدة"
-      ])
-    ]);
-    if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
-      const sb = btns.querySelector(`[data-save-btn="${q.id}::${bi}"]`);
-      if(sb) sb.disabled = true;
-    }
-
-    const container = el("div",{"data-branch-container":`${q.id}::${bi}`},[]);
-    container.appendChild(head);
-    container.appendChild(body);
-    if((branch.parts||[]).length>0){ typesetMath(parts); container.appendChild(parts); }
-    container.appendChild(btns);
-    branchCard.appendChild(container);
-    branches.appendChild(branchCard);
-
-    if(rec.saved && (rec.status==="wrong1")){
-      const grade = gradeBranch(q, branch, bi, rec.saved);
-      applyFieldFeedback(q.id, bi, grade);
-    }
-  });
-
-  wrap.appendChild(titleRow);
-  wrap.appendChild(branches);
-}
-
-function listIncomplete(){
-  const arr = [];
-  BANK.forEach((q,i)=>{ if(!isQuestionComplete(q)) arr.push({i:i+1, title:q.title}); });
-  return arr;
-}
-
-function tryShowResults(){
-  const p = setProgress();
-  if(!p.doneAll){
-    if(!confirm("لم تكمل جميع الأسئلة. هل تريد عرض النتيجة الآن؟")) return;
-  }
-  showResultsModal();
-}
-
-function showResultsModal(){
-  BANK = buildBank();
-  const s = computeScore();
-  const cards = BANK.map((q,qi)=>{
-    const complete = isQuestionComplete(q);
-    const correctQ = complete && isQuestionCorrect(q);
-
-    let inner = `
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
         <div style="font-weight:900">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
-        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"تم بنجاح":"توجد أخطاء"}</span>
+        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"✓ صحيح":"× غير صحيح"}</span>
       </div>
     `;
 
@@ -4304,17 +3796,19 @@ function showResultsModal(){
       const rec = ensureBranchRec(q.id,bi);
       const grade = gradeBranch(q, branch, bi, rec.saved||{});
       const keys = collectPartKeys(branch);
+
       inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
       keys.forEach(k=>{
-        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "-";
+        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "—";
         const correctVal = branch.answers[k];
         const ok = grade.byKey[k];
         const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
+
         inner += `
           <div class="partRow">
-            <div><b>البند:</b> ${escapeHtml(k)}</div>
+            <div><b>الجزء:</b> ${escapeHtml(k)}</div>
             <div><b>إجابتك:</b> ${escapeHtml(String(student))}</div>
-            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"صح":"خطأ"}</span></div>
+            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
           </div>`;
       });
     });
@@ -4327,13 +3821,13 @@ function showResultsModal(){
   openModal("النتيجة", `
     <div class="scoreCard" style="margin-bottom:14px">
       <div>
-        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} - ${s.pct}%</div>
+        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} — ${s.pct}%</div>
         <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
-        <div class="scoreSub">هذا ملخص سريع لجميع إجاباتك.</div>
+        <div class="scoreSub">تم تصحيح كل جزء بشكل مستقل.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
-        <button class="btn primary" onclick="window.__resetAll(); closeModal();">إعادة الاختبار</button>
+        <button class="btn primary" onclick="window.__resetAll(); closeModal();">إعادة المحاولة</button>
       </div>
     </div>
     ${cards}
@@ -4341,10 +3835,10 @@ function showResultsModal(){
 }
 window.__resetAll = resetAll;
 
-/* ===== ????? ?????? ??????? ===== */
+/* ===== أزرار الشريط الجانبي ===== */
 document.getElementById("nextBtnSide").onclick = next;
 document.getElementById("showResultsBtn").onclick = tryShowResults;
-document.getElementById("resetBtn").onclick = function(){ if(confirm("سيتم حذف التقدم الحالي وبدء الاختبار من جديد.")) resetAll(); };
+document.getElementById("resetBtn").onclick = function(){ if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) resetAll(); };
 
 var _fsb=document.getElementById("fontSmallBtn"); if(_fsb) _fsb.onclick = ()=>{ state.fontSize = Math.max(-1, (state.fontSize||0)-1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fbb=document.getElementById("fontBigBtn"); if(_fbb) _fbb.onclick = ()=>{ state.fontSize = Math.min(1, (state.fontSize||0)+1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
@@ -4352,10 +3846,10 @@ var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick =
 document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "خروج" : "ملء الشاشة"; });
 ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{ const b = document.getElementById(id); if(b) b.onclick = ()=>{ state.sidebarFilter = b.getAttribute("data-filter"); saveState(); renderSidebar(); }; });
 
-/* ????? ??? ???? ??????? ??? ??????? */
+/* تطبيق حجم الخط المحفوظ عند التحميل */
 (function(){ const fs = state.fontSize; if(fs===1) document.body.classList.add("font-lg"); else if(fs===-1) document.body.classList.add("font-sm"); })();
 
-/* ===== ???? ??? ===== */
+/* ===== رندر عام ===== */
 function renderAll(){
   BANK = buildBank();
   renderSidebar();
@@ -4364,396 +3858,7 @@ function renderAll(){
 }
 window.__examRunning = isExamStarted();
 renderAll();
-if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Adaptive Flow 1.1 Start */
-(function(){
-  const ALL_ORDER = ["q1_tf", "q2_circle", "q4_symbols_roles", "q3_census_sample", "q5_identify_role", "q6_sample_quality", "q7_census_decision"];
-  const CORE_ORDER = ["q1_tf", "q2_circle", "q3_census_sample"];
-  const SUPPORT_ORDER = ALL_ORDER.filter((id) => !CORE_ORDER.includes(id));
-  const QUESTION_PROFILES = {
-    q1_tf: { difficulty: 1, skills: ["concepts", "population"], remediation: ["q2_circle"], advancement: ["q3_census_sample"] },
-    q2_circle: { difficulty: 2, skills: ["population", "sample"], remediation: ["q1_tf"], advancement: ["q3_census_sample", "q4_symbols_roles"] },
-    q3_census_sample: { difficulty: 3, skills: ["sample", "application"], remediation: ["q2_circle"], advancement: ["q6_sample_quality", "q7_census_decision"] },
-    q4_symbols_roles: { difficulty: 2, skills: ["concepts", "parameter"], remediation: ["q1_tf"], advancement: ["q5_identify_role"] },
-    q5_identify_role: { difficulty: 3, skills: ["parameter", "sample"], remediation: ["q4_symbols_roles", "q2_circle"], advancement: ["q6_sample_quality"] },
-    q6_sample_quality: { difficulty: 4, skills: ["sample", "bias"], remediation: ["q2_circle", "q5_identify_role"], advancement: ["q7_census_decision"] },
-    q7_census_decision: { difficulty: 3, skills: ["application", "bias"], remediation: ["q3_census_sample", "q6_sample_quality"], advancement: [] }
-  };
-  const AI_KEY_ADAPT = "stat102_ai_models_v4_" + String((location.pathname || document.title || "lesson")).replace(/[^\w]+/g, "_").slice(-80);
-  const MAX_VARIANT_REPEATS = 2;
-  const SUPPORT_LIMIT = 2;
-  const SESSION_VERSION = "mastery_only_v2";
-  const LESSON_TARGET = 0.74;
-  const LESSON_FLOOR = 0.58;
-
-  function injectAdaptiveStyles(){
-    if(document.getElementById("adaptiveFlowStyles11")) return;
-    const style = document.createElement("style");
-    style.id = "adaptiveFlowStyles11";
-    style.textContent = `
-      .side .head h3,
-      .side .sidebar-filter,
-      .side .qList{
-        display:none !important;
-      }
-      .side{
-        display:grid;
-        gap:14px;
-      }
-      .side .head{
-        justify-content:space-between;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  function stableTopicKey(value){
-    return String(value || "topic").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "topic";
-  }
-
-  function clampAdaptive(value, min=0, max=1){
-    return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
-  }
-
-  function loadAdaptiveAiState(){
-    try{
-      const raw = typeof storageGet === "function" ? storageGet(AI_KEY_ADAPT) : localStorage.getItem(AI_KEY_ADAPT);
-      return raw ? JSON.parse(raw) : { topics: {} };
-    }catch(e){
-      return { topics: {} };
-    }
-  }
-
-  function validIds(list){
-    return list.filter((id) => TEMPLATES.some((template) => template.id === id));
-  }
-
-  function ensureSessionState(){
-    const validCore = validIds(CORE_ORDER);
-    const validAll = validIds(ALL_ORDER);
-    const current = Array.isArray(state.order)
-      ? state.order.filter((id, index, arr) => validAll.includes(id) && arr.indexOf(id) === index)
-      : [];
-    let nextOrder = current.slice();
-
-    if(state.masteryVersion !== SESSION_VERSION || !nextOrder.length){
-      nextOrder = [...validCore];
-      state.currentIndex = 0;
-    }
-
-    validCore.forEach((id, index) => {
-      if(!nextOrder.includes(id)) nextOrder.splice(Math.min(index, nextOrder.length), 0, id);
-    });
-
-    const supportTail = nextOrder.filter((id) => !validCore.includes(id));
-    nextOrder = [...validCore, ...supportTail];
-
-    const changed = !Array.isArray(state.order)
-      || state.masteryVersion !== SESSION_VERSION
-      || state.order.length !== nextOrder.length
-      || nextOrder.some((id, index) => state.order[index] !== id)
-      || (state.masterySupportCount || 0) !== supportTail.length;
-
-    if(changed){
-      state.order = nextOrder;
-      state.masteryVersion = SESSION_VERSION;
-      state.masterySupportCount = supportTail.length;
-      if(state.currentIndex >= nextOrder.length) state.currentIndex = 0;
-      saveState();
-    }
-    return state.order;
-  }
-
-  function getActiveOrder(){
-    return ensureSessionState().slice();
-  }
-
-  function buildFromOrder(order){
-    return order.map((id) => {
-      const template = TEMPLATES.find((item) => item.id === id);
-      if(!template) return null;
-      const variant = getVariant(template.id);
-      const generated = template.gen(variant);
-      return { id:template.id, title:template.title, icon:template.icon, branches:generated.branches };
-    }).filter(Boolean);
-  }
-
-  buildBank = function(){
-    const order = getActiveOrder();
-    const bank = buildFromOrder(order);
-    return bank.length ? bank : forceBuildBank(order);
-  };
-
-  function forceBuildBank(order){
-    const active = Array.isArray(order) && order.length ? order : getActiveOrder();
-    return buildFromOrder(active);
-  }
-
-  function ensureAdaptiveBankReady(){
-    let bank = buildBank();
-    if(!Array.isArray(bank) || !bank.length){
-      state.order = validIds(CORE_ORDER);
-      state.currentIndex = 0;
-      saveState();
-      bank = forceBuildBank(state.order);
-    }
-    BANK = Array.isArray(bank) ? bank : [];
-    if(state.currentIndex >= BANK.length) state.currentIndex = 0;
-    return BANK;
-  }
-
-  function concealSidebarQuestions(){
-    const list = document.getElementById("qList");
-    if(list) list.innerHTML = "";
-    const heading = document.querySelector(".side .head h3");
-    if(heading) heading.style.display = "none";
-    const filter = document.querySelector(".sidebar-filter");
-    if(filter) filter.style.display = "none";
-  }
-
-  function getQuestionById(qid){
-    return Array.isArray(BANK) ? BANK.find((question) => question.id === qid) : null;
-  }
-
-  function getCurrentQuestionId(){
-    return BANK && BANK[state.currentIndex] ? BANK[state.currentIndex].id : null;
-  }
-
-  function baseScoreFromRecord(record){
-    if(record.status === "correct") return record.attempts <= 1 ? 0.88 : 0.74;
-    if(record.status === "locked") return 0.22;
-    if(record.status === "wrong1") return 0.42;
-    if(record.attempts > 0) return 0.48;
-    return 0.5;
-  }
-
-  function getQuestionSignal(qid){
-    const profile = QUESTION_PROFILES[qid] || { difficulty: 2, skills: [], remediation: [], advancement: [] };
-    const record = ensureBranchRec(qid, 0);
-    const aiState = loadAdaptiveAiState();
-    const model = aiState && aiState.topics ? aiState.topics[stableTopicKey(qid)] : null;
-    const fallback = baseScoreFromRecord(record);
-    const attemptCount = Math.max(record.attempts || 0, model && typeof model.attempts === "number" ? model.attempts : 0);
-    const ensemble = clampAdaptive(model && typeof model.ensemble === "number" ? model.ensemble : fallback);
-    const mastery = clampAdaptive(model && typeof model.mastery === "number" ? model.mastery : fallback);
-    const lr = clampAdaptive(model && typeof model.lr === "number" ? model.lr : ensemble);
-    const nbScore = clampAdaptive(model && typeof model.nbScore === "number" ? model.nbScore : ensemble);
-    const knn = clampAdaptive(model && typeof model.knn === "number" ? model.knn : ensemble);
-    const readiness = clampAdaptive((ensemble * 0.42) + (mastery * 0.28) + (lr * 0.15) + (knn * 0.10) + (nbScore * 0.05));
-    const struggle = clampAdaptive(((1 - readiness) * 0.55) + Math.min(0.22, attemptCount * 0.08) + (record.status === "locked" ? 0.25 : (record.status === "wrong1" ? 0.12 : 0)));
-    return { qid, record, model, profile, attemptCount, ensemble, mastery, lr, nbScore, knn, readiness, struggle };
-  }
-
-  function metricIds(ids){
-    const source = (Array.isArray(ids) && ids.length ? ids : getActiveOrder()).filter((id) => ALL_ORDER.includes(id));
-    const answered = source.filter((id) => {
-      const record = ensureBranchRec(id, 0);
-      return (record.attempts || 0) > 0 || record.status !== "new";
-    });
-    return answered.length ? answered : source;
-  }
-
-  function lessonReadiness(ids){
-    const source = metricIds(ids);
-    if(!source.length) return 0.5;
-    return source.reduce((sum, id) => sum + getQuestionSignal(id).readiness, 0) / source.length;
-  }
-
-  function sharesSkill(sourceId, targetId){
-    const sourceSkills = (QUESTION_PROFILES[sourceId] && QUESTION_PROFILES[sourceId].skills) || [];
-    const targetSkills = (QUESTION_PROFILES[targetId] && QUESTION_PROFILES[targetId].skills) || [];
-    return sourceSkills.some((skill) => targetSkills.includes(skill));
-  }
-
-  function maxDifficulty(){
-    return Math.max(...Object.values(QUESTION_PROFILES).map((profile) => profile.difficulty || 1), 1);
-  }
-
-  function desiredDifficulty(signal){
-    const overall = lessonReadiness(CORE_ORDER);
-    if(signal.readiness < 0.45 || overall < 0.45) return Math.max(1, (signal.profile.difficulty || 2) - 1);
-    if(signal.readiness > 0.78 && overall > 0.7) return Math.min(maxDifficulty(), (signal.profile.difficulty || 2) + 1);
-    return signal.profile.difficulty || 2;
-  }
-
-  function shouldRepeatCurrent(signal){
-    return typeof swapQuestion === "function"
-      && signal.record.status !== "correct"
-      && signal.attemptCount < MAX_VARIANT_REPEATS
-      && (signal.record.status === "locked" || signal.struggle > 0.63 || signal.readiness < 0.46);
-  }
-
-  function completed(ids){
-    return ids.every((id) => {
-      const question = getQuestionById(id);
-      return !!question && isQuestionComplete(question);
-    });
-  }
-
-  function weakestSignal(ids){
-    const source = metricIds(ids);
-    if(!source.length) return null;
-    return source.map((id) => getQuestionSignal(id)).sort((a, b) => (a.readiness - b.readiness) || (b.struggle - a.struggle))[0] || null;
-  }
-
-  function meetsMasteryTarget(){
-    const coreIds = validIds(CORE_ORDER);
-    if(!coreIds.length || !completed(coreIds)) return false;
-    const average = lessonReadiness(coreIds);
-    const lowest = Math.min(...coreIds.map((id) => getQuestionSignal(id).readiness));
-    return average >= LESSON_TARGET && lowest >= LESSON_FLOOR;
-  }
-
-  function getRemainingCandidates(currentId){
-    return getActiveOrder().filter((id) => {
-      if(id === currentId) return false;
-      const question = getQuestionById(id);
-      return !!question && !isQuestionComplete(question);
-    });
-  }
-
-  function scoreCandidate(currentSignal, candidateId){
-    const signal = getQuestionSignal(candidateId);
-    const question = getQuestionById(candidateId);
-    if(!question || isQuestionComplete(question)) return -1;
-    const targetDifficulty = desiredDifficulty(currentSignal);
-    const difficultyGap = Math.abs((signal.profile.difficulty || 2) - targetDifficulty);
-    const difficultyFit = clampAdaptive(1 - (difficultyGap * 0.38));
-    const weaknessNeed = 1 - signal.readiness;
-    const unseenBonus = signal.attemptCount === 0 ? 0.18 : 0.04;
-    const sameSkillBonus = sharesSkill(currentSignal.qid, candidateId) ? (currentSignal.readiness < 0.62 ? 0.24 : 0.10) : 0;
-    const remediationBonus = (currentSignal.profile.remediation || []).includes(candidateId) ? 0.16 : 0;
-    const advancementBonus = (currentSignal.profile.advancement || []).includes(candidateId) ? (currentSignal.readiness >= 0.7 ? 0.18 : 0.06) : 0;
-    return (weaknessNeed * 0.40) + (difficultyFit * 0.22) + unseenBonus + sameSkillBonus + remediationBonus + advancementBonus;
-  }
-
-  function scoreSupportCandidate(focusSignal, candidateId){
-    const signal = getQuestionSignal(candidateId);
-    const sameSkillBonus = sharesSkill(focusSignal.qid, candidateId) ? 0.34 : 0;
-    const remediationBonus = (focusSignal.profile.remediation || []).includes(candidateId) ? 0.28 : 0;
-    const advancementBonus = (focusSignal.profile.advancement || []).includes(candidateId) ? 0.12 : 0;
-    const difficultyGap = Math.abs((signal.profile.difficulty || 2) - Math.min(maxDifficulty(), (focusSignal.profile.difficulty || 2) + 1));
-    const difficultyFit = clampAdaptive(1 - (difficultyGap * 0.35));
-    return ((1 - focusSignal.readiness) * 0.36) + (difficultyFit * 0.22) + sameSkillBonus + remediationBonus + advancementBonus;
-  }
-
-  function selectSupportCandidate(focusId){
-    const focusSignal = getQuestionSignal(focusId);
-    const active = getActiveOrder();
-    const available = SUPPORT_ORDER.filter((id) => !active.includes(id));
-    if(!available.length) return null;
-    return available.slice().sort((a, b) => scoreSupportCandidate(focusSignal, b) - scoreSupportCandidate(focusSignal, a))[0] || null;
-  }
-
-  function appendSupportQuestion(focusId){
-    if((state.masterySupportCount || 0) >= SUPPORT_LIMIT) return null;
-    const targetId = selectSupportCandidate(focusId);
-    if(!targetId) return null;
-    state.order = [...getActiveOrder(), targetId];
-    state.masterySupportCount = (state.masterySupportCount || 0) + 1;
-    saveState();
-    return targetId;
-  }
-
-  function chooseNextAdaptiveId(){
-    const currentId = getCurrentQuestionId();
-    if(!currentId) return null;
-    const currentSignal = getQuestionSignal(currentId);
-    const remaining = getRemainingCandidates(currentId);
-    if(!remaining.length) return null;
-    return remaining.slice().sort((a, b) => scoreCandidate(currentSignal, b) - scoreCandidate(currentSignal, a))[0] || null;
-  }
-
-  function moveToQuestion(targetId){
-    const bank = ensureAdaptiveBankReady();
-    const targetIndex = bank.findIndex((question) => question.id === targetId);
-    if(targetIndex < 0) return false;
-    state.currentIndex = targetIndex;
-    saveState();
-    renderAll();
-    return true;
-  }
-
-  const originalRenderSidebar = renderSidebar;
-  renderSidebar = function(){
-    ensureAdaptiveBankReady();
-    const result = originalRenderSidebar.apply(this, arguments);
-    concealSidebarQuestions();
-    return result;
-  };
-
-  const originalRenderMain = renderMain;
-  renderMain = function(){
-    const bank = ensureAdaptiveBankReady();
-    const wrap = document.getElementById("mainContent");
-    if(!bank.length){
-      if(wrap) wrap.innerHTML = '<div style="padding:24px;font-weight:900;color:#0f2a3b">يتم تجهيز الأسئلة، أعد تحميل الصفحة مرة واحدة.</div>';
-      return;
-    }
-    return originalRenderMain.apply(this, arguments);
-  };
-
-  const originalNext = next;
-  next = function(){
-    const bank = ensureAdaptiveBankReady();
-    if(!bank.length){
-      renderAll();
-      return;
-    }
-
-    const currentId = getCurrentQuestionId();
-    const currentSignal = currentId ? getQuestionSignal(currentId) : null;
-    if(currentId && currentSignal && shouldRepeatCurrent(currentSignal)){
-      swapQuestion(currentId);
-      BANK = ensureAdaptiveBankReady();
-      moveToQuestion(currentId);
-      return;
-    }
-
-    const targetId = chooseNextAdaptiveId();
-    if(targetId && moveToQuestion(targetId)) return;
-
-    if(completed(getActiveOrder())){
-      if(meetsMasteryTarget()){
-        showResultsModal();
-        return;
-      }
-      const focus = weakestSignal(CORE_ORDER) || weakestSignal(getActiveOrder());
-      const supportId = focus ? appendSupportQuestion(focus.qid) : null;
-      if(supportId){
-        BANK = ensureAdaptiveBankReady();
-        moveToQuestion(supportId);
-        return;
-      }
-      if(focus && typeof swapQuestion === "function" && focus.attemptCount < MAX_VARIANT_REPEATS){
-        swapQuestion(focus.qid);
-        BANK = ensureAdaptiveBankReady();
-        moveToQuestion(focus.qid);
-        return;
-      }
-      showResultsModal();
-      return;
-    }
-
-    return originalNext.apply(this, arguments);
-  };
-
-  ensureSessionState();
-  BANK = ensureAdaptiveBankReady();
-  if(!BANK.length){
-    state.order = validIds(CORE_ORDER);
-    state.currentIndex = 0;
-    saveState();
-    BANK = forceBuildBank(state.order);
-  }
-  if(state.currentIndex >= BANK.length) state.currentIndex = 0;
-  injectAdaptiveStyles();
-  saveState();
-  renderAll();
-})();
-/* Codex Adaptive Flow 1.1 End */
-
-
-
+if(window.__examRunning) startTimer(); else showIntroModal();
 
 
 /* Codex Unified AI Logic Start */
@@ -5067,7 +4172,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Adaptive F
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_1_1_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_4_3_ai_models_v1";
   try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
@@ -5889,9 +4994,9 @@ if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Adaptive F
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_1_1_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["q1_tf", "q2_circle", "q3_census_sample"];
-  const MASTERY_PROFILES_UNIFIED = {"q1_tf": {"supports": ["q2_circle", "q3_census_sample", "q4_symbols_roles", "q5_identify_role"]}, "q2_circle": {"supports": ["q3_census_sample", "q4_symbols_roles", "q5_identify_role", "q6_sample_quality"]}, "q3_census_sample": {"supports": ["q4_symbols_roles", "q5_identify_role", "q6_sample_quality", "q7_census_decision"]}, "q4_symbols_roles": {"supports": ["q5_identify_role", "q6_sample_quality", "q7_census_decision", "q1_tf"]}, "q5_identify_role": {"supports": ["q6_sample_quality", "q7_census_decision", "q1_tf", "q2_circle"]}, "q6_sample_quality": {"supports": ["q7_census_decision", "q1_tf", "q2_circle", "q3_census_sample"]}, "q7_census_decision": {"supports": ["q1_tf", "q2_circle", "q3_census_sample", "q4_symbols_roles"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_4_3_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["q1_regression_selftest_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46"];
+  const MASTERY_PROFILES_UNIFIED = {"q1_regression_selftest_pool": {"supports": ["q2_regression_tf_pool", "q3_regression_fill_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46"]}, "q2_regression_tf_pool": {"supports": ["q3_regression_fill_pool", "q4_example_431_summary_stats", "q5_example_432_formula_46", "q7_regression_estimation_context"]}, "q3_regression_fill_pool": {"supports": ["q4_example_431_summary_stats", "q5_example_432_formula_46", "q7_regression_estimation_context", "q6_exercise_422_constant_y"]}, "q4_example_431_summary_stats": {"supports": ["q5_example_432_formula_46", "q7_regression_estimation_context", "q6_exercise_422_constant_y", "q1_regression_selftest_pool"]}, "q5_example_432_formula_46": {"supports": ["q7_regression_estimation_context", "q6_exercise_422_constant_y", "q1_regression_selftest_pool", "q2_regression_tf_pool"]}, "q7_regression_estimation_context": {"supports": ["q6_exercise_422_constant_y", "q1_regression_selftest_pool", "q2_regression_tf_pool", "q3_regression_fill_pool"]}, "q6_exercise_422_constant_y": {"supports": ["q1_regression_selftest_pool", "q2_regression_tf_pool", "q3_regression_fill_pool", "q4_example_431_summary_stats"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}
@@ -6842,6 +5947,10 @@ if(window.__examRunning) startTimer(); else showIntroModal();/* Codex Adaptive F
 </style>
 </body>
 </html>
+
+
+
+
 
 
 

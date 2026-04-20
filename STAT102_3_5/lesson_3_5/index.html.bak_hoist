@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.4 معاملات التشتت والدرجة المعيارية</title>
+  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.5 مقاييس الشكل للتوزيعات</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -2124,14 +2124,6 @@ input.badField, textarea.badField{
 
 
 </style>
-<script>
-/* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
-</script>
-<style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
-</style>
-<!-- AI_KILL_SWITCH -->
 </head>
 <body>
   <header class="topbar">
@@ -2144,7 +2136,7 @@ window.AI_ENABLED = false;
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">3.4 معاملات التشتت والدرجة المعيارية <span class="sep">|</span> Coefficients of Dispersion and Standard Score</div>
+          <div class="s">3.5 مقاييس الشكل للتوزيعات <span class="sep">|</span> Shape Measures of Distributions</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
@@ -2231,9 +2223,9 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-const STATE_KEY = "stat102_3_4_state_v2";
+const STATE_KEY = "stat102_3_5_state_v2";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_3_4_timerEnd_v2";
+const TIMER_KEY = "stat102_3_5_timerEnd_v2";
 let state = loadState() || { currentIndex: 0, answers: {}, grading: {}, variants: {}, order: null, attempts: {}, saveAttempts: {}, locks: {}, outcomes: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
 state.attempts = state.attempts || {};
 state.saveAttempts = state.saveAttempts || {};
@@ -2744,259 +2736,255 @@ function svgBoxplot(cfg){
   </svg>`;
 }
 
-function cvBasicGen(v){
-  const means = [100, 75, 48, 25];
-  const sds = [15, 9, 6, 5];
-  const mean = means[v % means.length];
-  const sd = sds[v % sds.length];
-  const cv = cvValue(mean, sd);
+function shapeTypeGen(v){
+  const sets = [
+    {rows:[[1,4],[2,4],[3,4],[4,4]], ans:"عديم المنوال"},
+    {rows:[[1,2],[2,6],[3,10],[4,6],[5,2]], ans:"أحادي المنوال"},
+    {rows:[[1,7],[2,3],[3,7],[4,2]], ans:"متعدد المناويل"}
+  ];
+  const c = sets[v % sets.length];
+  const options = shuffleLocal(["عديم المنوال","أحادي المنوال","متعدد المناويل","متناظر معتدل"], seededRand("opt35shape|"+v));
   return {
     branches:[{
       level:"سهل",
-      explain:[
-        "معامل الاختلاف مقياس نسبي يجرّد التشتت من وحدة القياس.",
-        "\\( CV = \\frac{S}{\\bar{x}}\\times 100\\% \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">إذا كان متوسط البيانات \\(\\bar{x}=${mean}\\) والانحراف المعياري \\(S=${sd}\\)، فاحسب معامل الاختلاف \\(CV\\) بالنسبة المئوية.</div></div>`,
-      parts:[{key:"cv", type:"number", label:"معامل الاختلاف \\(CV\\) (بدون علامة %)", step:"0.01"}],
-      answers:{cv:round2(cv)},
-      method:[
-        `\\[ CV = \\frac{${sd}}{${mean}} \\times 100 = ${round2(cv)}\\% \\]`
-      ]
-    }]
-  };
-}
-
-function cvCompareGen(v){
-  const sets = [
-    {a:{name:"A", mean:68, sd:4.53}, b:{name:"B", mean:166, sd:6.56}},
-    {a:{name:"الوزن", mean:72, sd:9}, b:{name:"الطول", mean:168, sd:6}},
-    {a:{name:"السهم الأول", mean:110, sd:10}, b:{name:"السهم الثاني", mean:14, sd:2}}
-  ];
-  const c = sets[v % sets.length];
-  const cvA = round2(cvValue(c.a.mean, c.a.sd));
-  const cvB = round2(cvValue(c.b.mean, c.b.sd));
-  const less = cvA < cvB ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:[
-        "نقارن التشتت النسبي بين ظاهرتين مختلفتي الوحدة أو المختلفتين في المتوسط باستعمال معامل الاختلاف.",
-        "الأقل في \\(CV\\) هو الأقل تبعثراً حول متوسطه."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">لدينا ظاهرتان:</div>${table2colHtml("الظاهرة","المعطيات",[
-        [c.a.name, `\\(\\bar{x}=${c.a.mean}\\)، \\(S=${c.a.sd}\\)`],
-        [c.b.name, `\\(\\bar{x}=${c.b.mean}\\)، \\(S=${c.b.sd}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب معاملي الاختلاف ثم حدّد أي الظاهرتين أقل تشتتاً.</div></div>`,
-      parts:[
-        {key:"cvA", type:"number", label:`\\(CV\\) للظاهرة ${c.a.name} (بدون %)` , step:"0.01"},
-        {key:"cvB", type:"number", label:`\\(CV\\) للظاهرة ${c.b.name} (بدون %)` , step:"0.01"},
-        {key:"less", type:"mcq", label:"الأقل تشتتاً", options:shuffleLocal([c.a.name, c.b.name], seededRand("opt34cvcompare|"+v))}
-      ],
-      answers:{cvA, cvB, less},
-      method:[
-        `\\(CV_${c.a.name} = ${round2(c.a.sd)}/${round2(c.a.mean)} \\times 100 = ${cvA}\\%\\).`,
-        `\\(CV_${c.b.name} = ${round2(c.b.sd)}/${round2(c.b.mean)} \\times 100 = ${cvB}\\%\\).`,
-        `الأقل في معامل الاختلاف هو ${less}، لذا فهو الأقل تبعثراً حول متوسطه.`
-      ]
-    }]
-  };
-}
-
-function qcdBasicGen(v){
-  const sets = [
-    {q1:16.25, q3:20},
-    {q1:21.25, q3:25.75},
-    {q1:12, q3:18},
-    {q1:40, q3:55}
-  ];
-  const c = sets[v % sets.length];
-  const qcd = qcdValue(c.q1, c.q3);
-  return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "معامل التشتت الربيعي يعتمد على الربيعين الأول والثالث ويصلح كثيراً عندما توجد قيم منعزلة.",
-        "\\( QCD = \\frac{Q_3-Q_1}{Q_3+Q_1}\\times 100\\% \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كان \\(Q_1=${c.q1}\\) و \\(Q_3=${c.q3}\\)، فاحسب معامل التشتت الربيعي \\(QCD\\).</div></div>`,
-      parts:[{key:"qcd", type:"number", label:"\\(QCD\\) (بدون علامة %)", step:"0.01"}],
-      answers:{qcd:round2(qcd)},
-      method:[
-        `\\[ QCD = \\frac{${c.q3}-${c.q1}}{${c.q3}+${c.q1}} \\times 100 = ${round2(qcd)}\\% \\]`
-      ]
-    }]
-  };
-}
-
-function qcdCompareGen(v){
-  const sets = [
-    {a:{name:"المنتج A", q1:21.25, q3:25.75}, b:{name:"المنتج B", q1:16.25, q3:20}},
-    {a:{name:"العينة الأولى", q1:14, q3:20}, b:{name:"العينة الثانية", q1:10, q3:18}},
-    {a:{name:"الشعبة A", q1:157, q3:171}, b:{name:"الشعبة B", q1:157.5, q3:179}}
-  ];
-  const c = sets[v % sets.length];
-  const qa = round2(qcdValue(c.a.q1,c.a.q3));
-  const qb = round2(qcdValue(c.b.q1,c.b.q3));
-  const moreStable = qa < qb ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["الأقل في معامل التشتت الربيعي يكون أكثر ثباتاً نسبياً حول الوسيط."],
-      promptHtml:`<div class="card" style="padding:14px">${table2colHtml("المجموعة","القيم",[
-        [c.a.name, `\\(Q_1=${c.a.q1}\\)، \\(Q_3=${c.a.q3}\\)`],
-        [c.b.name, `\\(Q_1=${c.b.q1}\\)، \\(Q_3=${c.b.q3}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب \\(QCD\\) لكل مجموعة ثم حدّد الأكثر ثباتاً نسبياً.</div></div>`,
-      parts:[
-        {key:"qa", type:"number", label:`\\(QCD\\) لـ ${c.a.name} (بدون %)` , step:"0.01"},
-        {key:"qb", type:"number", label:`\\(QCD\\) لـ ${c.b.name} (بدون %)` , step:"0.01"},
-        {key:"stable", type:"mcq", label:"الأكثر ثباتاً نسبياً", options:shuffleLocal([c.a.name,c.b.name], seededRand("opt34qcdcmp|"+v))}
-      ],
-      answers:{qa, qb, stable:moreStable},
-      method:[
-        `${c.a.name}: \\(${qa}\\%\\).`,
-        `${c.b.name}: \\(${qb}\\%\\).`,
-        `بما أن القيمة الأصغر هي ${Math.min(qa,qb)}\\%، فإن الأكثر ثباتاً نسبياً هو ${moreStable}.`
-      ]
-    }]
-  };
-}
-
-function zBasicGen(v){
-  const sets = [
-    {x:7000, mean:4000, sd:2000},
-    {x:3000, mean:4000, sd:2000},
-    {x:19, mean:13.4, sd:5.6},
-    {x:85, mean:75, sd:5}
-  ];
-  const c = sets[v % sets.length];
-  const z = zValue(c.x, c.mean, c.sd);
-  return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "الدرجة المعيارية تعبّر عن موضع قيمة مفردة بالنسبة إلى المتوسط والانحراف المعياري.",
-        "\\( Z_i = \\frac{x_i-\\bar{x}}{S} \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كانت \\(x_i=${c.x}\\)، و\\(\\bar{x}=${c.mean}\\)، و\\(S=${c.sd}\\)، فاحسب الدرجة المعيارية \\(Z_i\\).</div></div>`,
-      parts:[{key:"z", type:"number", label:"الدرجة المعيارية \\(Z_i\\)", step:"0.01"}],
-      answers:{z:round2(z)},
-      method:[
-        `\\[ Z_i = \\frac{${c.x}-${c.mean}}{${c.sd}} = ${round2(z)} \\]`
-      ]
-    }]
-  };
-}
-
-function xFromZGen(v){
-  const sets = [
-    {z:2.3, mean:94, sd:4},
-    {z:-1.5, mean:60, sd:8},
-    {z:0.67, mean:75, sd:5}
-  ];
-  const c = sets[v % sets.length];
-  const x = c.mean + c.z*c.sd;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["إذا عُرفت الدرجة المعيارية فإننا نستعيد القيمة من العلاقة \\(x_i=\\bar{x}+Z_iS\\)."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كانت \\(Z_i=${c.z}\\)، و\\(\\bar{x}=${c.mean}\\)، و\\(S=${c.sd}\\)، فأوجد قيمة \\(x_i\\).</div></div>`,
-      parts:[{key:"x", type:"number", label:"القيمة \\(x_i\\)", step:"0.01"}],
-      answers:{x:round2(x)},
-      method:[
-        `\\[ x_i = ${c.mean} + (${c.z}\\times${c.sd}) = ${round2(x)} \\]`
-      ]
-    }]
-  };
-}
-
-function zCompareGen(v){
-  const sets = [
-    {score:8, a:{name:"المجموعة A", mean:6, sd:3.16}, b:{name:"المجموعة B", mean:7, sd:2.92}},
-    {score:85, a:{name:"الإحصاء", mean:75, sd:5}, b:{name:"الإنجليزية", mean:83, sd:3}},
-    {score:70, a:{name:"الشعبة الأولى", mean:60, sd:10}, b:{name:"الشعبة الثانية", mean:65, sd:4}}
-  ];
-  const c = sets[v % sets.length];
-  const za = round2(zValue(c.score, c.a.mean, c.a.sd));
-  const zb = round2(zValue(c.score, c.b.mean, c.b.sd));
-  const better = za > zb ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["نقارن القيمة نفسها في مجموعتين بواسطة الدرجة المعيارية؛ الأكبر Z يعني موضعاً أفضل بالنسبة إلى أقرانه."],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">حصل طالب على الدرجة ${c.score} في مجموعتين مختلفتين:</div>${table2colHtml("المجموعة","المعطيات",[
-        [c.a.name, `\\(\\bar{x}=${c.a.mean}\\)، \\(S=${c.a.sd}\\)`],
-        [c.b.name, `\\(\\bar{x}=${c.b.mean}\\)، \\(S=${c.b.sd}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب الدرجتين المعياريتين ثم حدّد أين كان أداء الطالب أفضل نسبياً.</div></div>`,
-      parts:[
-        {key:"za", type:"number", label:`\\(Z\\) ظپظٹ ${c.a.name}`, step:"0.01"},
-        {key:"zb", type:"number", label:`\\(Z\\) ظپظٹ ${c.b.name}`, step:"0.01"},
-        {key:"better", type:"mcq", label:"الأداء الأفضل نسبياً", options:shuffleLocal([c.a.name,c.b.name], seededRand("opt34zcmp|"+v))}
-      ],
-      answers:{za, zb, better},
-      method:[
-        `${c.a.name}: \\(Z=${za}\\).`,
-        `${c.b.name}: \\(Z=${zb}\\).`,
-        `بما أن القيمة الأكبر هي ${Math.max(za,zb)}، فالأداء الأفضل نسبياً كان في ${better}.`
-      ]
-    }]
-  };
-}
-
-function relMeasureChooseGen(v){
-  const sets = [
-    {txt:"لدينا مجموعتان بوحدتي قياس مختلفتين ولا توجد قيم منعزلة بارزة، ونريد مقارنة التبعثر حول المتوسط.", ans:"معامل الاختلاف"},
-    {txt:"لدينا مجموعتان مع وجود قيم منعزلة واضحة ونريد مقارنة التبعثر حول الوسيط.", ans:"معامل التشتت الربيعي"},
-    {txt:"نريد تحديد موضع قيمة واحدة بالنسبة إلى بقية أفراد مجموعتها.", ans:"الدرجة المعيارية"}
-  ];
-  const c = sets[v % sets.length];
-  const opts = shuffleLocal(["معامل الاختلاف","معامل التشتت الربيعي","الدرجة المعيارية","المدى"], seededRand("opt34measure|"+v));
-  return {
-    branches:[{
-      level:"سهل",
-      explain:["اختيار المقياس النسبي يعتمد على طبيعة المقارنة: بين مجموعات، أو داخل المجموعة نفسها، أو بوجود قيم منعزلة."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.txt}</div>`,
-      parts:[{key:"ans", type:"mcq", label:"الإجابة", options:opts}],
+      explain:["في بداية الدرس قُسّمت أشكال التوزيعات بحسب وجود المنوال: عديمة المنوال، أحادية المنوال، ومتعددة المناويل."],
+      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900;margin-bottom:10px">انظر إلى الجدول التكراري الآتي ثم حدّد نوع الشكل من حيث عدد المناويل:</div>${table2colHtml("القيمة","التكرار",c.rows,420)}</div>`,
+      parts:[{key:"ans", type:"mcq", label:"نوع الشكل", options}],
       answers:{ans:c.ans},
-      method:[`الإجابة الصحيحة: ${c.ans}.`]
+      method:[`التكرارات ${c.ans==="عديم المنوال" ? "متساوية، لذا لا يوجد منوال مميّز." : c.ans==="أحادي المنوال" ? "تبلغ ذروة واحدة واضحة." : "تبلغ أكثر من ذروة واحدة."}`]
     }]
   };
 }
 
-function mcq34Gen(v){
+function pearsonGen(v){
+  const sets = [
+    {mode:36, mean:37, sd:9.99, kind:"mode"},
+    {mode:175, mean:173, sd:11.498, kind:"mode"},
+    {median:7, mean:7, sd:1.581, kind:"median"}
+  ];
+  const c = sets[v % sets.length];
+  const sk = c.kind==="mode" ? pearsonWithMode(c.mean, c.mode, c.sd) : pearsonWithMedian(c.mean, c.median, c.sd);
+  const label = skewLabel(round3(sk));
+  const options = shuffleLocal(["متناظر","ملتوٍ نحو اليمين","ملتوٍ نحو اليسار"], seededRand("opt35pearson|"+v));
+  const formula = c.kind==="mode"
+    ? `\\( SK_P = \\frac{\\bar{x}-\\hat{x}}{S} \\)`
+    : `\\( SK_P = \\frac{3(\\bar{x}-\\tilde{x})}{S} \\)`;
+  const given = c.kind==="mode"
+    ? `\\(\\bar{x}=${c.mean}\\)، \\(\\hat{x}=${c.mode}\\)، \\(S=${c.sd}\\)`
+    : `\\(\\bar{x}=${c.mean}\\)، \\(\\tilde{x}=${c.median}\\)، \\(S=${c.sd}\\)`;
+  return {
+    branches:[{
+      level:"متوسط",
+      explain:["معامل بيرسون للالتواء يربط بين مقاييس النزعة المركزية والانحراف المعياري لتحديد مقدار الالتواء وجهته.", formula],
+      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">إذا كانت المعطيات ${given}، فاحسب معامل بيرسون للالتواء ثم حدّد نوع التوزيع.</div></div>`,
+      parts:[
+        {key:"sk", type:"number", label:"\\(SK_P\\)", step:"0.01"},
+        {key:"shape", type:"mcq", label:"نوع التوزيع", options}
+      ],
+      answers:{sk:round2(sk), shape:label},
+      method:[
+        c.kind==="mode"
+          ? `\\[ SK_P = \\frac{${c.mean}-${c.mode}}{${c.sd}} = ${round2(sk)} \\]`
+          : `\\[ SK_P = \\frac{3(${c.mean}-${c.median})}{${c.sd}} = ${round2(sk)} \\]`,
+        `إشارة المعامل هي التي تحدد الجهة: ${label}.`
+      ]
+    }]
+  };
+}
+
+function momentGen(v){
+  const sets = [
+    {xs:[4,5,6,7,8,9,10]},
+    {xs:[3,3,4,4,5,5,6,8,12]},
+    {xs:[1,4,8,8,9,9,10,10,10]}
+  ];
+  const xs = sets[v % sets.length].xs;
+  const sk = momentSkew(xs);
+  const label = skewLabel(round3(sk));
+  return {
+    branches:[{
+      level:"صعب",
+      explain:[
+        "معامل الالتواء العزومي أدق من معامل بيرسون عند الاختلاف بين النتائج.",
+        "\\( SK_m = \\frac{n}{(n-1)(n-2)} \\sum \\left(\\frac{x_i-\\bar{x}}{S}\\right)^3 \\)."
+      ],
+      promptHtml:`${rawListHtml(xs)}<div class="card" style="padding:14px;margin-top:12px"><div style="font-weight:900">احسب معامل الالتواء العزومي \\(SK_m\\) ثم حدّد نوع الالتواء.</div></div>`,
+      parts:[
+        {key:"skm", type:"number", label:"\\(SK_m\\)", step:"0.01"},
+        {key:"shape", type:"mcq", label:"نوع التوزيع", options:shuffleLocal(["متناظر","ملتوٍ نحو اليمين","ملتوٍ نحو اليسار"], seededRand("opt35moment|"+v))}
+      ],
+      answers:{skm:round2(sk), shape:label},
+      method:[
+        `بعد حساب المتوسط والانحراف المعياري والتعويض في العلاقة نحصل على: \\(SK_m=${round2(sk)}\\).`,
+        `إذن شكل التوزيع: ${label}.`
+      ]
+    }]
+  };
+}
+
+function kurtosisGen(v){
+  const sets = [
+    {xs:[1,2,3,4,5]},
+    {xs:[1,1,1,1,1,1,10]},
+    {xs:[2,2,3,4,4,5,5,6,8]}
+  ];
+  const xs = sets[v % sets.length].xs;
+  const ku = kurtosisBook(xs);
+  const label = kurtosisLabel(round3(ku));
+  return {
+    branches:[{
+      level:"صعب",
+      explain:[
+        "بحسب الكتاب: يعتمد الحكم على التفلطح على إشارة معامل التفلطح وقيمته.",
+        "\\( KU = 3 - \\frac{1}{n}\\sum\\left(\\frac{x_i-\\bar{x}}{S}\\right)^4 \\)."
+      ],
+      promptHtml:`${rawListHtml(xs)}<div class="card" style="padding:14px;margin-top:12px"><div style="font-weight:900">احسب معامل التفلطح \\(KU\\) ثم صنّف التوزيع.</div></div>`,
+      parts:[
+        {key:"ku", type:"number", label:"\\(KU\\)", step:"0.01"},
+        {key:"shape", type:"mcq", label:"تصنيف التفلطح", options:shuffleLocal(["معتدل","مدبّب قليلاً","مدبّب بشدّة","منبسط قليلاً","منبسط بشدّة"], seededRand("opt35ku|"+v))}
+      ],
+      answers:{ku:round2(ku), shape:label},
+      method:[
+        `بعد التعويض في العلاقة ينتج \\(KU=${round2(ku)}\\).`,
+        `وبالتالي يكون التوزيع ${label}.`
+      ]
+    }]
+  };
+}
+
+function boxplotCaseGen(v){
+  const cases = [
+    {
+      title:"حالة مماثلة لمثال 3.5.4",
+      cfg:{min:-5, ax:1, q1:4, q2:5, q3:6, ex:9, max:16, outliers:[-5,16]},
+      skew:"ملتوٍ نحو اليمين",
+      kurt:"مدبّب بشدّة"
+    },
+    {
+      title:"حالة مماثلة لمثال 3.5.5",
+      cfg:{min:3, ax:3, q1:5, q2:6, q3:8.5, ex:12, max:17, outliers:[17]},
+      skew:"ملتوٍ نحو اليمين",
+      kurt:"مدبّب بشدّة"
+    },
+    {
+      title:"حالة مماثلة لمثال 3.5.6",
+      cfg:{min:-4, ax:-4, q1:-2, q2:5, q3:10, ex:18, max:18, outliers:[]},
+      skew:"ملتوٍ نحو اليمين",
+      kurt:"منبسط بشدّة"
+    }
+  ];
+  const c = cases[v % cases.length];
+  return {
+    branches:[{
+      level:"متوسط",
+      explain:[
+        "في المخطط الصندوقي نقرأ الالتواء من انزياح الصندوق وخط الوسيط، ونقرأ التفلطح من طول الصندوق مقارنة ببقية الامتداد.",
+        "الصندوق يمثل في الأصل \\(IQR\\) أي 50% من البيانات."
+      ],
+      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900;margin-bottom:10px">${c.title}</div>${svgBoxplot(c.cfg)}<div style="margin-top:10px;font-weight:900">استنتج نوع الالتواء، ثم علّق على التفلطح.</div></div>`,
+      parts:[
+        {key:"skew", type:"mcq", label:"نوع الالتواء", options:shuffleLocal(["متناظر","ملتوٍ نحو اليمين","ملتوٍ نحو اليسار"], seededRand("opt35box1|"+v))},
+        {key:"kurt", type:"mcq", label:"وصف التفلطح", options:shuffleLocal(["معتدل","مدبّب قليلاً","مدبّب بشدّة","منبسط قليلاً","منبسط بشدّة"], seededRand("opt35box2|"+v))}
+      ],
+      answers:{skew:c.skew, kurt:c.kurt},
+      method:[
+        `من موضع الصندوق وخط الوسيط يكون التوزيع ${c.skew}.`,
+        `ومن طول الصندوق نسبةً إلى بقية الامتداد يكون التوزيع ${c.kurt}.`
+      ]
+    }]
+  };
+}
+
+function boxRuleGen(v){
+  const sets = [
+    {box:1.349, ans:"معتدل", txt:"لبيانات متناظرة يتبع توزيعها الطبيعي المعياري تقريباً"},
+    {box:1.1, ans:"مدبّب", txt:"لبيانات متناظرة طول صندوقها أصغر من 1.349"},
+    {box:1.9, ans:"منبسط", txt:"لبيانات متناظرة طول صندوقها أكبر من 1.349"},
+    {ratio:"half", ans:"منبسط قليلاً", txt:"لبيانات ليس فيها قيم منعزلة، مدىها 10 وحدات وطول الصندوق يقارب نصف المدى"},
+    {ratio:"fifth", ans:"مدبّب بشدّة", txt:"لبيانات ليس فيها قيم منعزلة، مدىها 7 وحدات وطول الصندوق لا يتجاوز خمس المدى"}
+  ];
+  const c = sets[v % sets.length];
+  const options = shuffleLocal(["معتدل","مدبّب","منبسط","منبسط قليلاً","مدبّب بشدّة"], seededRand("opt35rule|"+v));
+  return {
+    branches:[{
+      level:"سهل",
+      explain:["القواعد المباشرة المذكورة في الدرس تساعد على الحكم السريع على التفلطح من طول الصندوق."],
+      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.txt}. ما الوصف الأنسب؟</div>`,
+      parts:[{key:"ans", type:"mcq", label:"الوصف", options}],
+      answers:{ans:c.ans},
+      method:[`الوصف الصحيح هو: ${c.ans}.`]
+    }]
+  };
+}
+
+function fiveNumConceptGen(v){
   const pool = [
     {
-      q:"إذا كانت الدرجة المعيارية لأحد الطلاب تساوي 2، فهذا يعني أن درجته:",
-      options:["تساوي المتوسط","أعلى من المتوسط","أقل من المتوسط","لا يمكن الحكم"],
-      a:"أعلى من المتوسط",
-      method:["لأن \\(Z>0\\)، فالقيمة أكبر من المتوسط."]
+      q:"أي القيم الآتية ليست من القيم الخمس الأساسية في المخطط الصندوقي؟",
+      options:["الربيعي الثالث","القيمة الصغرى","الوسيط","المتوسط"],
+      a:"المتوسط",
+      method:["الأعداد الخمسة هي: أصغر قيمة، الربيعي الأول، الربيعي الثاني (الوسيط)، الربيعي الثالث، وأكبر قيمة."]
     },
     {
-      q:"إذا كان \\(CV=100\\%\\) ومتوسط الأعمار 25 سنة، فإن الانحراف المعياري يساوي:",
-      options:["5","25","625","4"],
-      a:"25",
-      method:["\\(CV=\\frac{S}{\\bar{x}}\\times100\\%\\)، فإذا كان \\(CV=100\\%\\) فلابد أن \\(S=\\bar{x}=25\\)."]
+      q:"الصندوق في المخطط الصندوقي يحتوي على:",
+      options:["75% من البيانات","60% من البيانات","50% من البيانات","25% من البيانات"],
+      a:"50% من البيانات",
+      method:["لأن الصندوق يمتد من \\(Q_1\\) إلى \\(Q_3\\)، أي يمثل المدى الربيعي."]
     },
     {
-      q:"الدرجة المعيارية تُستخدم غالباً من أجل:",
-      options:["حساب التكلفة الإجمالية","معرفة المادة المفضلة","تحديد موقع الفرد بالنسبة إلى أفراد العينة","قياس جودة المناهج"],
-      a:"تحديد موقع الفرد بالنسبة إلى أفراد العينة",
-      method:["لأنها مقياس موضع نسبي داخل المجموعة."]
-    },
-    {
-      q:"إذا كان معامل التشتت الربيعي لعينة الريف أكبر من عينة المدن، فإن هذا يعني أن:",
-      options:["التفاوت في الريف أكبر","المدن أكثر تشتتاً","الأعداد متساوية تماماً","جميع أسر الريف كبيرة"],
-      a:"التفاوت في الريف أكبر",
-      method:["القيمة الأكبر لمعامل التشتت الربيعي تعني تبعثرًا أكبر في النصف الأوسط من البيانات."]
+      q:"إذا كان الوسيط قريباً من الربيعي الأول، فإن توزيع البيانات يكون غالباً:",
+      options:["منحرف لليسار بشدة","منحرف لليمين","متماثل","منحرف لليسار"],
+      a:"منحرف لليمين",
+      method:["اقتراب الوسيط من \\(Q_1\\) يعني غالباً امتداداً أكبر نحو اليمين."]
     }
   ];
   const c = pool[v % pool.length];
   return {
     branches:[{
       level:"سهل",
-      explain:["سؤال نظري مباشر من أفكار الدرس."],
+      explain:["سؤال مفاهيمي مباشر حول المخطط الصندوقي."],
       promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.q}</div>`,
-      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt34mcq|"+v))}],
+      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt35five|"+v))}],
+      answers:{mcq:c.a},
+      method:c.method
+    }]
+  };
+}
+
+function mcq35Gen(v){
+  const pool = [
+    {
+      q:"إذا كان التفلطح سالباً، فإن التوزيع يكون:",
+      options:["مدبّباً","معتدلاً","منبسطاً","مائلاً لليسار"],
+      a:"مدبّباً",
+      method:["وفق الكتاب: الإشارة السالبة لمعامل التفلطح تدل على تدبّب التوزيع."]
+    },
+    {
+      q:"التوزيع الطبيعي المعياري هو توزيع:",
+      options:["مائل نحو اليسار","مائل نحو اليمين","منبسط","متناظر"],
+      a:"متناظر",
+      method:["التوزيع الطبيعي المعياري يُعد معيار الاعتدال والتناظر."]
+    },
+    {
+      q:"التفلطح للتوزيع الطبيعي يساوي:",
+      options:["1","0","-1","1.5"],
+      a:"0",
+      method:["في الكتاب، \\(KU=0\\) يعني توزيعاً معتدلاً قريباً من الطبيعي."]
+    },
+    {
+      q:"أي مما يلي لا يعبّر عن الالتواء؟",
+      options:["التدبب","التناظر","الالتواء نحو اليمين","الالتواء نحو اليسار"],
+      a:"التدبب",
+      method:["التدبب/الانبساط يرتبطان بالتفلطح لا بالالتواء."]
+    }
+  ];
+  const c = pool[v % pool.length];
+  return {
+    branches:[{
+      level:"سهل",
+      explain:["سؤال نظري من الاختبار الذاتي للطالب في آخر الدرس."],
+      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.q}</div>`,
+      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt35mcq|"+v))}],
       answers:{mcq:c.a},
       method:c.method
     }]
@@ -3004,15 +2992,14 @@ function mcq34Gen(v){
 }
 
 const TEMPLATES = [
-  {id:"34_cv_basic", title:"معامل الاختلاف", icon:"CV", gen:cvBasicGen},
-  {id:"34_cv_compare", title:"مقارنة التشتت بمعامل الاختلاف", icon:"%", gen:cvCompareGen},
-  {id:"34_qcd_basic", title:"معامل التشتت الربيعي", icon:"Q", gen:qcdBasicGen},
-  {id:"34_qcd_compare", title:"مقارنة التشتت الربيعي", icon:"Q%", gen:qcdCompareGen},
-  {id:"34_z_basic", title:"الدرجة المعيارية", icon:"Z", gen:zBasicGen},
-  {id:"34_x_from_z", title:"إيجاد القيمة من الدرجة المعيارية", icon:"x", gen:xFromZGen},
-  {id:"34_z_compare", title:"المفاضلة بين قيمتين بالدرجة المعيارية", icon:"⇅", gen:zCompareGen},
-  {id:"34_measure", title:"اختيار المقياس النسبي الأنسب", icon:"★", gen:relMeasureChooseGen},
-  {id:"34_mcq", title:"سؤال نظري", icon:"؟", gen:mcq34Gen}
+  {id:"35_shape_type", title:"أشكال التوزيعات بحسب المناويل", icon:"∿", gen:shapeTypeGen},
+  {id:"35_pearson", title:"معامل بيرسون للالتواء", icon:"P", gen:pearsonGen},
+  {id:"35_moment", title:"معامل الالتواء العزومي", icon:"m", gen:momentGen},
+  {id:"35_kurtosis", title:"معامل التفلطح", icon:"KU", gen:kurtosisGen},
+  {id:"35_box", title:"قراءة المخطط الصندوقي", icon:"▭", gen:boxplotCaseGen},
+  {id:"35_rule", title:"قواعد الحكم من طول الصندوق", icon:"1.349", gen:boxRuleGen},
+  {id:"35_five", title:"مفاهيم الأعداد الخمسة", icon:"5", gen:fiveNumConceptGen},
+  {id:"35_mcq", title:"سؤال نظري", icon:"؟", gen:mcq35Gen}
 ];
 function shuffleInPlace(arr, r){
   for(let i=arr.length-1;i>0;i--){
@@ -3591,15 +3578,15 @@ document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElem
 function renderAll(){ renderMain(); renderSidebar(); setProgress(); }
 window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); renderAll(); if(window.__examRunning) startTimer(); else showIntroModal(); });/* Codex Adaptive Mastery Start */
 (function(){
-  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_4";
-  const MASTERY_VERSION = "chapter3_mastery_3_4_v2";
-  const CORE_ORDER = ["34_cv_basic","34_qcd_basic","34_z_basic"];
-  const ALL_ORDER = ["34_cv_basic","34_cv_compare","34_qcd_basic","34_qcd_compare","34_z_basic","34_x_from_z","34_z_compare","34_measure","34_mcq"];
-  const QUESTION_PROFILES = {"34_cv_basic":{"skills":["cv","relative-dispersion"],"remediation":["34_measure"],"advancement":["34_cv_compare"]},"34_cv_compare":{"skills":["cv","compare"],"remediation":["34_cv_basic"],"advancement":[]},"34_qcd_basic":{"skills":["qcd","quartile"],"remediation":["34_measure"],"advancement":["34_qcd_compare"]},"34_qcd_compare":{"skills":["qcd","compare"],"remediation":["34_qcd_basic"],"advancement":[]},"34_z_basic":{"skills":["z","standard-score"],"remediation":["34_x_from_z"],"advancement":["34_z_compare"]},"34_x_from_z":{"skills":["z","inverse"],"remediation":["34_z_basic"],"advancement":["34_z_compare"]},"34_z_compare":{"skills":["z","compare"],"remediation":["34_z_basic","34_x_from_z"],"advancement":[]},"34_measure":{"skills":["measure-choice","relative-dispersion"],"remediation":["34_cv_basic","34_qcd_basic"],"advancement":[]},"34_mcq":{"skills":["concept"],"remediation":["34_measure"],"advancement":[]}};
+  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_5";
+  const MASTERY_VERSION = "chapter3_mastery_3_5_v2";
+  const CORE_ORDER = ["35_shape_type","35_pearson","35_box"];
+  const ALL_ORDER = ["35_shape_type","35_pearson","35_moment","35_kurtosis","35_box","35_rule","35_five","35_mcq"];
+  const QUESTION_PROFILES = {"35_shape_type":{"skills":["shape","modes"],"remediation":["35_mcq"],"advancement":["35_pearson"]},"35_pearson":{"skills":["skewness","pearson"],"remediation":["35_shape_type"],"advancement":["35_moment"]},"35_moment":{"skills":["skewness","moment"],"remediation":["35_pearson"],"advancement":["35_kurtosis"]},"35_kurtosis":{"skills":["kurtosis","shape"],"remediation":["35_moment"],"advancement":[]},"35_box":{"skills":["boxplot","five-number"],"remediation":["35_five","35_rule"],"advancement":[]},"35_rule":{"skills":["boxplot","rule"],"remediation":["35_box","35_five"],"advancement":[]},"35_five":{"skills":["five-number","quartile"],"remediation":["35_box"],"advancement":["35_rule"]},"35_mcq":{"skills":["concept","shape"],"remediation":["35_shape_type"],"advancement":[]}};
   const SUPPORT_LIMIT = 4;
   const READINESS_TO_ADVANCE = 0.74;
   const NEED_SUPPORT_BELOW = 0.62;
-  const AI_ADAPTIVE_KEY = "stat102_3_4_ai_adaptive_v1";
+  const AI_ADAPTIVE_KEY = "stat102_3_5_ai_adaptive_v1";
 
   const originalBuildBank = buildBank;
   const originalRenderSidebar = renderSidebar;
@@ -4187,7 +4174,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_3_4_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_3_5_ai_models_v1";
   try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
@@ -4594,7 +4581,20 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const thetaLbl = irtThetaLabel(theta);
     const thetaPct = clamp((theta + 3) / 6, 0, 1) * 100; /* 0% = -3, 100% = +3 */
 
-    /* === part-level aggregation MUST come first === */
+    const ec       = (__partStats && __partStats.errs) ? __partStats.errs : { conceptual:0, computational:0, application:0 };
+    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
+    var domErr     = "none";
+    (function(){
+      var best = 0;
+      ["conceptual","computational","application"].forEach(function(_k){
+        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
+      });
+      if(errTotal === 0) domErr = "none";
+    })();
+    const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
+
+    const bs       = brierScore();
+    var calibDx_old = calibDiagnosis();
     var __partStats = (function(){
       var ans = 0, ok = 0;
       var errs = { conceptual: 0, computational: 0, application: 0 };
@@ -4654,20 +4654,6 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
     const totalAtt = __partStats.answered;
     const totalOk  = __partStats.correct;
     const examAttempts = Math.max(1, (aiModelsState && aiModelsState.examAttempts) ? aiModelsState.examAttempts : 1);
-
-    const ec       = __partStats.errs;
-    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
-    var domErr     = "none";
-    (function(){
-      var best = 0;
-      ["conceptual","computational","application"].forEach(function(_k){
-        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
-      });
-      if(errTotal === 0) domErr = "none";
-    })();
-    const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
-
-    const bs       = brierScore();
     var calibDx = (function(){
       if(totalAtt === 0) return { text:"لم تبدأ الإجابة بعد — ابدأ أول سؤال لعرض التقييم.", cls:"" };
       var pct = totalOk / totalAtt;
@@ -5009,9 +4995,9 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_3_4_lesson_3_4_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["34_cv_basic", "34_qcd_basic", "34_z_basic"];
-  const MASTERY_PROFILES_UNIFIED = {"34_cv_basic": {"supports": ["34_cv_compare", "34_qcd_basic", "34_qcd_compare", "34_z_basic"]}, "34_cv_compare": {"supports": ["34_qcd_basic", "34_qcd_compare", "34_z_basic", "34_x_from_z"]}, "34_qcd_basic": {"supports": ["34_qcd_compare", "34_z_basic", "34_x_from_z", "34_z_compare"]}, "34_qcd_compare": {"supports": ["34_z_basic", "34_x_from_z", "34_z_compare", "34_measure"]}, "34_z_basic": {"supports": ["34_x_from_z", "34_z_compare", "34_measure", "34_mcq"]}, "34_x_from_z": {"supports": ["34_z_compare", "34_measure", "34_mcq", "34_cv_basic"]}, "34_z_compare": {"supports": ["34_measure", "34_mcq", "34_cv_basic", "34_cv_compare"]}, "34_measure": {"supports": ["34_mcq", "34_cv_basic", "34_cv_compare", "34_qcd_basic"]}, "34_mcq": {"supports": ["34_cv_basic", "34_cv_compare", "34_qcd_basic", "34_qcd_compare"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_3_5_lesson_3_5_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["35_shape_type", "35_pearson", "35_box"];
+  const MASTERY_PROFILES_UNIFIED = {"35_shape_type": {"supports": ["35_pearson", "35_moment", "35_kurtosis", "35_box"]}, "35_pearson": {"supports": ["35_moment", "35_kurtosis", "35_box", "35_rule"]}, "35_moment": {"supports": ["35_kurtosis", "35_box", "35_rule", "35_five"]}, "35_kurtosis": {"supports": ["35_box", "35_rule", "35_five", "35_mcq"]}, "35_box": {"supports": ["35_rule", "35_five", "35_mcq", "35_shape_type"]}, "35_rule": {"supports": ["35_five", "35_mcq", "35_shape_type", "35_pearson"]}, "35_five": {"supports": ["35_mcq", "35_shape_type", "35_pearson", "35_moment"]}, "35_mcq": {"supports": ["35_shape_type", "35_pearson", "35_moment", "35_kurtosis"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}

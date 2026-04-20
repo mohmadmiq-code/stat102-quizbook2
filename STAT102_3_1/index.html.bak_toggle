@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.4 معاملات التشتت والدرجة المعيارية</title>
+  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.1 مقاييس النزعة المركزية</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -107,7 +107,6 @@
     }
     .logoWrap:hover{background:rgba(255,255,255,.25);transform:translateY(-50%) scale(1.02)}
     .logoWrap img{height:52px;width:auto;display:block;}
-    .logoWrap .textLogo{height:52px;min-width:52px;padding:0 10px;border-radius:12px;display:grid;place-items:center;font-size:18px;font-weight:900;letter-spacing:.06em;color:#fff;}
 
     .wrap{
       max-width:900px;
@@ -2124,14 +2123,6 @@ input.badField, textarea.badField{
 
 
 </style>
-<script>
-/* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
-</script>
-<style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
-</style>
-<!-- AI_KILL_SWITCH -->
 </head>
 <body>
   <header class="topbar">
@@ -2144,11 +2135,11 @@ window.AI_ENABLED = false;
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">3.4 معاملات التشتت والدرجة المعيارية <span class="sep">|</span> Coefficients of Dispersion and Standard Score</div>
+          <div class="s">3.1 مقاييس النزعة المركزية <span class="sep">|</span> Measures of Central Tendency</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
-        <div class="textLogo" aria-label="King Saud University">KSU</div>
+        <img alt="King Saud University Logo" src="ksu_logo.png" />
       </div>
     </div>
   </header>
@@ -2231,9 +2222,9 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-const STATE_KEY = "stat102_3_4_state_v2";
+const STATE_KEY = "stat102_3_1_state_v12";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_3_4_timerEnd_v2";
+const TIMER_KEY = "stat102_3_1_timerEnd_v12";
 let state = loadState() || { currentIndex: 0, answers: {}, grading: {}, variants: {}, order: null, attempts: {}, saveAttempts: {}, locks: {}, outcomes: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
 state.attempts = state.attempts || {};
 state.saveAttempts = state.saveAttempts || {};
@@ -2634,386 +2625,664 @@ document.getElementById("modal").addEventListener("click", (e)=>{ if(e.target.id
 
 
 
+const LAT = { mean:"\\bar{x}", median:"\\tilde{x}", mode:"\\hat{x}" };
 
-const LAT = {};
+function meanRawGen(v){
+  const r = seededRand("mean_raw|"+v);
+  const n = (randInt(r, 7, 11) | 1);
+  const xs = Array.from({length:n}, ()=>randInt(r, 2, 10));
+  const sum = xs.reduce((a,b)=>a+b,0);
+  const mean = sum/n;
+  const meanRounded = Math.round(mean*100)/100;
 
-function round2(x){ return Math.round(Number(x)*100)/100; }
-function round3(x){ return Math.round(Number(x)*1000)/1000; }
-function sum(arr){ return arr.reduce((a,b)=>a+Number(b),0); }
-function pick(r, arr){ return arr[randInt(r,0,arr.length-1)]; }
-function shuffleLocal(arr, r){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(r()*(i+1));
-    const t = a[i]; a[i]=a[j]; a[j]=t;
+  const prompt = `البيانات: ${xs.join("، ")}<br>احسب \\( \\bar{x} \\) المتوسط الحسابي.`;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:[
+          "نستخدم قانون المتوسط الحسابي للبيانات غير المجمعة:",
+          `\\( ${LAT.mean} = \\frac{\\sum_{i=1}^{n} x_i}{n} \\)`,
+          "حيث \\(n\\) عدد القيم، و \\(\\sum x_i\\) مجموع القيم."
+        ],
+        promptHtml: `<div style="font-weight:900">${prompt}</div>`,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) المتوسط الحسابي`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `عدد القيم: \\( n = ${n} \\).`,
+          `مجموع القيم: \\( \\sum x_i = ${xs.join(" + ")} = ${sum} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${sum}}{${n}} = ${meanRounded} \\]`
+        ]
+      }
+    ]
+  };
+}
+
+function meanFromFreqTableGen(v){
+  const r = seededRand("mean_freq|"+v);
+  const x = [0,1,2,3,4];
+  let f = x.map(()=>randInt(r, 2, 14));
+  f[0]=randInt(r,2,6); f[4]=randInt(r,2,6);
+  const n = f.reduce((a,b)=>a+b,0);
+  const num = x.reduce((a,xi,i)=>a+xi*f[i],0);
+  const mean = num/n;
+
+  const rows = x.map((xi,i)=>`<tr><td>${xi}</td><td>${f[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">الجدول الآتي يوضح القيمة \\(x\\) وتكرارها \\(f\\):</div>
+    <table class="ftable" style="max-width:520px">
+      <thead><tr><th>القيمة \\(x\\)</th><th>التكرار \\(f\\)</th></tr></thead>
+      <tbody>${rows}<tr><td><b>\\(\\sum f\\)</b></td><td><b>${n}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">احسب \\( ${LAT.mean} \\) المتوسط.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:["استخدم العلاقة الخاصة بالمتوسط للجداول التكرارية."],
+        promptHtml,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) المتوسط`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `\\[ ${LAT.mean} = \\frac{\\sum_{i=1}^{n} x_i\\, f_i}{\\sum_{i=1}^{n} f_i} \\]`,
+          `نحسب حاصل ضرب كل قيمة في تكرارها: ${x.map((xi,i)=> (xi+"×"+f[i]+"="+(xi*f[i]))).join("، ")}.`,
+          `ثم نجمع نواتج الضرب: \\( \\sum x_i f_i = ${x.map((xi,i)=> (xi*f[i])).join(" + ")} = ${num} \\).`,
+          `ونجمع التكرارات: \\( \\sum f_i = ${f.join(" + ")} = ${n} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${num}}{${n}} = ${Math.round(mean*100)/100} \\]`
+]
+      }
+    ]
+  };
+}
+
+function meanGroupedGen(v){
+  const r = seededRand("mean_grouped|"+v);
+  const classes = [[20,25],[25,30],[30,35],[35,40],[40,45]];
+  let f = classes.map(()=>randInt(r, 8, 34));
+  f = f.map(x=>Math.max(6, Math.round(x/2)));
+  const mids = classes.map(c=>(c[0]+c[1])/2);
+  const N = f.reduce((a,b)=>a+b,0);
+  const products = mids.map((m,i)=>m*f[i]);
+  const num = products.reduce((a,b)=>a+b,0);
+  const mean = num/N;
+  const meanRounded = Math.round(mean*100)/100;
+
+  const rows = classes.map((c,i)=>`<tr><td>${c[0]}–${c[1]}</td><td>${f[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">الجدول التالي يوضح فئات العمر وتكراراتها:</div>
+    <table class="ftable" style="max-width:520px">
+      <thead><tr><th>الفئة</th><th>التكرار \\(f\\)</th></tr></thead>
+      <tbody>${rows}<tr><td><b>المجموع</b></td><td><b>${N}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">احسب \\( ${LAT.mean} \\) المتوسط التقريبي باستخدام مراكز الفئات.</div>
+  `;
+
+  const midsTxt = classes.map((c,i)=>`${c[0]}–${c[1]} ⇒ ${mids[i]}`).join("، ");
+  const prodTxt = classes.map((c,i)=>`${mids[i]}×${f[i]}=${products[i]}`).join("، ");
+  const sumFtxt = f.join(" + ");
+  const sumProdTxt = products.join(" + ");
+
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:[
+          "للبيانات المجمعة نستخدم مراكز الفئات (منتصف كل فئة) بدل القيم الأصلية.",
+          `\\( x_i = \\frac{حد\\,الفئة\\,الأدنى + حد\\,الفئة\\,الأعلى}{2} \\)`,
+          `ثم: \\( ${LAT.mean} = \\frac{\\sum x_i f_i}{\\sum f_i} \\).`
+        ],
+        promptHtml,
+        parts:[{key:"mean", type:"number", label:`\\( ${LAT.mean} \\) المتوسط التقريبي`, step:"0.01"}],
+        answers:{mean},
+        method:[
+          `مراكز الفئات: ${midsTxt}.`,
+          `نحسب \\(x_i f_i\\) لكل فئة: ${prodTxt}.`,
+          `مجموع التكرارات: \\( \\sum f_i = ${sumFtxt} = ${N} \\).`,
+          `مجموع \\(x_i f_i\\): \\( \\sum x_i f_i = ${sumProdTxt} = ${num} \\).`,
+          `\\[ ${LAT.mean} = \\frac{${num}}{${N}} = ${meanRounded} \\]`
+        ]
+      }
+    ]
+  };
+}
+
+function medianRawGen(v){
+  const r = seededRand("median_raw|"+v);
+  const even = (v % 2 === 1);
+  const base = even ? randInt(r, 6, 10) : (randInt(r, 7, 11) | 1);
+  const n = even ? (base % 2 === 0 ? base : base+1) : base;
+  const xs = Array.from({length:n}, ()=>randInt(r, 10, 99));
+  const sorted = [...xs].sort((a,b)=>a-b);
+  let med;
+  if(n%2===1){
+    med = sorted[(n-1)/2];
+  }else{
+    med = (sorted[n/2 - 1] + sorted[n/2]) / 2;
   }
-  return a;
-}
-function varianceRawStats(xs){
-  const n = xs.length;
-  const mean = sum(xs)/n;
-  const ss = xs.reduce((acc,x)=>acc + Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {n, mean, ss, variance, sd};
-}
-function varianceFreqStats(values, freqs){
-  const n = sum(freqs);
-  const mean = values.reduce((acc,x,i)=>acc + x*freqs[i], 0)/n;
-  const ss = values.reduce((acc,x,i)=>acc + freqs[i]*Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {n, mean, ss, variance, sd};
-}
-function groupedCenters(classes){
-  return classes.map(c=>round2((c[0]+c[1])/2));
-}
-function varianceGroupedStats(classes, freqs){
-  const centers = groupedCenters(classes);
-  const n = sum(freqs);
-  const mean = centers.reduce((acc,x,i)=>acc + x*freqs[i], 0)/n;
-  const ss = centers.reduce((acc,x,i)=>acc + freqs[i]*Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {centers, n, mean, ss, variance, sd};
-}
-function cvValue(mean, sd){ return (sd/mean)*100; }
-function qcdValue(q1, q3){ return ((q3-q1)/(q3+q1))*100; }
-function zValue(x, mean, sd){ return (x-mean)/sd; }
-function pearsonWithMode(mean, mode, sd){ return (mean-mode)/sd; }
-function pearsonWithMedian(mean, median, sd){ return 3*(mean-median)/sd; }
-function momentSkew(xs){
-  const {n, mean, sd} = varianceRawStats(xs);
-  return (n/((n-1)*(n-2))) * xs.reduce((acc,x)=>acc + Math.pow((x-mean)/sd,3), 0);
-}
-function kurtosisBook(xs){
-  const {n, mean, sd} = varianceRawStats(xs);
-  return 3 - (1/n) * xs.reduce((acc,x)=>acc + Math.pow((x-mean)/sd,4), 0);
-}
-function lowerFence(q1,q3){ return q1 - 1.5*(q3-q1); }
-function upperFence(q1,q3){ return q3 + 1.5*(q3-q1); }
-function skewLabel(sk){
-  if(Math.abs(sk) < 1e-9) return "متناظر";
-  return sk > 0 ? "ملتوٍ نحو اليمين" : "ملتوٍ نحو اليسار";
-}
-function kurtosisLabel(ku){
-  if(Math.abs(ku) < 1e-9) return "معتدل";
-  if(ku < -1) return "مدبّب بشدّة";
-  if(ku < 0) return "مدبّب قليلاً";
-  if(ku > 1) return "منبسط بشدّة";
-  return "منبسط قليلاً";
-}
-function rangeLabel(a,b){ return `<span class="ltr">${a} → ${b}</span>`; }
-function rawListHtml(xs){ return `<div class="card" style="padding:14px"><div style="font-weight:900">البيانات:</div><div style="margin-top:8px;font-weight:800">${xs.join("، ")}</div></div>`; }
-function table2colHtml(h1, h2, rows, maxW){
-  const body = rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||520}px"><thead><tr><th>${h1}</th><th>${h2}</th></tr></thead><tbody>${body}</tbody></table>`;
-}
-function groupedTableHtml(classes, freqs, maxW){
-  const head = `<thead><tr><th>الفئة</th><th>التكرار</th></tr></thead>`;
-  const body = classes.map((c,i)=>`<tr><td>${rangeLabel(c[0],c[1])}</td><td>${freqs[i]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||560}px">${head}<tbody>${body}</tbody></table>`;
-}
-function freqTableHtml(values, freqs, maxW){
-  const rows = values.map((x,i)=>`<tr><td>${x}</td><td>${freqs[i]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||520}px"><thead><tr><th>القيمة \\(x_i\\)</th><th>التكرار \\(f_i\\)</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-function chooseOptions(r, correct, distractors){
-  return shuffleLocal([correct, ...distractors], r);
-}
-function svgBoxplot(cfg){
-  const width = 620, height = 170, pad = 30, y = 78;
-  const vals = [cfg.min, cfg.ax, cfg.q1, cfg.q2, cfg.q3, cfg.ex, cfg.max].concat(cfg.outliers||[]);
-  const lo = Math.min(...vals), hi = Math.max(...vals);
-  const sx = x => pad + (width-2*pad) * ((x-lo)/(hi-lo || 1));
-  const tickVals = [cfg.min, cfg.q1, cfg.q2, cfg.q3, cfg.max];
-  const out = (cfg.outliers||[]).map(v=>`<circle cx="${sx(v)}" cy="${y}" r="4.5" fill="#dc2626"></circle><text x="${sx(v)}" y="${y-16}" text-anchor="middle" font-size="12" font-weight="800">${v}</text>`).join("");
-  const ticks = tickVals.map(v=>`<line x1="${sx(v)}" y1="${y+32}" x2="${sx(v)}" y2="${y+40}" stroke="#334155" stroke-width="2"></line><text x="${sx(v)}" y="${y+58}" text-anchor="middle" font-size="12" font-weight="800">${v}</text>`).join("");
-  return `
-  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block">
-    <rect x="0" y="0" width="${width}" height="${height}" rx="18" fill="#f8fafc" stroke="#e2e8f0"></rect>
-    <line x1="${pad}" y1="${y}" x2="${width-pad}" y2="${y}" stroke="#0f172a" stroke-width="2"></line>
-    <line x1="${sx(cfg.ax)}" y1="${y}" x2="${sx(cfg.q1)}" y2="${y}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.q3)}" y1="${y}" x2="${sx(cfg.ex)}" y2="${y}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.ax)}" y1="${y-20}" x2="${sx(cfg.ax)}" y2="${y+20}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.ex)}" y1="${y-20}" x2="${sx(cfg.ex)}" y2="${y+20}" stroke="#0f172a" stroke-width="3"></line>
-    <rect x="${sx(cfg.q1)}" y="${y-24}" width="${Math.max(8, sx(cfg.q3)-sx(cfg.q1))}" height="48" fill="#e0f2fe" stroke="#0369a1" stroke-width="3" rx="8"></rect>
-    <line x1="${sx(cfg.q2)}" y1="${y-24}" x2="${sx(cfg.q2)}" y2="${y+24}" stroke="#0369a1" stroke-width="4"></line>
-    ${out}
-    ${ticks}
-  </svg>`;
-}
-
-function cvBasicGen(v){
-  const means = [100, 75, 48, 25];
-  const sds = [15, 9, 6, 5];
-  const mean = means[v % means.length];
-  const sd = sds[v % sds.length];
-  const cv = cvValue(mean, sd);
+  const promptHtml = `
+    <div style="font-weight:900">البيانات: ${xs.join("، ")}<br>بعد ترتيبها تصاعدياً، احسب \\( ${LAT.median} \\) الوسيط.</div>
+  `;
   return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "معامل الاختلاف مقياس نسبي يجرّد التشتت من وحدة القياس.",
-        "\\( CV = \\frac{S}{\\bar{x}}\\times 100\\% \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">إذا كان متوسط البيانات \\(\\bar{x}=${mean}\\) والانحراف المعياري \\(S=${sd}\\)، فاحسب معامل الاختلاف \\(CV\\) بالنسبة المئوية.</div></div>`,
-      parts:[{key:"cv", type:"number", label:"معامل الاختلاف \\(CV\\) (بدون علامة %)", step:"0.01"}],
-      answers:{cv:round2(cv)},
-      method:[
-        `\\[ CV = \\frac{${sd}}{${mean}} \\times 100 = ${round2(cv)}\\% \\]`
-      ]
-    }]
+    branches:[
+      {
+        level:"سهل",
+        explain:["رتّب القيم تصاعدياً ثم حدّد موقع/موقعين المنتصف."],
+        formula:[
+          `إذا كان \\(n\\) فردياً: موقع الوسيط \\( k=\\frac{n+1}{2} \\)، والوسيط هو القيمة في هذا الموقع بعد الترتيب.`,
+          `إذا كان \\(n\\) زوجياً: \\( ${LAT.median}=\\frac{x_{(n/2)}+x_{(n/2+1)}}{2} \\).`
+        ],
+        promptHtml,
+        parts:[{key:"med", type:"number", label:`\\( ${LAT.median} \\) الوسيط`, step:"0.5"}],
+        answers:{med},
+        method:[
+          "رتّب البيانات تصاعدياً.",
+          `البيانات المرتبة: ${sorted.join("، ")}.`,
+          n%2===1
+            ? `\\(n=${n}\\) فردي ⇒ \\(k=\\frac{n+1}{2}=${(n+1)/2}\\) ⇒ \\( ${LAT.median} = ${med} \\).`
+            : `\\(n=${n}\\) زوجي ⇒ القيمتان في الموقعين \\(\\frac{n}{2}=${n/2}\\) و \\(\\frac{n}{2}+1=${n/2+1}\\) هما ${sorted[n/2-1]} و ${sorted[n/2]} ⇒ \\( ${LAT.median} = \\frac{${sorted[n/2-1]}+${sorted[n/2]}}{2} = ${med} \\).`
+        ]
+      }
+    ]
   };
 }
 
-function cvCompareGen(v){
-  const sets = [
-    {a:{name:"A", mean:68, sd:4.53}, b:{name:"B", mean:166, sd:6.56}},
-    {a:{name:"الوزن", mean:72, sd:9}, b:{name:"الطول", mean:168, sd:6}},
-    {a:{name:"السهم الأول", mean:110, sd:10}, b:{name:"السهم الثاني", mean:14, sd:2}}
-  ];
-  const c = sets[v % sets.length];
-  const cvA = round2(cvValue(c.a.mean, c.a.sd));
-  const cvB = round2(cvValue(c.b.mean, c.b.sd));
-  const less = cvA < cvB ? c.a.name : c.b.name;
+function medianFreqGen(v){
+  const r = seededRand("median_freq|"+v);
+  const x = [2,3,5,6,7];
+  let f = [randInt(r,8,15), randInt(r,12,20), randInt(r,6,12), randInt(r,2,6), randInt(r,1,4)];
+  const n = f.reduce((a,b)=>a+b,0);
+  let cum = [];
+  let s = 0;
+  for(let i=0;i<f.length;i++){ s += f[i]; cum.push(s); }
+
+  const k = (n%2===1) ? (n+1)/2 : (n/2);
+  const idxK = cum.findIndex(c=>c>=k);
+  const exactHalf = (n%2===0 && cum[idxK]===k);
+
+  let med;
+  if(n%2===1){
+    med = x[idxK];
+  }else{
+    med = exactHalf ? (x[idxK] + x[idxK+1]) / 2 : x[idxK];
+  }
+  const rows = x.map((xi,i)=>`<tr><td>${xi}</td><td>${f[i]}</td><td>${cum[i]}</td></tr>`).join("");
+  const promptHtml = `
+    <div style="font-weight:900;margin-bottom:10px">جدول تكراري (مع التكرار المتجمع الصاعد):</div>
+    <table class="ftable" style="max-width:640px">
+      <thead><tr><th>القيمة</th><th>التكرار \\(f\\)</th><th>التكرار المتجمع الصاعد</th></tr></thead>
+      <tbody>${rows}<tr><td><b>المجموع</b></td><td colspan="2"><b>${n}</b></td></tr></tbody>
+    </table>
+    <div style="margin-top:10px;font-weight:900">احسب \\( ${LAT.median} \\) الوسيط.</div>
+  `;
   return {
-    branches:[{
-      level:"متوسط",
-      explain:[
-        "نقارن التشتت النسبي بين ظاهرتين مختلفتي الوحدة أو المختلفتين في المتوسط باستعمال معامل الاختلاف.",
-        "الأقل في \\(CV\\) هو الأقل تبعثراً حول متوسطه."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">لدينا ظاهرتان:</div>${table2colHtml("الظاهرة","المعطيات",[
-        [c.a.name, `\\(\\bar{x}=${c.a.mean}\\)، \\(S=${c.a.sd}\\)`],
-        [c.b.name, `\\(\\bar{x}=${c.b.mean}\\)، \\(S=${c.b.sd}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب معاملي الاختلاف ثم حدّد أي الظاهرتين أقل تشتتاً.</div></div>`,
-      parts:[
-        {key:"cvA", type:"number", label:`\\(CV\\) للظاهرة ${c.a.name} (بدون %)` , step:"0.01"},
-        {key:"cvB", type:"number", label:`\\(CV\\) للظاهرة ${c.b.name} (بدون %)` , step:"0.01"},
-        {key:"less", type:"mcq", label:"الأقل تشتتاً", options:shuffleLocal([c.a.name, c.b.name], seededRand("opt34cvcompare|"+v))}
-      ],
-      answers:{cvA, cvB, less},
-      method:[
-        `\\(CV_${c.a.name} = ${round2(c.a.sd)}/${round2(c.a.mean)} \\times 100 = ${cvA}\\%\\).`,
-        `\\(CV_${c.b.name} = ${round2(c.b.sd)}/${round2(c.b.mean)} \\times 100 = ${cvB}\\%\\).`,
-        `الأقل في معامل الاختلاف هو ${less}، لذا فهو الأقل تبعثراً حول متوسطه.`
-      ]
-    }]
+    branches:[
+      {
+        level:"متوسط",
+        explain:["حدّد قيمة k ثم استخدم عمود التكرار المتجمع لتحديد الوسيط."],
+        promptHtml,
+        parts:[{key:"med", type:"number", label:`\\( ${LAT.median} \\) الوسيط`, step:"0.5"}],
+        answers:{med},
+        method:[
+          `مجموع التكرارات: \\( n = ${n} \\).`,
+          `نحدد قيمة المركز: \\( k = ${k} \\).`,
+          `التكرار المتجمع الصاعد: ${cum.join("، ")}.`,
+          exactHalf
+            ? `لأن التكرار المتجمع يساوي \\(k\\) تمامًا عند القيمة ${x[idxK]}، فإن الوسيط هو متوسط القيمتين ${x[idxK]} و ${x[idxK+1]}.`
+            : `أول تكرار متجمع صاعد \\(\\ge k\\) يقع عند القيمة ${x[idxK]}، لذا يكون الوسيط هذه القيمة.`,
+          exactHalf
+            ? `\\( ${LAT.median} = \\frac{${x[idxK]}+${x[idxK+1]}}{2} = ${med} \\).`
+            : `\\( ${LAT.median} = ${med} \\).`
+        ]
+      }
+    ]
   };
 }
 
-function qcdBasicGen(v){
-  const sets = [
-    {q1:16.25, q3:20},
-    {q1:21.25, q3:25.75},
-    {q1:12, q3:18},
-    {q1:40, q3:55}
-  ];
-  const c = sets[v % sets.length];
-  const qcd = qcdValue(c.q1, c.q3);
+function modeRawGen(v){
+  const r = seededRand("mode_raw|"+v);
+  const n = randInt(r, 8, 12);
+  let xs = Array.from({length:n}, ()=>randInt(r, 2, 11));
+  // enforce a mode (maybe bimodal sometimes)
+  const a = randInt(r, 3, 9);
+  const b = randInt(r, 3, 9);
+  xs[0]=a; xs[3]=a; xs[5]=a;
+  if(v%3===2){
+    xs[1]=b; xs[6]=b; xs[7]=b; // make two modes sometimes
+  }
+  const freq = {};
+  xs.forEach(x=>freq[x]=(freq[x]||0)+1);
+  const maxf = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k=>freq[k]===maxf).map(Number).sort((x,y)=>x-y);
+  const correct = modes.length===1 ? String(modes[0]) : modes.join("، ");
+  const promptHtml = `
+    <div style="font-weight:900">البيانات: ${xs.join("، ")}<br>حدِّد \\( ${LAT.mode} \\) المنوال.</div>
+  `;
   return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "معامل التشتت الربيعي يعتمد على الربيعين الأول والثالث ويصلح كثيراً عندما توجد قيم منعزلة.",
-        "\\( QCD = \\frac{Q_3-Q_1}{Q_3+Q_1}\\times 100\\% \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كان \\(Q_1=${c.q1}\\) و \\(Q_3=${c.q3}\\)، فاحسب معامل التشتت الربيعي \\(QCD\\).</div></div>`,
-      parts:[{key:"qcd", type:"number", label:"\\(QCD\\) (بدون علامة %)", step:"0.01"}],
-      answers:{qcd:round2(qcd)},
-      method:[
-        `\\[ QCD = \\frac{${c.q3}-${c.q1}}{${c.q3}+${c.q1}} \\times 100 = ${round2(qcd)}\\% \\]`
-      ]
-    }]
+    branches:[
+      {
+        level:"سهل",
+        explain:["المنوال هو القيمة الأكثر تكراراً."],
+        promptHtml,
+        parts:[{key:"mode", type:"text", label:`\\( ${LAT.mode} \\) المنوال`, placeholder:"اكتب القيمة (أو قيمتين إذا كان منوالان)"}],
+        answers:{mode: correct},
+        method:[
+          `\\( ${LAT.mode} \\) هو القيمة (أو القيم) الأكثر تكراراً.`,
+          `التكرارات: ${Object.keys(freq).map(Number).sort((a,b)=>a-b).map(k=>`${k}→${freq[k]}`).join("، ")}.`,
+          `أكبر تكرار = ${maxf}، إذن \\( ${LAT.mode} = ${correct} \\).`
+        ]
+      }
+    ]
   };
 }
 
-function qcdCompareGen(v){
-  const sets = [
-    {a:{name:"المنتج A", q1:21.25, q3:25.75}, b:{name:"المنتج B", q1:16.25, q3:20}},
-    {a:{name:"العينة الأولى", q1:14, q3:20}, b:{name:"العينة الثانية", q1:10, q3:18}},
-    {a:{name:"الشعبة A", q1:157, q3:171}, b:{name:"الشعبة B", q1:157.5, q3:179}}
-  ];
-  const c = sets[v % sets.length];
-  const qa = round2(qcdValue(c.a.q1,c.a.q3));
-  const qb = round2(qcdValue(c.b.q1,c.b.q3));
-  const moreStable = qa < qb ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["الأقل في معامل التشتت الربيعي يكون أكثر ثباتاً نسبياً حول الوسيط."],
-      promptHtml:`<div class="card" style="padding:14px">${table2colHtml("المجموعة","القيم",[
-        [c.a.name, `\\(Q_1=${c.a.q1}\\)، \\(Q_3=${c.a.q3}\\)`],
-        [c.b.name, `\\(Q_1=${c.b.q1}\\)، \\(Q_3=${c.b.q3}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب \\(QCD\\) لكل مجموعة ثم حدّد الأكثر ثباتاً نسبياً.</div></div>`,
-      parts:[
-        {key:"qa", type:"number", label:`\\(QCD\\) لـ ${c.a.name} (بدون %)` , step:"0.01"},
-        {key:"qb", type:"number", label:`\\(QCD\\) لـ ${c.b.name} (بدون %)` , step:"0.01"},
-        {key:"stable", type:"mcq", label:"الأكثر ثباتاً نسبياً", options:shuffleLocal([c.a.name,c.b.name], seededRand("opt34qcdcmp|"+v))}
-      ],
-      answers:{qa, qb, stable:moreStable},
-      method:[
-        `${c.a.name}: \\(${qa}\\%\\).`,
-        `${c.b.name}: \\(${qb}\\%\\).`,
-        `بما أن القيمة الأصغر هي ${Math.min(qa,qb)}\\%، فإن الأكثر ثباتاً نسبياً هو ${moreStable}.`
-      ]
-    }]
-  };
-}
+function modeGroupedGen(v){
+  const r = seededRand("mode_grouped|"+v);
 
-function zBasicGen(v){
-  const sets = [
-    {x:7000, mean:4000, sd:2000},
-    {x:3000, mean:4000, sd:2000},
-    {x:19, mean:13.4, sd:5.6},
-    {x:85, mean:75, sd:5}
-  ];
-  const c = sets[v % sets.length];
-  const z = zValue(c.x, c.mean, c.sd);
-  return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "الدرجة المعيارية تعبّر عن موضع قيمة مفردة بالنسبة إلى المتوسط والانحراف المعياري.",
-        "\\( Z_i = \\frac{x_i-\\bar{x}}{S} \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كانت \\(x_i=${c.x}\\)، و\\(\\bar{x}=${c.mean}\\)، و\\(S=${c.sd}\\)، فاحسب الدرجة المعيارية \\(Z_i\\).</div></div>`,
-      parts:[{key:"z", type:"number", label:"الدرجة المعيارية \\(Z_i\\)", step:"0.01"}],
-      answers:{z:round2(z)},
-      method:[
-        `\\[ Z_i = \\frac{${c.x}-${c.mean}}{${c.sd}} = ${round2(z)} \\]`
-      ]
-    }]
-  };
-}
+  // الفئات كما هي مكتوبة في الجدول (مثال: 4–10 ثم 10–16)
+  const C = 6;
+  const k = 6;
+  const start = randInt(r, 4, 14);
+  const classes = Array.from({length:k}, (_,i)=>{
+    const a = start + i*C;
+    const b = a + C;
+    return {a,b,label:`${a}–${b}`};
+  });
 
-function xFromZGen(v){
-  const sets = [
-    {z:2.3, mean:94, sd:4},
-    {z:-1.5, mean:60, sd:8},
-    {z:0.67, mean:75, sd:5}
-  ];
-  const c = sets[v % sets.length];
-  const x = c.mean + c.z*c.sd;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["إذا عُرفت الدرجة المعيارية فإننا نستعيد القيمة من العلاقة \\(x_i=\\bar{x}+Z_iS\\)."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كانت \\(Z_i=${c.z}\\)، و\\(\\bar{x}=${c.mean}\\)، و\\(S=${c.sd}\\)، فأوجد قيمة \\(x_i\\).</div></div>`,
-      parts:[{key:"x", type:"number", label:"القيمة \\(x_i\\)", step:"0.01"}],
-      answers:{x:round2(x)},
-      method:[
-        `\\[ x_i = ${c.mean} + (${c.z}\\times${c.sd}) = ${round2(x)} \\]`
-      ]
-    }]
-  };
-}
+  // تكرارات أحادية القمة لضمان فئة منوالية واحدة فقط
+  const modalIndex = randInt(r, 1, k-2);
+  let freqs;
+  while(true){
+    const peakF = randInt(r, 18, 28);
+    freqs = Array.from({length:k}, ()=>0);
+    freqs[modalIndex] = peakF;
 
-function zCompareGen(v){
-  const sets = [
-    {score:8, a:{name:"المجموعة A", mean:6, sd:3.16}, b:{name:"المجموعة B", mean:7, sd:2.92}},
-    {score:85, a:{name:"الإحصاء", mean:75, sd:5}, b:{name:"الإنجليزية", mean:83, sd:3}},
-    {score:70, a:{name:"الشعبة الأولى", mean:60, sd:10}, b:{name:"الشعبة الثانية", mean:65, sd:4}}
-  ];
-  const c = sets[v % sets.length];
-  const za = round2(zValue(c.score, c.a.mean, c.a.sd));
-  const zb = round2(zValue(c.score, c.b.mean, c.b.sd));
-  const better = za > zb ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["نقارن القيمة نفسها في مجموعتين بواسطة الدرجة المعيارية؛ الأكبر Z يعني موضعاً أفضل بالنسبة إلى أقرانه."],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">حصل طالب على الدرجة ${c.score} في مجموعتين مختلفتين:</div>${table2colHtml("المجموعة","المعطيات",[
-        [c.a.name, `\\(\\bar{x}=${c.a.mean}\\)، \\(S=${c.a.sd}\\)`],
-        [c.b.name, `\\(\\bar{x}=${c.b.mean}\\)، \\(S=${c.b.sd}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب الدرجتين المعياريتين ثم حدّد أين كان أداء الطالب أفضل نسبياً.</div></div>`,
-      parts:[
-        {key:"za", type:"number", label:`\\(Z\\) ظپظٹ ${c.a.name}`, step:"0.01"},
-        {key:"zb", type:"number", label:`\\(Z\\) ظپظٹ ${c.b.name}`, step:"0.01"},
-        {key:"better", type:"mcq", label:"الأداء الأفضل نسبياً", options:shuffleLocal([c.a.name,c.b.name], seededRand("opt34zcmp|"+v))}
-      ],
-      answers:{za, zb, better},
-      method:[
-        `${c.a.name}: \\(Z=${za}\\).`,
-        `${c.b.name}: \\(Z=${zb}\\).`,
-        `بما أن القيمة الأكبر هي ${Math.max(za,zb)}، فالأداء الأفضل نسبياً كان في ${better}.`
-      ]
-    }]
-  };
-}
-
-function relMeasureChooseGen(v){
-  const sets = [
-    {txt:"لدينا مجموعتان بوحدتي قياس مختلفتين ولا توجد قيم منعزلة بارزة، ونريد مقارنة التبعثر حول المتوسط.", ans:"معامل الاختلاف"},
-    {txt:"لدينا مجموعتان مع وجود قيم منعزلة واضحة ونريد مقارنة التبعثر حول الوسيط.", ans:"معامل التشتت الربيعي"},
-    {txt:"نريد تحديد موضع قيمة واحدة بالنسبة إلى بقية أفراد مجموعتها.", ans:"الدرجة المعيارية"}
-  ];
-  const c = sets[v % sets.length];
-  const opts = shuffleLocal(["معامل الاختلاف","معامل التشتت الربيعي","الدرجة المعيارية","المدى"], seededRand("opt34measure|"+v));
-  return {
-    branches:[{
-      level:"سهل",
-      explain:["اختيار المقياس النسبي يعتمد على طبيعة المقارنة: بين مجموعات، أو داخل المجموعة نفسها، أو بوجود قيم منعزلة."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.txt}</div>`,
-      parts:[{key:"ans", type:"mcq", label:"الإجابة", options:opts}],
-      answers:{ans:c.ans},
-      method:[`الإجابة الصحيحة: ${c.ans}.`]
-    }]
-  };
-}
-
-function mcq34Gen(v){
-  const pool = [
-    {
-      q:"إذا كانت الدرجة المعيارية لأحد الطلاب تساوي 2، فهذا يعني أن درجته:",
-      options:["تساوي المتوسط","أعلى من المتوسط","أقل من المتوسط","لا يمكن الحكم"],
-      a:"أعلى من المتوسط",
-      method:["لأن \\(Z>0\\)، فالقيمة أكبر من المتوسط."]
-    },
-    {
-      q:"إذا كان \\(CV=100\\%\\) ومتوسط الأعمار 25 سنة، فإن الانحراف المعياري يساوي:",
-      options:["5","25","625","4"],
-      a:"25",
-      method:["\\(CV=\\frac{S}{\\bar{x}}\\times100\\%\\)، فإذا كان \\(CV=100\\%\\) فلابد أن \\(S=\\bar{x}=25\\)."]
-    },
-    {
-      q:"الدرجة المعيارية تُستخدم غالباً من أجل:",
-      options:["حساب التكلفة الإجمالية","معرفة المادة المفضلة","تحديد موقع الفرد بالنسبة إلى أفراد العينة","قياس جودة المناهج"],
-      a:"تحديد موقع الفرد بالنسبة إلى أفراد العينة",
-      method:["لأنها مقياس موضع نسبي داخل المجموعة."]
-    },
-    {
-      q:"إذا كان معامل التشتت الربيعي لعينة الريف أكبر من عينة المدن، فإن هذا يعني أن:",
-      options:["التفاوت في الريف أكبر","المدن أكثر تشتتاً","الأعداد متساوية تماماً","جميع أسر الريف كبيرة"],
-      a:"التفاوت في الريف أكبر",
-      method:["القيمة الأكبر لمعامل التشتت الربيعي تعني تبعثرًا أكبر في النصف الأوسط من البيانات."]
+    let cur = peakF;
+    for(let i=modalIndex-1;i>=0;i--){
+      cur -= randInt(r, 2, 6);
+      freqs[i] = cur;
     }
+
+    cur = peakF;
+    for(let i=modalIndex+1;i<k;i++){
+      cur -= randInt(r, 2, 6);
+      freqs[i] = cur;
+    }
+
+    if(freqs.every(f=>f>=2)) break;
+  }
+
+  // تأكيد الشرط: f_m > f_prev و f_m >= f_next
+  if(freqs[modalIndex] <= freqs[modalIndex-1]) freqs[modalIndex] = freqs[modalIndex-1] + 1;
+  if(freqs[modalIndex] < freqs[modalIndex+1]) freqs[modalIndex+1] = freqs[modalIndex] - 1;
+
+  const fPrev  = freqs[modalIndex-1];
+  const fModal = freqs[modalIndex];
+  const fNext  = freqs[modalIndex+1];
+
+  const Lhat = classes[modalIndex].a;
+  const d1 = fModal - fPrev;
+  const d2 = fModal - fNext;
+  const mode = Lhat + (d1 / (d1 + d2)) * C;
+  const modeRounded = Math.round(mode*100)/100;
+
+  const tableRows = classes.map((c,i)=>`
+    <tr>
+      <td class="r"><span class="ltr">${c.label}</span></td>
+      <td class="c">${freqs[i]}</td>
+    </tr>
+  `).join("");
+
+  const promptHtml = `
+    <div class="subTitle">جدول توزيع تكراري</div>
+    <div class="qText">
+      من الجدول الآتي، حدد قيمة المنوال \\( ${LAT.mode} \\).
+    </div>
+    <div class="niceTableWrap">
+      <table class="niceTable">
+        <thead>
+          <tr><th class="r">الفئة</th><th class="c">التكرار</th></tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  const explain = [
+    "نحدد الفئة المنوالية: تكرارها أكبر من تكرار الفئة السابقة، وأكبر أو يساوي تكرار الفئة اللاحقة.",
+    `\\[ ${LAT.mode} = \\hat{L} + \\frac{d_1}{d_1 + d_2} \\, C \\]`,
+    "حيث:",
+    `\\(\\hat{L}\\) حدّ أدنى للفئة المنوالية.`,
+    `\\(d_1\\) = (تكرار الفئة المنوالية − تكرار الفئة السابقة).`,
+    `\\(d_2\\) = (تكرار الفئة المنوالية − تكرار الفئة اللاحقة).`,
+    `\\(C\\) سعة الفئة.`
   ];
-  const c = pool[v % pool.length];
+
+  const method = [
+    `الفئة المنوالية: ${classes[modalIndex].label} (تكرارها ${fModal}).`,
+    `لأن ${fModal} > ${fPrev} و ${fModal} >= ${fNext}.`,
+    `\\(\\hat{L} = ${Lhat}\\)، \\(C = ${C}\\).`,
+    `\\(d_1 = ${fModal} - ${fPrev} = ${d1}\\).`,
+    `\\(d_2 = ${fModal} - ${fNext} = ${d2}\\).`,
+    `\\[ ${LAT.mode} = ${Lhat} + \\frac{${d1}}{${d1}+${d2}} \\times ${C} = ${modeRounded} \\]`
+  ];
+
   return {
-    branches:[{
-      level:"سهل",
-      explain:["سؤال نظري مباشر من أفكار الدرس."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.q}</div>`,
-      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt34mcq|"+v))}],
-      answers:{mcq:c.a},
-      method:c.method
-    }]
+    id:"mode_grouped",
+    title:"المنوال",
+    branches:[
+      {
+        name:"سهل",
+        level:"سهل",
+        difficulty:"سهل",
+        explain,
+        promptHtml,
+        parts:[
+          {key:"mode", type:"number", label:`قيمة المنوال \\( ${LAT.mode} \\)`, placeholder:"مثال: 31.5"}
+        ],
+        answers:{ mode: modeRounded },
+        method
+      }
+    ]
+  };
+}
+
+
+function chooseMeasureGen(v){
+  const r = seededRand("choose|"+v);
+  const xs = Array.from({length:7}, ()=>randInt(r, 6, 20));
+  xs.push(randInt(r, 60, 90)); // outlier
+  const promptHtml = `
+    <div style="font-weight:900">البيانات: ${xs.join("، ")}<br>اختر المقياس الأنسب لتمثيلها.</div>
+  `;
+  return {
+    branches:[
+      {
+        level:"سهل",
+        explain:["عند وجود قيمة متطرفة، نختار المقياس الأقل تأثراً."],
+        promptHtml,
+        parts:[{key:"best", type:"mcq", label:"المقياس الأنسب", options:[`المتوسط الحسابي`,`الوسيط`,`المنوال`]} ],
+        answers:{best:`الوسيط`},
+        method:[
+          `عند وجود قيمة متطرفة فإن المتوسط \\( \\bar{x} \\) يتأثر بها أكثر.`,
+          `الوسيط \\( \\tilde{x} \\) أقل تأثراً بالقيم المتطرفة.`,
+          "لذلك يكون الاختيار الصحيح هو: الوسيط."
+        ]
+      }
+    ]
+  };
+}
+
+function histPolygonGen(v){
+  const r = seededRand("histpoly|"+v);
+
+  const w = 5;
+  const k = 6;
+  const start = randInt(r, 10, 14);
+  const classes = Array.from({length:k}, (_,i)=>[start+i*w, start+(i+1)*w]);
+
+  // بناء تكرارات أحادية القمة لضمان منوال واحد فقط
+  const peak = randInt(r, 1, k-2);
+  let freqs = Array.from({length:k}, ()=>0);
+  const peakF = randInt(r, 18, 26);
+  freqs[peak] = peakF;
+
+  // يسار القمة: تزايد حتى القمة (أقل منها دائماً)
+  for(let i=peak-1;i>=0;i--){
+    const dec = randInt(r, 2, 6);
+    freqs[i] = Math.max(2, freqs[i+1] - dec);
+  }
+  // يمين القمة: تناقص بعد القمة (أقل منها دائماً)
+  for(let i=peak+1;i<k;i++){
+    const dec = randInt(r, 2, 6);
+    freqs[i] = Math.max(2, freqs[i-1] - dec);
+  }
+
+  // تأكيد الشرط: تكرار القمة أكبر من السابق واللاحق
+  freqs[peak] = Math.max(freqs[peak], freqs[peak-1]+1, freqs[peak+1]+1);
+
+  const maxF = freqs[peak];
+  const n = freqs.reduce((a,b)=>a+b,0);
+
+  const cum = [];
+  freqs.reduce((acc, f, i)=>{ cum[i]=acc+f; return cum[i]; }, 0);
+
+  const target = (n%2===0) ? (n/2) : ((n+1)/2);
+  const medianIdx = cum.findIndex(c=>c>target);
+  const medianClass = `${classes[medianIdx][0]}–${classes[medianIdx][1]}`;
+
+  const modalIdx = peak;
+  const modalClass = `${classes[modalIdx][0]}–${classes[modalIdx][1]}`;
+
+  const W = 860, H = 290, pad = 70;
+  const plotW = W - pad*2;
+  const plotH = H - pad*2;
+  const bw = plotW / k;
+  const xStart = pad - bw/2;
+  const xEnd = W - pad + bw/2;
+
+  function yOf(val){ return pad + (plotH - (val/maxF)*plotH); }
+  function xOf(i){ return pad + i*bw; }
+  function midOf(i){ return pad + i*bw + bw/2; }
+
+  const xLabels = classes.map(c=>`${c[0]}–${c[1]}`);
+
+  // Histogram (touching bars) + التكرار فوق كل عمود
+  let rects = "";
+  let histFreqLabels = "";
+  for(let i=0;i<k;i++){
+    const x = xOf(i);
+    const y = yOf(freqs[i]);
+    const h = (pad+plotH) - y;
+    rects += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="0" ry="0" fill="rgba(0,140,255,0.18)" stroke="rgba(0,100,180,0.55)" stroke-width="2"></rect>`;
+    histFreqLabels += `<text x="${midOf(i)}" y="${y-8}" text-anchor="middle" font-size="14" font-weight="bold" fill="rgba(0,80,140,0.95)" direction="ltr">${freqs[i]}</text>`;
+  }
+
+  let xText = "";
+  for(let i=0;i<k;i++){
+    xText += `<text x="${midOf(i)}" y="${H-pad+22}" text-anchor="middle" font-size="14" direction="ltr">${xLabels[i]}</text>`;
+  }
+
+  // grid
+  let yGrid = "";
+  const ticks = 5;
+  for(let t=0;t<=ticks;t++){
+    const vTick = Math.round((maxF/ticks)*t);
+    const y = yOf(vTick);
+    yGrid += `<line x1="${xStart}" y1="${y}" x2="${xEnd}" y2="${y}" stroke="rgba(0,0,0,0.07)" stroke-width="1"></line>`;
+    yGrid += `<text x="${pad-10}" y="${y+5}" text-anchor="end" font-size="12" fill="rgba(0,0,0,0.55)" direction="ltr">${vTick}</text>`;
+  }
+
+  const histSvg = `
+  <svg viewBox="0 0 ${W} ${H}" width="100%" height="260" aria-label="Histogram">
+    ${yGrid}
+    <line x1="${xStart}" y1="${pad+plotH}" x2="${xEnd}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <line x1="${xStart}" y1="${pad}" x2="${xStart}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    ${rects}
+    ${histFreqLabels}
+    ${xText}
+  </svg>`;
+
+  // Polygon + التكرار فوق كل نقطة
+  let pts = classes.map((_,i)=>`${midOf(i)},${yOf(freqs[i])}`).join(" ");
+  const axisY = (pad+plotH);
+  const leftMid = xStart;
+  const rightMid = xEnd;
+  const ptsClosed = `${leftMid},${axisY} ` + pts + ` ${rightMid},${axisY}`;
+  let dots = "";
+  let polyFreqLabels = "";
+  for(let i=0;i<k;i++){
+    const cy = yOf(freqs[i]);
+    dots += `<circle cx="${midOf(i)}" cy="${cy}" r="5.5" fill="rgba(0,90,160,0.85)"></circle>`;
+    polyFreqLabels += `<text x="${midOf(i)}" y="${cy-10}" text-anchor="middle" font-size="14" font-weight="bold" fill="rgba(0,80,140,0.95)" direction="ltr">${freqs[i]}</text>`;
+  }
+  const polySvg = `
+  <svg viewBox="0 0 ${W} ${H}" width="100%" height="260" aria-label="Frequency Polygon">
+    ${yGrid}
+    <line x1="${xStart}" y1="${pad+plotH}" x2="${xEnd}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <line x1="${xStart}" y1="${pad}" x2="${xStart}" y2="${pad+plotH}" stroke="rgba(0,0,0,0.25)" stroke-width="1"></line>
+    <polyline points="${ptsClosed}" fill="none" stroke="rgba(0,90,160,0.85)" stroke-width="3" stroke-linejoin="round"></polyline>
+    ${dots}
+    ${polyFreqLabels}
+    ${xText}
+  </svg>`;
+
+  // Table with empty cumulative column (inputs inline)
+  const cumInput = (i)=>`<input class="inlineInput" data-key="cum${i}" inputmode="numeric" autocomplete="off" placeholder="—" style="width:92px;border:2px solid #000;border-radius:14px;padding:10px 12px;font-weight:900;background:#fff;text-align:center" />`;
+  const tableRows = classes.map((c,i)=>`
+    <tr>
+      <td><span class="ltr">${c[0]}–${c[1]}</span></td>
+      <td>${freqs[i]}</td>
+      <td>${cumInput(i)}</td>
+    </tr>
+  `).join("");
+
+  const tableHtml = `
+  <div class="card" style="margin-top:12px;padding:14px 14px 8px">
+    <div style="font-weight:900;margin:2px 0 10px">أكمل عمود التكرار المتجمع الصاعد:</div>
+    <table class="niceTable">
+      <thead>
+        <tr>
+          <th>الفئة</th>
+          <th>التكرار</th>
+          <th>التكرار المتجمع الصاعد</th>
+        </tr>
+      </thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+  </div>`;
+
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:["اقرأ المدرج التكراري ثم أكمل التكرار المتجمع الصاعد وحدد الفئة الوسيطية."],
+        promptHtml: `
+          <div class="card" style="padding:16px">
+            <div style="font-weight:900;margin-bottom:8px">الرسم المدرج التكراري</div>
+            ${histSvg}
+          </div>
+          ${tableHtml}
+        `,
+        parts:[
+          {key:"cum0", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum1", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum2", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum3", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum4", type:"number", inline:true, label:"", step:"1"},
+          {key:"cum5", type:"number", inline:true, label:"", step:"1"},
+          {key:"medianClass", type:"mcq", label:"الفئة الوسيطية", options:xLabels}
+        ],
+        answers:{
+          cum0:cum[0], cum1:cum[1], cum2:cum[2], cum3:cum[3], cum4:cum[4], cum5:cum[5],
+          medianClass: medianClass
+        },
+        method:[
+          "نحسب التكرار المتجمع الصاعد بجمع التكرارات تدريجياً.",
+          `مجموع التكرارات: \\( n = ${n} \\).`,
+          `نصف المجموع (قيمة المركز): \\( ${target} \\).`,
+          `التكرار المتجمع الصاعد: ${cum.join("، ")}.`,
+          `أول تكرار متجمع صاعد أكبر من \\( ${target} \\) هو \\( ${cum[medianIdx]} \\) عند الفئة: ${medianClass}.`
+        ]
+      },
+      {
+        level:"متوسط",
+        explain:["اقرأ المضلع التكراري ثم حدد الفئة المنوالية والتكرار الأكبر."],
+        promptHtml: `
+          <div class="card" style="padding:16px">
+            <div style="font-weight:900;margin-bottom:8px">المضلع التكراري</div>
+            ${polySvg}
+          </div>
+        `,
+        parts:[
+          {key:"modalClass", type:"mcq", label:"الفئة المنوالية", options:xLabels},
+          {key:"maxF", type:"number", label:"التكرار الأكبر", step:"1"}
+        ],
+        answers:{ modalClass, maxF },
+        method:[
+          "من الرسم: حدِّد أعلى نقطة في المضلع التكراري.",
+          `أكبر تكرار هو \\( ${maxF} \\) عند الفئة: ${modalClass}.`,
+          `إذن الفئة المنوالية: ${modalClass}، والتكرار الأكبر = ${maxF}.`
+        ]
+      }
+    ]
+  };
+}
+
+
+function miscMcqGen(v){
+  const r = seededRand("misc_mcq|"+v);
+  const sh = (arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; } return a; };
+  const clamp = (x,a,b)=>Math.max(a, Math.min(b,x));
+
+  const wTheory = randInt(r, 1, 3);
+  const wPrac = randInt(r, 2, 6);
+  const pTheory = randInt(r, 70, 95);
+  const pPrac = randInt(r, 70, 95);
+  const overall = Math.round((wTheory*pTheory + wPrac*pPrac)/(wTheory+wPrac));
+
+  const opt1 = overall;
+  const opt2 = clamp(overall + randInt(r, 3, 8), 0, 100);
+  const opt3 = clamp(overall - randInt(r, 3, 8), 0, 100);
+  const opt4 = clamp(overall + randInt(r, 10, 18), 0, 100);
+  const optsA = sh([opt1,opt2,opt3,opt4]).map(x=>`${x}%`);
+
+  const optionsB = sh(["0","9","3","10"]);
+
+  const promptA = `
+    <div class="card" style="padding:14px">
+      <div style="font-weight:900;margin-bottom:8px">إذا كان الاختبار مكوّنًا من قسمين: نظري وعملي، وكان وزن النظري = ${wTheory} ووزن العملي = ${wPrac}،</div>
+      <div style="font-weight:900;margin-bottom:8px">وحصل طالب على ${pTheory}% في النظري و ${pPrac}% في العملي؛ احسب النسبة المئوية الكلية.</div>
+    </div>
+  `;
+
+  const promptB = `
+    <div class="card" style="padding:14px">
+      <div style="font-weight:900;margin-bottom:8px">لمجموعة مشاهدات عددها 10، إذا علمت أن \\\(\\sum_{i=1}^{10} (x_i-\\bar{x})^2 = 9\\\) فإن:</div>
+      <div style="font-weight:900">\\\(\\sum_{i=1}^{10} (x_i-\\bar{x})\\\) يساوي:</div>
+    </div>
+  `;
+
+  return {
+    branches:[
+      {
+        level:"متوسط",
+        explain:["احسب المتوسط المرجّح باستخدام الأوزان ثم اختر الإجابة الصحيحة."],
+        promptHtml: promptA,
+        parts:[{key:"wavg", type:"mcq", label:"الإجابة", options:optsA}],
+        answers:{wavg:`${overall}%`},
+        method:[
+          "النسبة الكلية = المتوسط المرجّح للأوزان.",
+          `المعطيات: \\(w_T=${wTheory},\; P_T=${pTheory},\; w_P=${wPrac},\; P_P=${pPrac}\\).`,
+          `\\[ \\text{Overall} = \\frac{${wTheory}\\times${pTheory} + ${wPrac}\\times${pPrac}}{${wTheory}+${wPrac}} = ${overall} \\]`
+        ]
+      },
+      {
+        level:"سهل",
+        explain:["خاصية مهمة: مجموع الانحرافات عن المتوسط يساوي صفرًا."],
+        promptHtml: promptB,
+        parts:[{key:"devsum", type:"mcq", label:"الإجابة", options:optionsB}],
+        answers:{devsum:"0"},
+        method:[
+          "لأي بيانات: مجموع الانحرافات عن المتوسط يساوي صفرًا.",
+          `\\[ \\sum (x_i-\\bar{x}) = 0 \\]`
+        ]
+      }
+    ]
   };
 }
 
 const TEMPLATES = [
-  {id:"34_cv_basic", title:"معامل الاختلاف", icon:"CV", gen:cvBasicGen},
-  {id:"34_cv_compare", title:"مقارنة التشتت بمعامل الاختلاف", icon:"%", gen:cvCompareGen},
-  {id:"34_qcd_basic", title:"معامل التشتت الربيعي", icon:"Q", gen:qcdBasicGen},
-  {id:"34_qcd_compare", title:"مقارنة التشتت الربيعي", icon:"Q%", gen:qcdCompareGen},
-  {id:"34_z_basic", title:"الدرجة المعيارية", icon:"Z", gen:zBasicGen},
-  {id:"34_x_from_z", title:"إيجاد القيمة من الدرجة المعيارية", icon:"x", gen:xFromZGen},
-  {id:"34_z_compare", title:"المفاضلة بين قيمتين بالدرجة المعيارية", icon:"⇅", gen:zCompareGen},
-  {id:"34_measure", title:"اختيار المقياس النسبي الأنسب", icon:"★", gen:relMeasureChooseGen},
-  {id:"34_mcq", title:"سؤال نظري", icon:"؟", gen:mcq34Gen}
+  {id:"q1_mean_raw",    title:`المتوسط الحسابي`,        icon:"μ", gen: meanRawGen},
+  {id:"q2_mean_freq",   title:`المتوسط من جدول تكراري`, icon:"∑", gen: meanFromFreqTableGen},
+  {id:"q3_mean_group",  title:`المتوسط لبيانات مجمعة`,  icon:"▤", gen: meanGroupedGen},
+  {id:"q4_median_raw",  title:`الوسيط`,                 icon:"◐", gen: medianRawGen},
+  {id:"q6_mode_raw",    title:`المنوال`,                icon:"◉", gen: modeGroupedGen},
+  {id:"q7_choose",      title:`اختيار المقياس الأنسب`,  icon:"★", gen: chooseMeasureGen},
+  {id:"q8_histpoly",    title:`الرسم المدرج/المضلع التكراري`, icon:"▃", gen: histPolygonGen},
+  {id:"misc_mcq",       title:`أسئلة متنوعة`,           icon:"⋯", gen: miscMcqGen}
 ];
+
 function shuffleInPlace(arr, r){
   for(let i=arr.length-1;i>0;i--){
     const j = Math.floor(r()*(i+1));
@@ -3265,20 +3534,24 @@ function showHelp(q, b){
   if(level.trim().toLowerCase()==="undefined") level="";
   const explainHtml = (b.explain && b.explain.length)
     ? `<ul style="margin:0;padding-right:18px;line-height:2">${b.explain.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المطلوب قبل التعويض.</div>";
-  const formulaHtml = (b.formula && b.formula.length)
-    ? `<div style="font-weight:900;margin:12px 0 6px">القانون/ملاحظات</div><ul style="margin:0;padding-right:18px;line-height:2">${b.formula.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
+    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المقياس المطلوب قبل أي تعويض.</div>";
+  const lawList = (b.formula && b.formula.length) ? b.formula : [];
+  const lawHtml = lawList.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:2">${lawList.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>استخدم القانون العام المناسب لنوع السؤال ثم عوّض القيم من المعطيات.</div>";
   openModal("مساعدة", `
-    <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">${title}${level?` <span style="font-size:13px;color:var(--muted)">— (${escapeHtml(level)})</span>`:""}</div>
-    <div style="background:var(--brand-light);border:1px solid rgba(3,105,161,.22);border-radius:14px;padding:14px 16px;margin-bottom:10px">
+    <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">
+      ${title}${level?` <span style="font-size:13px;color:var(--muted)">— (${escapeHtml(level)})</span>`:""}
+    </div>
+    <div style="background:var(--brand-light);border:1px solid rgba(3,105,161,.22);border-radius:14px;padding:14px 16px;margin-bottom:10px;">
       <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">الفكرة</div>
       ${explainHtml}
     </div>
-    <div style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px 16px">
+    <div style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px 16px;">
       <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">القانون</div>
-      ${formulaHtml}
+      ${lawHtml}
     </div>
+    <div style="margin-top:10px;color:var(--muted);font-weight:700">لن يتم عرض الجواب النهائي.</div>
   `);
 }
 
@@ -3318,7 +3591,7 @@ function _showCorrectModal(q, b, wrongItems){
     ${methodItems}
     <div style="margin:10px 0 6px;font-weight:900">الإجابة الصحيحة</div>
     <ul style="margin:0;padding-right:18px">${list}</ul>
-    <div style="margin-top:10px;color:#5b6b7a;font-weight:800">تم إظهار الإجابة الصحيحة. لتجنّب حفظ الحل، يمكنك توليد نسخة جديدة.</div>
+    <div style="margin-top:10px;color:#5b6b7a;font-weight:800">تم إظهار الإجابة الصحيحة. لتجنّب الحفظ المباشر للحل، سيتم توليد نسخة جديدة من السؤال.</div>
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button>
       <button class="btn small" onclick="closeModal()">لاحقًا</button>
@@ -3326,7 +3599,9 @@ function _showCorrectModal(q, b, wrongItems){
   `;
   openModal("الإجابة الصحيحة", html);
   const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
-  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
+  if(regenBtn){
+    regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
+  }
 }
 
 function _promptShowCorrectModal(q, b, wrongItems){
@@ -3591,15 +3866,15 @@ document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElem
 function renderAll(){ renderMain(); renderSidebar(); setProgress(); }
 window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); renderAll(); if(window.__examRunning) startTimer(); else showIntroModal(); });/* Codex Adaptive Mastery Start */
 (function(){
-  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_4";
-  const MASTERY_VERSION = "chapter3_mastery_3_4_v2";
-  const CORE_ORDER = ["34_cv_basic","34_qcd_basic","34_z_basic"];
-  const ALL_ORDER = ["34_cv_basic","34_cv_compare","34_qcd_basic","34_qcd_compare","34_z_basic","34_x_from_z","34_z_compare","34_measure","34_mcq"];
-  const QUESTION_PROFILES = {"34_cv_basic":{"skills":["cv","relative-dispersion"],"remediation":["34_measure"],"advancement":["34_cv_compare"]},"34_cv_compare":{"skills":["cv","compare"],"remediation":["34_cv_basic"],"advancement":[]},"34_qcd_basic":{"skills":["qcd","quartile"],"remediation":["34_measure"],"advancement":["34_qcd_compare"]},"34_qcd_compare":{"skills":["qcd","compare"],"remediation":["34_qcd_basic"],"advancement":[]},"34_z_basic":{"skills":["z","standard-score"],"remediation":["34_x_from_z"],"advancement":["34_z_compare"]},"34_x_from_z":{"skills":["z","inverse"],"remediation":["34_z_basic"],"advancement":["34_z_compare"]},"34_z_compare":{"skills":["z","compare"],"remediation":["34_z_basic","34_x_from_z"],"advancement":[]},"34_measure":{"skills":["measure-choice","relative-dispersion"],"remediation":["34_cv_basic","34_qcd_basic"],"advancement":[]},"34_mcq":{"skills":["concept"],"remediation":["34_measure"],"advancement":[]}};
+  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_1";
+  const MASTERY_VERSION = "chapter3_mastery_3_1_v2";
+  const CORE_ORDER = ["q1_mean_raw","q2_mean_freq","q4_median_raw"];
+  const ALL_ORDER = ["q1_mean_raw","q2_mean_freq","q3_mean_group","q4_median_raw","q6_mode_raw","q7_choose","q8_histpoly","misc_mcq"];
+  const QUESTION_PROFILES = {"q1_mean_raw":{"skills":["mean","raw","central"],"remediation":["q2_mean_freq","misc_mcq"],"advancement":["q3_mean_group"]},"q2_mean_freq":{"skills":["mean","frequency","central"],"remediation":["q1_mean_raw"],"advancement":["q3_mean_group"]},"q3_mean_group":{"skills":["mean","grouped","frequency"],"remediation":["q2_mean_freq"],"advancement":[]},"q4_median_raw":{"skills":["median","position","central"],"remediation":["misc_mcq"],"advancement":["q6_mode_raw"]},"q6_mode_raw":{"skills":["mode","central"],"remediation":["q4_median_raw"],"advancement":["q7_choose"]},"q7_choose":{"skills":["measure-choice","central"],"remediation":["q1_mean_raw","q4_median_raw","q6_mode_raw"],"advancement":[]},"q8_histpoly":{"skills":["graph","frequency"],"remediation":["q2_mean_freq","q3_mean_group"],"advancement":[]},"misc_mcq":{"skills":["concept","central"],"remediation":["q7_choose"],"advancement":[]}};
   const SUPPORT_LIMIT = 4;
   const READINESS_TO_ADVANCE = 0.74;
   const NEED_SUPPORT_BELOW = 0.62;
-  const AI_ADAPTIVE_KEY = "stat102_3_4_ai_adaptive_v1";
+  const AI_ADAPTIVE_KEY = "stat102_3_1_ai_adaptive_v1";
 
   const originalBuildBank = buildBank;
   const originalRenderSidebar = renderSidebar;
@@ -4187,7 +4462,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_3_4_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_3_1_ai_models_v1";
   try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
@@ -5009,9 +5284,9 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_3_4_lesson_3_4_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["34_cv_basic", "34_qcd_basic", "34_z_basic"];
-  const MASTERY_PROFILES_UNIFIED = {"34_cv_basic": {"supports": ["34_cv_compare", "34_qcd_basic", "34_qcd_compare", "34_z_basic"]}, "34_cv_compare": {"supports": ["34_qcd_basic", "34_qcd_compare", "34_z_basic", "34_x_from_z"]}, "34_qcd_basic": {"supports": ["34_qcd_compare", "34_z_basic", "34_x_from_z", "34_z_compare"]}, "34_qcd_compare": {"supports": ["34_z_basic", "34_x_from_z", "34_z_compare", "34_measure"]}, "34_z_basic": {"supports": ["34_x_from_z", "34_z_compare", "34_measure", "34_mcq"]}, "34_x_from_z": {"supports": ["34_z_compare", "34_measure", "34_mcq", "34_cv_basic"]}, "34_z_compare": {"supports": ["34_measure", "34_mcq", "34_cv_basic", "34_cv_compare"]}, "34_measure": {"supports": ["34_mcq", "34_cv_basic", "34_cv_compare", "34_qcd_basic"]}, "34_mcq": {"supports": ["34_cv_basic", "34_cv_compare", "34_qcd_basic", "34_qcd_compare"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_3_1_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["q1_mean_raw", "q2_mean_freq", "q4_median_raw"];
+  const MASTERY_PROFILES_UNIFIED = {"q1_mean_raw": {"supports": ["q2_mean_freq", "q3_mean_group", "q4_median_raw", "q6_mode_raw"]}, "q2_mean_freq": {"supports": ["q3_mean_group", "q4_median_raw", "q6_mode_raw", "q7_choose"]}, "q3_mean_group": {"supports": ["q4_median_raw", "q6_mode_raw", "q7_choose", "q8_histpoly"]}, "q4_median_raw": {"supports": ["q6_mode_raw", "q7_choose", "q8_histpoly", "misc_mcq"]}, "q6_mode_raw": {"supports": ["q7_choose", "q8_histpoly", "misc_mcq", "q1_mean_raw"]}, "q7_choose": {"supports": ["q8_histpoly", "misc_mcq", "q1_mean_raw", "q2_mean_freq"]}, "q8_histpoly": {"supports": ["misc_mcq", "q1_mean_raw", "q2_mean_freq", "q3_mean_group"]}, "misc_mcq": {"supports": ["q1_mean_raw", "q2_mean_freq", "q3_mean_group", "q4_median_raw"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}

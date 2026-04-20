@@ -2189,6 +2189,14 @@ input.badField, textarea.badField{
 
 
 </style>
+<script>
+/* AI kill-switch: flip to true when the central collection pipeline is ready. */
+window.AI_ENABLED = false;
+</script>
+<style id="al-ai-disabled-style">
+#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
+</style>
+<!-- AI_KILL_SWITCH -->
 </head>
 <body>
   <header class="topbar">
@@ -5432,20 +5440,7 @@ function renderAll(){
     const thetaLbl = irtThetaLabel(theta);
     const thetaPct = clamp((theta + 3) / 6, 0, 1) * 100; /* 0% = -3, 100% = +3 */
 
-    const ec       = (__partStats && __partStats.errs) ? __partStats.errs : { conceptual:0, computational:0, application:0 };
-    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
-    var domErr     = "none";
-    (function(){
-      var best = 0;
-      ["conceptual","computational","application"].forEach(function(_k){
-        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
-      });
-      if(errTotal === 0) domErr = "none";
-    })();
-    const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
-
-    const bs       = brierScore();
-    var calibDx_old = calibDiagnosis();
+    /* === part-level aggregation MUST come first === */
     var __partStats = (function(){
       var ans = 0, ok = 0;
       var errs = { conceptual: 0, computational: 0, application: 0 };
@@ -5505,6 +5500,20 @@ function renderAll(){
     const totalAtt = __partStats.answered;
     const totalOk  = __partStats.correct;
     const examAttempts = Math.max(1, (aiModelsState && aiModelsState.examAttempts) ? aiModelsState.examAttempts : 1);
+
+    const ec       = __partStats.errs;
+    const errTotal = (ec.conceptual||0) + (ec.computational||0) + (ec.application||0);
+    var domErr     = "none";
+    (function(){
+      var best = 0;
+      ["conceptual","computational","application"].forEach(function(_k){
+        if((ec[_k]||0) > best){ best = ec[_k]; domErr = _k; }
+      });
+      if(errTotal === 0) domErr = "none";
+    })();
+    const errInfo  = ERROR_TYPES[domErr] || ERROR_TYPES.none;
+
+    const bs       = brierScore();
     var calibDx = (function(){
       if(totalAtt === 0) return { text:"لم تبدأ الإجابة بعد — ابدأ أول سؤال لعرض التقييم.", cls:"" };
       var pct = totalOk / totalAtt;

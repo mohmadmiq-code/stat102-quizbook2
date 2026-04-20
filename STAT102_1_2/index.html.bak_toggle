@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.4 معاملات التشتت والدرجة المعيارية</title>
+  <title>جامعة الملك سعود - السنة الأولى المشتركة - STAT 102 | 1.2 المتغيرات وأنواع البيانات</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
@@ -25,6 +25,7 @@
       --brand2:#0c4a6e;
       --brand-light:#e0f2fe;
       --accent:#0284c7;
+      --accent-hover:#0ea5e9;
       --good:#059669;
       --good-bg:#d1fae5;
       --bad:#dc2626;
@@ -38,7 +39,7 @@
       --shadow-lg: 0 20px 50px rgba(15,23,42,.1);
       --r:16px;
       --r-lg:22px;
-      --font:"Cairo", "Noto Sans Symbols 2", system-ui, sans-serif;
+      --font:"Cairo", "Noto Sans Symbols 2", system-ui, -apple-system, sans-serif;
       --transition: .2s cubic-bezier(.4,0,.2,1);
     }
     *{box-sizing:border-box}
@@ -63,6 +64,7 @@
       min-height:80px;
       position:sticky; top:0; z-index:10;
       box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(8px);
     }
     .topbar .row{
       max-width:1280px;
@@ -82,7 +84,7 @@
     .brandblock{display:flex; align-items:center; gap:14px; min-width:0; text-align:center;}
     .brandtext{min-width:0; text-align:center}
     .brandtext .u{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
-    .brandtext .u.en{font-size:13px;font-weight:700;opacity:.9;margin-top:2px;direction:ltr;unicode-bidi:embed}
+    .brandtext .u.en{font-size:13px;font-weight:700;opacity:.9;margin-top:2px;direction:ltr;unicode-bidi:embed;letter-spacing:.03em}
     .sep{opacity:.6;margin:0 6px;font-weight:600;font-size:12px}
     .brandtext .d{font-size:13px;font-weight:700;opacity:.92;margin-top:2px;line-height:1.3}
     .brandtext .s{font-size:12px;opacity:.85;margin-top:2px;font-weight:600}
@@ -101,13 +103,14 @@
       background: rgba(255,255,255,.18);
       border:1px solid rgba(255,255,255,.35);
       border-radius:12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      box-shadow:
+        0 12px 24px rgba(0,0,0,.2),
+        0 0 0 4px rgba(30,167,255,.10);
       flex:0 0 auto;
       transition: var(--transition);
     }
     .logoWrap:hover{background:rgba(255,255,255,.25);transform:translateY(-50%) scale(1.02)}
     .logoWrap img{height:52px;width:auto;display:block;}
-    .logoWrap .textLogo{height:52px;min-width:52px;padding:0 10px;border-radius:12px;display:grid;place-items:center;font-size:18px;font-weight:900;letter-spacing:.06em;color:#fff;}
 
     .wrap{
       max-width:900px;
@@ -440,6 +443,9 @@
     }
     .part .label{font-weight:800;color:var(--ink);line-height:1.5;min-width:0;font-size:14px}
     .part .inputWrap{display:flex; gap:10px; align-items:center; justify-content:flex-end; flex:0 0 auto;}
+    .part.mcqPart{flex-direction:column;align-items:stretch;justify-content:flex-start;}
+    .part.mcqPart .label{width:100%;font-size:15px;}
+    .part.mcqPart .inputWrap{width:100%;justify-content:stretch;flex:1 1 auto;}
     input[type="text"], input[type="number"], textarea, select{
       border:2px solid var(--line);
       border-radius:12px;
@@ -553,6 +559,37 @@
     .modal .box .mh b{font-size:16px;font-weight:800;color:var(--ink)}
     .modal .box .mb{padding:20px 22px;color:var(--ink-soft);line-height:1.9;max-height:70vh;overflow:auto;}
 
+    .stemleaf{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      background:linear-gradient(180deg, var(--line-soft), var(--card));
+      margin-top:14px;
+    }
+    .stemleaf .slRow{
+      display:grid;
+      grid-template-columns: 110px 12px 1fr;
+      gap:12px;
+      align-items:center;
+      margin-top:12px;
+      font-weight:800;
+      direction:ltr;
+    }
+    .stemleaf .sep{
+      width:12px;height:46px;border-radius:10px;background:var(--line);
+      display:grid; place-items:center; color:var(--muted);
+      font-weight:800;
+    }
+    .stemleaf .stem{
+      border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);
+      text-align:center;font-family: ui-monospace, monospace;
+    }
+    .stemleaf .leaves{
+      border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);
+      font-family: ui-monospace, monospace;
+      text-align:left; white-space:nowrap; overflow:auto;
+    }
+
     table.ftable{
       width:100%;
       border-collapse:collapse;
@@ -596,66 +633,94 @@
       font-family:var(--font);
     }
 
-    /* --- 3.1 specific: Math, method panel, niceTable, inline inputs, feedback --- */
-.mathInline{direction:ltr; unicode-bidi:embed; display:inline-block;}
-.mathBlock{direction:ltr; unicode-bidi:embed;}
-.katex,.katex-display{direction:ltr; unicode-bidi:embed;}
-.katex{font-size:1.06em}
+    .charts{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      background: linear-gradient(180deg, var(--line-soft), var(--card));
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 860px){ .charts{grid-template-columns:1fr;} }
+    .chartBox{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--card);
+      padding:16px;
+      overflow:hidden;
+      transition: var(--transition);
+    }
+    .chartBox:hover{box-shadow: var(--shadow-sm)}
+    .chartTitle{font-weight:800;color:var(--ink);margin-bottom:10px;font-size:14px}
+    .chartNote{color:var(--muted);font-weight:600;font-size:12px;margin-top:10px;line-height:1.5}
+    svg{display:block;width:100%;height:auto}
 
-.methodHead{font-weight:900;margin-bottom:10px}
-.methodList{margin:0;padding-right:18px;line-height:2}
-.methodLine{direction:rtl;unicode-bidi:isolate}
-.methodLine .mathInline{direction:ltr;unicode-bidi:embed}
+    .hint{margin-top:10px;font-size:13px;color:var(--muted);font-weight:700}
+    .dataGrid{font-family:ui-monospace, monospace;font-size:14px;padding:12px;background:var(--line-soft);border-radius:10px;margin:10px 0;border:1px solid var(--line);direction:ltr;text-align:left}
+    .smallMuted{color:var(--muted);font-size:14px;font-weight:600}
 
-.niceTable{width:100%;border-collapse:separate;border-spacing:0;direction:ltr}
-.niceTable th,.niceTable td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:center}
-.niceTable thead th{background:var(--brand-light);font-weight:900}
-.niceTable tbody tr:last-child td{border-bottom:none}
+    input:focus, textarea:focus, select:focus{
+      outline:none;
+      border-color:var(--brand);
+      box-shadow: 0 0 0 3px rgba(3,105,161,.15);
+    }
+    .cellWrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+    .cellHint{font-size:11px;color:var(--muted);font-weight:600}
 
-input.inlineInput, textarea.inlineInput{
-  min-width:92px !important;
-  width:92px !important;
-  padding:10px 10px !important;
-  border:2px solid var(--line) !important;
-  background:var(--card) !important;
-  text-align:center;
-}
-.ltr{direction:ltr; unicode-bidi:embed; display:inline-block;}
-.hint{margin-top:8px;font-size:13px;color:var(--muted);font-weight:800}
-select option{direction:ltr;unicode-bidi:embed;}
+    .mcqGroup{display:flex;flex-direction:column;gap:10px;margin-top:12px;align-items:stretch}
+    .choice{
+      display:flex; align-items:center; gap:12px;
+      border:2px solid var(--line);
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:700;
+      color:var(--ink);
+      cursor:pointer;
+      background:var(--card);
+      transition: var(--transition);
+    }
+    .choice:hover{
+      border-color:var(--brand);
+      background:var(--brand-light);
+      transform:translateX(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .choice input{width:18px; height:18px; margin:0; accent-color:var(--brand)}
+    .choice.badField{border-color:var(--bad); background:var(--bad-bg); color:var(--bad)}
+    .choice.goodField{border-color:var(--good); background:var(--good-bg); color:var(--good)}
 
-table.ftable, table.niceTable{ direction:ltr; }
-table.ftable th, table.ftable td, table.niceTable th, table.niceTable td{ text-align:center; }
-table.ftable th, table.niceTable th{ white-space:nowrap; }
+    input.badField, textarea.badField{border-color:var(--bad) !important; background:var(--bad-bg) !important}
+    input.goodField, textarea.goodField{border-color:var(--good) !important; background:var(--good-bg) !important}
 
-input.is-wrong, textarea.is-wrong, select.is-wrong{
-  border-color:var(--bad) !important;
-  box-shadow:0 0 0 4px rgba(220,38,38,.12) !important;
-  background:var(--card) !important;
-}
-input.is-wrong-strong, textarea.is-wrong-strong, select.is-wrong-strong{
-  border-color:var(--bad) !important;
-  box-shadow:0 0 0 4px rgba(220,38,38,.12) !important;
-  background:var(--bad-bg) !important;
-}
-input.is-right, textarea.is-right, select.is-right{
-  border-color:var(--good) !important;
-  box-shadow:0 0 0 4px rgba(5,150,105,.15) !important;
-}
+    .chartTip{position:fixed; z-index:10000; pointer-events:none; background:var(--ink); color:#fff; padding:12px 14px; border-radius:12px; box-shadow: var(--shadow-lg); font-weight:700; font-size:12px; max-width:280px; line-height:1.5}
+    .graphs{display:grid; gap:16px;}
+    .svgInteractive .barSeg,.svgInteractive .pieSeg{cursor:pointer; transition: var(--transition)}
+    .svgInteractive .barSeg:hover,.svgInteractive .pieSeg:hover{opacity:.9}
+    .svgInteractive .barSeg.selected, .svgInteractive .pieSeg.selected, .svgInteractive .polyDot.selected, .svgInteractive .ogDot.selected{stroke:var(--brand); stroke-width:3}
 
-.katex,.katex-display,.mathInline,.mathBlock{direction:ltr;unicode-bidi:embed;}
-.mathInline{display:inline-block;}
-.mathBlock{display:block;}
-.katex-display{overflow-x:auto; overflow-y:hidden;}
-.rtlText{ direction:rtl; unicode-bidi:plaintext; }
-  body.font-sm{ font-size: 90%; }
-  body.font-lg{ font-size: 110%; }
-  .unsaved-dot{ width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0; }
-  .sidebar-filter{ display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap; }
-  .score-bar-wrap{ height:12px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0;display:flex; }
-  .score-bar-correct{ height:100%;background:linear-gradient(90deg,var(--good),var(--accent));border-radius:999px;transition:width .3s; }
-  .score-bar-wrong{ height:100%;background:var(--line);border-radius:0 999px 999px 0; }
-  @media print{ body * { visibility: hidden; } .modal.show, .modal.show * { visibility: visible; } .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; } .modal .box { box-shadow: none; border: 1px solid #ccc; } }
+    .katex,.katex-display,.mathInline,.mathBlock{direction:ltr;unicode-bidi:embed;}
+    .mathInline{display:inline-block;}
+    .mathBlock{display:block;}
+    .katex-display{overflow-x:auto; overflow-y:hidden;}
+    .rtlText{ direction:rtl; unicode-bidi:plaintext; }
+    .ltr{ direction:ltr; unicode-bidi:bidi-override; }
+    body.font-sm{ font-size: 90%; }
+    body.font-lg{ font-size: 110%; }
+    .unsaved-dot{ width:8px;height:8px;border-radius:50%;background:var(--warn);flex-shrink:0; }
+    .sidebar-filter{ display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap; }
+    .sidebar-filter .btn.small{ padding:6px 10px;font-size:12px; }
+    .score-bar-wrap{ height:12px;background:var(--line);border-radius:999px;overflow:hidden;margin:10px 0;display:flex; }
+    .score-bar-correct{ height:100%;background:linear-gradient(90deg,var(--good),var(--accent));border-radius:999px;transition:width .3s; }
+    .score-bar-wrong{ height:100%;background:var(--line);border-radius:0 999px 999px 0; }
+    @media print{
+      body * { visibility: hidden; }
+      .modal.show, .modal.show * { visibility: visible; }
+      .modal.show { position: fixed; inset: 0; background: #fff; z-index: 99999; }
+      .modal .box { box-shadow: none; border: 1px solid #ccc; }
+    }
 
 /* Codex Unified AI Help Start */
     .branchHead{
@@ -2124,14 +2189,6 @@ input.badField, textarea.badField{
 
 
 </style>
-<script>
-/* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
-</script>
-<style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
-</style>
-<!-- AI_KILL_SWITCH -->
 </head>
 <body>
   <header class="topbar">
@@ -2144,11 +2201,11 @@ window.AI_ENABLED = false;
           <div class="u">جامعة الملك سعود</div>
           <div class="u en">King Saud University</div>
           <div class="d">السنة الأولى المشتركة <span class="sep">|</span> First-Year Common Program</div>
-          <div class="s">3.4 معاملات التشتت والدرجة المعيارية <span class="sep">|</span> Coefficients of Dispersion and Standard Score</div>
+          <div class="s">1.2 المتغيرات وأنواع البيانات <span class="sep">|</span> Variables and Data Types</div>
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
-        <div class="textLogo" aria-label="King Saud University">KSU</div>
+        <img alt="King Saud University Logo" src="ksu_logo.png" />
       </div>
     </div>
   </header>
@@ -2170,10 +2227,10 @@ window.AI_ENABLED = false;
     <aside class="card side">
       <div class="head">
         <h3>مسار الأسئلة</h3>
-        <button class="btn small" id="resetBtn">إعادة</button>
+        <button class="btn small" id="resetBtn" aria-label="إعادة ضبط الاختبار">إعادة</button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="font-weight:900;color:var(--ink)" id="progressText">تم حل 0 سؤال</div>
+        <div style="font-weight:900;color:#0f2a3b" id="progressText">تم حل 0 سؤال</div>
         <div style="flex:1" class="progress"><div id="progressBar"></div></div>
       </div>
       <div class="sidebar-filter">
@@ -2202,9 +2259,8 @@ window.AI_ENABLED = false;
   </div>
 
 
-
 <script>
-
+/* ===== ????? ??????? (Seeded RNG) ===== */
 function xmur3(str){
   let h = 1779033703 ^ str.length;
   for (let i = 0; i < str.length; i++) {
@@ -2231,28 +2287,36 @@ function seededRand(seedStr){
 }
 function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 
-const STATE_KEY = "stat102_3_4_state_v2";
+/* ===== ???? ?????? (????? ??? ??? ??? ??? ???????) ===== */
+const STATE_KEY = "stat102_1_2_state_v16";
 const TIMER_MINUTES = 30;
-const TIMER_KEY = "stat102_3_4_timerEnd_v2";
-let state = loadState() || { currentIndex: 0, answers: {}, grading: {}, variants: {}, order: null, attempts: {}, saveAttempts: {}, locks: {}, outcomes: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
-state.attempts = state.attempts || {};
-state.saveAttempts = state.saveAttempts || {};
-state.locks = state.locks || {};
-state.outcomes = state.outcomes || {};
-state.timerEnded = !!state.timerEnded;
-state.dirty = state.dirty || {};
-state.sidebarFilter = state.sidebarFilter || "all";
-if(state.fontSize==null) state.fontSize = 0;
-function saveState(){ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
-function loadState(){ try{ const s = JSON.parse(localStorage.getItem(STATE_KEY)); if(s){ s.timerEnded = !!s.timerEnded; if(!s.dirty) s.dirty = {}; if(!s.sidebarFilter) s.sidebarFilter = "all"; if(s.fontSize==null) s.fontSize = 0; } return s; }catch(e){ return null; } }
+const TIMER_KEY = "stat102_1_2_timerEnd_v16";
+// Safe storage wrapper (works even if localStorage is blocked)
+const __storage = (function(){
+  try{
+    const k="__stat102_test__";
+    window.storageSet(k,"1");
+    window.storageRemove(k);
+    return window.localStorage;
+  }catch(e){
+    return null;
+  }
+})();
+function storageGet(key){ try{ return __storage ? __storage.getItem(key) : null; }catch(e){ return null; } }
+function storageSet(key, val){ try{ if(__storage) __storage.setItem(key, val); }catch(e){} }
+function storageRemove(key){ try{ if(__storage) __storage.removeItem(key); }catch(e){} }
+
+const state = loadState() || { currentIndex: 0, variants: {}, branches: {}, order: null, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
+function saveState(){ storageSet(STATE_KEY, JSON.stringify(state)); }
+function loadState(){ try{ const s = JSON.parse(storageGet(STATE_KEY)); if(s){ s.timerEnded = !!s.timerEnded; if(!s.dirty) s.dirty = {}; if(!s.sidebarFilter) s.sidebarFilter = "all"; if(s.fontSize==null) s.fontSize = 0; } return s; }catch(e){ return null; } }
 
 let timerInterval = null;
 function startTimer(){
   let endAt = null;
-  try{ const v = localStorage.getItem(TIMER_KEY); if(v) endAt = parseInt(v,10); }catch(e){}
+  try{ const v = storageGet(TIMER_KEY); if(v) endAt = parseInt(v,10); }catch(e){}
   if(endAt == null || endAt < Date.now()){
     endAt = Date.now() + TIMER_MINUTES * 60 * 1000;
-    localStorage.setItem(TIMER_KEY, String(endAt));
+    storageSet(TIMER_KEY, String(endAt));
   }
   if(endAt != null && endAt > Date.now()){
     state.timerEnded = false;
@@ -2269,7 +2333,7 @@ function startTimer(){
     el.textContent = "الوقت المتبقي: " + m + ":" + (s<10?"0":"") + s;
     el.classList.remove("warn","done");
     if(rem <= 60) el.classList.add("warn");
-    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">دقيقة واحدة متبقية — احفظ إجاباتك إن لم تكن محفوظة.</p>"); }
+    if(rem === 60 && !oneMinuteWarned){ oneMinuteWarned = true; openModal("تنبيه", "<p style=\"font-weight:800\">بقيت دقيقة واحدة على انتهاء الوقت.</p>"); }
     if(rem === 0){
       if(timerInterval) clearInterval(timerInterval);
       timerInterval = null;
@@ -2301,12 +2365,8 @@ function resetAll(){
     }
   }catch(_e){}
   state.currentIndex = 0;
-  state.answers = {};
-  state.grading = {};
-  state.attempts = {};
-  state.saveAttempts = {};
-  state.locks = {};
-  state.outcomes = {};
+  state.variants = {};
+  state.branches = {};
   state.order = null;
   delete state.masteryVersion;
   state.masterySupportCount = 0;
@@ -2314,300 +2374,59 @@ function resetAll(){
   state.dirty = {};
   state.sidebarFilter = "all";
   state.fontSize = 0;
-  localStorage.removeItem(TIMER_KEY);
-  state.variants = state.variants || {};
-  (TEMPLATES||[]).forEach(t=>{
-    state.variants[t.id] = (state.variants[t.id]||0) + 1;
-  });
+  storageRemove(TIMER_KEY);
   saveState();
   location.reload();
 }
 function isExamStarted(){
-  try{ const v = localStorage.getItem(TIMER_KEY); if(!v) return false; const endAt = parseInt(v,10); return endAt > Date.now(); }catch(e){ return false; }
+  try{ const v = storageGet(TIMER_KEY); if(!v) return false; const endAt = parseInt(v,10); return endAt > Date.now(); }catch(e){ return false; }
 }
 function showIntroModal(){
   const html = `
     <div style="margin-bottom:16px;line-height:1.9;">
       <p style="font-weight:800;margin-bottom:10px;">تعريف بالاختبار</p>
-      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>٣٠ دقيقة</b>.</p>
+      <p>هذا اختبار ذاتي لمادة الإحصاء. مدة الاختبار <b>30 دقيقة</b>.</p>
       <p style="font-weight:800;margin:14px 0 6px;">تعليمات الاختبار:</p>
       <ul style="margin:0;padding-right:20px;">
-        <li>يمكنك <b>تبديل السؤال</b> لاستبداله بسؤال آخر.</li>
-        <li>يمكنك التنقل بين الأسئلة بـ <b>السابق</b> و<b>التالي</b>.</li>
-        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك طلب <b>مساعدة</b> أو إظهار الإجابة الصحيحة حسب نظام المحاولات.</li>
-        <li>عند انتهاء الوقت يُقفل الاختبار تلقائياً وتظهر النتيجة.</li>
+        <li>يمكن التنقل بين الأسئلة في أي وقت.</li>
+        <li>استخدم أزرار <b>السابق</b> و<b>التالي</b> أو مسار الأسئلة.</li>
+        <li>بعد الإجابة اضغط <b>حفظ الإجابة</b> ثم يمكنك فتح <b>مساعدة</b>.</li>
+        <li>لن يتم عرض الجواب النهائي مباشرة داخل المساعدة.</li>
       </ul>
       <p style="margin-top:16px;color:var(--muted);font-weight:700;">اضغط <b>بدء الاختبار</b> لبدء الوقت والاختبار.</p>
     </div>
     <button class="btn primary" id="startExamBtn" style="font-size:16px;padding:12px 24px;">بدء الاختبار</button>
   `;
   openModal("بداية الاختبار", html);
-  document.getElementById("startExamBtn").onclick = function(){ closeModal(); if(window.__startExam) window.__startExam(); };
+  document.getElementById("startExamBtn").onclick = function(){
+    closeModal();
+    if(typeof window.__startExam === "function") window.__startExam();
+  };
 }
 window.__startExam = function(){
   window.__examRunning = true;
-  localStorage.setItem(TIMER_KEY, String(Date.now() + TIMER_MINUTES * 60 * 1000));
+  storageSet(TIMER_KEY, String(Date.now() + TIMER_MINUTES * 60 * 1000));
   state.timerEnded = false;
   saveState();
   startTimer();
   setTimeout(function(){ renderAll(); }, 0);
 };
 
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
-function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[ظھ%]/g,"%"); }
-function nearlyEqual(a,b,eps=1e-2){ if(a==null||b==null) return false; if(Number.isNaN(a)||Number.isNaN(b)) return false; return Math.abs(a-b)<=eps; }
-function formatNumber(x){
-  const n = Number(x);
-  if(Number.isNaN(n)) return String(x);
-  if(Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
-  return (Math.round(n*100)/100).toFixed(2);
+function ensureBranchRec(qid, bi){
+  if(!state.branches[qid]) state.branches[qid] = {};
+  if(!state.branches[qid][bi]) state.branches[qid][bi] = { attempts: 0, status: "new", saved: {} };
+  return state.branches[qid][bi];
 }
-
-function fmt2(x){
-  const n=Number(x);
-  if(!isFinite(n)) return String(x??'');
-  return n.toFixed(2);
-}
-
-
-function typesetMath(container){
-  const run = ()=>{
-    if(window.renderMathInElement){
-      window.renderMathInElement(container, {
-        delimiters: [
-          {left: "$$", right: "$$", display: true},
-          {left: "\\[", right: "\\]", display: true},
-          {left: "\\(", right: "\\)", display: false}
-        ],
-        throwOnError: false
-      });
-      return true;
-    }
-    return false;
-  };
-  if(!run()){
-    let tries=0;
-    const t=setInterval(()=>{
-      tries++;
-      if(run() || tries>30) clearInterval(t);
-    }, 120);
-  }
-}
-
-function storeAnswer(qid, bIndex, key, value){
-  if(!state.answers[qid]) state.answers[qid] = {};
-  if(!state.answers[qid][bIndex]) state.answers[qid][bIndex] = {};
-  state.answers[qid][bIndex][key] = value;
+function clearQuestionState(qid){
+  if(state.branches[qid]) delete state.branches[qid];
   saveState();
 }
 
-function _ensureAttempts(){
-  state.attempts = state.attempts || {};
-}
-function _incAttempt(qid, bi, key){
-  _ensureAttempts();
-  if(!state.attempts[qid]) state.attempts[qid] = {};
-  if(!state.attempts[qid][bi]) state.attempts[qid][bi] = {};
-  state.attempts[qid][bi][key] = (state.attempts[qid][bi][key] || 0) + 1;
-  saveState();
-  return state.attempts[qid][bi][key];
-}
-function _clearAttempt(qid, bi, key){
-  if(state.attempts && state.attempts[qid] && state.attempts[qid][bi] && state.attempts[qid][bi][key]!=null){
-    delete state.attempts[qid][bi][key];
-    saveState();
-  }
-}
-
-function _ensureSaveAttempts(){
-  state.saveAttempts = state.saveAttempts || {};
-}
-function _incSaveAttempt(qid, bi){
-  _ensureSaveAttempts();
-  if(!state.saveAttempts[qid]) state.saveAttempts[qid] = {};
-  state.saveAttempts[qid][bi] = (state.saveAttempts[qid][bi] || 0) + 1;
-  saveState();
-  return state.saveAttempts[qid][bi];
-}
-function _getSaveAttempt(qid, bi){
-  _ensureSaveAttempts();
-  return (state.saveAttempts[qid] && state.saveAttempts[qid][bi]) ? state.saveAttempts[qid][bi] : 0;
-}
-function _clearSaveAttempt(qid, bi){
-  if(state.saveAttempts && state.saveAttempts[qid] && state.saveAttempts[qid][bi]!=null){
-    delete state.saveAttempts[qid][bi];
-    saveState();
-  }
-}
-
-function _ensureLocks(){
-  state.locks = state.locks || {};
-}
-function _isBranchLocked(qid, bi){
-  if(!window.__examRunning) return true;
-  _ensureLocks();
-  return !!(state.locks[qid] && state.locks[qid][bi]);
-}
-function _setBranchLocked(qid, bi, locked){
-  _ensureLocks();
-  if(!state.locks[qid]) state.locks[qid] = {};
-  if(locked) state.locks[qid][bi] = true;
-  else delete state.locks[qid][bi];
-  saveState();
-}
-
-function _ensureOutcomes(){ state.outcomes = state.outcomes || {}; }
-function _setOutcome(qid, bi, val){
-  _ensureOutcomes();
-  if(!state.outcomes[qid]) state.outcomes[qid] = {};
-  if(val==null) delete state.outcomes[qid][bi];
-  else state.outcomes[qid][bi] = val;
-  saveState();
-}
-function _getOutcome(qid, bi){
-  _ensureOutcomes();
-  return (state.outcomes[qid] && state.outcomes[qid][bi]) ? state.outcomes[qid][bi] : null;
-}
-
-function _clearMarks(inp){
-  if(!inp || !inp.classList) return;
-  inp.classList.remove("is-wrong","is-wrong-strong","is-right");
-}
-function _mark(inp, kind){
-  _clearMarks(inp);
-  if(!inp || !inp.classList) return;
-  if(kind==="wrong1") inp.classList.add("is-wrong");
-  else if(kind==="wrong2") inp.classList.add("is-wrong-strong");
-  else if(kind==="right") inp.classList.add("is-right");
-}
-function _getBranch(qid, bi){
-  // BANK reflects current variants; ensure it's fresh
-  BANK = buildBank();
-  const q = BANK.find(x=>x.id===qid);
-  if(!q) return null;
-  return q.branches && q.branches[bi]!=null ? q.branches[bi] : null;
-}
-function instantCheckInput(qid, bi, key, inp){
-  if(!inp) return;
-  const raw = (inp.value ?? "").toString().trim();
-  if(raw===""){
-    _clearMarks(inp);
-    _clearAttempt(qid, bi, key);
-    return;
-  }
-  const b = _getBranch(qid, bi);
-  if(!b || !b.answers) return;
-  const correct = b.answers[key];
-  if(correct===undefined || correct===null) return;
-
-  const part = (b.parts||[]).find(p=>p.key===key) || {};
-  let ok = false;
-  if(part.type==="mcq" || part.type==="text"){
-    ok = normalizeText(raw) === normalizeText(correct);
-  }else{
-    ok = nearlyEqual(Number(raw), Number(correct), 1e-2);
-  }
-
-  if(ok){
-    _mark(inp, "right");
-    _clearAttempt(qid, bi, key);
-  }else{
-    const n = _incAttempt(qid, bi, key);
-    _mark(inp, n>=2 ? "wrong2" : "wrong1");
-    // لا تفتح نافذة المساعدة تلقائياً—الطالب يضغط "مساعدة" إذا احتاج.
-  }
-}
-
-
-function bindInlineInputs(root, qid, bi){
-  if(!root) return;
-  const nodes = root.querySelectorAll("input.inlineInput, textarea.inlineInput");
-  nodes.forEach(inp=>{
-    const key = inp.getAttribute("data-key");
-    if(!key) return;
-    const stored = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][key] : "";
-    if(inp.type==="number"){
-      inp.value = (stored ?? "");
-    }else{
-      inp.value = (stored ?? "");
-    }
-    inp.dataset.qid = qid;
-    inp.dataset.bi = String(bi);
-    if(_isBranchLocked(qid, bi)){
-      inp.disabled = true;
-    }
-    const handler = ()=>{ /* لا يتم التخزين إلا عند الضغط على زر حفظ الإجابة */ };
-    inp.addEventListener("input", ()=>{ _clearMarks(inp); handler(); });
-    inp.addEventListener("change", ()=>{ _clearMarks(inp); handler(); });
-    inp.addEventListener("blur", ()=>{ handler(); });
-  });
-}
-function clearAnswersForQuestion(qid){
-  if(state.answers[qid]) delete state.answers[qid];
-  if(state.grading[qid]) delete state.grading[qid];
-  if(state.attempts && state.attempts[qid]) delete state.attempts[qid];
-  if(state.saveAttempts && state.saveAttempts[qid]) delete state.saveAttempts[qid];
-  if(state.locks && state.locks[qid]) delete state.locks[qid];
-  if(state.outcomes && state.outcomes[qid]) delete state.outcomes[qid];
-  saveState();
-}
-function getVariant(qid){ if(state.variants[qid]==null) state.variants[qid]=0; return state.variants[qid]; }
-function bumpVariant(qid){ if(state.variants[qid]==null) state.variants[qid]=0; state.variants[qid]++; saveState(); }
-
-function collectPartKeys(q,b){
-  const keys = [];
-  (b.parts||[]).forEach(p=>keys.push(p.key));
-  return keys;
-}
-function _branchHasParts(b){ return (b.parts||[]).length>0; }
-
-function getQuestionStatus(q){
-  if(!window.__examRunning) return "not_started";
-  const qid = q.id;
-  let anyProgress = false;
-  let allComplete = true;
-  let allCorrect = true;
-  let anyPart = false;
-
-  q.branches.forEach((b,bi)=>{
-    if(!_branchHasParts(b)) return;
-    anyPart = true;
-
-    const locked = _isBranchLocked(qid, bi);
-    const out = _getOutcome(qid, bi);
-    const saved = (_getSaveAttempt(qid, bi) > 0) || (state.answers[qid] && state.answers[qid][bi]);
-
-    if(saved) anyProgress = true;
-
-    if(!locked){
-      allComplete = false;
-      allCorrect = false;
-      return;
-    }
-    if(out !== "correct") allCorrect = false;
-  });
-
-  if(!anyPart) return "completed_correct";
-  if(allComplete) return allCorrect ? "completed_correct" : "completed_wrong";
-  if(anyProgress) return "in_progress";
-  return "not_started";
-}
-
-function isQuestionDone(q){
-  const st = getQuestionStatus(q);
-  return st === "completed_correct" || st === "completed_wrong";
-}
-
-function listIncomplete(){
-  const arr=[];
-  BANK.forEach((q,i)=>{
-    if(!isQuestionDone(q)) arr.push({i:i+1, title:q.title});
-  });
-  return arr;
-}
-
+/* ===== ????? ?????? ===== */
+const SVG_TAGS = new Set(["svg","g","path","rect","line","circle","text","defs","linearGradient","stop","polyline","polygon"]);
 function el(tag, attrs={}, children=[]){
-  const node = document.createElement(tag);
+  const isSvg = SVG_TAGS.has(String(tag).toLowerCase());
+  const node = isSvg ? document.createElementNS("http://www.w3.org/2000/svg", tag) : document.createElement(tag);
   Object.entries(attrs).forEach(([k,v])=>{
     if(k==="class") node.className=v;
     else if(k==="html") node.innerHTML=v;
@@ -2621,6 +2440,54 @@ function el(tag, attrs={}, children=[]){
   });
   return node;
 }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+function normalizeText(s){ if(s==null) return ""; return String(s).trim().replace(/\s+/g," ").replace(/[%%]/g,"%"); }
+function parseNumberLoose(v){
+  if(v==null) return NaN;
+  const s = String(v).replace(/[??]/g,",").replace(/[%%]/g,"").trim();
+  if(!s) return NaN;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+function nearlyEqual(a,b,eps=1e-2){
+  if(a==null||b==null) return false;
+  if(!Number.isFinite(a) || !Number.isFinite(b)) return false;
+  return Math.abs(a-b) <= eps;
+}
+function roundTo(x, d=2){
+  const n = Number(x);
+  if(!Number.isFinite(n)) return String(x);
+  const m = Math.pow(10,d);
+  return (Math.round(n*m)/m).toFixed(d);
+}
+function formatNumber(x){
+  const n = Number(x);
+  if(!Number.isFinite(n)) return String(x);
+  if(Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+  return roundTo(n, 2);
+}
+function parseNumberList(s){
+  if(s==null) return [];
+  const raw = String(s).replace(/[?]/g, ",").trim();
+  if(!raw) return [];
+  return raw.split(",").map(x=>x.trim()).filter(Boolean).map(x=>Number(x)).filter(x=>Number.isFinite(x)).sort((a,b)=>a-b);
+}
+function sameNumberList(a,b){
+  const A=parseNumberList(a), B=parseNumberList(b);
+  if(A.length!==B.length) return false;
+  for(let i=0;i<A.length;i++){
+    if(Math.abs(A[i]-B[i])>1e-9) return false;
+  }
+  return true;
+}
+
+function latexFix(s){
+  if(s==null) return "";
+  // Reduce doubled backslashes produced by JS string escaping
+  return String(s).replace(/\\\\/g, "\\");
+}
+
+/* ===== ????? ?????? ===== */
 function openModal(title, html){
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalBody").innerHTML = html;
@@ -2632,388 +2499,534 @@ window.closeModal = closeModal;
 document.getElementById("closeModal").onclick = closeModal;
 document.getElementById("modal").addEventListener("click", (e)=>{ if(e.target.id==="modal") closeModal(); });
 
-
-
-
-const LAT = {};
-
-function round2(x){ return Math.round(Number(x)*100)/100; }
-function round3(x){ return Math.round(Number(x)*1000)/1000; }
-function sum(arr){ return arr.reduce((a,b)=>a+Number(b),0); }
-function pick(r, arr){ return arr[randInt(r,0,arr.length-1)]; }
-function shuffleLocal(arr, r){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(r()*(i+1));
-    const t = a[i]; a[i]=a[j]; a[j]=t;
-  }
-  return a;
-}
-function varianceRawStats(xs){
-  const n = xs.length;
-  const mean = sum(xs)/n;
-  const ss = xs.reduce((acc,x)=>acc + Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {n, mean, ss, variance, sd};
-}
-function varianceFreqStats(values, freqs){
-  const n = sum(freqs);
-  const mean = values.reduce((acc,x,i)=>acc + x*freqs[i], 0)/n;
-  const ss = values.reduce((acc,x,i)=>acc + freqs[i]*Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {n, mean, ss, variance, sd};
-}
-function groupedCenters(classes){
-  return classes.map(c=>round2((c[0]+c[1])/2));
-}
-function varianceGroupedStats(classes, freqs){
-  const centers = groupedCenters(classes);
-  const n = sum(freqs);
-  const mean = centers.reduce((acc,x,i)=>acc + x*freqs[i], 0)/n;
-  const ss = centers.reduce((acc,x,i)=>acc + freqs[i]*Math.pow(x-mean,2), 0);
-  const variance = ss/(n-1);
-  const sd = Math.sqrt(variance);
-  return {centers, n, mean, ss, variance, sd};
-}
-function cvValue(mean, sd){ return (sd/mean)*100; }
-function qcdValue(q1, q3){ return ((q3-q1)/(q3+q1))*100; }
-function zValue(x, mean, sd){ return (x-mean)/sd; }
-function pearsonWithMode(mean, mode, sd){ return (mean-mode)/sd; }
-function pearsonWithMedian(mean, median, sd){ return 3*(mean-median)/sd; }
-function momentSkew(xs){
-  const {n, mean, sd} = varianceRawStats(xs);
-  return (n/((n-1)*(n-2))) * xs.reduce((acc,x)=>acc + Math.pow((x-mean)/sd,3), 0);
-}
-function kurtosisBook(xs){
-  const {n, mean, sd} = varianceRawStats(xs);
-  return 3 - (1/n) * xs.reduce((acc,x)=>acc + Math.pow((x-mean)/sd,4), 0);
-}
-function lowerFence(q1,q3){ return q1 - 1.5*(q3-q1); }
-function upperFence(q1,q3){ return q3 + 1.5*(q3-q1); }
-function skewLabel(sk){
-  if(Math.abs(sk) < 1e-9) return "متناظر";
-  return sk > 0 ? "ملتوٍ نحو اليمين" : "ملتوٍ نحو اليسار";
-}
-function kurtosisLabel(ku){
-  if(Math.abs(ku) < 1e-9) return "معتدل";
-  if(ku < -1) return "مدبّب بشدّة";
-  if(ku < 0) return "مدبّب قليلاً";
-  if(ku > 1) return "منبسط بشدّة";
-  return "منبسط قليلاً";
-}
-function rangeLabel(a,b){ return `<span class="ltr">${a} → ${b}</span>`; }
-function rawListHtml(xs){ return `<div class="card" style="padding:14px"><div style="font-weight:900">البيانات:</div><div style="margin-top:8px;font-weight:800">${xs.join("، ")}</div></div>`; }
-function table2colHtml(h1, h2, rows, maxW){
-  const body = rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||520}px"><thead><tr><th>${h1}</th><th>${h2}</th></tr></thead><tbody>${body}</tbody></table>`;
-}
-function groupedTableHtml(classes, freqs, maxW){
-  const head = `<thead><tr><th>الفئة</th><th>التكرار</th></tr></thead>`;
-  const body = classes.map((c,i)=>`<tr><td>${rangeLabel(c[0],c[1])}</td><td>${freqs[i]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||560}px">${head}<tbody>${body}</tbody></table>`;
-}
-function freqTableHtml(values, freqs, maxW){
-  const rows = values.map((x,i)=>`<tr><td>${x}</td><td>${freqs[i]}</td></tr>`).join("");
-  return `<table class="ftable" style="max-width:${maxW||520}px"><thead><tr><th>القيمة \\(x_i\\)</th><th>التكرار \\(f_i\\)</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-function chooseOptions(r, correct, distractors){
-  return shuffleLocal([correct, ...distractors], r);
-}
-function svgBoxplot(cfg){
-  const width = 620, height = 170, pad = 30, y = 78;
-  const vals = [cfg.min, cfg.ax, cfg.q1, cfg.q2, cfg.q3, cfg.ex, cfg.max].concat(cfg.outliers||[]);
-  const lo = Math.min(...vals), hi = Math.max(...vals);
-  const sx = x => pad + (width-2*pad) * ((x-lo)/(hi-lo || 1));
-  const tickVals = [cfg.min, cfg.q1, cfg.q2, cfg.q3, cfg.max];
-  const out = (cfg.outliers||[]).map(v=>`<circle cx="${sx(v)}" cy="${y}" r="4.5" fill="#dc2626"></circle><text x="${sx(v)}" y="${y-16}" text-anchor="middle" font-size="12" font-weight="800">${v}</text>`).join("");
-  const ticks = tickVals.map(v=>`<line x1="${sx(v)}" y1="${y+32}" x2="${sx(v)}" y2="${y+40}" stroke="#334155" stroke-width="2"></line><text x="${sx(v)}" y="${y+58}" text-anchor="middle" font-size="12" font-weight="800">${v}</text>`).join("");
-  return `
-  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block">
-    <rect x="0" y="0" width="${width}" height="${height}" rx="18" fill="#f8fafc" stroke="#e2e8f0"></rect>
-    <line x1="${pad}" y1="${y}" x2="${width-pad}" y2="${y}" stroke="#0f172a" stroke-width="2"></line>
-    <line x1="${sx(cfg.ax)}" y1="${y}" x2="${sx(cfg.q1)}" y2="${y}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.q3)}" y1="${y}" x2="${sx(cfg.ex)}" y2="${y}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.ax)}" y1="${y-20}" x2="${sx(cfg.ax)}" y2="${y+20}" stroke="#0f172a" stroke-width="3"></line>
-    <line x1="${sx(cfg.ex)}" y1="${y-20}" x2="${sx(cfg.ex)}" y2="${y+20}" stroke="#0f172a" stroke-width="3"></line>
-    <rect x="${sx(cfg.q1)}" y="${y-24}" width="${Math.max(8, sx(cfg.q3)-sx(cfg.q1))}" height="48" fill="#e0f2fe" stroke="#0369a1" stroke-width="3" rx="8"></rect>
-    <line x1="${sx(cfg.q2)}" y1="${y-24}" x2="${sx(cfg.q2)}" y2="${y+24}" stroke="#0369a1" stroke-width="4"></line>
-    ${out}
-    ${ticks}
-  </svg>`;
-}
-
-function cvBasicGen(v){
-  const means = [100, 75, 48, 25];
-  const sds = [15, 9, 6, 5];
-  const mean = means[v % means.length];
-  const sd = sds[v % sds.length];
-  const cv = cvValue(mean, sd);
-  return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "معامل الاختلاف مقياس نسبي يجرّد التشتت من وحدة القياس.",
-        "\\( CV = \\frac{S}{\\bar{x}}\\times 100\\% \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">إذا كان متوسط البيانات \\(\\bar{x}=${mean}\\) والانحراف المعياري \\(S=${sd}\\)، فاحسب معامل الاختلاف \\(CV\\) بالنسبة المئوية.</div></div>`,
-      parts:[{key:"cv", type:"number", label:"معامل الاختلاف \\(CV\\) (بدون علامة %)", step:"0.01"}],
-      answers:{cv:round2(cv)},
-      method:[
-        `\\[ CV = \\frac{${sd}}{${mean}} \\times 100 = ${round2(cv)}\\% \\]`
-      ]
-    }]
-  };
-}
-
-function cvCompareGen(v){
-  const sets = [
-    {a:{name:"A", mean:68, sd:4.53}, b:{name:"B", mean:166, sd:6.56}},
-    {a:{name:"الوزن", mean:72, sd:9}, b:{name:"الطول", mean:168, sd:6}},
-    {a:{name:"السهم الأول", mean:110, sd:10}, b:{name:"السهم الثاني", mean:14, sd:2}}
-  ];
-  const c = sets[v % sets.length];
-  const cvA = round2(cvValue(c.a.mean, c.a.sd));
-  const cvB = round2(cvValue(c.b.mean, c.b.sd));
-  const less = cvA < cvB ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:[
-        "نقارن التشتت النسبي بين ظاهرتين مختلفتي الوحدة أو المختلفتين في المتوسط باستعمال معامل الاختلاف.",
-        "الأقل في \\(CV\\) هو الأقل تبعثراً حول متوسطه."
-      ],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">لدينا ظاهرتان:</div>${table2colHtml("الظاهرة","المعطيات",[
-        [c.a.name, `\\(\\bar{x}=${c.a.mean}\\)، \\(S=${c.a.sd}\\)`],
-        [c.b.name, `\\(\\bar{x}=${c.b.mean}\\)، \\(S=${c.b.sd}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب معاملي الاختلاف ثم حدّد أي الظاهرتين أقل تشتتاً.</div></div>`,
-      parts:[
-        {key:"cvA", type:"number", label:`\\(CV\\) للظاهرة ${c.a.name} (بدون %)` , step:"0.01"},
-        {key:"cvB", type:"number", label:`\\(CV\\) للظاهرة ${c.b.name} (بدون %)` , step:"0.01"},
-        {key:"less", type:"mcq", label:"الأقل تشتتاً", options:shuffleLocal([c.a.name, c.b.name], seededRand("opt34cvcompare|"+v))}
-      ],
-      answers:{cvA, cvB, less},
-      method:[
-        `\\(CV_${c.a.name} = ${round2(c.a.sd)}/${round2(c.a.mean)} \\times 100 = ${cvA}\\%\\).`,
-        `\\(CV_${c.b.name} = ${round2(c.b.sd)}/${round2(c.b.mean)} \\times 100 = ${cvB}\\%\\).`,
-        `الأقل في معامل الاختلاف هو ${less}، لذا فهو الأقل تبعثراً حول متوسطه.`
-      ]
-    }]
-  };
-}
-
-function qcdBasicGen(v){
-  const sets = [
-    {q1:16.25, q3:20},
-    {q1:21.25, q3:25.75},
-    {q1:12, q3:18},
-    {q1:40, q3:55}
-  ];
-  const c = sets[v % sets.length];
-  const qcd = qcdValue(c.q1, c.q3);
-  return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "معامل التشتت الربيعي يعتمد على الربيعين الأول والثالث ويصلح كثيراً عندما توجد قيم منعزلة.",
-        "\\( QCD = \\frac{Q_3-Q_1}{Q_3+Q_1}\\times 100\\% \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كان \\(Q_1=${c.q1}\\) و \\(Q_3=${c.q3}\\)، فاحسب معامل التشتت الربيعي \\(QCD\\).</div></div>`,
-      parts:[{key:"qcd", type:"number", label:"\\(QCD\\) (بدون علامة %)", step:"0.01"}],
-      answers:{qcd:round2(qcd)},
-      method:[
-        `\\[ QCD = \\frac{${c.q3}-${c.q1}}{${c.q3}+${c.q1}} \\times 100 = ${round2(qcd)}\\% \\]`
-      ]
-    }]
-  };
-}
-
-function qcdCompareGen(v){
-  const sets = [
-    {a:{name:"المنتج A", q1:21.25, q3:25.75}, b:{name:"المنتج B", q1:16.25, q3:20}},
-    {a:{name:"العينة الأولى", q1:14, q3:20}, b:{name:"العينة الثانية", q1:10, q3:18}},
-    {a:{name:"الشعبة A", q1:157, q3:171}, b:{name:"الشعبة B", q1:157.5, q3:179}}
-  ];
-  const c = sets[v % sets.length];
-  const qa = round2(qcdValue(c.a.q1,c.a.q3));
-  const qb = round2(qcdValue(c.b.q1,c.b.q3));
-  const moreStable = qa < qb ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["الأقل في معامل التشتت الربيعي يكون أكثر ثباتاً نسبياً حول الوسيط."],
-      promptHtml:`<div class="card" style="padding:14px">${table2colHtml("المجموعة","القيم",[
-        [c.a.name, `\\(Q_1=${c.a.q1}\\)، \\(Q_3=${c.a.q3}\\)`],
-        [c.b.name, `\\(Q_1=${c.b.q1}\\)، \\(Q_3=${c.b.q3}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب \\(QCD\\) لكل مجموعة ثم حدّد الأكثر ثباتاً نسبياً.</div></div>`,
-      parts:[
-        {key:"qa", type:"number", label:`\\(QCD\\) لـ ${c.a.name} (بدون %)` , step:"0.01"},
-        {key:"qb", type:"number", label:`\\(QCD\\) لـ ${c.b.name} (بدون %)` , step:"0.01"},
-        {key:"stable", type:"mcq", label:"الأكثر ثباتاً نسبياً", options:shuffleLocal([c.a.name,c.b.name], seededRand("opt34qcdcmp|"+v))}
-      ],
-      answers:{qa, qb, stable:moreStable},
-      method:[
-        `${c.a.name}: \\(${qa}\\%\\).`,
-        `${c.b.name}: \\(${qb}\\%\\).`,
-        `بما أن القيمة الأصغر هي ${Math.min(qa,qb)}\\%، فإن الأكثر ثباتاً نسبياً هو ${moreStable}.`
-      ]
-    }]
-  };
-}
-
-function zBasicGen(v){
-  const sets = [
-    {x:7000, mean:4000, sd:2000},
-    {x:3000, mean:4000, sd:2000},
-    {x:19, mean:13.4, sd:5.6},
-    {x:85, mean:75, sd:5}
-  ];
-  const c = sets[v % sets.length];
-  const z = zValue(c.x, c.mean, c.sd);
-  return {
-    branches:[{
-      level:"سهل",
-      explain:[
-        "الدرجة المعيارية تعبّر عن موضع قيمة مفردة بالنسبة إلى المتوسط والانحراف المعياري.",
-        "\\( Z_i = \\frac{x_i-\\bar{x}}{S} \\)."
-      ],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كانت \\(x_i=${c.x}\\)، و\\(\\bar{x}=${c.mean}\\)، و\\(S=${c.sd}\\)، فاحسب الدرجة المعيارية \\(Z_i\\).</div></div>`,
-      parts:[{key:"z", type:"number", label:"الدرجة المعيارية \\(Z_i\\)", step:"0.01"}],
-      answers:{z:round2(z)},
-      method:[
-        `\\[ Z_i = \\frac{${c.x}-${c.mean}}{${c.sd}} = ${round2(z)} \\]`
-      ]
-    }]
-  };
-}
-
-function xFromZGen(v){
-  const sets = [
-    {z:2.3, mean:94, sd:4},
-    {z:-1.5, mean:60, sd:8},
-    {z:0.67, mean:75, sd:5}
-  ];
-  const c = sets[v % sets.length];
-  const x = c.mean + c.z*c.sd;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["إذا عُرفت الدرجة المعيارية فإننا نستعيد القيمة من العلاقة \\(x_i=\\bar{x}+Z_iS\\)."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">إذا كانت \\(Z_i=${c.z}\\)، و\\(\\bar{x}=${c.mean}\\)، و\\(S=${c.sd}\\)، فأوجد قيمة \\(x_i\\).</div></div>`,
-      parts:[{key:"x", type:"number", label:"القيمة \\(x_i\\)", step:"0.01"}],
-      answers:{x:round2(x)},
-      method:[
-        `\\[ x_i = ${c.mean} + (${c.z}\\times${c.sd}) = ${round2(x)} \\]`
-      ]
-    }]
-  };
-}
-
-function zCompareGen(v){
-  const sets = [
-    {score:8, a:{name:"المجموعة A", mean:6, sd:3.16}, b:{name:"المجموعة B", mean:7, sd:2.92}},
-    {score:85, a:{name:"الإحصاء", mean:75, sd:5}, b:{name:"الإنجليزية", mean:83, sd:3}},
-    {score:70, a:{name:"الشعبة الأولى", mean:60, sd:10}, b:{name:"الشعبة الثانية", mean:65, sd:4}}
-  ];
-  const c = sets[v % sets.length];
-  const za = round2(zValue(c.score, c.a.mean, c.a.sd));
-  const zb = round2(zValue(c.score, c.b.mean, c.b.sd));
-  const better = za > zb ? c.a.name : c.b.name;
-  return {
-    branches:[{
-      level:"متوسط",
-      explain:["نقارن القيمة نفسها في مجموعتين بواسطة الدرجة المعيارية؛ الأكبر Z يعني موضعاً أفضل بالنسبة إلى أقرانه."],
-      promptHtml:`<div class="card" style="padding:14px"><div style="font-weight:900">حصل طالب على الدرجة ${c.score} في مجموعتين مختلفتين:</div>${table2colHtml("المجموعة","المعطيات",[
-        [c.a.name, `\\(\\bar{x}=${c.a.mean}\\)، \\(S=${c.a.sd}\\)`],
-        [c.b.name, `\\(\\bar{x}=${c.b.mean}\\)، \\(S=${c.b.sd}\\)`]
-      ],560)}<div style="margin-top:10px;font-weight:900">احسب الدرجتين المعياريتين ثم حدّد أين كان أداء الطالب أفضل نسبياً.</div></div>`,
-      parts:[
-        {key:"za", type:"number", label:`\\(Z\\) ظپظٹ ${c.a.name}`, step:"0.01"},
-        {key:"zb", type:"number", label:`\\(Z\\) ظپظٹ ${c.b.name}`, step:"0.01"},
-        {key:"better", type:"mcq", label:"الأداء الأفضل نسبياً", options:shuffleLocal([c.a.name,c.b.name], seededRand("opt34zcmp|"+v))}
-      ],
-      answers:{za, zb, better},
-      method:[
-        `${c.a.name}: \\(Z=${za}\\).`,
-        `${c.b.name}: \\(Z=${zb}\\).`,
-        `بما أن القيمة الأكبر هي ${Math.max(za,zb)}، فالأداء الأفضل نسبياً كان في ${better}.`
-      ]
-    }]
-  };
-}
-
-function relMeasureChooseGen(v){
-  const sets = [
-    {txt:"لدينا مجموعتان بوحدتي قياس مختلفتين ولا توجد قيم منعزلة بارزة، ونريد مقارنة التبعثر حول المتوسط.", ans:"معامل الاختلاف"},
-    {txt:"لدينا مجموعتان مع وجود قيم منعزلة واضحة ونريد مقارنة التبعثر حول الوسيط.", ans:"معامل التشتت الربيعي"},
-    {txt:"نريد تحديد موضع قيمة واحدة بالنسبة إلى بقية أفراد مجموعتها.", ans:"الدرجة المعيارية"}
-  ];
-  const c = sets[v % sets.length];
-  const opts = shuffleLocal(["معامل الاختلاف","معامل التشتت الربيعي","الدرجة المعيارية","المدى"], seededRand("opt34measure|"+v));
-  return {
-    branches:[{
-      level:"سهل",
-      explain:["اختيار المقياس النسبي يعتمد على طبيعة المقارنة: بين مجموعات، أو داخل المجموعة نفسها، أو بوجود قيم منعزلة."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.txt}</div>`,
-      parts:[{key:"ans", type:"mcq", label:"الإجابة", options:opts}],
-      answers:{ans:c.ans},
-      method:[`الإجابة الصحيحة: ${c.ans}.`]
-    }]
-  };
-}
-
-function mcq34Gen(v){
-  const pool = [
-    {
-      q:"إذا كانت الدرجة المعيارية لأحد الطلاب تساوي 2، فهذا يعني أن درجته:",
-      options:["تساوي المتوسط","أعلى من المتوسط","أقل من المتوسط","لا يمكن الحكم"],
-      a:"أعلى من المتوسط",
-      method:["لأن \\(Z>0\\)، فالقيمة أكبر من المتوسط."]
-    },
-    {
-      q:"إذا كان \\(CV=100\\%\\) ومتوسط الأعمار 25 سنة، فإن الانحراف المعياري يساوي:",
-      options:["5","25","625","4"],
-      a:"25",
-      method:["\\(CV=\\frac{S}{\\bar{x}}\\times100\\%\\)، فإذا كان \\(CV=100\\%\\) فلابد أن \\(S=\\bar{x}=25\\)."]
-    },
-    {
-      q:"الدرجة المعيارية تُستخدم غالباً من أجل:",
-      options:["حساب التكلفة الإجمالية","معرفة المادة المفضلة","تحديد موقع الفرد بالنسبة إلى أفراد العينة","قياس جودة المناهج"],
-      a:"تحديد موقع الفرد بالنسبة إلى أفراد العينة",
-      method:["لأنها مقياس موضع نسبي داخل المجموعة."]
-    },
-    {
-      q:"إذا كان معامل التشتت الربيعي لعينة الريف أكبر من عينة المدن، فإن هذا يعني أن:",
-      options:["التفاوت في الريف أكبر","المدن أكثر تشتتاً","الأعداد متساوية تماماً","جميع أسر الريف كبيرة"],
-      a:"التفاوت في الريف أكبر",
-      method:["القيمة الأكبر لمعامل التشتت الربيعي تعني تبعثرًا أكبر في النصف الأوسط من البيانات."]
+function typesetMath(root){
+  if(!root) return;
+  try{
+    if(window.renderMathInElement){
+      window.renderMathInElement(root, {
+        delimiters: [
+          {left: "\\(", right: "\\)", display: false},
+          {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError: false
+      });
     }
-  ];
-  const c = pool[v % pool.length];
-  return {
-    branches:[{
-      level:"سهل",
-      explain:["سؤال نظري مباشر من أفكار الدرس."],
-      promptHtml:`<div class="card" style="padding:14px;font-weight:900">${c.q}</div>`,
-      parts:[{key:"mcq", type:"mcq", label:"الإجابة", options:shuffleLocal(c.options, seededRand("opt34mcq|"+v))}],
-      answers:{mcq:c.a},
-      method:c.method
-    }]
-  };
+  }catch(e){}
 }
 
+/* ===== ??? ??????? (????? 1.2) ===== */
 const TEMPLATES = [
-  {id:"34_cv_basic", title:"معامل الاختلاف", icon:"CV", gen:cvBasicGen},
-  {id:"34_cv_compare", title:"مقارنة التشتت بمعامل الاختلاف", icon:"%", gen:cvCompareGen},
-  {id:"34_qcd_basic", title:"معامل التشتت الربيعي", icon:"Q", gen:qcdBasicGen},
-  {id:"34_qcd_compare", title:"مقارنة التشتت الربيعي", icon:"Q%", gen:qcdCompareGen},
-  {id:"34_z_basic", title:"الدرجة المعيارية", icon:"Z", gen:zBasicGen},
-  {id:"34_x_from_z", title:"إيجاد القيمة من الدرجة المعيارية", icon:"x", gen:xFromZGen},
-  {id:"34_z_compare", title:"المفاضلة بين قيمتين بالدرجة المعيارية", icon:"⇅", gen:zCompareGen},
-  {id:"34_measure", title:"اختيار المقياس النسبي الأنسب", icon:"★", gen:relMeasureChooseGen},
-  {id:"34_mcq", title:"سؤال نظري", icon:"؟", gen:mcq34Gen}
+  {
+    id:"q1_circle",
+    title:"?? ????? ??? ??????? ??????? � ????????? ?????? ????????",
+    gen:(variant)=>{
+      const r = seededRand("q1_circle|"+variant);
+
+      // 7 ???? ?? ????? 1.2 (???? ?????? 3 ???????? ???? ??????)
+      const POOL = [
+        {
+          s:"??????? (Variable) ??:",
+          options:[
+            "?????/????? ??????? ??? ????? ?????? (?? ???????) ????? ?????? (???)",
+            "???? ????? ??? ??????? ??????",
+            "???? ?????? ????????",
+            "????? ??????? ??????"
+          ],
+          a:"?????/????? ??????? ??? ????? ?????? (?? ???????) ????? ?????? (???)"
+        },
+        {
+          s:"?? ??? ??? ???? ??? ?????? ????? (?????)?",
+          options:[
+            "??? ?????? ???????????",
+            "????? ???? (A, B, AB, O)",
+            "??? ?????? ??????????",
+            "???? ???????? ?? 100"
+          ],
+          a:"????? ???? (A, B, AB, O)"
+        },
+        {
+          s:"?? ??? ??? ???? ??? ?????? ?????",
+          options:[
+            "?????? ?????????? (????/?????/...)",
+            "??? ?????",
+            "??? ???????? ?? ???",
+            "???????"
+          ],
+          a:"??? ???????? ?? ???"
+        },
+        {
+          s:"???????? ??????? (Nominal) ????? ?????:",
+          options:[
+            "????? ???????? ??? ????/????? ??? ??? ?????",
+            "????? ???????? ??? ???? ???? ???????",
+            "???? ?????? ?????? ??? ?? ???? ?????????",
+            "???? ??? ???????? ???????? ??? ???? ????????"
+          ],
+          a:"????? ???????? ??? ????/????? ??? ??? ?????"
+        },
+        {
+          s:"???????? ??????? (Ordinal) ????? ?????:",
+          options:[
+            "?? ???? ????? ?????? ??????",
+            "???? ????? ?????? ??????? ????????/????????",
+            "????? ???? ??? ?????",
+            "?? ???? ????????"
+          ],
+          a:"???? ????? ?????? ??????? ????????/????????"
+        },
+        {
+          s:"????? ??????? (Interval) ????? ????:",
+          options:[
+            "????? ??? ??? ?????",
+            "????? ??? ??? ??????? ???/???",
+            "???? ????? ????? ?????? ??? ?? ???? ???????? ??? ???? ???? ???? ??? ?????",
+            "???? ????? ???? ???????? ??? ???? ???????? ????? ??? ?????"
+          ],
+          a:"???? ????? ????? ?????? ??? ?? ???? ???????? ??? ???? ???? ???? ??? ?????"
+        },
+        {
+          s:"????? ?????? (Ratio) ????? ????:",
+          options:[
+            "?? ???? ????????? ????????",
+            "???? ?????? ?????? ???",
+            "???? ??? ???????? ???????? ??? ???? ???????? ????? ??? ?????",
+            "??????? ???????? ??????? ???"
+          ],
+          a:"???? ??? ???????? ???????? ??? ???? ???????? ????? ??? ?????"
+        }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"mcq"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["mcq"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"???",
+            prompt:"?? ????? ??? ??????? ??????? ??? ???:",
+            parts,
+            answers,
+            explain:[
+              "??????? ?????/???? ???? ?????? ??? ??????? ??? ????? ??????/???????.",
+              "???????? ????? ?? ????? ???? ??? ??????? ???? ??????."
+            ],
+            solutionSteps:[
+              "???? ????? ?? ?????? ?? ????? ??????? ?? ?? ??? ???????? ?? ?? ????? ???????.",
+              "???? ?????? ???? ????? ??????? ????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+
+  {
+    id:"q2_tf",
+    title:"?? / ??? � ????????? ?????? ????????",
+    gen:(variant)=>{
+      const r = seededRand("q2_tf|"+variant);
+
+      // 10 ?????? (???? ?????? 5 ???????? ???? ??????)
+      const POOL = [
+        {s:"???????? ??????? (???????) ?????? ???? ?? ??????? ?? �??� ?? �???�.", a:"??"},
+        {s:"???????? ?????? ?????? ???? ?? ??????? ?? �??�.", a:"??"},
+        {s:"????? ??????? ???????? ???????? (ID) ???? ?????? ????? ????? ??????? ??????.", a:"??"},
+        {s:"???????? ???? ???? ??????? ?????? ?? ???? ????? ??????? ??????? ????????.", a:"??"},
+        {s:"?? ??????? ?????? ???? ????? ?????? ??? ?????? ??? ????? ???? ???????? ????? ??????.", a:"??"},
+        {s:"???? ??????? ???????? ??????? (C�) ???? ???? ??? ????? ?????? (Interval).", a:"??"},
+        {s:"????? ?????? ?????? ??? ????? ?????? (Ratio) ????? ??? ?????.", a:"??"},
+        {s:"?????? ???????? ???????? ???? ????? ??????? ???????? ??????? ????????.", a:"??"},
+        {s:"?????? ???????? ???????? ???? ?? ???? ????? ??? ???? ?? ??????? ????????.", a:"??"},
+        {s:"?? ????? ?????? ???? ???????? (???: ???/???) ??? ????.", a:"??"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,5);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"tf"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["??","???"]
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["tf"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"???",
+            prompt:"???? (??) ?? (???) ??? ?????:",
+            parts,
+            answers,
+            explain:[
+              "?????? ??? ????/????? ??????? ???? ??? ?????? ?????? ??? ????.",
+              "?????? ??????? (????/????/??????/????) ???? ?? ???????? ???????? ??? ????????."
+            ],
+            solutionSteps:[
+              "????: ?? ??????? ????? ?? (??? ????????) ?? (????? ???????) ?? (?????/?????)?",
+              "???? (??) ??? ???? ?????? ???????? ?????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+
+  {
+    id:"q3_method",
+    title:"???? ??????? � ???? ?? ????",
+    gen:(variant)=>{
+      const r = seededRand("q3_method|"+variant);
+
+      const POOL = [
+        {s:"??? ?????", a:"????? (Qualitative)"},
+        {s:"??? ??????", a:"???? (Quantitative)"},
+        {s:"????? ????", a:"????? (Qualitative)"},
+        {s:"???? ????????", a:"???? (Quantitative)"},
+        {s:"?????? ??????????", a:"????? (Qualitative)"},
+        {s:"??? ?????? ??????????", a:"???? (Quantitative)"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"cls"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["????? (Qualitative)","???? (Quantitative)"]
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["cls"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"?????",
+            prompt:"???? ??????? ?????? ??? ?????:",
+            parts,
+            answers,
+            explain:[
+              "?????? ??? ????/????? ??????? ???? (???? ?? ???? �??�)."
+            ],
+            solutionSteps:[
+              "??? ???? ????? ?????/????/????? ? ?????.",
+              "??? ???? ????? ??????? ??? ???? ????? ? ????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+
+  {
+    id:"q4_param_stat",
+    title:"???? ????? ??????? � ????/????/??????/????",
+    gen:(variant)=>{
+      const r = seededRand("q4_param_stat|"+variant);
+
+      const POOL = [
+        {
+          s:"????? (???/????)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Nominal)"
+        },
+        {
+          s:"??????? (?????/??? ????/???/?????)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ordinal)"
+        },
+        {
+          s:"???? ??????? ???????? ??????? (C�)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"?????? (Interval)"
+        },
+        {
+          s:"????? ???????????",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ratio)"
+        },
+        {
+          s:"??? ?????? / ????? ??????? (ID)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Nominal)"
+        },
+        {
+          s:"????? ?????????? ?? ???? (?????/??????/??????...)",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ordinal)"
+        },
+        {
+          s:"??? ?????? ?? ????",
+          options:["???? (Nominal)","???? (Ordinal)","?????? (Interval)","???? (Ratio)"],
+          a:"???? (Ratio)"
+        }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"lvl"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["lvl"+(i+1)] = it.a; });
+
+      return {
+        branches:[
+          {
+            level:"?????",
+            prompt:"???? ????? ??????? ??????? ??? ???:",
+            parts,
+            answers,
+            explain:[
+              "????: ????? ??? ?????. ????: ????? ?? ?????.",
+              "??????: ???/??? ??? ??? (?? ??? ?????). ????: ???? ???????? ?????? (??? ?????)."
+            ],
+            solutionSteps:[
+              "?? ???????? ???? ?????? ? ????.",
+              "?? ???? ???????? ? ????.",
+              "?? ????? ????? ?????? ?????? ? ????.",
+              "??? ?? ??? ????? ??? ?????/????? ?????? ? ??????."
+            ]
+          }
+        ]
+      };
+    }
+  },
+  {
+    id:"q5_nominal_ordinal",
+    title:"تمييز الاسمي والترتيبي",
+    gen:(variant)=>{
+      const r = seededRand("q5_nominal_ordinal|"+variant);
+      const POOL = [
+        { s:"فصيلة الدم", a:"اسمي (Nominal)" },
+        { s:"مستوى الرضا: منخفض، متوسط، مرتفع", a:"ترتيبي (Ordinal)" },
+        { s:"المرحلة الدراسية: أول، ثاني، ثالث", a:"ترتيبي (Ordinal)" },
+        { s:"الجنسية", a:"اسمي (Nominal)" },
+        { s:"الحالة الاجتماعية", a:"اسمي (Nominal)" },
+        { s:"ترتيب الطالب في المسابقة", a:"ترتيبي (Ordinal)" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"no"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["اسمي (Nominal)","ترتيبي (Ordinal)"]
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["no"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"متوسط",
+          prompt:"حدد المستوى الأنسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "الاسمي يعني فئات دون ترتيب.",
+            "الترتيبي يعني فئات بينها ترتيب لكن الفروق العددية غير محددة."
+          ],
+          formula:[
+            "اسمي = تصنيف فقط.",
+            "ترتيبي = تصنيف مع ترتيب."
+          ],
+          solutionSteps:[
+            "اسأل: هل يمكن ترتيب الفئات من الأقل إلى الأعلى؟",
+            "إذا نعم فهو ترتيبي، وإذا لا فهو اسمي."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q6_interval_ratio",
+    title:"تمييز الفئوي والنسبي",
+    gen:(variant)=>{
+      const r = seededRand("q6_interval_ratio|"+variant);
+      const POOL = [
+        { s:"درجة الحرارة المئوية", a:"فئوي (Interval)" },
+        { s:"الوزن بالكيلوجرام", a:"نسبي (Ratio)" },
+        { s:"العمر بالسنوات", a:"نسبي (Ratio)" },
+        { s:"درجة الذكاء IQ", a:"فئوي (Interval)" },
+        { s:"المسافة بالكيلومترات", a:"نسبي (Ratio)" },
+        { s:"درجة الحرارة بالفهرنهايت", a:"فئوي (Interval)" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"ir"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["فئوي (Interval)","نسبي (Ratio)"]
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["ir"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"صعب",
+          prompt:"حدد المستوى الأنسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "الفئوي يملك فروقا ذات معنى لكن الصفر فيه ليس حقيقيا.",
+            "النسبي يملك صفرا حقيقيا ويمكن فيه مقارنة النسب."
+          ],
+          formula:[
+            "فئوي = فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي = فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "افحص أولا هل الصفر يعني انعدام الكمية فعلا.",
+            "إذا كان الصفر حقيقيا فالمستوى نسبي، وإلا فهو فئوي."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q7_codes_vs_values",
+    title:"الأرقام كرموز أم قياسات؟",
+    gen:(variant)=>{
+      const r = seededRand("q7_codes_vs_values|"+variant);
+      const POOL = [
+        { s:"رقم الهوية الوطنية", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"نوعي اسمي" },
+        { s:"رقم الطالب الجامعي", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"نوعي اسمي" },
+        { s:"عدد الغرف في المنزل", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"كمي نسبي" },
+        { s:"ترتيب المتسابق في السباق", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"نوعي ترتيبي" },
+        { s:"درجة الحرارة المئوية", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"كمي فئوي" },
+        { s:"عدد الساعات التي درسها الطالب", options:["نوعي اسمي","نوعي ترتيبي","كمي فئوي","كمي نسبي"], a:"كمي نسبي" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"cv"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:it.options
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["cv"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"صعب",
+          prompt:"اختر الوصف الأدق لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "وجود أرقام في البيانات لا يعني دائما أنها كمية قابلة للحساب.",
+            "بعض الأرقام تعمل كرموز تعريف فقط مثل رقم الطالب أو الهوية."
+          ],
+          formula:[
+            "أرقام ترميزية = نوعي اسمي.",
+            "أرقام تعبر عن مقدار = متغير كمي."
+          ],
+          solutionSteps:[
+            "اسأل: هل الرقم يمثل كمية أم مجرد بطاقة تعريف؟",
+            "إذا كان مجرد تعريف فتعامل معه كبيان نوعي اسمي."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q8_advanced_tf",
+    title:"صح أو خطأ - فهم أعمق لمستويات القياس",
+    gen:(variant)=>{
+      const r = seededRand("q8_advanced_tf|"+variant);
+      const POOL = [
+        { s:"يمكن مقارنة النسب مباشرة في المستوى النسبي.", a:"صح" },
+        { s:"إذا وُجد ترتيب بين الفئات فهذا يكفي للحكم بأن البيانات فئوية.", a:"خطأ" },
+        { s:"الرقم المخصص للاعب في الفريق يعد مثالا على بيانات كمية.", a:"خطأ" },
+        { s:"الصفر في مقياس الحرارة المئوي لا يعني انعدام الحرارة تماما.", a:"صح" },
+        { s:"كل متغير ترتيبي هو في الأصل متغير نوعي.", a:"صح" },
+        { s:"العمر يمكن عده من البيانات الاسمية لأنه يكتب أرقاما.", a:"خطأ" },
+        { s:"المستوى الفئوي يسمح بفهم الفروق بين القيم لكنه لا يدعم مقارنة النسب الحقيقية.", a:"صح" },
+        { s:"الحالة الاجتماعية مثال جيد على بيانات ترتيبيّة.", a:"خطأ" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,4);
+      const parts = picked.map((it,i)=>({
+        type:"mcq",
+        key:"atf"+(i+1),
+        label:(i+1)+") "+it.s,
+        options:["صح","خطأ"]
+      }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["atf"+(i+1)] = it.a; });
+
+      return {
+        branches:[{
+          level:"صعب",
+          prompt:"حدد (صح) أو (خطأ) لكل عبارة:",
+          parts,
+          answers,
+          explain:[
+            "ركز على ثلاثة مفاتيح: وجود ترتيب، معنى الفروق، ووجود الصفر الحقيقي.",
+            "ولا تنخدع بوجود الأرقام إذا كانت مجرد رموز تعريف."
+          ],
+          formula:[
+            "ترتيب فقط = ترتيبي.",
+            "فروق ذات معنى بلا صفر حقيقي = فئوي.",
+            "فروق ذات معنى مع صفر حقيقي = نسبي."
+          ],
+          solutionSteps:[
+            "حلل العبارة وحدد أي خاصية من خصائص مستويات القياس تشير إليها.",
+            "ثم طابقها مع التعريف الصحيح للمستوى."
+          ]
+        }]
+      };
+    }
+  }
 ];
+
+function randomToken(){
+  return String(Date.now()) + "_" + Math.floor(Math.random()*1000000);
+}
+function getVariant(qid){
+  if(state.variants[qid]==null){
+    state.variants[qid] = randomToken();
+    saveState();
+  }
+  return state.variants[qid];
+}
+function bumpVariant(qid){
+  state.variants[qid] = randomToken();
+  saveState();
+}
+
 function shuffleInPlace(arr, r){
   for(let i=arr.length-1;i>0;i--){
     const j = Math.floor(r()*(i+1));
@@ -3025,13 +3038,21 @@ function shuffleInPlace(arr, r){
 }
 function ensureOrder(){
   const ids = TEMPLATES.map(t=>t.id);
-  const ok = Array.isArray(state.order) && state.order.length === ids.length && ids.every(id=>state.order.includes(id));
+  const ok = Array.isArray(state.order)
+    && state.order.length === ids.length
+    && ids.every(id=>state.order.includes(id));
   if(!ok){
     const r = seededRand("order|"+Date.now()+"|"+Math.random());
     state.order = shuffleInPlace([...ids], r);
     saveState();
   }
   return state.order;
+}
+function reshuffleOrder(){
+  const ids = TEMPLATES.map(t=>t.id);
+  const r = seededRand("order|"+Date.now()+"|"+Math.random());
+  state.order = shuffleInPlace([...ids], r);
+  saveState();
 }
 
 function buildBank(){
@@ -3043,36 +3064,127 @@ function buildBank(){
     return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
   });
 }
-let BANK = buildBank();
-if(BANK.length===0){ console.error('BANK is empty'); }
 
+let BANK = [];
 
-function markDirty(qid){ state.dirty[qid]=true; saveState(); renderSidebar(); }
+/* ===== ????? ?????? ???????? ??? ??? ===== */
+function collectPartKeys(branch){
+  const keys=[];
+  (branch.parts||[]).forEach(p=>keys.push(p.key));
+  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
+    branch.table.rows.forEach(r=>(r.inputs||[]).forEach(k=>keys.push(k)));
+  }
+  return keys;
+}
+
+/* ===== ????? ??? ===== */
+function gradeBranch(q, branch, bi, savedObj){
+  const result = { okAll: true, byKey: {} };
+
+  // parts
+  (branch.parts||[]).forEach(p=>{
+    const studentRaw = (savedObj && savedObj[p.key] != null) ? savedObj[p.key] : "";
+    const correct = branch.answers[p.key];
+    let ok=false;
+    if(p.type==="mcq"){
+      ok = normalizeText(studentRaw) === normalizeText(correct);
+    }else if(p.type==="text"){
+      if(p.orderInsensitive) ok = sameNumberList(studentRaw, correct);
+      else ok = normalizeText(studentRaw) === normalizeText(correct);
+    }else{
+      ok = nearlyEqual(parseNumberLoose(studentRaw), Number(correct), 1e-2);
+    }
+    result.byKey[p.key]=ok;
+    if(!ok) result.okAll=false;
+  });
+
+  // freq table
+  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
+    branch.table.rows.forEach(r=>{
+      (r.inputs||[]).forEach(k=>{
+        const studentRaw = (savedObj && savedObj[k] != null) ? savedObj[k] : "";
+        const correct = branch.answers[k];
+        const ok = nearlyEqual(parseNumberLoose(studentRaw), Number(correct), 1e-2);
+        result.byKey[k]=ok;
+        if(!ok) result.okAll=false;
+      });
+    });
+  }
+
+  return result;
+}
+
+/* ===== ???? ??????? ===== */
+function isBranchComplete(qid, bi){
+  const rec = ensureBranchRec(qid, bi);
+  return rec.status==="correct" || rec.status==="locked" || !window.__examRunning;
+}
+function isQuestionComplete(q){
+  return q.branches.every((b,bi)=>isBranchComplete(q.id, bi));
+}
+function isQuestionCorrect(q){
+  return q.branches.every((b,bi)=>ensureBranchRec(q.id,bi).status==="correct");
+}
+function isQuestionWrong(q){
+  return q.branches.some((b,bi)=>ensureBranchRec(q.id,bi).status==="locked");
+}
+
+function setProgress(){
+  const completed = BANK.filter(q=>isQuestionComplete(q)).length;
+  const visibleCompleted = window.__examRunning ? completed : 0;
+    const qCountEl = document.getElementById("qCount");
+  const qNoEl = document.getElementById("qNo");
+  if(qCountEl) qCountEl.textContent = BANK.length;
+  if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
+  document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
+  document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
+
+  const pill = document.getElementById("statusPill");
+  const q = BANK[state.currentIndex];
+  if(isQuestionComplete(q)){
+    if(isQuestionCorrect(q)){
+      pill.textContent="?????";
+      pill.className="pill";
+    }else{
+      pill.textContent="????? (????? ??? ?????)";
+      pill.className="pill warn";
+    }
+  }else{
+    pill.textContent="??? ?????";
+    pill.className="pill warn";
+  }
+
+  const showBtn = document.getElementById("showResultsBtn");
+  const nextBtnSide = document.getElementById("nextBtnSide");
+  showBtn.disabled = (completed !== BANK.length) || !window.__examRunning;
+  if(nextBtnSide) nextBtnSide.disabled = !window.__examRunning;
+
+  return {completed, doneAll: (completed === BANK.length)};
+}
+
 function renderSidebar(){
   const list=document.getElementById("qList");
   list.innerHTML="";
+  state.dirty = state.dirty || {};
   const filter = state.sidebarFilter || "all";
   const toShow = BANK.map((q,i)=>({q,i})).filter(({q,i})=>{
-    if(filter==="incomplete") return !isQuestionDone(q);
+    if(filter==="incomplete") return !isQuestionComplete(q);
     return true;
   });
   toShow.forEach(({q,i})=>{
-    const st = getQuestionStatus(q);
-    let dotClass = "";
-    if(st==="completed_correct") dotClass = "done";
-    else if(st==="completed_wrong") dotClass = "bad";
-    else if(st==="in_progress") dotClass = "progress";
-    let badge;
-    if(st==="completed_correct") badge = el("span",{class:"badge good"},["مكتمل"]);
-    else if(st==="completed_wrong") badge = el("span",{class:"badge bad"},["مكتمل"]);
-    else badge = el("span",{class:"badge warn"},["غير مكتمل"]);
+    const complete = isQuestionComplete(q);
+    const correct = complete && isQuestionCorrect(q);
+    const dotClass = !complete ? "" : (correct ? "done" : "bad");
+    const badge = !complete
+      ? el("span",{class:"badge warn"},["??? ?????"])
+      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"?????":"????? (???)"]);
     const unsaved = state.dirty[q.id];
-    const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{state.currentIndex=i;saveState();renderAll();}},[
+    const item=el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
       el("div",{class:"left"},[
-        unsaved ? el("div",{class:"unsaved-dot", title:"إجابة غير محفوظة"},[]) : null,
+        unsaved ? el("div",{class:"unsaved-dot", title:"????? ??? ??????"},[]) : null,
         el("div",{class:"dot "+dotClass}),
         el("div",{},[
-          el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
+          el("div",{class:"name"},[`???? ${i+1}: ${q.title}`]),
           el("div",{style:"margin-top:6px"},[badge])
         ])
       ]),
@@ -3084,43 +3196,1060 @@ function renderSidebar(){
     const btn=document.getElementById(id);
     if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
   });
-  typesetMath(list);
+}
+
+/* ===== ?????? ????? ===== */
+function renderFreqTable(q, branch, bi){
+  const rec = ensureBranchRec(q.id, bi);
+  const t = branch.table;
+  const table = el("table",{class:"ftable"},[]);
+  const thead = el("thead",{},[]);
+  thead.appendChild(el("tr",{}, t.headers.map(h=>el("th",{},[h]))));
+  table.appendChild(thead);
+
+  const tbody = el("tbody",{},[]);
+  t.rows.forEach((row)=>{
+    const tr = el("tr",{},[]);
+    tr.appendChild(el("td",{},[row.label]));
+    if(row.fixed){
+      row.fixed.forEach(val=> tr.appendChild(el("td",{},[val])));
+    }else if(row.inputs){
+      row.inputs.forEach((k)=>{
+        const savedVal = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "";
+        const inp = el("input",{class:"cellInput", type:"text", value: savedVal},[]);
+        inp.setAttribute("data-qid", q.id);
+        inp.setAttribute("data-bi", String(bi));
+        inp.setAttribute("data-key", k);
+        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
+        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
+
+        tr.appendChild(el("td",{},[inp]));
+      });
+    }
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  return table;
+}
+
+function piePaths(counts, cx, cy, r){
+  const total = counts.reduce((a,b)=>a+b,0);
+  let a0 = -Math.PI/2;
+  const paths = [];
+  for(let i=0;i<counts.length;i++){
+    const frac = counts[i]/total;
+    const a1 = a0 + frac*2*Math.PI;
+    const x0 = cx + r*Math.cos(a0), y0 = cy + r*Math.sin(a0);
+    const x1 = cx + r*Math.cos(a1), y1 = cy + r*Math.sin(a1);
+    const large = (a1-a0) > Math.PI ? 1 : 0;
+    const d = `M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} Z`;
+    paths.push({d, frac, a0, a1});
+    a0 = a1;
+  }
+  return paths;
+}
+
+function renderChartsInteractive(branch){
+  const {cats, counts, N} = branch.chartData;
+  const max = Math.max(...counts);
+
+  const outer = el("div",{class:"charts"},[]);
+  const tip = el("div",{class:"chartTip"},[]);
+  tip.style.display="none";
+  document.body.appendChild(tip);
+
+  function showTip(x,y,html){
+    tip.innerHTML = html;
+    tip.style.left = (x+12)+"px";
+    tip.style.top  = (y+12)+"px";
+    tip.style.display="block";
+  }
+  function hideTip(){ tip.style.display="none"; }
+
+  // Bar chart (SVG)
+  const w=520, h=260, pad=34, bw=56, gap=22, x0=24, baseY=h-54;
+  const barSvg = el("svg",{viewBox:`0 0 ${w} ${h}`, class:"svgInteractive", "aria-label":"????? ????????"},[]);
+  barSvg.appendChild(el("rect",{x:"0",y:"0",width:String(w),height:String(h),rx:"14",fill:"#ffffff"}));
+  barSvg.appendChild(el("line",{x1:String(pad),y1:String(baseY),x2:String(w-pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
+  barSvg.appendChild(el("line",{x1:String(pad),y1:String(pad),x2:String(pad),y2:String(baseY),stroke:"#dbe7f2","stroke-width":"2"}));
+
+  const barGroup = el("g",{},[]);
+  counts.forEach((c,i)=>{
+    const bh = (c/max) * (baseY - pad);
+    const x = x0 + i*(bw+gap);
+    const y = baseY - bh;
+
+    const rect = el("rect",{x:String(x),y:String(y),width:String(bw),height:String(bh),rx:"10",ry:"10",
+      fill:"rgba(10,94,168,.22)", stroke:"rgba(10,94,168,.45)", "stroke-width":"1.5", class:"barSeg", "data-i":String(i)},[]);
+    rect.addEventListener("mousemove",(ev)=>{
+      const pct = (c/N)*100;
+      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">???????: ${c}</div><div>??????: ${pct.toFixed(1)}%</div>`);
+    });
+    rect.addEventListener("mouseleave", hideTip);
+    rect.addEventListener("click", ()=>{
+      barSvg.querySelectorAll(".barSeg").forEach(n=>n.classList.remove("selected"));
+      rect.classList.add("selected");
+      info.innerHTML = `<div><b>?????:</b> ${escapeHtml(cats[i])}</div>
+                        <div><b>???????:</b> ${c}</div>
+                        <div><b>??????? ??????:</b> ${(c/N).toFixed(3)}</div>
+                        <div><b>?????? ???????:</b> ${((c/N)*100).toFixed(1)}%</div>
+                        <div><b>????? ??????:</b> ${Math.round((c/N)*360)}�</div>`;
+    });
+    barGroup.appendChild(rect);
+
+    barGroup.appendChild(el("text",{x:String(x+bw/2),y:String(y-8),"text-anchor":"middle","font-size":"12","font-weight":"900",fill:"#0f2a3b"},[String(c)]));
+    barGroup.appendChild(el("text",{x:String(x+bw/2),y:String(baseY+18),"text-anchor":"middle","font-size":"10","font-weight":"800",fill:"#2a4c66"},[cats[i]]));
+  });
+  barSvg.appendChild(barGroup);
+
+  const barBox = el("div",{class:"chartBox"},[
+    el("div",{class:"chartTitle"},["????? ????????"]),
+    el("div",{class:"svgWrap"},[barSvg]),
+    el("div",{class:"chartNote"},[`N = ${N} � ???? ?????? ??? ?????? ?? ???? ?????? ????????.`])
+  ]);
+
+  // Pie chart (SVG)
+  const pcw=320, pch=260, cx=150, cy=130, pr=92;
+  const pieSvg = el("svg",{viewBox:`0 0 ${pcw} ${pch}`, class:"svgInteractive", "aria-label":"???????? ????????"},[]);
+  pieSvg.appendChild(el("rect",{x:"0",y:"0",width:String(pcw),height:String(pch),rx:"14",fill:"#ffffff"}));
+
+  const pie = piePaths(counts, cx, cy, pr);
+  pie.forEach((seg,i)=>{
+    const c = counts[i];
+    const path = el("path",{d:seg.d, fill:`rgba(30,167,255,${0.12+0.08*i})`, stroke:"rgba(10,94,168,.25)", "stroke-width":"1.5", class:"pieSeg", "data-i":String(i)},[]);
+    path.addEventListener("mousemove",(ev)=>{
+      const angle = (c/N)*360;
+      showTip(ev.clientX, ev.clientY, `<b>${escapeHtml(cats[i])}</b><div style="margin-top:4px">???????: ${c}</div><div>???????: ${angle.toFixed(1)}�</div>`);
+    });
+    path.addEventListener("mouseleave", hideTip);
+    path.addEventListener("click", ()=>{
+      pieSvg.querySelectorAll(".pieSeg").forEach(n=>n.classList.remove("selected"));
+      path.classList.add("selected");
+      info.innerHTML = `<div><b>?????:</b> ${escapeHtml(cats[i])}</div>
+                        <div><b>???????:</b> ${c}</div>
+                        <div><b>??????? ??????:</b> ${(c/N).toFixed(3)}</div>
+                        <div><b>?????? ???????:</b> ${((c/N)*100).toFixed(1)}%</div>
+                        <div><b>????? ??????:</b> ${Math.round((c/N)*360)}�</div>`;
+    });
+    pieSvg.appendChild(path);
+  });
+  pieSvg.appendChild(el("circle",{cx:String(cx),cy:String(cy),r:String(pr),fill:"none",stroke:"#dbe7f2","stroke-width":"2"}));
+
+  const pieBox = el("div",{class:"chartBox"},[
+    el("div",{class:"chartTitle"},["???????? ????????"]),
+    el("div",{class:"svgWrap"},[pieSvg]),
+    el("div",{class:"chartNote"},[`???? ??? ?????? ?????? ???????.`])
+  ]);
+
+  const info = el("div",{class:"chartInfo", html:`<div style="font-weight:900;color:#0f2a3b;margin-bottom:6px">?????? ?????? ??????</div><div style="color:#5b6b7a;font-weight:800">???? ??? ????/????.</div>`});
+  const infoBox = el("div",{class:"chartBox"},[
+    el("div",{class:"chartTitle"},["???? ????????"]),
+    info
+  ]);
+
+  outer.appendChild(barBox);
+  outer.appendChild(pieBox);
+  outer.appendChild(infoBox);
+
+  // clean tooltip on destroy via navigation
+  outer._disposeTip = ()=>{ try{ tip.remove(); }catch(e){} };
+
+  return outer;
+}
+
+function renderStemLeaf(branch){
+  return el("div",{class:"stemleaf"},[
+    ...(branch.stemleaf||[]).map(r=> el("div",{class:"slRow"},[
+      el("div",{class:"stem"},[String(r.stem)]),
+      el("div",{class:"sep"},["|"]),
+      el("div",{class:"leaves"},[(r.leaves||[]).join("  ")])
+    ]))
+  ]);
+}
+
+/* ===== ????? ???????? ?? DOM ???? ??? ===== */
+function readBranchInputs(qid, bi, branch){
+  const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
+  const saved = {};
+  const keys = collectPartKeys(branch);
+
+  let ok=true;
+  keys.forEach(k=>{
+    const node = container ? container.querySelector(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${k}"]`) : null;
+    let val = "";
+    if(node){
+      if(node.type==="radio"){
+        const checked = container.querySelector(`input[type="radio"][data-qid="${qid}"][data-bi="${bi}"][data-key="${k}"]:checked`);
+        val = checked ? checked.value : "";
+      }else{
+        val = node.value ?? "";
+      }
+    }
+    saved[k] = val;
+    if(String(val).trim()==="") ok=false;
+  });
+
+  return {saved, okFilled: ok};
+}
+
+function applyFieldFeedback(qid, bi, grade){
+  const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
+  if(!container) return;
+
+  const q = BANK.find(x=>x.id===qid);
+  const branch = (q && q.branches) ? q.branches[bi] : null;
+  const rec = ensureBranchRec(qid, bi);
+  const saved = rec.saved || {};
+  const status = rec.status;
+
+  Object.entries(grade.byKey||{}).forEach(([k,ok])=>{
+    const nodes = container.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${k}"]`);
+    nodes.forEach(n=>{
+      if(n.type==="radio"){
+        const wrap = n.closest(".choice");
+        if(!wrap) return;
+
+        // reset
+        wrap.classList.remove("badField","goodField","revealCorrect");
+
+        const sel = normalizeText(saved[k] != null ? saved[k] : "");
+        const val = normalizeText(n.value != null ? n.value : "");
+        const corr = (branch && branch.answers) ? normalizeText(branch.answers[k] != null ? branch.answers[k] : "") : "";
+
+        // highlight only the selected option
+        if(sel && val===sel){
+          wrap.classList.add(ok ? "goodField" : "badField");
+        }
+
+        // on second wrong (locked): reveal the correct option only
+        if(status==="locked" && corr && val===corr){
+          wrap.classList.add("goodField","revealCorrect");
+        }
+      }else{
+        const hasVal = (saved[k] != null && String(saved[k]).trim() !== "");
+        n.classList.remove("badField","goodField");
+        if(hasVal){
+          n.classList.add(ok ? "goodField" : "badField");
+        }
+      }
+    });
+  });
+}
+
+function disableBranchInputs(qid, bi){
+  const container = document.querySelector(`[data-branch-container="${qid}::${bi}"]`);
+  if(!container) return;
+  container.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key]`).forEach(n=>{
+    if(n.type==="radio") n.disabled = true;
+    else n.disabled = true;
+  });
+  const saveBtn = container.querySelector(`[data-save-btn="${qid}::${bi}"]`);
+  if(saveBtn) saveBtn.disabled = true;
+}
+
+/* ===== ???????? ???????? ??????? ===== */
+function openHelp(q, branch){
+  const explainHtml = (branch.explain && branch.explain.length)
+    ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>???? ?????? ???????? ?? ??? ??????? ??? ???????.</div>";
+  const formulaHtml = (branch.formula && branch.formula.length)
+    ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>???? ??????? ??????? ?? ???? ???? ????.</div>";
+
+  openModal("?????? ????", `
+    <div class="ai-help-panel">
+      <div class="ai-help-hero">
+        <div class="ai-help-orb"><span></span></div>
+        <div class="ai-help-copy">
+          <div class="ai-help-kicker">HELP</div>
+          <div class="ai-help-title">${escapeHtml(q.title)} <span style="font-size:13px;color:rgba(255,255,255,.7)">(${escapeHtml(branch.level)})</span></div>        </div>
+      </div>
+      <div class="ai-help-grid">
+        <div class="ai-help-section">
+          <div class="ai-help-section-head">
+            <span class="ai-help-chip-icon">?</span>
+            <span>??? ???? ?? ???????</span>
+          </div>
+          <div class="ai-help-body">${explainHtml}</div>
+        </div>
+        <div class="ai-help-section">
+          <div class="ai-help-section-head">
+            <span class="ai-help-chip-icon">?</span>
+            <span>?? ??????? ?? ???????</span>
+          </div>
+          <div class="ai-help-body">${formulaHtml}</div>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function openCorrectAnswer(q, branch, bi){
+  const steps = (branch.solutionSteps && branch.solutionSteps.length)
+    ? `<div style="font-weight:900;margin:10px 0 6px">????? ????</div>
+       <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
+    : "";
+
+  // List correct values for parts
+  const correctList = [];
+  (branch.parts||[]).forEach(p=>{
+    const val = (p.type==="mcq") ? branch.answers[p.key] : formatNumber(branch.answers[p.key]);
+    correctList.push(`<li><b>${escapeHtml(p.label)}:</b> ${escapeHtml(String(val))}</li>`);
+  });
+  if(branch.customUI==="freqTable" && branch.table && branch.table.rows){
+    branch.table.rows.forEach(r=>{
+      (r.inputs||[]).forEach(k=>{
+        correctList.push(`<li><b>????</b>: ${escapeHtml(String(formatNumber(branch.answers[k])))}</li>`);
+      });
+    });
+  }
+  const correctHtml = correctList.length
+    ? `<div style="font-weight:900;margin:12px 0 6px">??????? ???????</div>
+       <ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
+    : "";
+
+  openModal("??????? ???????", `
+    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} � (${escapeHtml(branch.level)})</div>
+    ${steps}
+    ${correctHtml}
+    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">?? ????? ??????? ???????. ?????? ??? ????? ????? ????? ???? ?????.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">????? ???? ????</button><button class="btn small" onclick="closeModal()">??????</button></div>
+  `);
+  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
+  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
+}
+
+function promptOpenCorrectAnswer(q, branch, bi){
+  openModal("????? ?????????", `
+    <div style="font-weight:900;margin-bottom:10px">????? ??????? ??? ??????.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">????? ???? ??? ???? ?????? ?????? ??? ???? ??????.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">????? ???????</button>
+  `);
+  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
+  if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
+}
+
+function markDirty(qid){ state.dirty = state.dirty || {}; state.dirty[qid]=true; saveState(); renderSidebar(); }
+
+/* ===== ??? ??????? (?????? ?????? ????) ===== */
+function handleSaveBranch(q, branch, bi){
+  const rec = ensureBranchRec(q.id, bi);
+
+  // ??? ??? ????/???? ??? ???
+  if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
+
+  const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
+  if(!okFilled){
+    openModal("?????", `<div style="font-weight:900">???? ???? ??????? ???????? ?? ???? (??? ???????).</div>`);
+    return;
+  }
+
+  // ??? ???????? ??????
+  rec.attempts = (rec.attempts || 0) + 1;
+  rec.saved = saved;
+  delete state.dirty[q.id];
+  saveState();
+
+  const grade = gradeBranch(q, branch, bi, rec.saved);
+  if(grade.okAll){
+    rec.status = "correct";
+    saveState();
+  applyFieldFeedback(q.id, bi, grade);
+    disableBranchInputs(q.id, bi);
+    setProgress(); renderSidebar();
+    return;
+  }
+
+  // ???
+  if(rec.attempts === 1){
+    rec.status = "wrong1";
+    saveState();
+  applyFieldFeedback(q.id, bi, grade);
+    setProgress(); renderSidebar();
+    // ???? ???????? ???????? (???? ????? ????)
+    openHelp(q, branch);
+    return;
+  }
+
+  // ???????? ???????: ????? ??????? ??????? ?????? ???????
+  rec.status = "locked";
+  saveState();
+  applyFieldFeedback(q.id, bi, grade);
+  disableBranchInputs(q.id, bi);
+  setProgress(); renderSidebar();
+  promptOpenCorrectAnswer(q, branch, bi);
+}
+
+/* ===== ??? ?????? ???????? ===== */
+function renderMain(){
+  BANK = buildBank();
+  const i = state.currentIndex;
+  const q = BANK[i];
+  const wrap = document.getElementById("mainContent");
+  wrap.innerHTML = "";
+
+  const p = setProgress();
+
+  const titleRow = el("div",{class:"qtitleRow"},[
+    el("div",{class:"qtitle"},[
+      el("div",{class:"qnum"},[String(i+1)]),
+      el("div",{},[q.title])
+    ]),
+    el("div",{class:"qmeta"},[
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>swapQuestion(q.id)},["????? ??????"]),
+      el("button",{class:"btn small", disabled: !p.doneAll || !window.__examRunning, onclick:()=>tryShowResults()},["????? ???????"]),
+      el("button",{class:"btn small", disabled: !window.__examRunning, onclick:()=>prev()},["??????"]),
+      el("button",{class:"btn primary small", disabled: !window.__examRunning, onclick:()=>next()},["??????"])
+    ])
+  ]);
+
+  const branches = el("div",{class:"branches"},[]);
+  q.branches.forEach((branch, bi)=>{
+    const tagClass=(branch.level==="???")?"easy":(branch.level==="?????"?"med":"hard");
+    const rec = ensureBranchRec(q.id, bi);
+
+    const branchCard = el("div",{class:"branch"},[]);
+    const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
+      ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},
+        [rec.status==="correct" ? "????" : "???"])
+      : null;
+
+    const head = el("div",{class:"branchHead"},[
+      el("span",{class:`btag ${tagClass}`},[branch.level]),
+      statusTag
+    ]);
+const body = el("div",{class:"branchBody"},[]);
+    body.innerHTML = latexFix(branch.prompt).replace(/\n/g,"<br/>");
+    typesetMath(body);
+
+    if(branch.customUI==="stemleaf"){ body.appendChild(renderStemLeaf(branch)); }
+    if(branch.customUI==="freqTable"){ body.appendChild(renderFreqTable(q, branch, bi)); }
+    if(branch.customUI==="charts"){
+      const ch = renderChartsInteractive(branch);
+      body.appendChild(ch);
+    }
+
+    const parts = el("div",{class:"parts"},[]);
+    (branch.parts||[]).forEach(p=>{
+      const row = el("div",{class:"part"},[]);
+      if(p.type==="mcq") row.classList.add("mcqPart");
+      const label = el("div",{class:"label"},[p.label]);
+      const inputWrap = el("div",{class:"inputWrap"},[]);
+      const savedVal = (rec.saved && rec.saved[p.key]!=null) ? rec.saved[p.key] : "";
+
+      if(p.type==="mcq"){
+        const group = el("div",{class:"mcqGroup"},[]);
+        (p.options||[]).forEach((op,idx)=>{
+          const id = `${q.id}_${bi}_${p.key}_${idx}`;
+          const radio = el("input",{type:"radio", id, name:`${q.id}_${bi}_${p.key}`, value:op},[]);
+          radio.setAttribute("data-qid", q.id);
+          radio.setAttribute("data-bi", String(bi));
+          radio.setAttribute("data-key", p.key);
+          if(String(savedVal)===String(op)) radio.checked = true;
+          radio.onchange = ()=>{ markDirty(q.id); };
+          if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
+
+          const lab = el("label",{class:"choice", for:id},[
+            radio,
+            el("span",{},[op])
+          ]);
+          group.appendChild(lab);
+        });
+        inputWrap.appendChild(group);
+      }else if(p.type==="text"){
+        const ta = el("textarea",{placeholder:p.placeholder||""},[]);
+        ta.setAttribute("data-qid", q.id);
+        ta.setAttribute("data-bi", String(bi));
+        ta.setAttribute("data-key", p.key);
+        ta.value = savedVal;
+        ta.oninput = ()=>{ ta.classList.remove("badField","goodField"); markDirty(q.id); };
+        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) ta.disabled = true;
+        inputWrap.appendChild(ta);
+      }else{
+        const inp = el("input",{type:"text", inputmode:"decimal", placeholder:p.placeholder||""},[]);
+        inp.setAttribute("data-qid", q.id);
+        inp.setAttribute("data-bi", String(bi));
+        inp.setAttribute("data-key", p.key);
+        inp.value = savedVal;
+        inp.oninput = ()=>{ inp.classList.remove("badField","goodField"); markDirty(q.id); };
+        if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) inp.disabled = true;
+        inputWrap.appendChild(inp);
+      }
+
+      row.appendChild(label);
+      row.appendChild(inputWrap);
+      parts.appendChild(row);
+    });
+
+    const btns = el("div",{class:"branchBtns"},[
+      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["??? ???????"]),
+      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"????? ???? ???????"},[
+        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["?"]),
+        "?????? ????"
+      ])
+    ]);
+    if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
+      const sb = btns.querySelector(`[data-save-btn="${q.id}::${bi}"]`);
+      if(sb) sb.disabled = true;
+    }
+
+    const container = el("div",{"data-branch-container":`${q.id}::${bi}`},[]);
+    container.appendChild(head);
+    container.appendChild(body);
+    if((branch.parts||[]).length>0){ typesetMath(parts); container.appendChild(parts);}
+    container.appendChild(btns);
+
+    branchCard.appendChild(container);
+    branches.appendChild(branchCard);
+
+    // Apply feedback if already saved
+    if(rec.saved && (rec.status==="wrong1")){
+      const grade = gradeBranch(q, branch, bi, rec.saved);
+    }
+  });
+
+  wrap.appendChild(titleRow);
+  wrap.appendChild(branches);
+  typesetMath(wrap);
+}
+
+/* ===== ????? ?????? ===== */
+function swapQuestion(qid){
+  bumpVariant(qid);
+  clearQuestionState(qid);
+  const t = TEMPLATES.find(x=>x.id===qid);
+  if(t){
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    const ni = BANK.findIndex(q=>q.id===qid);
+    const obj = { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+    if(ni>=0) BANK[ni]=obj;
+  }
+  saveState();
+  renderAll();
+}
+
+/* ===== ?????? ===== */
+function next(){
+  if(state.currentIndex < BANK.length-1){
+    state.currentIndex++;
+    saveState();
+    renderAll();
+  }else{
+    tryShowResults();
+  }
+}
+function prev(){
+  if(state.currentIndex>0){
+    state.currentIndex--;
+    saveState();
+    renderAll();
+  }
+}
+
+/* ===== ??????? (????? ??????) ===== */
+function listIncomplete(){
+  const arr=[];
+  BANK.forEach((q,i)=>{
+    if(!isQuestionComplete(q)) arr.push({i:i+1, title:q.title});
+  });
+  return arr;
+}
+
+function tryShowResults(){
+  const p = setProgress();
+  if(!p.doneAll){
+    if(!confirm("???? ????? ?? ???? ????. ?? ???? ?????????")) return;
+  }
+  showResultsModal();
+}
+
+function computeScore(){
+  let total=0, correct=0;
+  BANK.forEach(q=>{
+    q.branches.forEach((branch,bi)=>{
+      const rec = ensureBranchRec(q.id,bi);
+      const keys = collectPartKeys(branch);
+      const grade = gradeBranch(q, branch, bi, rec.saved||{});
+      keys.forEach(k=>{
+        total++;
+        if(grade.byKey[k]) correct++;
+      });
+    });
+  });
+  const pct = total? (correct/total)*100 : 0;
+  return {correct,total,pct:Math.round(pct*10)/10};
+}
+
+function showResultsModal(){
+  BANK = buildBank();
+  const s = computeScore();
+
+  const cards = BANK.map((q,qi)=>{
+    const complete = isQuestionComplete(q);
+    const correctQ = complete && isQuestionCorrect(q);
+
+    let inner = `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="font-weight:900">???? ${qi+1}: ${escapeHtml(q.title)}</div>
+        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"? ????":"� ??? ????"}</span>
+      </div>
+    `;
+
+    q.branches.forEach((branch,bi)=>{
+      const rec = ensureBranchRec(q.id,bi);
+      const grade = gradeBranch(q, branch, bi, rec.saved||{});
+      const keys = collectPartKeys(branch);
+
+      inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
+      keys.forEach(k=>{
+        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "�";
+        const correctVal = branch.answers[k];
+        const ok = grade.byKey[k];
+        const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
+
+        inner += `
+          <div class="partRow">
+            <div><b>?????:</b> ${escapeHtml(k)}</div>
+            <div><b>??????:</b> ${escapeHtml(String(student))}</div>
+            <div><b>??????:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"?":"�"}</span></div>
+          </div>`;
+      });
+    });
+
+    return `<div class="resultCard">${inner}</div>`;
+  }).join("");
+
+  const correctPct = s.total ? (s.correct/s.total)*100 : 0;
+  const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
+  openModal("???????", `
+    <div class="scoreCard" style="margin-bottom:14px">
+      <div>
+        <div class="scoreBig">??????: ${s.correct} ?? ${s.total} � ${s.pct}%</div>
+        <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
+        <div class="scoreSub">?? ????? ?? ??? ???? ?????.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn primary" onclick="window.print()">????? ???????</button>
+        <button class="btn primary" onclick="window.__resetAll(); closeModal();">????? ????????</button>
+      </div>
+    </div>
+    ${cards}
+  `);
+}
+const CLEAN_TEMPLATES_12 = [
+  {
+    id:"q1_circle",
+    title:"اختر الإجابة الصحيحة - المتغيرات وأنواع البيانات",
+    gen:(variant)=>{
+      const r = seededRand("q1_circle|"+variant);
+      const POOL = [
+        { s:"المتغير (Variable) هو:", options:["صفة أو خاصية تختلف من مفردة إلى أخرى","جدول لعرض البيانات","طريقة لحساب المتوسط","عدد الفئات فقط"], a:"صفة أو خاصية تختلف من مفردة إلى أخرى" },
+        { s:"أي مما يلي مثال على متغير نوعي اسمي؟", options:["درجة الحرارة المئوية","فصيلة الدم (A, B, AB, O)","عدد الإخوة","العمر بالسنوات"], a:"فصيلة الدم (A, B, AB, O)" },
+        { s:"أي مما يلي مثال على متغير كمي؟", options:["المدينة السكنية","لون العين","عدد الغيابات في الفصل","الجنسية"], a:"عدد الغيابات في الفصل" },
+        { s:"المستوى الاسمي (Nominal) يتميز بأنه:", options:["تصنيف دون ترتيب بين الفئات","تصنيف مع ترتيب واضح","بيانات ذات صفر حقيقي","بيانات يمكن مقارنة النسب فيها"], a:"تصنيف دون ترتيب بين الفئات" },
+        { s:"المستوى الترتيبي (Ordinal) يتميز بأنه:", options:["لا يوجد فيه ترتيب","تصنيف مع ترتيب بين الفئات","فروق عددية متساوية","وجود صفر حقيقي"], a:"تصنيف مع ترتيب بين الفئات" },
+        { s:"المستوى الفئوي (Interval) يتميز بأنه:", options:["يستخدم للفئات الاسمية فقط","ترتيب فقط دون أعداد","الفروق بين القيم ذات معنى لكن الصفر غير حقيقي","يمكن مقارنة النسب فيه مباشرة"], a:"الفروق بين القيم ذات معنى لكن الصفر غير حقيقي" },
+        { s:"المستوى النسبي (Ratio) يتميز بأنه:", options:["لا يحتوي على صفر حقيقي","مناسب فقط للبيانات النوعية","يحتوي على صفر حقيقي ويمكن مقارنة النسب","يعبر عن ترتيب فقط"], a:"يحتوي على صفر حقيقي ويمكن مقارنة النسب" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"mcq"+(i+1), label:(i+1)+") "+it.s, options:it.options }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["mcq"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"سهل",
+          prompt:"اختر الإجابة الصحيحة لكل عبارة:",
+          parts,
+          answers,
+          explain:[
+            "حدد أولا هل السؤال عن نوع المتغير أم عن مستوى القياس.",
+            "المتغير الكمي يعبر عن عدد أو مقدار، أما النوعي فيصف فئة أو صفة."
+          ],
+          formula:[
+            "اسمي: تصنيف فقط.",
+            "ترتيبي: تصنيف مع ترتيب.",
+            "فئوي: فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي: فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "اقرأ العبارة وابحث عن الكلمة المفتاحية في التعريف.",
+            "استبعد الاختيارات التي تتحدث عن مستوى مختلف."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q2_tf",
+    title:"صح / خطأ - أنواع البيانات ومستويات القياس",
+    gen:(variant)=>{
+      const r = seededRand("q2_tf|"+variant);
+      const POOL = [
+        {s:"البيانات الاسمية تصنف في فئات دون ترتيب.", a:"صح"},
+        {s:"البيانات الكمية تقاس عدديا.", a:"صح"},
+        {s:"رقم الهوية متغير كمي يمكن إجراء العمليات الحسابية عليه.", a:"خطأ"},
+        {s:"المتغير النوعي لا يمثل كمية قابلة للقياس العددي.", a:"صح"},
+        {s:"المستوى التعليمي مثال على بيانات ترتيبية.", a:"صح"},
+        {s:"درجة الحرارة المئوية من المستوى النسبي.", a:"خطأ"},
+        {s:"الوزن من المستوى النسبي لأنه يملك صفرا حقيقيا.", a:"صح"},
+        {s:"البيانات الترتيبية تسمح بالمقارنة من حيث الترتيب فقط.", a:"صح"},
+        {s:"البيانات الفئوية لا تحتوي على صفر حقيقي.", a:"صح"},
+        {s:"جميع المتغيرات النوعية ثنائية فقط.", a:"خطأ"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,5);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"tf"+(i+1), label:(i+1)+") "+it.s, options:["صح","خطأ"] }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["tf"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"سهل",
+          prompt:"حدد (صح) أو (خطأ) لكل عبارة:",
+          parts,
+          answers,
+          explain:[
+            "اسأل نفسك: هل المتغير وصفي أم عددي؟ وهل يوجد ترتيب أو صفر حقيقي؟",
+            "رقم التعريف قد يكون مكتوبا بالأرقام لكنه لا يمثل كمية قابلة للقياس."
+          ],
+          formula:[
+            "اسمي = فئات فقط.",
+            "ترتيبي = فئات مرتبة.",
+            "فئوي = فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي = فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "حدد المفهوم الأساسي في العبارة.",
+            "طابق العبارة مع تعريف المستوى أو نوع المتغير."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q3_method",
+    title:"نوع المتغير - نوعي أم كمي",
+    gen:(variant)=>{
+      const r = seededRand("q3_method|"+variant);
+      const POOL = [
+        {s:"لون العين", a:"نوعي (Qualitative)"},
+        {s:"عدد الإخوة", a:"كمي (Quantitative)"},
+        {s:"المدينة السكنية", a:"نوعي (Qualitative)"},
+        {s:"الطول بالسنتيمتر", a:"كمي (Quantitative)"},
+        {s:"الحالة الاجتماعية", a:"نوعي (Qualitative)"},
+        {s:"الدخل الشهري", a:"كمي (Quantitative)"}
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"cls"+(i+1), label:(i+1)+") "+it.s, options:["نوعي (Qualitative)","كمي (Quantitative)"] }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["cls"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"متوسط",
+          prompt:"حدد نوع المتغير المناسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "إذا كان الناتج صفة أو فئة فهو متغير نوعي.",
+            "إذا كان الناتج عددا أو مقدارا قابلا للقياس فهو متغير كمي."
+          ],
+          formula:[
+            "نوعي = وصف أو فئة.",
+            "كمي = عدد أو قياس."
+          ],
+          solutionSteps:[
+            "حدد هل الإجابة ستكون وصفا أم قيمة عددية.",
+            "اختر النوع الموافق لذلك."
+          ]
+        }]
+      };
+    }
+  },
+  {
+    id:"q4_param_stat",
+    title:"مستوى القياس المناسب",
+    gen:(variant)=>{
+      const r = seededRand("q4_param_stat|"+variant);
+      const POOL = [
+        { s:"الجنس (ذكر/أنثى)", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"اسمي (Nominal)" },
+        { s:"التقدير (ضعيف/جيد/ممتاز)", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"ترتيبي (Ordinal)" },
+        { s:"درجة الحرارة المئوية", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"فئوي (Interval)" },
+        { s:"الوزن بالكيلوغرام", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"نسبي (Ratio)" },
+        { s:"رقم الطالب الجامعي", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"اسمي (Nominal)" },
+        { s:"المستوى التعليمي", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"ترتيبي (Ordinal)" },
+        { s:"العمر بالسنوات", options:["اسمي (Nominal)","ترتيبي (Ordinal)","فئوي (Interval)","نسبي (Ratio)"], a:"نسبي (Ratio)" }
+      ];
+
+      const items = POOL.slice();
+      shuffleInPlace(items, r);
+      const picked = items.slice(0,3);
+      const parts = picked.map((it,i)=>({ type:"mcq", key:"lvl"+(i+1), label:(i+1)+") "+it.s, options:it.options }));
+      const answers = {};
+      picked.forEach((it,i)=>{ answers["lvl"+(i+1)] = it.a; });
+      return {
+        branches:[{
+          level:"متوسط",
+          prompt:"حدد مستوى القياس المناسب لكل مثال:",
+          parts,
+          answers,
+          explain:[
+            "اسأل: هل توجد فئات فقط أم ترتيب أم فروق ذات معنى أم صفر حقيقي؟",
+            "وجود صفر حقيقي يجعل المستوى نسبيا."
+          ],
+          formula:[
+            "اسمي: فئات فقط.",
+            "ترتيبي: فئات مرتبة.",
+            "فئوي: فروق ذات معنى بلا صفر حقيقي.",
+            "نسبي: فروق ذات معنى مع صفر حقيقي."
+          ],
+          solutionSteps:[
+            "حدد إن كانت البيانات فئوية أو عددية.",
+            "افحص وجود ترتيب.",
+            "افحص معنى الفروق ووجود الصفر الحقيقي."
+          ]
+        }]
+      };
+    }
+  }
+];
+
+const ADAPTIVE_TEMPLATE_EXTRA_IDS_12 = new Set(["q5_nominal_ordinal","q6_interval_ratio","q7_codes_vs_values","q8_advanced_tf"]);
+const ADAPTIVE_TEMPLATES_12 = CLEAN_TEMPLATES_12.concat(
+  TEMPLATES.filter((template) => ADAPTIVE_TEMPLATE_EXTRA_IDS_12.has(template.id))
+);
+
+function buildBank(){
+  const order = ensureOrder();
+  const bank = order.map(id=>{
+    const t = ADAPTIVE_TEMPLATES_12.find(x=>x.id===id);
+    if(!t) return null;
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+  }).filter(Boolean);
+  return bank.length ? bank : ADAPTIVE_TEMPLATES_12.map(t=>{
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    return { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+  });
+}
+
+function swapQuestion(qid){
+  bumpVariant(qid);
+  clearQuestionState(qid);
+  const t = ADAPTIVE_TEMPLATES_12.find(x=>x.id===qid);
+  if(t){
+    const v = getVariant(t.id);
+    const g = t.gen(v);
+    const ni = BANK.findIndex(q=>q.id===qid);
+    const obj = { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
+    if(ni>=0) BANK[ni]=obj;
+  }
+  saveState();
+  renderAll();
 }
 
 function setProgress(){
-  let completed=0;
-  BANK.forEach(q=>{ if(isQuestionDone(q)) completed++; });
-
+  const completed = BANK.filter(q=>isQuestionComplete(q)).length;
+  const visibleCompleted = window.__examRunning ? completed : 0;
     const qCountEl = document.getElementById("qCount");
   const qNoEl = document.getElementById("qNo");
   if(qCountEl) qCountEl.textContent = BANK.length;
   if(qNoEl) qNoEl.textContent = (state.currentIndex+1);
-  const visibleCompleted = window.__examRunning ? completed : 0;
   document.getElementById("progressText").textContent = `تم حل ${visibleCompleted} سؤال`;
   document.getElementById("progressBar").style.width = `${BANK.length ? (visibleCompleted/BANK.length)*100 : 0}%`;
 
   const pill = document.getElementById("statusPill");
-  const doneAll = (completed===BANK.length);
-  pill.textContent = doneAll ? "مكتمل" : "غير مكتمل";
-  pill.className = "pill" + (doneAll ? "" : " warn");
+  const q = BANK[state.currentIndex];
+  if(isQuestionComplete(q)){
+    if(isQuestionCorrect(q)){
+      pill.textContent = "مكتمل";
+      pill.className = "pill";
+    }else{
+      pill.textContent = "مكتمل (توجد أخطاء)";
+      pill.className = "pill warn";
+    }
+  }else{
+    pill.textContent = "غير مكتمل";
+    pill.className = "pill warn";
+  }
 
   const showBtn = document.getElementById("showResultsBtn");
   const nextBtnSide = document.getElementById("nextBtnSide");
-  showBtn.disabled = !doneAll || !window.__examRunning;
+  showBtn.disabled = (completed !== BANK.length) || !window.__examRunning;
   if(nextBtnSide) nextBtnSide.disabled = !window.__examRunning;
-  return {completed, doneAll};
+
+  return {completed, doneAll:(completed===BANK.length)};
+}
+
+function renderSidebar(){
+  const list = document.getElementById("qList");
+  list.innerHTML = "";
+  state.dirty = state.dirty || {};
+  const filter = state.sidebarFilter || "all";
+  const toShow = BANK.map((q,i)=>({q,i})).filter(({q})=>filter==="incomplete" ? !isQuestionComplete(q) : true);
+
+  toShow.forEach(({q,i})=>{
+    const complete = isQuestionComplete(q);
+    const correct = complete && isQuestionCorrect(q);
+    const dotClass = !complete ? "" : (correct ? "done" : "bad");
+    const badge = !complete
+      ? el("span",{class:"badge warn"},["غير مكتمل"])
+      : el("span",{class:"badge "+(correct?"good":"warn")},[correct?"مكتمل":"مكتمل (خطأ)"]);
+    const unsaved = state.dirty[q.id];
+    const item = el("div",{class:"qItem"+(state.currentIndex===i?" active":""), onclick:()=>{ state.currentIndex=i; saveState(); renderAll(); }},[
+      el("div",{class:"left"},[
+        unsaved ? el("div",{class:"unsaved-dot", title:"توجد إجابة غير محفوظة"},[]) : null,
+        el("div",{class:"dot "+dotClass}),
+        el("div",{},[
+          el("div",{class:"name"},[`سؤال ${i+1}: ${q.title}`]),
+          el("div",{style:"margin-top:6px"},[badge])
+        ])
+      ]),
+      el("div",{class:"icon"},[q.icon])
+    ].filter(Boolean));
+    list.appendChild(item);
+  });
+
+  ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{
+    const btn = document.getElementById(id);
+    if(btn) btn.className = "btn small" + ((btn.getAttribute("data-filter")===filter) ? " primary" : "");
+  });
+}
+
+function openHelp(q, branch){
+  const explainHtml = (branch.explain && branch.explain.length)
+    ? `<ul>${branch.explain.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>ابدأ بفهم المطلوب ثم حدد نوع الفكرة قبل الحل.</div>";
+  const formulaHtml = (branch.formula && branch.formula.length)
+    ? `<ul>${branch.formula.map(s=>`<li>${escapeHtml(latexFix(s))}</li>`).join("")}</ul>`
+    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون أو القاعدة المناسبة ثم عوّض عليها.</div>";
+
+  openModal("مساعدة", `
+    <div class="ai-help-panel">
+      <div class="ai-help-hero">
+        <div class="ai-help-orb"><span></span></div>
+        <div class="ai-help-copy">
+          <div class="ai-help-kicker">HELP</div>
+          <div class="ai-help-title">${escapeHtml(q.title)} <span style="font-size:13px;color:rgba(255,255,255,.7)">(${escapeHtml(branch.level)})</span></div>        </div>
+      </div>
+      <div class="ai-help-grid">
+        <div class="ai-help-section">
+          <div class="ai-help-section-head">
+            <span class="ai-help-chip-icon">?</span>
+            <span>الفكرة</span>
+          </div>
+          <div class="ai-help-body">${explainHtml}</div>
+        </div>
+        <div class="ai-help-section">
+          <div class="ai-help-section-head">
+            <span class="ai-help-chip-icon">?</span>
+            <span>القانون</span>
+          </div>
+          <div class="ai-help-body">${formulaHtml}</div>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function openCorrectAnswer(q, branch, bi){
+  const steps = (branch.solutionSteps && branch.solutionSteps.length)
+    ? `<div style="font-weight:900;margin:10px 0 6px">خطوات الحل</div><ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
+    : "";
+
+  const correctList = [];
+  (branch.parts||[]).forEach(p=>{
+    const val = (p.type==="mcq") ? branch.answers[p.key] : formatNumber(branch.answers[p.key]);
+    correctList.push(`<li><b>${escapeHtml(p.label)}:</b> ${escapeHtml(String(val))}</li>`);
+  });
+  const correctHtml = correctList.length
+    ? `<div style="font-weight:900;margin:12px 0 6px">الإجابات الصحيحة</div><ul style="margin:0;padding-right:18px">${correctList.join("")}</ul>`
+    : "";
+
+  openModal("الإجابة الصحيحة", `
+    <div style="font-weight:900;margin-bottom:6px">${escapeHtml(q.title)} - (${escapeHtml(branch.level)})</div>
+    ${steps}
+    ${correctHtml}
+    <div style="margin-top:14px;color:#5b6b7a;font-weight:900">يمكنك توليد نسخة جديدة من السؤال بعد الإغلاق.</div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="regenAfterShowAnswerBtn">سؤال جديد</button><button class="btn small" onclick="closeModal()">إغلاق</button></div>
+  `);
+  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
+  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
+}
+
+function promptOpenCorrectAnswer(q, branch, bi){
+  openModal("عرض الإجابة", `
+    <div style="font-weight:900;margin-bottom:10px">انتهت المحاولات لهذا الجزء.</div>
+    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الإجابة الصحيحة.</div>
+    <button class="btn primary" id="showAnswerAfterAttemptsBtn">عرض الإجابة</button>
+  `);
+  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
+  if(btn) btn.onclick = ()=>openCorrectAnswer(q, branch, bi);
+}
+
+function handleSaveBranch(q, branch, bi){
+  const rec = ensureBranchRec(q.id, bi);
+  if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) return;
+
+  const {saved, okFilled} = readBranchInputs(q.id, bi, branch);
+  if(!okFilled){
+    openModal("تنبيه", `<div style="font-weight:900">أكمل جميع الحقول المطلوبة ثم احفظ الإجابة.</div>`);
+    return;
+  }
+
+  rec.attempts = (rec.attempts || 0) + 1;
+  rec.saved = saved;
+  delete state.dirty[q.id];
+  saveState();
+
+  const grade = gradeBranch(q, branch, bi, rec.saved);
+  if(grade.okAll){
+    rec.status = "correct";
+    saveState();
+    applyFieldFeedback(q.id, bi, grade);
+    disableBranchInputs(q.id, bi);
+    setProgress();
+    renderSidebar();
+    return;
+  }
+
+  if(rec.attempts === 1){
+    rec.status = "wrong1";
+    saveState();
+    applyFieldFeedback(q.id, bi, grade);
+    setProgress();
+    renderSidebar();
+    openHelp(q, branch);
+    return;
+  }
+
+  rec.status = "locked";
+  saveState();
+  applyFieldFeedback(q.id, bi, grade);
+  disableBranchInputs(q.id, bi);
+  setProgress();
+  renderSidebar();
+  promptOpenCorrectAnswer(q, branch, bi);
 }
 
 function renderMain(){
   BANK = buildBank();
-  const i=state.currentIndex;
-  const q=BANK[i];
-  const wrap=document.getElementById("mainContent");
-  wrap.innerHTML="";
-
+  const i = state.currentIndex;
+  const q = BANK[i];
+  const wrap = document.getElementById("mainContent");
+  wrap.innerHTML = "";
   const p = setProgress();
 
-  const titleRow=el("div",{class:"qtitleRow"},[
+  const titleRow = el("div",{class:"qtitleRow"},[
     el("div",{class:"qtitle"},[
       el("div",{class:"qnum"},[String(i+1)]),
       el("div",{},[q.title])
@@ -3133,746 +4262,558 @@ function renderMain(){
     ])
   ]);
 
-  const branches=el("div",{class:"branches"},[]);
-  q.branches.forEach((b,bi)=>{
-    const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
-    let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
-    if(lvl.trim().toLowerCase()==="undefined") lvl="";
-    const tagClass=(lvl==="سهل")?"easy":(lvl==="متوسط"?"med":(lvl==="صعب"?"hard":""));
-    const branchCard=el("div",{class:"branch"},[]);
-    const head=el("div",{class:"branchHead"},[
-      ...(lvl ? [el("span",{class:`btag ${tagClass||"easy"}`},[lvl])] : [])
+  const branches = el("div",{class:"branches"},[]);
+  q.branches.forEach((branch, bi)=>{
+    const tagClass = (branch.level==="سهل") ? "easy" : (branch.level==="متوسط" ? "med" : "hard");
+    const rec = ensureBranchRec(q.id, bi);
+    const branchCard = el("div",{class:"branch"},[]);
+    const statusTag = (rec.status==="correct" || rec.status==="locked" || !window.__examRunning)
+      ? el("span",{class:"btag", style:`border-color:${rec.status==="correct"?"#0b7a43":"#b42318"};background:${rec.status==="correct"?"#eafff4":"#ffecec"};color:${rec.status==="correct"?"#0b7a43":"#b42318"}`},[rec.status==="correct" ? "صحيح" : "خطأ"])
+      : null;
+
+    const head = el("div",{class:"branchHead"},[
+      el("span",{class:`btag ${tagClass}`},[branch.level]),
+      statusTag
     ]);
-    const body=el("div",{class:"branchBody"},[]);
-    if(b.promptHtml){
-      body.innerHTML = b.promptHtml;
-    }else{
-      body.innerHTML = escapeHtml(b.prompt).replace(/\n/g,"<br/>");
-    }
+    const body = el("div",{class:"branchBody"},[]);
+    body.innerHTML = latexFix(branch.prompt).replace(/\n/g,"<br/>");
+    typesetMath(body);
 
-    const parts=el("div",{class:"parts"},[]);
-    (b.parts||[]).forEach(pp=>{
-      if(pp.inline) return;
-      const row=el("div",{class:"part"},[]);
-      const label=pp.labelHtml ? el("div",{class:"label", html: pp.labelHtml},[]) : el("div",{class:"label"},[pp.label]);
-      const inputWrap=el("div",{class:"inputWrap"},[]);
-      const stored = (state.answers[q.id] && state.answers[q.id][bi]) ? state.answers[q.id][bi][pp.key] : "";
+    const parts = el("div",{class:"parts"},[]);
+    (branch.parts||[]).forEach(p=>{
+      const row = el("div",{class:"part"},[]);
+      if(p.type==="mcq") row.classList.add("mcqPart");
+      const label = el("div",{class:"label"},[p.label]);
+      const inputWrap = el("div",{class:"inputWrap"},[]);
+      const savedVal = (rec.saved && rec.saved[p.key]!=null) ? rec.saved[p.key] : "";
 
-      let input;
-      if(pp.type==="mcq"){
-        input=el("select",{},[
-          el("option",{value:""},["اختر..."]),
-          ...(pp.options||[]).map(op=>el("option",{value:op},[op]))
-        ]);
-        input.setAttribute("data-qid", q.id);
-        input.setAttribute("data-bi", String(bi));
-        input.setAttribute("data-key", pp.key);
-        input.value = stored ?? "";
-        input.onchange=()=>{ markDirty(q.id); };
-      }else if(pp.type==="text"){
-        input=el("textarea",{placeholder:pp.placeholder||""},[]);
-        input.setAttribute("data-qid", q.id);
-        input.setAttribute("data-bi", String(bi));
-        input.setAttribute("data-key", pp.key);
-        input.value = stored ?? "";
-        input.oninput=()=>{ markDirty(q.id); };
-      }else{
-        input=el("input",{type:"number", step:pp.step||"1", placeholder:pp.placeholder||""},[]);
-        input.setAttribute("data-qid", q.id);
-        input.setAttribute("data-bi", String(bi));
-        input.setAttribute("data-key", pp.key);
-        input.value = stored ?? "";
-        input.oninput=()=>{ markDirty(q.id); };
+      if(p.type==="mcq"){
+        const group = el("div",{class:"mcqGroup"},[]);
+        (p.options||[]).forEach((op,idx)=>{
+          const id = `${q.id}_${bi}_${p.key}_${idx}`;
+          const radio = el("input",{type:"radio", id, name:`${q.id}_${bi}_${p.key}`, value:op},[]);
+          radio.setAttribute("data-qid", q.id);
+          radio.setAttribute("data-bi", String(bi));
+          radio.setAttribute("data-key", p.key);
+          if(String(savedVal)===String(op)) radio.checked = true;
+          radio.onchange = ()=>{ markDirty(q.id); };
+          if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning) radio.disabled = true;
+          group.appendChild(el("label",{class:"choice", for:id},[radio, el("span",{},[op])]));
+        });
+        inputWrap.appendChild(group);
       }
 
-      inputWrap.appendChild(input);
-      // مسح التلوين عند التعديل (التقييم يتم عند الضغط على زر "حفظ الإجابة")
-      input.addEventListener("input", ()=>_clearMarks(input));
-      input.addEventListener("change", ()=>_clearMarks(input));
-
-      // قفل الحقول بعد الحفظ النهائي (صحيح أو بعد إظهار الإجابة الصحيحة)
-      if(_isBranchLocked(q.id, bi)){
-        input.disabled = true;
-      }
-
-      // إرشاد التقريب للقيم النسبية/المئوية
-      const lbl = (pp.label||"");
-      if(pp.type==="number" && (lbl.includes("نسبي") || lbl.includes("مئوية"))){
-        const txt = lbl.includes("مئوية") ? "قرّب إلى منزلتين عشريتين (بدون علامة %)." : "قرّب إلى منزلتين عشريتين.";
-        inputWrap.appendChild(el("div",{class:"hint"},[txt]));
-      }
       row.appendChild(label);
       row.appendChild(inputWrap);
       parts.appendChild(row);
     });
 
-    const locked = _isBranchLocked(q.id, bi);
-    const saveBtn = el("button",{class:"btn primary small"},[locked?"محفوظ":"حفظ الإجابة"]);
-    saveBtn.disabled = locked;
-    saveBtn.onclick = ()=>saveBranchAnswer(q, b, bi, branchCard, saveBtn);
-
-    const btns=el("div",{class:"branchBtns"},[
-      saveBtn,
-      el("button",{class:"btn small ai-help-btn", onclick:()=>showHelp(q, b), title:"مساعد ذكاء اصطناعي"},[
-        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["✦"]),
+    const btns = el("div",{class:"branchBtns"},[
+      el("button",{class:"btn small primary", "data-save-btn":`${q.id}::${bi}`, disabled: !window.__examRunning, onclick:()=>handleSaveBranch(q, branch, bi)},["حفظ الإجابة"]),
+      el("button",{class:"btn small ai-help-btn", disabled: !window.__examRunning, onclick:()=>openHelp(q, branch), title:"فتح المساعدة"},[
+        el("span",{class:"ai-help-glyph","aria-hidden":"true"},["?"]),
         "مساعدة"
       ])
     ]);
+    if(rec.status==="correct" || rec.status==="locked" || !window.__examRunning){
+      const sb = btns.querySelector(`[data-save-btn="${q.id}::${bi}"]`);
+      if(sb) sb.disabled = true;
+    }
 
-    branchCard.appendChild(head);
-    branchCard.appendChild(body);
-    if((b.parts||[]).length>0) branchCard.appendChild(parts);
-    branchCard.appendChild(btns);
-    bindInlineInputs(branchCard, q.id, bi);
+    const container = el("div",{"data-branch-container":`${q.id}::${bi}`},[]);
+    container.appendChild(head);
+    container.appendChild(body);
+    if((branch.parts||[]).length>0){ typesetMath(parts); container.appendChild(parts); }
+    container.appendChild(btns);
+    branchCard.appendChild(container);
     branches.appendChild(branchCard);
   });
 
   wrap.appendChild(titleRow);
   wrap.appendChild(branches);
-  typesetMath(wrap);
-
 }
 
-function showExplain(q, b){
-  const lvl = (b.level || b.difficulty || b.name || "").toString();
-  const list = (Array.isArray(b.explain) ? b.explain : []).map(s=>`<li>${escapeHtml(s)}</li>`).join("");
-  const html = `
-    <div style="font-weight:900;margin-bottom:8px">${escapeHtml(q.title)} — (${escapeHtml(lvl)})</div>
-    ${list ? `<ul style="margin:0;padding-right:18px">${list}</ul>` : ``}
-  `;
-  openModal("شرح السؤال", html);
-}
-
-function showMethod(q, b){
-  const items = (b.method||["اتبع الخطوات المناسبة للحل."]).map(s=>`<li><div class="methodLine">${s}</div></li>`).join("");
-  const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
-  let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
-  if(lvl.trim().toLowerCase()==="undefined") lvl="";
-  const head = lvl ? `${escapeHtml(q.title)} — <span class="badge small">${escapeHtml(lvl)}</span>` : `${escapeHtml(q.title)}`;
-  const html = `
-    <div class="methodHead">${head}</div>
-    <ul class="methodList">${items}</ul>
-  `;
-  openModal("طريقة الحل", html);
-}
-
-function showHelp(q, b){
-  /* prefer the non-revealing AI help panel */
-  if(typeof window.__openUnifiedAiHelp === "function") return window.__openUnifiedAiHelp(q, b);
-  const title = escapeHtml(q.title||"");
-  const levelRaw = (b.level ?? b.difficulty ?? b.name ?? "");
-  let level = (levelRaw===undefined||levelRaw===null) ? "" : String(levelRaw);
-  if(level.trim().toLowerCase()==="undefined") level="";
-  const explainHtml = (b.explain && b.explain.length)
-    ? `<ul style="margin:0;padding-right:18px;line-height:2">${b.explain.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>ابدأ بتحديد المعطيات ثم نوع المطلوب قبل التعويض.</div>";
-  const formulaHtml = (b.formula && b.formula.length)
-    ? `<div style="font-weight:900;margin:12px 0 6px">القانون/ملاحظات</div><ul style="margin:0;padding-right:18px;line-height:2">${b.formula.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "<div style='color:var(--muted);font-weight:700'>اكتب القانون المناسب ثم عوّض خطوة خطوة.</div>";
-  openModal("مساعدة", `
-    <div style="font-weight:900;font-size:16px;color:var(--ink);margin-bottom:12px">${title}${level?` <span style="font-size:13px;color:var(--muted)">— (${escapeHtml(level)})</span>`:""}</div>
-    <div style="background:var(--brand-light);border:1px solid rgba(3,105,161,.22);border-radius:14px;padding:14px 16px;margin-bottom:10px">
-      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">الفكرة</div>
-      ${explainHtml}
-    </div>
-    <div style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:14px 16px">
-      <div style="font-weight:900;color:var(--brand2);margin-bottom:8px">القانون</div>
-      ${formulaHtml}
-    </div>
-  `);
-}
-
-function _checkPart(part, studentRaw, correct){
-  const raw = (studentRaw ?? "").toString().trim();
-  if(raw==="") return {ok:false, empty:true};
-  if(part.type==="mcq" || part.type==="text"){
-    return {ok: normalizeText(raw) === normalizeText(correct), empty:false};
-  }
-  return {ok: nearlyEqual(Number(raw), Number(correct), 1e-2), empty:false};
-}
-
-function _lockBranchInputs(branchCard, qid, bi){
-  const nodes = branchCard.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key]`);
-  nodes.forEach(n=>{ n.disabled = true; });
-}
-
-function _showCorrectModal(q, b, wrongItems){
-  const title = escapeHtml(q.title||"");
-  const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
-  let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
-  if(lvl.trim().toLowerCase()==="undefined") lvl="";
-
-  const methodItems = (b.method && b.method.length)
-    ? `<div style="margin:10px 0 6px;font-weight:900">طريقة الحل</div>
-       <ul style="margin:0;padding-right:18px">${b.method.map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-    : "";
-
-  const list = wrongItems.map(it=>{
-    const label = it.labelHtml ? it.labelHtml : escapeHtml(it.label||it.key);
-    const val = (typeof it.correct === "number") ? formatNumber(it.correct) : escapeHtml(it.correct);
-    return `<li style="margin:8px 0"><div style="font-weight:900">${label}</div><div style="margin-top:4px;color:#0b2b4c;font-weight:900">${val}</div></li>`;
-  }).join("");
-
-  const html = `
-    <div style="font-weight:900;margin-bottom:6px">${title}${lvl?` — (${escapeHtml(lvl)})`:""}</div>
-    ${methodItems}
-    <div style="margin:10px 0 6px;font-weight:900">الإجابة الصحيحة</div>
-    <ul style="margin:0;padding-right:18px">${list}</ul>
-    <div style="margin-top:10px;color:#5b6b7a;font-weight:800">تم إظهار الإجابة الصحيحة. لتجنّب حفظ الحل، يمكنك توليد نسخة جديدة.</div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn primary" id="regenAfterShowAnswerBtn">توليد سؤال جديد</button>
-      <button class="btn small" onclick="closeModal()">لاحقًا</button>
-    </div>
-  `;
-  openModal("الإجابة الصحيحة", html);
-  const regenBtn = document.getElementById("regenAfterShowAnswerBtn");
-  if(regenBtn) regenBtn.onclick = ()=>{ closeModal(); swapQuestion(q.id); };
-}
-
-function _promptShowCorrectModal(q, b, wrongItems){
-  openModal("انتهت المحاولات", `
-    <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
-    <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
-    <button class="btn primary" id="showAnswerAfterAttemptsBtn">إظهار الإجابة</button>
-  `);
-  const btn = document.getElementById("showAnswerAfterAttemptsBtn");
-  if(btn) btn.onclick = ()=>_showCorrectModal(q, b, wrongItems);
-}
-
-function saveBranchAnswer(q, b, bi, branchCard, saveBtn){
-  const qid = q.id;
-  if(_isBranchLocked(qid, bi)) return;
-
-  const parts = (b.parts||[]);
-  const results = [];
-  let hasEmpty = false;
-
-  parts.forEach(p=>{
-    const key = p.key;
-    const inp = branchCard.querySelector(`[data-qid="${qid}"][data-bi="${bi}"][data-key="${key}"]`);
-    if(!inp) return;
-    const student = (inp.value ?? "").toString();
-    const correct = b.answers ? b.answers[key] : undefined;
-    const chk = _checkPart(p, student, correct);
-    if(chk.empty) hasEmpty = true;
-    results.push({key, part:p, inp, correct, ...chk});
-  });
-
-  if(hasEmpty){
-    openModal("تنبيه", `<div style="font-weight:900">أكمل إدخال الإجابة ثم اضغط زر حفظ الإجابة.</div>`);
-    return;
-  }
-
-  // تخزين الإجابة عند الضغط على زر الحفظ فقط (الانتقال لا يسبب تخزينًا)
-  if(!state.answers[qid]) state.answers[qid] = {};
-  if(!state.answers[qid][bi]) state.answers[qid][bi] = {};
-  results.forEach(r=>{
-    state.answers[qid][bi][r.key] = (r.inp && r.inp.value!=null) ? r.inp.value : "";
-  });
-  delete state.dirty[qid];
-  saveState();
-
-  const wrong = results.filter(r=>!r.ok);
-  const right = results.filter(r=>r.ok);
-
-  right.forEach(r=>_mark(r.inp, "right"));
-
-  if(wrong.length===0){
-    _clearSaveAttempt(qid, bi);
-    _setOutcome(qid, bi, "correct");
-    _setBranchLocked(qid, bi, true);
-    _lockBranchInputs(branchCard, qid, String(bi));
-    if(saveBtn) saveBtn.disabled = true;
-    setProgress();
-    renderSidebar();
-    return;
-  }
-
-  const n = _incSaveAttempt(qid, bi);
-  if(n<=1){
-    wrong.forEach(r=>_mark(r.inp, "wrong1"));
-    _setOutcome(qid, bi, null);
-    showHelp(q, b);
-  }else{
-    wrong.forEach(r=>_mark(r.inp, "wrong2"));
-    const wrongItems = wrong.map(r=>({
-      key:r.key,
-      label: r.part.label,
-      labelHtml: r.part.labelHtml,
-      correct: r.correct
-    }));
-    _setOutcome(qid, bi, "wrong");
-    _setBranchLocked(qid, bi, true);
-    _lockBranchInputs(branchCard, qid, String(bi));
-    if(saveBtn) saveBtn.disabled = true;
-    _promptShowCorrectModal(q, b, wrongItems);
-  }
-
-  setProgress();
-  renderSidebar();
-}
-
-
-function swapQuestion(qid){
-  bumpVariant(qid);
-  clearAnswersForQuestion(qid);
-  const t = TEMPLATES.find(x=>x.id===qid);
-  if(t){
-    const v = getVariant(t.id);
-    const g = t.gen(v);
-    const ni = BANK.findIndex(q=>q.id===qid);
-    const obj = { id:t.id, title:t.title, icon:t.icon, branches:g.branches };
-    if(ni>=0) BANK[ni]=obj;
-  }
-  saveState();
-  renderAll();
-}
-function next(){ if(state.currentIndex < BANK.length-1){state.currentIndex++;saveState();renderAll();} else tryShowResults(); }
-function prev(){ if(state.currentIndex>0){state.currentIndex--;saveState();renderAll();} }
-
-function gradeAll(){
-  state.grading = {};
-  BANK.forEach((q)=>{
-    const qid=q.id;
-    state.grading[qid] = {};
-    q.branches.forEach((b,bi)=>{
-      state.grading[qid][bi] = {};
-      (b.parts||[]).forEach(p=>{
-        const student = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][p.key] : "";
-        const correct = b.answers[p.key];
-        let ok=false;
-        if(p.type==="mcq"){
-          ok = normalizeText(student) === normalizeText(correct);
-        }else if(p.type==="text"){
-          ok = normalizeText(student) === normalizeText(correct);
-        }else{
-          ok = nearlyEqual(Number(student), Number(correct), 1e-2);
-        }
-        state.grading[qid][bi][p.key] = ok;
-      });
-    });
-  });
-  saveState();
-}
-function computeScore(){
-  let correct=0,total=0;
-  BANK.forEach(q=>{
-    const qid=q.id;
-    q.branches.forEach((b,bi)=>{
-      const keys = collectPartKeys(q,b);
-      keys.forEach(k=>{
-        total++;
-        const ok = state.grading[qid] && state.grading[qid][bi] ? state.grading[qid][bi][k] : false;
-        if(ok) correct++;
-      });
-    });
-  });
-  return {correct,total};
+function listIncomplete(){
+  const arr = [];
+  BANK.forEach((q,i)=>{ if(!isQuestionComplete(q)) arr.push({i:i+1, title:q.title}); });
+  return arr;
 }
 
 function tryShowResults(){
-  syncAllInputs();
   const p = setProgress();
   if(!p.doneAll){
-    if(!confirm("هناك أسئلة لم تُجب عنها. هل تريد المتابعة؟")) return;
+    if(!confirm("لم تكمل جميع الأسئلة. هل تريد عرض النتيجة الآن؟")) return;
   }
-  showResults();
-}
-window.__goToQ = function(idx){
-  closeModal();
-  state.currentIndex = idx;
-  saveState();
-  renderAll();
+  showResultsModal();
 }
 
-
-function syncAllInlineInputs(){ /* لا يتم تخزين الإجابات إلا عبر زر حفظ الإجابة */ }
-
-function syncAllInputs(){ /* لا يتم تخزين الإجابات إلا عبر زر حفظ الإجابة */ }
-
-
-function showResults(){
-  syncAllInlineInputs();
+function showResultsModal(){
   BANK = buildBank();
-  gradeAll();
   const s = computeScore();
-  const pct = Math.round((s.correct/s.total)*1000)/10;
+  const cards = BANK.map((q,qi)=>{
+    const complete = isQuestionComplete(q);
+    const correctQ = complete && isQuestionCorrect(q);
+    let inner = `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="font-weight:900">سؤال ${qi+1}: ${escapeHtml(q.title)}</div>
+        <span class="tag ${correctQ?"good":"bad"}">${correctQ?"تم بنجاح":"توجد أخطاء"}</span>
+      </div>
+    `;
+
+    q.branches.forEach((branch,bi)=>{
+      const rec = ensureBranchRec(q.id,bi);
+      const grade = gradeBranch(q, branch, bi, rec.saved||{});
+      const keys = collectPartKeys(branch);
+      inner += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(branch.level)})</div>`;
+      keys.forEach(k=>{
+        const student = (rec.saved && rec.saved[k]!=null) ? rec.saved[k] : "-";
+        const correctVal = branch.answers[k];
+        const ok = grade.byKey[k];
+        const correctText = (typeof correctVal === "string") ? correctVal : formatNumber(correctVal);
+        inner += `
+          <div class="partRow">
+            <div><b>البند:</b> ${escapeHtml(k)}</div>
+            <div><b>إجابتك:</b> ${escapeHtml(String(student))}</div>
+            <div><b>الصحيح:</b> ${escapeHtml(String(correctText))} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"صح":"خطأ"}</span></div>
+          </div>`;
+      });
+    });
+    return `<div class="resultCard">${inner}</div>`;
+  }).join("");
 
   const correctPct = s.total ? (s.correct/s.total)*100 : 0;
   const wrongPct = s.total ? ((s.total-s.correct)/s.total)*100 : 0;
-  const header = `
-    <div class="scoreCard">
+  openModal("النتيجة", `
+    <div class="scoreCard" style="margin-bottom:14px">
       <div>
-        <div class="scoreBig">النتيجة: ${s.correct} من ${s.total} — ${pct}%</div>
+        <div class="scoreBig">الدرجة: ${s.correct} من ${s.total} - ${s.pct}%</div>
         <div class="score-bar-wrap" style="margin:10px 0"><div class="score-bar-correct" style="width:${correctPct}%"></div><div class="score-bar-wrong" style="width:${wrongPct}%"></div></div>
-        <div class="scoreSub">توضيح: تم تصحيح كل جزء بشكل مستقل.</div>
+        <div class="scoreSub">هذا ملخص سريع لجميع إجاباتك.</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn primary" onclick="window.print()">طباعة النتيجة</button>
-        <button class="btn small" onclick="resetAll(); closeModal();">إعادة تعيين</button>
+        <button class="btn primary" onclick="window.__resetAll(); closeModal();">إعادة الاختبار</button>
       </div>
     </div>
-  `;
-
-  const qCards = BANK.map((q,i)=>{
-    const qid = q.id;
-    const st = getQuestionStatus(q);
-    const isCorrect = (st === "completed_correct");
-    let card = `
-      <div class="resultCard">
-        <div class="rt">
-          <div style="font-weight:900">سؤال ${i+1}: ${escapeHtml(q.title||"")}</div>
-          <span class="tag ${isCorrect?"good":"bad"}">${isCorrect?"صحيح":"غير صحيح"}</span>
-        </div>
-    `;
-
-    q.branches.forEach((b,bi)=>{
-      const rawLvl = (b.level ?? b.difficulty ?? b.name ?? "");
-      let lvl = (rawLvl===undefined||rawLvl===null) ? "" : String(rawLvl);
-      if(lvl.trim().toLowerCase()==="undefined") lvl="";
-      if(lvl.trim()!==""){
-        card += `<div style="margin-top:10px;font-weight:900;color:#0f2a3b">(${escapeHtml(lvl)})</div>`;
-      }
-
-      (b.parts||[]).forEach(p=>{
-        const student = (state.answers[qid] && state.answers[qid][bi]) ? state.answers[qid][bi][p.key] : "";
-        const correctVal = b.answers[p.key];
-        const need2 = (p.label||"").includes("نسبي") || (p.label||"").includes("مئوية");
-
-        let studentText = "—";
-        if((student??"").toString().trim()!==""){
-          if(p.type==="mcq" || p.type==="text"){
-            studentText = escapeHtml(String(student));
-          }else{
-            studentText = need2 ? fmt2(student) : formatNumber(student);
-          }
-        }
-
-        const correctText = (p.type==="mcq" || p.type==="text")
-          ? escapeHtml(String(correctVal))
-          : (need2 ? fmt2(correctVal) : formatNumber(correctVal));
-
-        const ok = state.grading[qid] && state.grading[qid][bi] ? state.grading[qid][bi][p.key] : false;
-
-        card += `
-          <div class="partRow">
-            <div><b>الجزء:</b> ${escapeHtml(p.label||p.key||"")}</div>
-            <div><b>إجابتك:</b> ${studentText}</div>
-            <div><b>الصحيح:</b> ${correctText} <span class="tag ${ok?"good":"bad"}" style="margin-right:8px">${ok?"✓":"×"}</span></div>
-          </div>
-        `;
-      });
-    });
-
-    card += `</div>`;
-    return card;
-  }).join("");
-
-  const footer = `
-    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start">
-      <button class="btn primary" onclick="closeModal()">إغلاق</button>
-    </div>
-  `;
-
-  openModal("النتيجة", `<div class="resultWrap">${header}${qCards}${footer}</div>`);
+    ${cards}
+  `);
 }
+window.__resetAll = resetAll;
 
-
+/* ===== ????? ?????? ??????? ===== */
 document.getElementById("nextBtnSide").onclick = next;
 document.getElementById("showResultsBtn").onclick = tryShowResults;
-document.getElementById("resetBtn").onclick = function(){ if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) resetAll(); };
+document.getElementById("resetBtn").onclick = function(){ if(confirm("سيتم حذف التقدم الحالي وبدء الاختبار من جديد.")) resetAll(); };
+
 var _fsb=document.getElementById("fontSmallBtn"); if(_fsb) _fsb.onclick = ()=>{ state.fontSize = Math.max(-1, (state.fontSize||0)-1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fbb=document.getElementById("fontBigBtn"); if(_fbb) _fbb.onclick = ()=>{ state.fontSize = Math.min(1, (state.fontSize||0)+1); saveState(); document.body.classList.remove("font-sm","font-lg"); if(state.fontSize===1) document.body.classList.add("font-lg"); else if(state.fontSize===-1) document.body.classList.add("font-sm"); };
 var _fsBtn=document.getElementById("fullscreenBtn"); if(_fsBtn) _fsBtn.onclick = function(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen().then(function(){ if(_fsBtn) _fsBtn.textContent = "\u062e\u0631\u0648\u062c"; }); } else { document.exitFullscreen(); if(_fsBtn) _fsBtn.textContent = "\u0645\u0644\u0621 \u0627\u0644\u0634\u0627\u0634\u0629"; } };
 document.addEventListener("fullscreenchange", ()=>{ const btn = document.getElementById("fullscreenBtn"); if(btn) btn.textContent = document.fullscreenElement ? "خروج" : "ملء الشاشة"; });
 ["filterAllBtn","filterIncompleteBtn"].forEach(id=>{ const b = document.getElementById(id); if(b) b.onclick = ()=>{ state.sidebarFilter = b.getAttribute("data-filter"); saveState(); renderSidebar(); }; });
+
+/* ????? ??? ???? ??????? ??? ??????? */
 (function(){ const fs = state.fontSize; if(fs===1) document.body.classList.add("font-lg"); else if(fs===-1) document.body.classList.add("font-sm"); })();
 
-function renderAll(){ renderMain(); renderSidebar(); setProgress(); }
-window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); renderAll(); if(window.__examRunning) startTimer(); else showIntroModal(); });/* Codex Adaptive Mastery Start */
-(function(){
-  const ADAPTIVE_STYLE_ID = "codex-adaptive-mastery-3_4";
-  const MASTERY_VERSION = "chapter3_mastery_3_4_v2";
-  const CORE_ORDER = ["34_cv_basic","34_qcd_basic","34_z_basic"];
-  const ALL_ORDER = ["34_cv_basic","34_cv_compare","34_qcd_basic","34_qcd_compare","34_z_basic","34_x_from_z","34_z_compare","34_measure","34_mcq"];
-  const QUESTION_PROFILES = {"34_cv_basic":{"skills":["cv","relative-dispersion"],"remediation":["34_measure"],"advancement":["34_cv_compare"]},"34_cv_compare":{"skills":["cv","compare"],"remediation":["34_cv_basic"],"advancement":[]},"34_qcd_basic":{"skills":["qcd","quartile"],"remediation":["34_measure"],"advancement":["34_qcd_compare"]},"34_qcd_compare":{"skills":["qcd","compare"],"remediation":["34_qcd_basic"],"advancement":[]},"34_z_basic":{"skills":["z","standard-score"],"remediation":["34_x_from_z"],"advancement":["34_z_compare"]},"34_x_from_z":{"skills":["z","inverse"],"remediation":["34_z_basic"],"advancement":["34_z_compare"]},"34_z_compare":{"skills":["z","compare"],"remediation":["34_z_basic","34_x_from_z"],"advancement":[]},"34_measure":{"skills":["measure-choice","relative-dispersion"],"remediation":["34_cv_basic","34_qcd_basic"],"advancement":[]},"34_mcq":{"skills":["concept"],"remediation":["34_measure"],"advancement":[]}};
-  const SUPPORT_LIMIT = 4;
-  const READINESS_TO_ADVANCE = 0.74;
-  const NEED_SUPPORT_BELOW = 0.62;
-  const AI_ADAPTIVE_KEY = "stat102_3_4_ai_adaptive_v1";
+/* ===== ???? ??? ===== */
+function renderAll(){
+  BANK = buildBank();
+  renderSidebar();
+  renderMain();
+  setProgress();
+}
+window.__examRunning = isExamStarted();
+renderAll();
+if(window.__examRunning) startTimer(); else showIntroModal();
 
-  const originalBuildBank = buildBank;
-  const originalRenderSidebar = renderSidebar;
-  const originalRenderMain = renderMain;
-  const originalSaveBranchAnswer = saveBranchAnswer;
-  const originalNext = next;
+/* Codex Adaptive Flow 1.2 Start */
+(function(){
+  const ALL_ORDER = ["q1_circle", "q2_tf", "q3_method", "q5_nominal_ordinal", "q4_param_stat", "q6_interval_ratio", "q7_codes_vs_values", "q8_advanced_tf"];
+  const CORE_ORDER = ["q1_circle", "q2_tf", "q3_method", "q4_param_stat"];
+  const SUPPORT_ORDER = ALL_ORDER.filter((id) => !CORE_ORDER.includes(id));
+  const QUESTION_PROFILES = {
+    q1_circle: { difficulty: 1, skills: ["classification", "discrete"], remediation: ["q2_tf"], advancement: ["q3_method", "q5_nominal_ordinal"] },
+    q2_tf: { difficulty: 2, skills: ["classification", "qualitative"], remediation: ["q1_circle"], advancement: ["q3_method", "q4_param_stat"] },
+    q3_method: { difficulty: 3, skills: ["collection", "application"], remediation: ["q1_circle", "q2_tf"], advancement: ["q4_param_stat", "q7_codes_vs_values"] },
+    q4_param_stat: { difficulty: 2, skills: ["parameter", "statistic"], remediation: ["q3_method"], advancement: ["q6_interval_ratio"] },
+    q5_nominal_ordinal: { difficulty: 2, skills: ["qualitative", "scale"], remediation: ["q1_circle", "q2_tf"], advancement: ["q6_interval_ratio"] },
+    q6_interval_ratio: { difficulty: 4, skills: ["scale", "quantitative"], remediation: ["q5_nominal_ordinal", "q4_param_stat"], advancement: ["q8_advanced_tf"] },
+    q7_codes_vs_values: { difficulty: 3, skills: ["representation", "application"], remediation: ["q3_method", "q5_nominal_ordinal"], advancement: ["q8_advanced_tf"] },
+    q8_advanced_tf: { difficulty: 4, skills: ["quantitative", "parameter"], remediation: ["q4_param_stat", "q6_interval_ratio"], advancement: [] }
+  };
+  const AI_KEY_ADAPT = "stat102_ai_models_v4_" + String((location.pathname || document.title || "lesson")).replace(/[^\w]+/g, "_").slice(-80);
+  const MAX_VARIANT_REPEATS = 2;
+  const SUPPORT_LIMIT = 2;
+  const SESSION_VERSION = "mastery_only_v2";
+  const LESSON_TARGET = 0.74;
+  const LESSON_FLOOR = 0.58;
 
   function injectAdaptiveStyles(){
-    if(document.getElementById(ADAPTIVE_STYLE_ID)) return;
+    if(document.getElementById("adaptiveFlowStyles12")) return;
     const style = document.createElement("style");
-    style.id = ADAPTIVE_STYLE_ID;
+    style.id = "adaptiveFlowStyles12";
     style.textContent = `
       .side .head h3,
       .side .sidebar-filter,
-      .side .qList{display:none !important;}
-      #qCount[hidden]{display:none !important;}
-      .side{display:grid;gap:14px;align-content:start;}
-      .side .head{justify-content:space-between;}
-      .branchBody{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-      .branchBody table.ftable,
-      .branchBody table.niceTable{min-width:520px;max-width:none;}
-      .branchBody table.ftable.wide,
-      .branchBody table.niceTable.wide{min-width:680px;}
-      table.ftable th, table.niceTable th{direction:rtl;}
-      .modal .box{width:min(900px, calc(100vw - 40px)) !important;max-width:calc(100vw - 40px) !important;}
-      @media (max-width: 720px){
-        .wrap,.mainGrid,.layout,.pageGrid{grid-template-columns:1fr !important;max-width:100vw;overflow-x:hidden;}
-        .aiResultsRail{order:-1;width:100%;max-width:100%;}
-        .card,.main,.side,.aiModelsPanel{max-width:100%;}
-        .qtitleRow,.mainhead,.part{align-items:stretch;}
-        .part{flex-direction:column;}
-        .part .inputWrap{width:100%;justify-content:stretch;}
-        input[type="text"],input[type="number"],textarea,select{min-width:0;width:100%;max-width:100%;}
+      .side .qList{
+        display:none !important;
       }
-      @media (max-width: 560px){
-        .modal{align-items:flex-start !important;justify-content:flex-start !important;direction:ltr;padding:12px;overflow:auto;}
-        .modal .box{direction:rtl;width:min(366px, calc(100vw - 24px)) !important;max-width:min(366px, calc(100vw - 24px)) !important;border-radius:16px;margin:10px 0;}
-        .modal .box .mh{padding:14px;gap:10px;flex-direction:column-reverse;align-items:stretch;}
-        .modal .box .mh b{text-align:center;}
-        .modal .box .mh .btn{width:100%;justify-content:center;}
-        .modal .box .mb{padding:16px 14px;max-height:none;overflow:visible;}
-        .branchBody table.ftable,.branchBody table.niceTable{min-width:500px;}
+      .side{
+        display:grid;
+        gap:14px;
+      }
+      .side .head{
+        justify-content:space-between;
       }
     `;
     document.head.appendChild(style);
   }
 
-  function uniqueValid(ids){
-    return (Array.isArray(ids) ? ids : []).filter((id, index, arr)=> id && ALL_ORDER.includes(id) && arr.indexOf(id) === index);
+  function stableTopicKey(value){
+    return String(value || "topic").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "topic";
   }
 
-  function topicKey(value){
+  function clampAdaptive(value, min=0, max=1){
+    return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
+  }
+
+  function loadAdaptiveAiState(){
     try{
-      return String(value || "topic").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "") || "topic";
+      const raw = typeof storageGet === "function" ? storageGet(AI_KEY_ADAPT) : localStorage.getItem(AI_KEY_ADAPT);
+      return raw ? JSON.parse(raw) : { topics: {} };
     }catch(e){
-      return String(value || "topic").toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "") || "topic";
+      return { topics: {} };
     }
   }
 
-  function loadAiState(){
-    try{
-      const raw = (typeof storageGet === "function") ? storageGet(AI_ADAPTIVE_KEY) : localStorage.getItem(AI_ADAPTIVE_KEY);
-      if(!raw) return null;
-      const parsed = JSON.parse(raw);
-      return parsed && typeof parsed === "object" ? parsed : null;
-    }catch(e){
-      return null;
-    }
+  function validIds(list){
+    return list.filter((id) => ADAPTIVE_TEMPLATES_12.some((template) => template.id === id));
   }
 
   function ensureSessionState(){
-    const expected = uniqueValid(CORE_ORDER);
-    const needsReset = state.masteryVersion !== MASTERY_VERSION || !Array.isArray(state.order) || !state.order.length;
-    if(needsReset){
-      state.order = expected.length ? expected.slice() : uniqueValid(ALL_ORDER).slice(0, 3);
-      state.currentIndex = Math.min(state.currentIndex || 0, Math.max(0, state.order.length - 1));
-      state.masteryVersion = MASTERY_VERSION;
-      state.masterySupportCount = 0;
-      saveState();
-      return;
+    const validCore = validIds(CORE_ORDER);
+    const validAll = validIds(ALL_ORDER);
+    const current = Array.isArray(state.order)
+      ? state.order.filter((id, index, arr) => validAll.includes(id) && arr.indexOf(id) === index)
+      : [];
+    let nextOrder = current.slice();
+
+    if(state.masteryVersion !== SESSION_VERSION || !nextOrder.length){
+      nextOrder = [...validCore];
+      state.currentIndex = 0;
     }
-    const cleaned = uniqueValid(state.order);
-    if(cleaned.length !== state.order.length || cleaned.some((id, index)=> id !== state.order[index])){
-      state.order = cleaned.length ? cleaned : expected.slice();
-      state.currentIndex = Math.min(state.currentIndex || 0, Math.max(0, state.order.length - 1));
+
+    validCore.forEach((id, index) => {
+      if(!nextOrder.includes(id)) nextOrder.splice(Math.min(index, nextOrder.length), 0, id);
+    });
+
+    const supportTail = nextOrder.filter((id) => !validCore.includes(id));
+    nextOrder = [...validCore, ...supportTail];
+
+    const changed = !Array.isArray(state.order)
+      || state.masteryVersion !== SESSION_VERSION
+      || state.order.length !== nextOrder.length
+      || nextOrder.some((id, index) => state.order[index] !== id)
+      || (state.masterySupportCount || 0) !== supportTail.length;
+
+    if(changed){
+      state.order = nextOrder;
+      state.masteryVersion = SESSION_VERSION;
+      state.masterySupportCount = supportTail.length;
+      if(state.currentIndex >= nextOrder.length) state.currentIndex = 0;
       saveState();
     }
-    state.masterySupportCount = Number(state.masterySupportCount || 0);
+    return state.order;
   }
 
   function getActiveOrder(){
-    ensureSessionState();
-    const order = uniqueValid(state.order);
-    if(order.length) return order;
-    return uniqueValid(CORE_ORDER).length ? uniqueValid(CORE_ORDER) : uniqueValid(ALL_ORDER).slice(0, 3);
+    return ensureSessionState().slice();
   }
 
-  function buildQuestionsFromOrder(order){
-    return uniqueValid(order).map((id)=>{
-      const t = TEMPLATES.find((item)=> item.id === id);
-      if(!t) return null;
-      const variant = (typeof getVariant === "function") ? getVariant(t.id) : 0;
-      const generated = t.gen(variant);
-      return { id:t.id, title:t.title, icon:t.icon, branches:generated.branches };
+  function buildFromOrder(order){
+    return order.map((id) => {
+      const template = ADAPTIVE_TEMPLATES_12.find((item) => item.id === id);
+      if(!template) return null;
+      const variant = getVariant(template.id);
+      const generated = template.gen(variant);
+      return { id:template.id, title:template.title, icon:template.icon, branches:generated.branches };
     }).filter(Boolean);
   }
 
+  buildBank = function(){
+    const order = getActiveOrder();
+    const bank = buildFromOrder(order);
+    return bank.length ? bank : forceBuildBank(order);
+  };
+
+  function forceBuildBank(order){
+    const active = Array.isArray(order) && order.length ? order : getActiveOrder();
+    return buildFromOrder(active);
+  }
+
   function ensureAdaptiveBankReady(){
-    const bank = buildQuestionsFromOrder(getActiveOrder());
-    if(!bank.length) return originalBuildBank();
-    if(state.currentIndex >= bank.length){
-      state.currentIndex = Math.max(0, bank.length - 1);
+    let bank = buildBank();
+    if(!Array.isArray(bank) || !bank.length){
+      state.order = validIds(CORE_ORDER);
+      state.currentIndex = 0;
       saveState();
+      bank = forceBuildBank(state.order);
     }
-    return bank;
+    BANK = Array.isArray(bank) ? bank : [];
+    if(state.currentIndex >= BANK.length) state.currentIndex = 0;
+    return BANK;
+  }
+
+  function concealSidebarQuestions(){
+    const list = document.getElementById("qList");
+    if(list) list.innerHTML = "";
+    const heading = document.querySelector(".side .head h3");
+    if(heading) heading.style.display = "none";
+    const filter = document.querySelector(".sidebar-filter");
+    if(filter) filter.style.display = "none";
   }
 
   function getQuestionById(qid){
-    return (BANK || []).find((item)=> item.id === qid) || buildQuestionsFromOrder([qid])[0] || null;
+    return Array.isArray(BANK) ? BANK.find((question) => question.id === qid) : null;
   }
 
-  function profileFor(qid){
-    return QUESTION_PROFILES[qid] || { skills:[], remediation:[], advancement:[] };
+  function getCurrentQuestionId(){
+    return BANK && BANK[state.currentIndex] ? BANK[state.currentIndex].id : null;
+  }
+
+  function baseScoreFromRecord(record){
+    if(record.status === "correct") return record.attempts <= 1 ? 0.88 : 0.74;
+    if(record.status === "locked") return 0.22;
+    if(record.status === "wrong1") return 0.42;
+    if(record.attempts > 0) return 0.48;
+    return 0.5;
   }
 
   function getQuestionSignal(qid){
-    const q = getQuestionById(qid);
-    const profile = profileFor(qid);
-    let attempts = 0;
-    let status = "not_started";
-    if(q){
-      status = (typeof getQuestionStatus === "function") ? getQuestionStatus(q) : "not_started";
-      (q.branches || []).forEach((branch, bi)=>{
-        attempts += (typeof _getSaveAttempt === "function") ? (_getSaveAttempt(qid, bi) || 0) : 0;
-      });
-    }
-
-    const correct = status === "completed_correct";
-    const wrong = status === "completed_wrong";
-    const baseReadiness = correct ? (attempts <= 1 ? 0.9 : 0.78) : (wrong ? 0.25 : (attempts ? 0.42 : 0.52));
-    let readiness = baseReadiness;
-    let struggle = wrong ? 0.82 : (attempts ? 0.5 : 0.25);
-
-    const ai = loadAiState();
-    const model = ai && ai.topics ? ai.topics[topicKey(qid)] : null;
-    if(model){
-      const modelScore = Number(model.ensemble ?? model.lastProb ?? model.mastery ?? readiness);
-      const modelWeak = Number(model.nbWeak ?? (1 - modelScore));
-      if(isFinite(modelScore)) readiness = Math.max(0.05, Math.min(0.98, (readiness * 0.55) + (modelScore * 0.45)));
-      if(isFinite(modelWeak)) struggle = Math.max(0.02, Math.min(0.98, (struggle * 0.45) + (modelWeak * 0.55)));
-    }
-
-    return { qid, status, attempts, readiness, struggle, skills:profile.skills || [], mastered: correct && readiness >= READINESS_TO_ADVANCE };
+    const profile = QUESTION_PROFILES[qid] || { difficulty: 2, skills: [], remediation: [], advancement: [] };
+    const record = ensureBranchRec(qid, 0);
+    const aiState = loadAdaptiveAiState();
+    const model = aiState && aiState.topics ? aiState.topics[stableTopicKey(qid)] : null;
+    const fallback = baseScoreFromRecord(record);
+    const attemptCount = Math.max(record.attempts || 0, model && typeof model.attempts === "number" ? model.attempts : 0);
+    const ensemble = clampAdaptive(model && typeof model.ensemble === "number" ? model.ensemble : fallback);
+    const mastery = clampAdaptive(model && typeof model.mastery === "number" ? model.mastery : fallback);
+    const lr = clampAdaptive(model && typeof model.lr === "number" ? model.lr : ensemble);
+    const nbScore = clampAdaptive(model && typeof model.nbScore === "number" ? model.nbScore : ensemble);
+    const knn = clampAdaptive(model && typeof model.knn === "number" ? model.knn : ensemble);
+    const readiness = clampAdaptive((ensemble * 0.42) + (mastery * 0.28) + (lr * 0.15) + (knn * 0.10) + (nbScore * 0.05));
+    const struggle = clampAdaptive(((1 - readiness) * 0.55) + Math.min(0.22, attemptCount * 0.08) + (record.status === "locked" ? 0.25 : (record.status === "wrong1" ? 0.12 : 0)));
+    return { qid, record, model, profile, attemptCount, ensemble, mastery, lr, nbScore, knn, readiness, struggle };
   }
 
-  function isDoneId(qid){
-    const q = getQuestionById(qid);
-    return q ? isQuestionDone(q) : false;
+  function metricIds(ids){
+    const source = (Array.isArray(ids) && ids.length ? ids : getActiveOrder()).filter((id) => ALL_ORDER.includes(id));
+    const answered = source.filter((id) => {
+      const record = ensureBranchRec(id, 0);
+      return (record.attempts || 0) > 0 || record.status !== "new";
+    });
+    return answered.length ? answered : source;
   }
 
-  function overlapScore(a, b){
-    const set = new Set(a || []);
-    return (b || []).reduce((sum, item)=> sum + (set.has(item) ? 1 : 0), 0);
+  function lessonReadiness(ids){
+    const source = metricIds(ids);
+    if(!source.length) return 0.5;
+    return source.reduce((sum, id) => sum + getQuestionSignal(id).readiness, 0) / source.length;
   }
 
-  function candidateSupportIds(sourceId){
+  function sharesSkill(sourceId, targetId){
+    const sourceSkills = (QUESTION_PROFILES[sourceId] && QUESTION_PROFILES[sourceId].skills) || [];
+    const targetSkills = (QUESTION_PROFILES[targetId] && QUESTION_PROFILES[targetId].skills) || [];
+    return sourceSkills.some((skill) => targetSkills.includes(skill));
+  }
+
+  function maxDifficulty(){
+    return Math.max(...Object.values(QUESTION_PROFILES).map((profile) => profile.difficulty || 1), 1);
+  }
+
+  function desiredDifficulty(signal){
+    const overall = lessonReadiness(CORE_ORDER);
+    if(signal.readiness < 0.45 || overall < 0.45) return Math.max(1, (signal.profile.difficulty || 2) - 1);
+    if(signal.readiness > 0.78 && overall > 0.7) return Math.min(maxDifficulty(), (signal.profile.difficulty || 2) + 1);
+    return signal.profile.difficulty || 2;
+  }
+
+  function shouldRepeatCurrent(signal){
+    return typeof swapQuestion === "function"
+      && signal.record.status !== "correct"
+      && signal.attemptCount < MAX_VARIANT_REPEATS
+      && (signal.record.status === "locked" || signal.struggle > 0.63 || signal.readiness < 0.46);
+  }
+
+  function completed(ids){
+    return ids.every((id) => {
+      const question = getQuestionById(id);
+      return !!question && isQuestionComplete(question);
+    });
+  }
+
+  function weakestSignal(ids){
+    const source = metricIds(ids);
+    if(!source.length) return null;
+    return source.map((id) => getQuestionSignal(id)).sort((a, b) => (a.readiness - b.readiness) || (b.struggle - a.struggle))[0] || null;
+  }
+
+  function meetsMasteryTarget(){
+    const coreIds = validIds(CORE_ORDER);
+    if(!coreIds.length || !completed(coreIds)) return false;
+    const average = lessonReadiness(coreIds);
+    const lowest = Math.min(...coreIds.map((id) => getQuestionSignal(id).readiness));
+    return average >= LESSON_TARGET && lowest >= LESSON_FLOOR;
+  }
+
+  function getRemainingCandidates(currentId){
+    return getActiveOrder().filter((id) => {
+      if(id === currentId) return false;
+      const question = getQuestionById(id);
+      return !!question && !isQuestionComplete(question);
+    });
+  }
+
+  function scoreCandidate(currentSignal, candidateId){
+    const signal = getQuestionSignal(candidateId);
+    const question = getQuestionById(candidateId);
+    if(!question || isQuestionComplete(question)) return -1;
+    const targetDifficulty = desiredDifficulty(currentSignal);
+    const difficultyGap = Math.abs((signal.profile.difficulty || 2) - targetDifficulty);
+    const difficultyFit = clampAdaptive(1 - (difficultyGap * 0.38));
+    const weaknessNeed = 1 - signal.readiness;
+    const unseenBonus = signal.attemptCount === 0 ? 0.18 : 0.04;
+    const sameSkillBonus = sharesSkill(currentSignal.qid, candidateId) ? (currentSignal.readiness < 0.62 ? 0.24 : 0.10) : 0;
+    const remediationBonus = (currentSignal.profile.remediation || []).includes(candidateId) ? 0.16 : 0;
+    const advancementBonus = (currentSignal.profile.advancement || []).includes(candidateId) ? (currentSignal.readiness >= 0.7 ? 0.18 : 0.06) : 0;
+    return (weaknessNeed * 0.40) + (difficultyFit * 0.22) + unseenBonus + sameSkillBonus + remediationBonus + advancementBonus;
+  }
+
+  function scoreSupportCandidate(focusSignal, candidateId){
+    const signal = getQuestionSignal(candidateId);
+    const sameSkillBonus = sharesSkill(focusSignal.qid, candidateId) ? 0.34 : 0;
+    const remediationBonus = (focusSignal.profile.remediation || []).includes(candidateId) ? 0.28 : 0;
+    const advancementBonus = (focusSignal.profile.advancement || []).includes(candidateId) ? 0.12 : 0;
+    const difficultyGap = Math.abs((signal.profile.difficulty || 2) - Math.min(maxDifficulty(), (focusSignal.profile.difficulty || 2) + 1));
+    const difficultyFit = clampAdaptive(1 - (difficultyGap * 0.35));
+    return ((1 - focusSignal.readiness) * 0.36) + (difficultyFit * 0.22) + sameSkillBonus + remediationBonus + advancementBonus;
+  }
+
+  function selectSupportCandidate(focusId){
+    const focusSignal = getQuestionSignal(focusId);
     const active = getActiveOrder();
-    const used = new Set(active);
-    const profile = profileFor(sourceId);
-    const related = ALL_ORDER
-      .filter((id)=> !used.has(id))
-      .map((id)=>({ id, score:overlapScore(profile.skills || [], profileFor(id).skills || []) }))
-      .filter((item)=> item.score > 0)
-      .sort((a,b)=> b.score - a.score)
-      .map((item)=> item.id);
-    return uniqueValid([...(profile.remediation || []), ...related, ...(profile.advancement || []), ...ALL_ORDER]).filter((id)=> !used.has(id));
+    const available = SUPPORT_ORDER.filter((id) => !active.includes(id));
+    if(!available.length) return null;
+    return available.slice().sort((a, b) => scoreSupportCandidate(focusSignal, b) - scoreSupportCandidate(focusSignal, a))[0] || null;
   }
 
-  function appendSupportQuestion(sourceId){
-    ensureSessionState();
-    if(Number(state.masterySupportCount || 0) >= SUPPORT_LIMIT) return null;
-    const nextId = candidateSupportIds(sourceId)[0];
-    if(!nextId) return null;
-    state.order = uniqueValid([ ...getActiveOrder(), nextId ]);
-    state.masterySupportCount = Number(state.masterySupportCount || 0) + 1;
+  function appendSupportQuestion(focusId){
+    if((state.masterySupportCount || 0) >= SUPPORT_LIMIT) return null;
+    const targetId = selectSupportCandidate(focusId);
+    if(!targetId) return null;
+    state.order = [...getActiveOrder(), targetId];
+    state.masterySupportCount = (state.masterySupportCount || 0) + 1;
     saveState();
-    return nextId;
+    return targetId;
   }
 
-  function chooseNextAdaptiveId(currentId){
-    BANK = ensureAdaptiveBankReady();
-    const order = getActiveOrder();
-    const currentIndex = order.indexOf(currentId);
-    const afterCurrent = order.slice(Math.max(0, currentIndex + 1)).find((id)=> !isDoneId(id));
-    if(afterCurrent) return afterCurrent;
-
-    const beforeCurrent = order.slice(0, Math.max(0, currentIndex + 1)).find((id)=> !isDoneId(id));
-    if(beforeCurrent) return beforeCurrent;
-
-    const signals = order.map(getQuestionSignal);
-    const weak = signals.filter((item)=> item.status !== "completed_correct" || item.readiness < NEED_SUPPORT_BELOW)
-      .sort((a,b)=> (b.struggle - a.struggle) || (a.readiness - b.readiness))[0];
-    if(weak){
-      return appendSupportQuestion(weak.qid);
-    }
-
-    return null;
+  function chooseNextAdaptiveId(){
+    const currentId = getCurrentQuestionId();
+    if(!currentId) return null;
+    const currentSignal = getQuestionSignal(currentId);
+    const remaining = getRemainingCandidates(currentId);
+    if(!remaining.length) return null;
+    return remaining.slice().sort((a, b) => scoreCandidate(currentSignal, b) - scoreCandidate(currentSignal, a))[0] || null;
   }
 
-  buildBank = function(){
-    return ensureAdaptiveBankReady();
-  };
+  function moveToQuestion(targetId){
+    const bank = ensureAdaptiveBankReady();
+    const targetIndex = bank.findIndex((question) => question.id === targetId);
+    if(targetIndex < 0) return false;
+    state.currentIndex = targetIndex;
+    saveState();
+    renderAll();
+    return true;
+  }
 
+  const originalRenderSidebar = renderSidebar;
   renderSidebar = function(){
-    injectAdaptiveStyles();
-    BANK = ensureAdaptiveBankReady();
-    return originalRenderSidebar.apply(this, arguments);
-  };
-
-  renderMain = function(){
-    injectAdaptiveStyles();
-    BANK = ensureAdaptiveBankReady();
-    return originalRenderMain.apply(this, arguments);
-  };
-
-  saveBranchAnswer = function(q, b, bi, branchCard, saveBtn){
-    const qid = q && q.id;
-    const beforeAttempts = qid && (typeof _getSaveAttempt === "function") ? (_getSaveAttempt(qid, bi) || 0) : 0;
-    const beforeOutcome = qid && (typeof _getOutcome === "function") ? _getOutcome(qid, bi) : null;
-    const result = originalSaveBranchAnswer.apply(this, arguments);
-    try{
-      if(!qid || !window.__examRunning) return result;
-      const afterAttempts = (typeof _getSaveAttempt === "function") ? (_getSaveAttempt(qid, bi) || 0) : beforeAttempts;
-      const afterOutcome = (typeof _getOutcome === "function") ? _getOutcome(qid, bi) : beforeOutcome;
-      const changed = afterAttempts !== beforeAttempts || afterOutcome !== beforeOutcome;
-      if(changed){
-        const signal = getQuestionSignal(qid);
-        if(afterOutcome !== "correct" && (afterAttempts > beforeAttempts || signal.status === "completed_wrong" || signal.readiness < NEED_SUPPORT_BELOW || signal.struggle > 0.5)){
-          appendSupportQuestion(qid);
-          BANK = ensureAdaptiveBankReady();
-        }
-        setProgress();
-        renderSidebar();
-      }
-    }catch(e){}
+    ensureAdaptiveBankReady();
+    const result = originalRenderSidebar.apply(this, arguments);
+    concealSidebarQuestions();
     return result;
   };
 
-  next = function(){
-    if(!window.__examRunning){
-      return originalNext.apply(this, arguments);
+  const originalRenderMain = renderMain;
+  renderMain = function(){
+    const bank = ensureAdaptiveBankReady();
+    const wrap = document.getElementById("mainContent");
+    if(!bank.length){
+      if(wrap) wrap.innerHTML = '<div style="padding:24px;font-weight:900;color:#0f2a3b">يتم تجهيز الأسئلة، أعد تحميل الصفحة مرة واحدة.</div>';
+      return;
     }
-    BANK = ensureAdaptiveBankReady();
-    const current = BANK[state.currentIndex];
-    const nextId = chooseNextAdaptiveId(current ? current.id : null);
-    if(nextId){
-      BANK = ensureAdaptiveBankReady();
-      const nextIndex = BANK.findIndex((item)=> item.id === nextId);
-      if(nextIndex >= 0){
-        state.currentIndex = nextIndex;
-        saveState();
-        renderAll();
-        return;
-      }
-    }
-    tryShowResults();
+    return originalRenderMain.apply(this, arguments);
   };
 
-  injectAdaptiveStyles();
+  const originalNext = next;
+  next = function(){
+    const bank = ensureAdaptiveBankReady();
+    if(!bank.length){
+      renderAll();
+      return;
+    }
+
+    const currentId = getCurrentQuestionId();
+    const currentSignal = currentId ? getQuestionSignal(currentId) : null;
+    if(currentId && currentSignal && shouldRepeatCurrent(currentSignal)){
+      swapQuestion(currentId);
+      BANK = ensureAdaptiveBankReady();
+      moveToQuestion(currentId);
+      return;
+    }
+
+    const targetId = chooseNextAdaptiveId();
+    if(targetId && moveToQuestion(targetId)) return;
+
+    if(completed(getActiveOrder())){
+      if(meetsMasteryTarget()){
+        showResultsModal();
+        return;
+      }
+      const focus = weakestSignal(CORE_ORDER) || weakestSignal(getActiveOrder());
+      const supportId = focus ? appendSupportQuestion(focus.qid) : null;
+      if(supportId){
+        BANK = ensureAdaptiveBankReady();
+        moveToQuestion(supportId);
+        return;
+      }
+      if(focus && typeof swapQuestion === "function" && focus.attemptCount < MAX_VARIANT_REPEATS){
+        swapQuestion(focus.qid);
+        BANK = ensureAdaptiveBankReady();
+        moveToQuestion(focus.qid);
+        return;
+      }
+      showResultsModal();
+      return;
+    }
+
+    return originalNext.apply(this, arguments);
+  };
+
   ensureSessionState();
   BANK = ensureAdaptiveBankReady();
+  if(!BANK.length){
+    state.order = validIds(CORE_ORDER);
+    state.currentIndex = 0;
+    saveState();
+    BANK = forceBuildBank(state.order);
+  }
+  if(state.currentIndex >= BANK.length) state.currentIndex = 0;
+  injectAdaptiveStyles();
+  saveState();
+  renderAll();
 })();
-/* Codex Adaptive Mastery End */
+/* Codex Adaptive Flow 1.2 End */
+
 
 
 
@@ -4187,7 +5128,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 
 /* Codex AI Models Logic Start */
 (function(){
-  const AI_MODELS_KEY = "stat102_3_4_ai_models_v1";
+  const AI_MODELS_KEY = "stat102_1_2_ai_models_v1";
   try{ window.AI_MODELS_KEY = AI_MODELS_KEY; }catch(_e){}
 
   function aiStoreGet(key){
@@ -5009,9 +5950,9 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   if(typeof TEMPLATES === "undefined" || !Array.isArray(TEMPLATES) || !TEMPLATES.length || typeof state === "undefined") return;
 
   const ADAPTIVE_SOURCE = (typeof ADAPTIVE_TEMPLATES_12 !== "undefined" && Array.isArray(ADAPTIVE_TEMPLATES_12) && ADAPTIVE_TEMPLATES_12.length) ? ADAPTIVE_TEMPLATES_12 : TEMPLATES;
-  const MASTERY_VERSION_UNIFIED = "stat102_3_4_lesson_3_4_index_html_universal_mastery_v1";
-  const MASTERY_CORE_UNIFIED = ["34_cv_basic", "34_qcd_basic", "34_z_basic"];
-  const MASTERY_PROFILES_UNIFIED = {"34_cv_basic": {"supports": ["34_cv_compare", "34_qcd_basic", "34_qcd_compare", "34_z_basic"]}, "34_cv_compare": {"supports": ["34_qcd_basic", "34_qcd_compare", "34_z_basic", "34_x_from_z"]}, "34_qcd_basic": {"supports": ["34_qcd_compare", "34_z_basic", "34_x_from_z", "34_z_compare"]}, "34_qcd_compare": {"supports": ["34_z_basic", "34_x_from_z", "34_z_compare", "34_measure"]}, "34_z_basic": {"supports": ["34_x_from_z", "34_z_compare", "34_measure", "34_mcq"]}, "34_x_from_z": {"supports": ["34_z_compare", "34_measure", "34_mcq", "34_cv_basic"]}, "34_z_compare": {"supports": ["34_measure", "34_mcq", "34_cv_basic", "34_cv_compare"]}, "34_measure": {"supports": ["34_mcq", "34_cv_basic", "34_cv_compare", "34_qcd_basic"]}, "34_mcq": {"supports": ["34_cv_basic", "34_cv_compare", "34_qcd_basic", "34_qcd_compare"]}};
+  const MASTERY_VERSION_UNIFIED = "stat102_1_2_index_html_universal_mastery_v1";
+  const MASTERY_CORE_UNIFIED = ["q1_circle", "q2_tf", "q3_method", "q4_param_stat"];
+  const MASTERY_PROFILES_UNIFIED = {"q1_circle": {"supports": ["q2_tf", "q3_method", "q4_param_stat", "q5_nominal_ordinal"]}, "q2_tf": {"supports": ["q3_method", "q4_param_stat", "q5_nominal_ordinal", "q6_interval_ratio"]}, "q3_method": {"supports": ["q4_param_stat", "q5_nominal_ordinal", "q6_interval_ratio", "q7_codes_vs_values"]}, "q4_param_stat": {"supports": ["q5_nominal_ordinal", "q6_interval_ratio", "q7_codes_vs_values", "q8_advanced_tf"]}, "q5_nominal_ordinal": {"supports": ["q6_interval_ratio", "q7_codes_vs_values", "q8_advanced_tf", "q1_circle"]}, "q6_interval_ratio": {"supports": ["q7_codes_vs_values", "q8_advanced_tf", "q1_circle", "q2_tf"]}, "q7_codes_vs_values": {"supports": ["q8_advanced_tf", "q1_circle", "q2_tf", "q3_method"]}, "q8_advanced_tf": {"supports": ["q1_circle", "q2_tf", "q3_method", "q4_param_stat"]}};
 
   function adaptiveSaveState(){
     try{ if(typeof saveState === "function") saveState(); }catch(e){}
@@ -5962,6 +6903,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 </style>
 </body>
 </html>
+
 
 
 
