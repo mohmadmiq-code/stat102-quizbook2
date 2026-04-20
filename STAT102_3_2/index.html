@@ -2151,10 +2151,10 @@ input.badField, textarea.badField{
 </style>
 <script>
 /* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
+window.AI_ENABLED = true;
 </script>
 <style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
+/* AI enabled: keep panel visible. */
 </style>
 <!-- AI_KILL_SWITCH -->
 </head>
@@ -3803,6 +3803,9 @@ function renderMain(){
     branchCard.appendChild(body);
     if((b.parts||[]).length>0) branchCard.appendChild(parts);
     branchCard.appendChild(btns);
+    if(_getOutcome(q.id, bi) === "wrong"){
+      _renderInlineSolution(q, b, branchCard, _collectSolutionItems(b));
+    }
     bindInlineInputs(branchCard, q.id, bi);
     branches.appendChild(branchCard);
   });
@@ -3897,6 +3900,65 @@ function _lockBranchInputs(branchCard, qid, bi){
       });
     }
   });
+}
+
+function _collectSolutionItems(b){
+  const parts = Array.isArray(b && b.parts) ? b.parts : [];
+  const answers = (b && b.answers) ? b.answers : {};
+  return parts.map((p)=>({
+    key: p.key,
+    label: p.label,
+    labelHtml: p.labelHtml,
+    correct: answers[p.key]
+  }));
+}
+
+function _renderInlineSolution(q, b, branchCard, solutionItems){
+  if(!branchCard) return;
+  let panel = branchCard.querySelector(".inlineSolutionPanel");
+  if(!panel){
+    panel = document.createElement("div");
+    panel.className = "inlineSolutionPanel";
+    panel.style.cssText = "margin-top:12px;padding:12px;border:1px solid #fecaca;background:#fff7ed;border-radius:14px";
+    branchCard.appendChild(panel);
+  }
+
+  const explainList = Array.isArray(b && b.explain) ? b.explain : [];
+  const methodList = Array.isArray(b && b.method) ? b.method : [];
+  const title = escapeHtml((q && q.title) || "");
+  const lvlRaw = (b && (b.level ?? b.difficulty ?? b.name)) || "";
+  const lvl = escapeHtml(String(lvlRaw || "").trim());
+
+  const explainHtml = explainList.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:1.9">${explainList.map((s)=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : `<div style="color:#475569;font-weight:700">لا يوجد شرح إضافي لهذا السؤال.</div>`;
+
+  const methodHtml = methodList.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:1.9">${methodList.map((s)=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : `<div style="color:#475569;font-weight:700">اتبع خطوات الحل المناسبة حسب نوع السؤال.</div>`;
+
+  const items = Array.isArray(solutionItems) ? solutionItems : [];
+  const answerHtml = items.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:1.9">${items.map((it)=>{
+        const label = it.labelHtml ? it.labelHtml : escapeHtml(it.label || it.key || "");
+        const rawCorrect = it && it.correct != null ? it.correct : "—";
+        const val = (typeof rawCorrect === "number") ? formatNumber(rawCorrect) : escapeHtml(rawCorrect);
+        return `<li><div style="font-weight:900">${label}</div><div style="color:#0b2b4c;font-weight:900">${val}</div></li>`;
+      }).join("")}</ul>`
+    : `<div style="color:#475569;font-weight:700">لا توجد أجزاء ظاهرة لهذا السؤال.</div>`;
+
+  panel.innerHTML = `
+    <div style="font-weight:900;color:#9a3412;margin-bottom:6px">الحل ظاهر بجانب السؤال</div>
+    <div style="font-size:13px;color:#475569;font-weight:800;margin-bottom:10px">${title}${lvl ? ` — (${lvl})` : ""}</div>
+    <div style="font-weight:900;margin:10px 0 6px">شرح السؤال</div>
+    ${explainHtml}
+    <div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>
+    ${methodHtml}
+    <div style="font-weight:900;margin:10px 0 6px">الإجابات الصحيحة</div>
+    ${answerHtml}
+    <div style="margin-top:10px;color:#7c2d12;font-weight:800">تم قفل هذا السؤال بعد إظهار الحل.</div>
+  `;
+  typesetMath(panel);
 }
 
 function _showCorrectModal(q, b, wrongItems){
@@ -3997,17 +4059,12 @@ function saveBranchAnswer(q, b, bi, branchCard, saveBtn){
     showHelp(q, b);
   }else{
     wrong.forEach(r=>_mark(r.inp, "wrong2"));
-    const wrongItems = wrong.map(r=>({
-      key:r.key,
-      label: r.part.label,
-      labelHtml: r.part.labelHtml,
-      correct: r.correct
-    }));
+    const solutionItems = _collectSolutionItems(b);
     _setOutcome(qid, bi, "wrong");
     _setBranchLocked(qid, bi, true);
     _lockBranchInputs(branchCard, qid, String(bi));
     if(saveBtn) saveBtn.disabled = true;
-    _promptShowCorrectModal(q, b, wrongItems);
+    _renderInlineSolution(q, b, branchCard, solutionItems);
   }
 
   setProgress();
