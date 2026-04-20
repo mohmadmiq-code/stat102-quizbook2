@@ -2126,10 +2126,10 @@ input.badField, textarea.badField{
 </style>
 <script>
 /* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
+window.AI_ENABLED = true;
 </script>
 <style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
+/* AI enabled: keep panel visible. */
 </style>
 <!-- AI_KILL_SWITCH -->
 </head>
@@ -3218,6 +3218,9 @@ function renderMain(){
     branchCard.appendChild(body);
     if((b.parts||[]).length>0) branchCard.appendChild(parts);
     branchCard.appendChild(btns);
+    if(_getOutcome(q.id, bi) === "wrong"){
+      _renderInlineSolution(q, b, branchCard, _collectSolutionItems(b));
+    }
     bindInlineInputs(branchCard, q.id, bi);
     branches.appendChild(branchCard);
   });
@@ -3289,6 +3292,65 @@ function _checkPart(part, studentRaw, correct){
 function _lockBranchInputs(branchCard, qid, bi){
   const nodes = branchCard.querySelectorAll(`[data-qid="${qid}"][data-bi="${bi}"][data-key]`);
   nodes.forEach(n=>{ n.disabled = true; });
+}
+
+function _collectSolutionItems(b){
+  const parts = Array.isArray(b && b.parts) ? b.parts : [];
+  const answers = (b && b.answers) ? b.answers : {};
+  return parts.map((p)=>({
+    key: p.key,
+    label: p.label,
+    labelHtml: p.labelHtml,
+    correct: answers[p.key]
+  }));
+}
+
+function _renderInlineSolution(q, b, branchCard, solutionItems){
+  if(!branchCard) return;
+  let panel = branchCard.querySelector(".inlineSolutionPanel");
+  if(!panel){
+    panel = document.createElement("div");
+    panel.className = "inlineSolutionPanel";
+    panel.style.cssText = "margin-top:12px;padding:12px;border:1px solid #fecaca;background:#fff7ed;border-radius:14px";
+    branchCard.appendChild(panel);
+  }
+
+  const explainList = Array.isArray(b && b.explain) ? b.explain : [];
+  const methodList = Array.isArray(b && b.method) ? b.method : [];
+  const title = escapeHtml((q && q.title) || "");
+  const lvlRaw = (b && (b.level ?? b.difficulty ?? b.name)) || "";
+  const lvl = escapeHtml(String(lvlRaw || "").trim());
+
+  const explainHtml = explainList.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:1.9">${explainList.map((s)=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : `<div style="color:#475569;font-weight:700">لا يوجد شرح إضافي لهذا السؤال.</div>`;
+
+  const methodHtml = methodList.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:1.9">${methodList.map((s)=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+    : `<div style="color:#475569;font-weight:700">اتبع خطوات الحل المناسبة حسب نوع السؤال.</div>`;
+
+  const items = Array.isArray(solutionItems) ? solutionItems : [];
+  const answerHtml = items.length
+    ? `<ul style="margin:0;padding-right:18px;line-height:1.9">${items.map((it)=>{
+        const label = it.labelHtml ? it.labelHtml : escapeHtml(it.label || it.key || "");
+        const rawCorrect = it && it.correct != null ? it.correct : "—";
+        const val = (typeof rawCorrect === "number") ? formatNumber(rawCorrect) : escapeHtml(rawCorrect);
+        return `<li><div style="font-weight:900">${label}</div><div style="color:#0b2b4c;font-weight:900">${val}</div></li>`;
+      }).join("")}</ul>`
+    : `<div style="color:#475569;font-weight:700">لا توجد أجزاء ظاهرة لهذا السؤال.</div>`;
+
+  panel.innerHTML = `
+    <div style="font-weight:900;color:#9a3412;margin-bottom:6px">الحل ظاهر بجانب السؤال</div>
+    <div style="font-size:13px;color:#475569;font-weight:800;margin-bottom:10px">${title}${lvl ? ` — (${lvl})` : ""}</div>
+    <div style="font-weight:900;margin:10px 0 6px">شرح السؤال</div>
+    ${explainHtml}
+    <div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>
+    ${methodHtml}
+    <div style="font-weight:900;margin:10px 0 6px">الإجابات الصحيحة</div>
+    ${answerHtml}
+    <div style="margin-top:10px;color:#7c2d12;font-weight:800">تم قفل هذا السؤال بعد إظهار الحل.</div>
+  `;
+  typesetMath(panel);
 }
 
 function _showCorrectModal(q, b, wrongItems){
@@ -3390,17 +3452,12 @@ function saveBranchAnswer(q, b, bi, branchCard, saveBtn){
     showHelp(q, b);
   }else{
     wrong.forEach(r=>_mark(r.inp, "wrong2"));
-    const wrongItems = wrong.map(r=>({
-      key:r.key,
-      label: r.part.label,
-      labelHtml: r.part.labelHtml,
-      correct: r.correct
-    }));
+    const solutionItems = _collectSolutionItems(b);
     _setOutcome(qid, bi, "wrong");
     _setBranchLocked(qid, bi, true);
     _lockBranchInputs(branchCard, qid, String(bi));
     if(saveBtn) saveBtn.disabled = true;
-    _promptShowCorrectModal(q, b, wrongItems);
+    _renderInlineSolution(q, b, branchCard, solutionItems);
   }
 
   setProgress();
@@ -5754,9 +5811,20 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   function syncAIDrawer(){
     var inner = document.getElementById("drawerAIInner");
     if(!inner) return;
+    try{
+      if(typeof renderAiModelsPanel === "function") renderAiModelsPanel();
+    }catch(_e){}
+    var panel = document.getElementById("aiModelsPanel");
+    if(panel && panel.innerHTML && panel.innerHTML.trim()){
+      inner.innerHTML = panel.outerHTML;
+      return;
+    }
     var rail = document.querySelector(".aiResultsRail");
-    if(!rail) return;
-    inner.innerHTML = rail.innerHTML;
+    if(rail && rail.innerHTML && rail.innerHTML.trim()){
+      inner.innerHTML = rail.innerHTML;
+      return;
+    }
+    inner.innerHTML = '<div class="aiInferenceCard" style="margin:12px"><div class="aiSectionTitle">التحليل الذكي</div><div class="aiInferenceText">لا توجد بيانات بعد. احفظ إجابة واحدة على الأقل ليظهر التحليل.</div></div>';
   }
 
   /* أزرار الدرج السفلية */
@@ -5906,6 +5974,12 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
           };
           window.AdaptiveLearning.collectStudentEvent(payload);
           runInference(payload, branchCard);
+          if(showedSolution && branchCard && typeof window._renderInlineSolution === "function"){
+            var solutionItems = (typeof window._collectSolutionItems === "function")
+              ? window._collectSolutionItems(b)
+              : [];
+            window._renderInlineSolution(q, b, branchCard, solutionItems);
+          }
         }catch(_e){}
         return out;
       };
@@ -5955,6 +6029,21 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
   .qmeta .btn{min-width:70px !important; font-size:11.5px !important; padding:6px 8px !important;}
 }
 </style>
+<script>
+(function(){
+  if(window.__feedbackSystemLoader) return;
+  window.__feedbackSystemLoader = true;
+  var candidates = ["assets/js/feedback_system.js","../assets/js/feedback_system.js","../../assets/js/feedback_system.js"];
+  (function load(i){
+    if(i>=candidates.length) return;
+    var s = document.createElement("script");
+    s.src = candidates[i];
+    s.onload = function(){};
+    s.onerror = function(){ load(i+1); };
+    document.head.appendChild(s);
+  })(0);
+})();
+</script>
 </body>
 </html>
 

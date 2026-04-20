@@ -262,4 +262,15 @@
     exportStudentTrainingData : exportStudentTrainingData,
     loadModelWeights       : loadModelWeights
   };
+  if(typeof document !== "undefined"){
+    var _promptNow = function(){
+      if(_vid(_s.studentId) || _declined || _promptPending) return;
+      ensureStudentIdentity();
+    };
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", function(){ setTimeout(_promptNow, 160); }, { once:true });
+    }else{
+      setTimeout(_promptNow, 160);
+    }
+  }
 })();

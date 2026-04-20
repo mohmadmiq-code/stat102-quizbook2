@@ -414,6 +414,41 @@
     .branches{display:grid; gap:16px;}
     .branch{border:1px solid var(--line); border-radius:16px; background:var(--card); overflow:hidden; transition: var(--transition);}
     .branch:hover{border-color:var(--line);box-shadow: var(--shadow-sm)}
+    .branch.with-inline-solution .branchContentLayout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(290px,360px);
+      gap:14px;
+      align-items:start;
+      padding:12px;
+    }
+    .branch.with-inline-solution .branchMainStack{
+      min-width:0;
+    }
+    .branch.with-inline-solution .inlineSolutionPanel{
+      margin:0;
+      border:1px solid rgba(124,58,237,.26);
+      background:linear-gradient(165deg,#f8f7ff 0%,#eef2ff 46%,#f5f3ff 100%);
+      border-radius:16px;
+      box-shadow:0 16px 30px rgba(76,29,149,.13);
+      position:sticky;
+      top:10px;
+      overflow:hidden;
+    }
+    .branch.with-inline-solution .inlineSolutionPanel::before{
+      content:"";
+      display:block;
+      height:5px;
+      background:linear-gradient(90deg,#7c3aed,#4f46e5,#0ea5e9);
+    }
+    @media (max-width: 980px){
+      .branch.with-inline-solution .branchContentLayout{
+        grid-template-columns:1fr;
+      }
+      .branch.with-inline-solution .inlineSolutionPanel{
+        position:relative;
+        top:auto;
+      }
+    }
     .branchHead{
       display:flex; align-items:center; justify-content:flex-end; gap:12px;
       padding:14px 16px;
@@ -458,6 +493,50 @@
       box-shadow: 0 0 0 3px rgba(3,105,161,.15);
     }
     .branchBtns{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; justify-content:flex-start}
+    .btn.feedback-btn{
+      border-color:#c7d2fe;
+      background:#eef2ff;
+      color:#3730a3;
+      font-weight:800;
+    }
+    .btn.feedback-btn:hover{
+      border-color:#a5b4fc;
+      background:#e0e7ff;
+    }
+    .feedback-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.55);
+      backdrop-filter:blur(4px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:3500;
+      padding:16px;
+    }
+    .feedback-modal.show{display:flex}
+    .feedback-shell{
+      width:min(560px,calc(100vw - 32px));
+      background:#fff;
+      border-radius:18px;
+      border:1px solid var(--line);
+      box-shadow:0 24px 46px rgba(15,23,42,.22);
+      overflow:hidden;
+    }
+    .feedback-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(145deg,#eef2ff,#e0f2fe);
+    }
+    .feedback-head b{font-size:16px;color:#1f2937}
+    .feedback-body{padding:16px;display:grid;gap:12px}
+    .feedback-label{font-size:13px;font-weight:800;color:#334155}
+    .feedback-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+    .feedback-note{font-size:12px;color:#64748b;font-weight:700}
 
     .side{padding:20px;}
     .side .head{display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:14px;}
@@ -2210,6 +2289,9 @@ window.AI_ENABLED = true;
         <button class="btn" id="showResultsBtn" aria-label="إظهار النتيجة">إظهار النتيجة</button>
         <button class="btn primary" id="nextBtnSide">التالي</button>
       </div>
+      <div style="margin-top:10px;display:flex;justify-content:flex-start">
+        <button class="btn small" id="exportFeedbackBtn" title="تصدير ملاحظات الطلاب">تصدير الملاحظات</button>
+      </div>
     </aside>
     <aside class="card aiResultsRail">
       <div class="aiModelsPanel" id="aiModelsPanel"></div>
@@ -2259,6 +2341,10 @@ function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 const STATE_KEY = "stat102_3_2_state_v2";
 const TIMER_MINUTES = 30;
 const TIMER_KEY = "stat102_3_2_timerEnd_v2";
+const FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbypvAjqIdXTuc5Zzlkz6IvHGoWBvizIeD83apMCZvHUCbtWxZCRIwIxJ6QKGNrT9CsV/exec";
+const FEEDBACK_STORAGE_KEY = "stat102_3_2_feedback_items_v1";
+const FEEDBACK_PENDING_KEY = "stat102_3_2_feedback_pending_ids_v1";
+const FEEDBACK_SESSION_KEY = "stat102_3_2_feedback_session_id_v1";
 let state = loadState() || { currentIndex: 0, answers: {}, grading: {}, variants: {}, order: null, attempts: {}, saveAttempts: {}, locks: {}, outcomes: {}, timerEnded: false, dirty: {}, sidebarFilter: "all", fontSize: 0 };
 state.attempts = state.attempts || {};
 state.saveAttempts = state.saveAttempts || {};
@@ -2417,6 +2503,266 @@ function typesetMath(container){
       if(run() || tries>30) clearInterval(t);
     }, 120);
   }
+}
+
+let __feedbackModalState = { questionMeta: null };
+
+function _readJsonArray(key){
+  try{
+    const raw = localStorage.getItem(key);
+    const data = raw ? JSON.parse(raw) : [];
+    return Array.isArray(data) ? data : [];
+  }catch(_e){
+    return [];
+  }
+}
+function _writeJsonArray(key, arr){
+  try{ localStorage.setItem(key, JSON.stringify(Array.isArray(arr) ? arr : [])); }catch(_e){}
+}
+function _feedbackNowIso(){ return new Date().toISOString(); }
+function _feedbackLessonId(){
+  const p = String((location && location.pathname) || "");
+  const m = p.match(/STAT102_\d+_\d+/i);
+  return m ? m[0] : "STAT102_3_2";
+}
+function _ensureFeedbackSessionId(){
+  let sid = "";
+  try{ sid = String(sessionStorage.getItem(FEEDBACK_SESSION_KEY) || ""); }catch(_e){}
+  if(!sid){
+    sid = "fb_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+    try{ sessionStorage.setItem(FEEDBACK_SESSION_KEY, sid); }catch(_e){}
+  }
+  return sid;
+}
+function _feedbackSnapshot(qid, bi){
+  try{
+    const qAnswers = state.answers && state.answers[qid] ? state.answers[qid] : null;
+    const branchAnswers = (qAnswers && bi!=null && qAnswers[bi]) ? qAnswers[bi] : qAnswers;
+    const text = JSON.stringify(branchAnswers || {});
+    return text && text.length > 1200 ? text.slice(0, 1200) + "...(truncated)" : text;
+  }catch(_e){
+    return "";
+  }
+}
+function _feedbackAttempts(qid, bi){
+  try{
+    if(typeof _getSaveAttempt === "function" && qid!=null && bi!=null){
+      return Number(_getSaveAttempt(qid, bi) || 0);
+    }
+  }catch(_e){}
+  return 0;
+}
+function _ensureFeedbackModal(){
+  let root = document.getElementById("feedbackModalRoot");
+  if(root) return root;
+  root = document.createElement("div");
+  root.id = "feedbackModalRoot";
+  root.className = "feedback-modal";
+  root.innerHTML = `
+    <div class="feedback-shell" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+      <div class="feedback-head">
+        <b id="feedbackModalTitle">إرسال ملاحظة</b>
+        <button type="button" class="btn small" id="feedbackCloseBtn">إغلاق</button>
+      </div>
+      <div class="feedback-body">
+        <div class="feedback-label">نوع الملاحظة</div>
+        <select id="feedbackTypeSelect">
+          <option value="خطأ في السؤال">خطأ في السؤال</option>
+          <option value="خطأ في الحل">خطأ في الحل</option>
+          <option value="خطأ لغوي">خطأ لغوي</option>
+          <option value="اقتراح تحسين">اقتراح تحسين</option>
+          <option value="صعوبة في الفهم">صعوبة في الفهم</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+        <div class="feedback-label">اكتب الملاحظة</div>
+        <textarea id="feedbackTextInput" placeholder="اكتب ملاحظتك هنا..." rows="5"></textarea>
+        <div class="feedback-note">لن تُفقد الملاحظة حتى لو فشل الإرسال؛ سيتم حفظها محلياً.</div>
+        <div class="feedback-actions">
+          <button type="button" class="btn primary" id="feedbackSubmitBtn">إرسال</button>
+          <button type="button" class="btn small" id="feedbackCancelBtn">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  `;
+  root.addEventListener("click", (e)=>{ if(e.target === root) closeFeedbackModal(); });
+  document.body.appendChild(root);
+  const closeBtn = root.querySelector("#feedbackCloseBtn");
+  const cancelBtn = root.querySelector("#feedbackCancelBtn");
+  const submitBtn = root.querySelector("#feedbackSubmitBtn");
+  if(closeBtn) closeBtn.onclick = closeFeedbackModal;
+  if(cancelBtn) cancelBtn.onclick = closeFeedbackModal;
+  if(submitBtn){
+    submitBtn.onclick = async ()=>{
+      const payload = collectFeedbackPayload();
+      if(!payload){
+        openModal("تنبيه", "<div style='font-weight:900'>اكتب نص الملاحظة قبل الإرسال.</div>");
+        return;
+      }
+      const localRecord = saveFeedbackLocally(payload);
+      const res = await submitFeedback(payload);
+      if(res && res.success){
+        _markFeedbackSent(localRecord.local_id);
+        closeFeedbackModal();
+        openModal("تم", "<div style='font-weight:900'>تم إرسال الملاحظة بنجاح.</div>");
+      }else if(res && res.skipped){
+        _markFeedbackLocalOnly(localRecord.local_id);
+        closeFeedbackModal();
+        openModal("تم الحفظ", "<div style='font-weight:900'>تم حفظ الملاحظة محليًا فقط لأن رابط الإرسال غير مضبوط.</div>");
+      }else{
+        _queuePendingFeedback(localRecord.local_id);
+        closeFeedbackModal();
+        openModal("تم الحفظ محليًا", "<div style='font-weight:900'>تعذر الإرسال الآن. تم حفظ الملاحظة محليًا وسيُعاد إرسالها لاحقًا.</div>");
+      }
+    };
+  }
+  return root;
+}
+function closeFeedbackModal(){
+  const root = document.getElementById("feedbackModalRoot");
+  if(root) root.classList.remove("show");
+}
+function openFeedbackModal(questionMeta){
+  __feedbackModalState.questionMeta = questionMeta || {};
+  const root = _ensureFeedbackModal();
+  const txt = root.querySelector("#feedbackTextInput");
+  const typ = root.querySelector("#feedbackTypeSelect");
+  if(typ) typ.value = "خطأ في السؤال";
+  if(txt) txt.value = "";
+  root.classList.add("show");
+  setTimeout(()=>{ try{ txt && txt.focus(); }catch(_e){} }, 40);
+}
+function collectFeedbackPayload(){
+  const root = document.getElementById("feedbackModalRoot");
+  const textEl = root ? root.querySelector("#feedbackTextInput") : null;
+  const typeEl = root ? root.querySelector("#feedbackTypeSelect") : null;
+  const feedbackText = String((textEl && textEl.value) || "").trim();
+  if(!feedbackText) return null;
+
+  const meta = __feedbackModalState.questionMeta || {};
+  const qid = String(meta.question_id || meta.qid || "");
+  const bi = (meta.branch_index!=null) ? Number(meta.branch_index) : null;
+  const topic = String(meta.topic_id || meta.topicId || qid || "");
+  const attempts = (meta.attempts_count!=null) ? Number(meta.attempts_count || 0) : _feedbackAttempts(qid, bi);
+  const snapshot = (meta.student_answer_snapshot!=null) ? String(meta.student_answer_snapshot || "") : _feedbackSnapshot(qid, bi);
+
+  return {
+    question_id: qid,
+    lesson_id: String(meta.lesson_id || _feedbackLessonId()),
+    topic_id: topic,
+    timestamp: _feedbackNowIso(),
+    page_url: String(location.href || ""),
+    feedback_type: String((typeEl && typeEl.value) || "أخرى"),
+    feedback_text: feedbackText,
+    attempts_count: Number.isFinite(attempts) ? attempts : 0,
+    student_answer_snapshot: snapshot,
+    user_agent: String(navigator.userAgent || ""),
+    session_id: String(meta.session_id || _ensureFeedbackSessionId())
+  };
+}
+function saveFeedbackLocally(payload){
+  const list = _readJsonArray(FEEDBACK_STORAGE_KEY);
+  const local_id = "local_" + Date.now() + "_" + Math.random().toString(36).slice(2,8);
+  const rec = Object.assign({}, payload, {
+    local_id,
+    sync_status: "pending",
+    saved_at: _feedbackNowIso()
+  });
+  list.push(rec);
+  _writeJsonArray(FEEDBACK_STORAGE_KEY, list);
+  return rec;
+}
+function _queuePendingFeedback(localId){
+  if(!localId) return;
+  const pending = _readJsonArray(FEEDBACK_PENDING_KEY);
+  if(!pending.includes(localId)){
+    pending.push(localId);
+    _writeJsonArray(FEEDBACK_PENDING_KEY, pending);
+  }
+}
+function _markFeedbackSent(localId){
+  if(!localId) return;
+  const list = _readJsonArray(FEEDBACK_STORAGE_KEY);
+  const idx = list.findIndex((x)=>x && x.local_id === localId);
+  if(idx>=0){
+    list[idx].sync_status = "sent";
+    list[idx].sent_at = _feedbackNowIso();
+    _writeJsonArray(FEEDBACK_STORAGE_KEY, list);
+  }
+  const pending = _readJsonArray(FEEDBACK_PENDING_KEY).filter((id)=>id !== localId);
+  _writeJsonArray(FEEDBACK_PENDING_KEY, pending);
+}
+function _markFeedbackLocalOnly(localId){
+  if(!localId) return;
+  const list = _readJsonArray(FEEDBACK_STORAGE_KEY);
+  const idx = list.findIndex((x)=>x && x.local_id === localId);
+  if(idx>=0){
+    list[idx].sync_status = "local_only";
+    _writeJsonArray(FEEDBACK_STORAGE_KEY, list);
+  }
+}
+async function submitFeedback(payload){
+  const endpoint = String(FEEDBACK_ENDPOINT || "").trim();
+  if(!endpoint){
+    return { success:false, skipped:true, reason:"endpoint_not_configured" };
+  }
+  try{
+    const res = await fetch(endpoint, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) return { success:false, reason:"http_" + res.status };
+    let data = null;
+    try{ data = await res.json(); }catch(_e){ data = { success:true }; }
+    if(data && data.success === false) return { success:false, reason:"remote_rejected", data };
+    return { success:true, data };
+  }catch(_e){
+    return { success:false, reason:"network_error" };
+  }
+}
+function exportFeedbackData(){
+  const data = _readJsonArray(FEEDBACK_STORAGE_KEY);
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "feedback_export_" + Date.now() + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  return data;
+}
+async function retryPendingFeedback(){
+  const endpoint = String(FEEDBACK_ENDPOINT || "").trim();
+  if(!endpoint) return { retried:0, sent:0 };
+  const pending = _readJsonArray(FEEDBACK_PENDING_KEY);
+  if(!pending.length) return { retried:0, sent:0 };
+  const list = _readJsonArray(FEEDBACK_STORAGE_KEY);
+  let sent = 0;
+  for(const id of pending){
+    const item = list.find((x)=>x && x.local_id === id);
+    if(!item) continue;
+    const payload = {
+      question_id: item.question_id || "",
+      lesson_id: item.lesson_id || "",
+      topic_id: item.topic_id || "",
+      timestamp: item.timestamp || _feedbackNowIso(),
+      page_url: item.page_url || String(location.href || ""),
+      feedback_type: item.feedback_type || "أخرى",
+      feedback_text: item.feedback_text || "",
+      attempts_count: Number(item.attempts_count || 0),
+      student_answer_snapshot: item.student_answer_snapshot || "",
+      user_agent: item.user_agent || String(navigator.userAgent || ""),
+      session_id: item.session_id || _ensureFeedbackSessionId()
+    };
+    const res = await submitFeedback(payload);
+    if(res && res.success){
+      sent++;
+      _markFeedbackSent(id);
+    }
+  }
+  return { retried: pending.length, sent };
 }
 
 function storeAnswer(qid, bIndex, key, value){
@@ -3796,7 +4142,15 @@ function renderMain(){
       el("button",{class:"btn small ai-help-btn", onclick:()=>showHelp(q, b), title:"مساعد ذكاء اصطناعي"},[
         el("span",{class:"ai-help-glyph","aria-hidden":"true"},["✦"]),
         "مساعدة"
-      ])
+      ]),
+      el("button",{class:"btn small feedback-btn", onclick:()=>openFeedbackModal({
+        question_id: q.id,
+        lesson_id: _feedbackLessonId(),
+        topic_id: (b && (b.topic_id || b.topicId)) || (q && (q.topic_id || q.topicId)) || q.id || "",
+        branch_index: bi,
+        attempts_count: _feedbackAttempts(q.id, bi),
+        student_answer_snapshot: _feedbackSnapshot(q.id, bi)
+      })},["إرسال ملاحظة"])
     ]);
 
     branchCard.appendChild(head);
@@ -3915,12 +4269,36 @@ function _collectSolutionItems(b){
 
 function _renderInlineSolution(q, b, branchCard, solutionItems){
   if(!branchCard) return;
+  branchCard.classList.add("with-inline-solution");
+  let layout = branchCard.querySelector(".branchContentLayout");
+  let mainStack = branchCard.querySelector(".branchMainStack");
+  if(!layout){
+    layout = document.createElement("div");
+    layout.className = "branchContentLayout";
+    mainStack = document.createElement("div");
+    mainStack.className = "branchMainStack";
+    const nodes = Array.from(branchCard.children).filter((node)=>{
+      return !(node.classList && node.classList.contains("branchHead"));
+    });
+    nodes.forEach((node)=>{
+      if(node.classList && node.classList.contains("inlineSolutionPanel")) return;
+      mainStack.appendChild(node);
+    });
+    layout.appendChild(mainStack);
+    branchCard.appendChild(layout);
+  }else if(!mainStack){
+    mainStack = document.createElement("div");
+    mainStack.className = "branchMainStack";
+    layout.prepend(mainStack);
+  }
   let panel = branchCard.querySelector(".inlineSolutionPanel");
   if(!panel){
     panel = document.createElement("div");
     panel.className = "inlineSolutionPanel";
-    panel.style.cssText = "margin-top:12px;padding:12px;border:1px solid #fecaca;background:#fff7ed;border-radius:14px";
-    branchCard.appendChild(panel);
+    panel.style.cssText = "padding:12px";
+    layout.appendChild(panel);
+  }else if(panel.parentElement !== layout){
+    layout.appendChild(panel);
   }
 
   const explainList = Array.isArray(b && b.explain) ? b.explain : [];
@@ -3948,7 +4326,7 @@ function _renderInlineSolution(q, b, branchCard, solutionItems){
     : `<div style="color:#475569;font-weight:700">لا توجد أجزاء ظاهرة لهذا السؤال.</div>`;
 
   panel.innerHTML = `
-    <div style="font-weight:900;color:#9a3412;margin-bottom:6px">الحل ظاهر بجانب السؤال</div>
+    <div style="font-weight:900;color:#4c1d95;margin-bottom:6px">الحل التفصيلي بجانب السؤال</div>
     <div style="font-size:13px;color:#475569;font-weight:800;margin-bottom:10px">${title}${lvl ? ` — (${lvl})` : ""}</div>
     <div style="font-weight:900;margin:10px 0 6px">شرح السؤال</div>
     ${explainHtml}
@@ -4243,9 +4621,18 @@ var _fbb=document.getElementById("fontBigBtn"); if(_fbb) _fbb.onclick = ()=>{ st
 if(state.sidebarFilter==="all") document.getElementById("filterAllBtn")?.classList.add("primary"); else document.getElementById("filterIncompleteBtn")?.classList.add("primary");
 document.getElementById("showResultsBtn").onclick = tryShowResults;
 document.getElementById("resetBtn").onclick = function(){ if(confirm("هل تريد إعادة تعيين الاختبار؟ سيتم حذف جميع الإجابات.")) resetAll(); };
+var _expFb = document.getElementById("exportFeedbackBtn");
+if(_expFb){
+  _expFb.onclick = function(){
+    const rows = exportFeedbackData();
+    openModal("تصدير الملاحظات", "<div style='font-weight:900'>تم تصدير " + rows.length + " ملاحظة إلى ملف JSON.</div>");
+  };
+}
 
 function renderAll(){ renderMain(); renderSidebar(); setProgress(); }
 window.addEventListener("load", ()=>{
+  _ensureFeedbackSessionId();
+  setTimeout(()=>{ retryPendingFeedback(); }, 900);
   window.__examRunning = isExamStarted();
   document.body.classList.remove("font-sm","font-lg");
   if(state.fontSize===1) document.body.classList.add("font-lg");
@@ -6533,18 +6920,7 @@ window.addEventListener("load", ()=>{
         showed_solution: payload.showed_solution,
         bkt_mastery: bkt.mastery
       });
-      if(!branchCard) return;
-      var panel = branchCard.querySelector(".aiInferencePanel");
-      if(!panel){
-        panel = document.createElement("div");
-        panel.className = "aiInferencePanel";
-        panel.style.cssText = "margin-top:10px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;color:#0f172a;font-weight:800";
-        branchCard.appendChild(panel);
-      }
-      panel.innerHTML = "<div style='font-weight:900;margin-bottom:4px'>تحليل تعلم داخلي</div>" +
-        "<div style='font-size:13px;color:#334155'>mastery probability: " + Math.round((pred.probability_mastered||0)*100) + "%</div>" +
-        "<div style='font-size:13px;color:#334155'>current skill mastery: " + Math.round((bkt.mastery||0)*100) + "%</div>" +
-        "<div style='font-size:13px;color:#334155'>recommended support: " + pred.recommended_support + "</div>";
+      return { bkt: bkt, pred: pred };
     }
 
     var origRenderMain = window.renderMain;

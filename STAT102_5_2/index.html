@@ -2156,10 +2156,10 @@ input.badField, textarea.badField{
 </style>
 <script>
 /* AI kill-switch: flip to true when the central collection pipeline is ready. */
-window.AI_ENABLED = false;
+window.AI_ENABLED = true;
 </script>
 <style id="al-ai-disabled-style">
-#aiModelsPanel, .aiResultsRail, #al-id-modal-root { display: none !important; }
+/* AI enabled: keep panel visible. */
 </style>
 <!-- AI_KILL_SWITCH -->
 </head>
@@ -5961,6 +5961,21 @@ if(window.__examRunning) startTimer(); else showIntroModal();
   .qmeta .btn{min-width:70px !important; font-size:11.5px !important; padding:6px 8px !important;}
 }
 </style>
+<script>
+(function(){
+  if(window.__feedbackSystemLoader) return;
+  window.__feedbackSystemLoader = true;
+  var candidates = ["assets/js/feedback_system.js","../assets/js/feedback_system.js","../../assets/js/feedback_system.js"];
+  (function load(i){
+    if(i>=candidates.length) return;
+    var s = document.createElement("script");
+    s.src = candidates[i];
+    s.onload = function(){};
+    s.onerror = function(){ load(i+1); };
+    document.head.appendChild(s);
+  })(0);
+})();
+</script>
 </body>
 </html>
 
