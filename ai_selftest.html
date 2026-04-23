@@ -37,6 +37,8 @@ code{background:#0b1220;padding:2px 6px;border-radius:4px;color:#fde68a}
 </div>
 
 <script>
+window.AI_ENABLED = true;
+const SELFTEST_STUDENT_ID = "443211234";
 const report = document.getElementById("report");
 function row(label, ok, detail){
   const d = document.createElement("div");
@@ -70,15 +72,15 @@ async function runTests(){
   row("2) توفر جميع الدوال المطلوبة", missing.length===0, missing.length? ("مفقود: "+missing.join(", ")) : fns.join(" · "));
 
   try{
-    AL.setStudentId("selftest_user");
+    AL.setStudentId(SELFTEST_STUDENT_ID);
     const sid = AL.getStudentId();
-    row("3) تعيين/قراءة الرقم الجامعي", sid==="selftest_user", "student_id = "+sid);
+    row("3) تعيين/قراءة الرقم الجامعي", sid===SELFTEST_STUDENT_ID, "student_id = "+sid);
   }catch(e){ row("3) تعيين/قراءة الرقم الجامعي", false, e.message); }
 
   try{
     const before = JSON.parse(localStorage.getItem("student_training_log_v1")||"[]").length;
     AL.collectStudentEvent({
-      student_id:"selftest_user", question_id:"selftest_q1", skill_id:"selftest_skill",
+      student_id:SELFTEST_STUDENT_ID, question_id:"selftest_q1", skill_id:"selftest_skill",
       difficulty:"medium", is_correct:true, attempts_count:1, used_help:false,
       time_spent_sec:20, showed_solution:false
     });

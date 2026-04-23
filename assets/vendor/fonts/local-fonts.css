@@ -1,0 +1,4 @@
+/* Local font stack to avoid external Google Fonts requests */
+:root{
+  --font: "Cairo", "Noto Sans Symbols 2", "Segoe UI", Tahoma, Arial, sans-serif;
+}

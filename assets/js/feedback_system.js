@@ -4,7 +4,7 @@
   if(window.__feedbackSystemReady) return;
   window.__feedbackSystemReady = true;
 
-  const FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbypvAjqIdXTuc5Zzlkz6IvHGoWBvizIeD83apMCZvHUCbtWxZCRIwIxJ6QKGNrT9CsV/exec";
+  const FEEDBACK_ENDPOINT = "";
   const FEEDBACK_TYPES = ["خطأ في السؤال","خطأ في الحل","خطأ لغوي","اقتراح تحسين","صعوبة في الفهم","أخرى"];
   const LESSON_ID = (function(){
     const path = String(location.pathname || "");
@@ -16,7 +16,8 @@
   const SESSION_KEY = "feedback_session_" + LESSON_ID;
 
   const state = {
-    modalMeta: null
+    modalMeta: null,
+    lastLockedContext: null
   };
 
   function readArray(key){
@@ -117,6 +118,10 @@
           markSent(rec.local_id);
           closeFeedbackModal();
           notify("تم", "تم إرسال الملاحظة بنجاح.");
+      }else if(sent && sent.skipped){
+        markLocalOnly(rec.local_id);
+        closeFeedbackModal();
+        notify("تم الحفظ", "تم حفظ الملاحظة محليًا فقط لأن رابط الإرسال غير مضبوط.");
         }else{
           queuePending(rec.local_id);
           closeFeedbackModal();
@@ -249,9 +254,19 @@
     writeArray(PENDING_KEY, p);
   }
 
+  function markLocalOnly(localId){
+    if(!localId) return;
+    const list = readArray(STORAGE_KEY);
+    const i = list.findIndex((x)=>x && x.local_id === localId);
+    if(i >= 0){
+      list[i].sync_status = "local_only";
+      writeArray(STORAGE_KEY, list);
+    }
+  }
+
   async function submitFeedback(payload){
     const endpoint = String(FEEDBACK_ENDPOINT || "").trim();
-    if(!endpoint) return { success:false, skipped:true };
+    if(!endpoint) return { success:false, skipped:true, reason:"endpoint_not_configured" };
     try{
       const res = await fetch(endpoint, {
         method: "POST",
@@ -264,7 +279,17 @@
       if(data && data.success === false) return { success:false, reason:"rejected", data:data };
       return { success:true, data:data };
     }catch(_e){
-      return { success:false, reason:"network" };
+      try{
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        return { success:true, opaque:true };
+      }catch(_e2){
+        return { success:false, reason:"network" };
+      }
     }
   }
 
@@ -330,6 +355,339 @@
     side.appendChild(btn);
   }
 
+  function collectSolutionItems(branch){
+    const parts = Array.isArray(branch && branch.parts) ? branch.parts : [];
+    const answers = (branch && branch.answers) ? branch.answers : {};
+    return parts.map((p)=>{
+      return {
+        key: p.key,
+        label: p.label,
+        labelHtml: p.labelHtml,
+        correct: answers[p.key]
+      };
+    });
+  }
+
+  function renderInlineSolution(question, branch, branchCard, solutionItems){
+    if(!branchCard) return;
+    branchCard.classList.add("with-inline-solution");
+
+    let layout = branchCard.querySelector(".branchContentLayout");
+    let mainStack = branchCard.querySelector(".branchMainStack");
+    if(!layout){
+      layout = document.createElement("div");
+      layout.className = "branchContentLayout";
+      mainStack = document.createElement("div");
+      mainStack.className = "branchMainStack";
+      Array.from(branchCard.children).forEach((node)=>{
+        if(node.classList && node.classList.contains("branchHead")) return;
+        if(node.classList && node.classList.contains("inlineSolutionPanel")) return;
+        mainStack.appendChild(node);
+      });
+      layout.appendChild(mainStack);
+      branchCard.appendChild(layout);
+    }else if(!mainStack){
+      mainStack = document.createElement("div");
+      mainStack.className = "branchMainStack";
+      layout.prepend(mainStack);
+    }
+
+    let panel = branchCard.querySelector(".inlineSolutionPanel");
+    if(!panel){
+      panel = document.createElement("div");
+      panel.className = "inlineSolutionPanel";
+      panel.style.cssText = "padding:12px";
+      layout.appendChild(panel);
+    }else if(panel.parentElement !== layout){
+      layout.appendChild(panel);
+    }
+
+    const explain = Array.isArray(branch && branch.explain) ? branch.explain : [];
+    const method = Array.isArray(branch && branch.method) ? branch.method : [];
+    const title = esc(question && question.title ? question.title : "");
+    const lvlRaw = (branch && (branch.level ?? branch.difficulty ?? branch.name)) || "";
+    const lvl = esc(String(lvlRaw || "").trim());
+
+    const explainHtml = explain.length
+      ? "<ul style=\"margin:0;padding-right:18px;line-height:1.9\">" + explain.map((s)=>"<li>"+esc(s)+"</li>").join("") + "</ul>"
+      : "<div style=\"color:#475569;font-weight:700\">لا يوجد شرح إضافي لهذا السؤال.</div>";
+    const methodHtml = method.length
+      ? "<ul style=\"margin:0;padding-right:18px;line-height:1.9\">" + method.map((s)=>"<li>"+esc(s)+"</li>").join("") + "</ul>"
+      : "<div style=\"color:#475569;font-weight:700\">اتبع خطوات الحل المناسبة حسب نوع السؤال.</div>";
+    const items = Array.isArray(solutionItems) ? solutionItems : [];
+    const answerHtml = items.length
+      ? "<ul style=\"margin:0;padding-right:18px;line-height:1.9\">" + items.map((it)=>{
+          const lbl = it.labelHtml ? it.labelHtml : esc(it.label || it.key || "");
+          const raw = it && it.correct != null ? it.correct : "—";
+          const val = (typeof raw === "number" && typeof window.formatNumber === "function") ? window.formatNumber(raw) : esc(raw);
+          return "<li><div style=\"font-weight:900\">" + lbl + "</div><div style=\"color:#0b2b4c;font-weight:900\">" + val + "</div></li>";
+        }).join("") + "</ul>"
+      : "<div style=\"color:#475569;font-weight:700\">لا توجد أجزاء ظاهرة لهذا السؤال.</div>";
+
+    panel.innerHTML = [
+      '<div style="font-weight:900;color:#4c1d95;margin-bottom:6px">الحل التفصيلي بجانب السؤال</div>',
+      '<div style="font-size:13px;color:#475569;font-weight:800;margin-bottom:10px">' + title + (lvl ? (" — (" + lvl + ")") : "") + "</div>",
+      '<div style="font-weight:900;margin:10px 0 6px">شرح السؤال</div>',
+      explainHtml,
+      '<div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>',
+      methodHtml,
+      '<div style="font-weight:900;margin:10px 0 6px">الإجابات الصحيحة</div>',
+      answerHtml,
+      '<div style="margin-top:10px;color:#7c2d12;font-weight:800">تم قفل هذا السؤال بعد إظهار الحل.</div>'
+    ].join("");
+    if(typeof window.typesetMath === "function") window.typesetMath(panel);
+  }
+
+  function renderInlineSolutionForContainer(question, branch, container, solutionItems){
+    if(!container) return;
+    container.classList.add("with-inline-solution");
+    let layout = container.querySelector(".branchContentLayout");
+    let mainStack = container.querySelector(".branchMainStack");
+    if(!layout){
+      layout = document.createElement("div");
+      layout.className = "branchContentLayout";
+      mainStack = document.createElement("div");
+      mainStack.className = "branchMainStack";
+      Array.from(container.children).forEach((node)=>{
+        if(node.classList && node.classList.contains("inlineSolutionPanel")) return;
+        mainStack.appendChild(node);
+      });
+      layout.appendChild(mainStack);
+      container.appendChild(layout);
+    }else if(!mainStack){
+      mainStack = document.createElement("div");
+      mainStack.className = "branchMainStack";
+      layout.prepend(mainStack);
+    }
+    let panel = container.querySelector(".inlineSolutionPanel");
+    if(!panel){
+      panel = document.createElement("div");
+      panel.className = "inlineSolutionPanel";
+      panel.style.cssText = "padding:12px";
+      layout.appendChild(panel);
+    }else if(panel.parentElement !== layout){
+      layout.appendChild(panel);
+    }
+
+    const explain = Array.isArray(branch && branch.explain) ? branch.explain : [];
+    const method = Array.isArray(branch && branch.method) ? branch.method : [];
+    const title = esc(question && question.title ? question.title : "");
+    const lvlRaw = (branch && (branch.level ?? branch.difficulty ?? branch.name)) || "";
+    const lvl = esc(String(lvlRaw || "").trim());
+    const explainHtml = explain.length
+      ? "<ul style=\"margin:0;padding-right:18px;line-height:1.9\">" + explain.map((s)=>"<li>"+esc(s)+"</li>").join("") + "</ul>"
+      : "<div style=\"color:#475569;font-weight:700\">لا يوجد شرح إضافي لهذا السؤال.</div>";
+    const methodHtml = method.length
+      ? "<ul style=\"margin:0;padding-right:18px;line-height:1.9\">" + method.map((s)=>"<li>"+esc(s)+"</li>").join("") + "</ul>"
+      : "<div style=\"color:#475569;font-weight:700\">اتبع خطوات الحل المناسبة حسب نوع السؤال.</div>";
+    const items = Array.isArray(solutionItems) ? solutionItems : [];
+    const answerHtml = items.length
+      ? "<ul style=\"margin:0;padding-right:18px;line-height:1.9\">" + items.map((it)=>{
+          const lbl = it.labelHtml ? it.labelHtml : esc(it.label || it.key || "");
+          const raw = it && it.correct != null ? it.correct : "—";
+          const val = (typeof raw === "number" && typeof window.formatNumber === "function") ? window.formatNumber(raw) : esc(raw);
+          return "<li><div style=\"font-weight:900\">" + lbl + "</div><div style=\"color:#0b2b4c;font-weight:900\">" + val + "</div></li>";
+        }).join("") + "</ul>"
+      : "<div style=\"color:#475569;font-weight:700\">لا توجد أجزاء ظاهرة لهذا السؤال.</div>";
+
+    panel.innerHTML = [
+      '<div style="font-weight:900;color:#4c1d95;margin-bottom:6px">الحل التفصيلي بجانب السؤال</div>',
+      '<div style="font-size:13px;color:#475569;font-weight:800;margin-bottom:10px">' + title + (lvl ? (" — (" + lvl + ")") : "") + "</div>",
+      '<div style="font-weight:900;margin:10px 0 6px">شرح السؤال</div>',
+      explainHtml,
+      '<div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>',
+      methodHtml,
+      '<div style="font-weight:900;margin:10px 0 6px">الإجابات الصحيحة</div>',
+      answerHtml,
+      '<div style="margin-top:10px;color:#7c2d12;font-weight:800">تم قفل هذا السؤال بعد إظهار الحل.</div>'
+    ].join("");
+    if(typeof window.typesetMath === "function") window.typesetMath(panel);
+  }
+
+  function injectInlineSolutionCss(){
+    if(document.getElementById("inline-solution-style")) return;
+    const style = document.createElement("style");
+    style.id = "inline-solution-style";
+    style.textContent = [
+      ".branch.with-inline-solution .branchContentLayout{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,360px);gap:14px;align-items:start;padding:12px;}",
+      ".branch.with-inline-solution .branchMainStack{min-width:0;}",
+      ".branch.with-inline-solution .inlineSolutionPanel{margin:0;border:1px solid rgba(124,58,237,.26);background:linear-gradient(165deg,#f8f7ff 0%,#eef2ff 46%,#f5f3ff 100%);border-radius:16px;box-shadow:0 16px 30px rgba(76,29,149,.13);position:sticky;top:10px;overflow:hidden;}",
+      ".branch.with-inline-solution .inlineSolutionPanel::before{content:'';display:block;height:5px;background:linear-gradient(90deg,#7c3aed,#4f46e5,#0ea5e9);}",
+      "[data-branch-container].with-inline-solution .branchContentLayout{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,360px);gap:14px;align-items:start;padding:12px;}",
+      "[data-branch-container].with-inline-solution .branchMainStack{min-width:0;}",
+      "[data-branch-container].with-inline-solution .inlineSolutionPanel{margin:0;border:1px solid rgba(124,58,237,.26);background:linear-gradient(165deg,#f8f7ff 0%,#eef2ff 46%,#f5f3ff 100%);border-radius:16px;box-shadow:0 16px 30px rgba(76,29,149,.13);position:sticky;top:10px;overflow:hidden;}",
+      "[data-branch-container].with-inline-solution .inlineSolutionPanel::before{content:'';display:block;height:5px;background:linear-gradient(90deg,#7c3aed,#4f46e5,#0ea5e9);}",
+      "@media (max-width:980px){.branch.with-inline-solution .branchContentLayout{grid-template-columns:1fr}.branch.with-inline-solution .inlineSolutionPanel{position:relative;top:auto}}"
+      ,"@media (max-width:980px){[data-branch-container].with-inline-solution .branchContentLayout{grid-template-columns:1fr}[data-branch-container].with-inline-solution .inlineSolutionPanel{position:relative;top:auto}}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function suppressSolutionModals(){
+    if(typeof window._promptShowCorrectModal === "function" && !window._promptShowCorrectModal.__inlineSuppressed){
+      const original = window._promptShowCorrectModal;
+      window._promptShowCorrectModal = function(q,b,wrongItems){
+        if(typeof window.closeModal === "function") window.closeModal();
+        return null;
+      };
+      window._promptShowCorrectModal.__inlineSuppressed = true;
+      window._promptShowCorrectModal.__original = original;
+    }
+    if(typeof window._showCorrectModal === "function" && !window._showCorrectModal.__inlineSuppressed){
+      const original = window._showCorrectModal;
+      window._showCorrectModal = function(q,b,wrongItems){
+        if(typeof window.closeModal === "function") window.closeModal();
+        return null;
+      };
+      window._showCorrectModal.__inlineSuppressed = true;
+      window._showCorrectModal.__original = original;
+    }
+    if(typeof window.promptOpenCorrectAnswer === "function" && !window.promptOpenCorrectAnswer.__inlineSuppressed){
+      const original = window.promptOpenCorrectAnswer;
+      window.promptOpenCorrectAnswer = function(q, branch, bi){
+        if(typeof window.closeModal === "function") window.closeModal();
+        const key = String((q && q.id) || "") + "::" + String(bi);
+        const container = document.querySelector('[data-branch-container="' + key + '"]');
+        if(container && q && branch){
+          renderInlineSolutionForContainer(q, branch, container, collectSolutionItems(branch));
+        }
+        return null;
+      };
+      window.promptOpenCorrectAnswer.__inlineSuppressed = true;
+      window.promptOpenCorrectAnswer.__original = original;
+    }
+    if(typeof window.openCorrectAnswer === "function" && !window.openCorrectAnswer.__inlineSuppressed){
+      const original = window.openCorrectAnswer;
+      window.openCorrectAnswer = function(q, branch, bi){
+        if(typeof window.closeModal === "function") window.closeModal();
+        const key = String((q && q.id) || "") + "::" + String(bi);
+        const container = document.querySelector('[data-branch-container="' + key + '"]');
+        if(container && q && branch){
+          renderInlineSolutionForContainer(q, branch, container, collectSolutionItems(branch));
+        }
+        return null;
+      };
+      window.openCorrectAnswer.__inlineSuppressed = true;
+      window.openCorrectAnswer.__original = original;
+    }
+  }
+
+  function hydrateInlineSolutions(){
+    if(!Array.isArray(window.BANK) || typeof window._getOutcome !== "function") return;
+    const cards = document.querySelectorAll(".branch");
+    cards.forEach((card)=>{
+      const probe = card.querySelector("[data-qid][data-bi]");
+      if(!probe) return;
+      const qid = String(probe.getAttribute("data-qid") || "");
+      const bi = Number(probe.getAttribute("data-bi"));
+      if(!qid || !Number.isFinite(bi)) return;
+      const out = window._getOutcome(qid, bi);
+      if(out !== "wrong") return;
+      const q = window.BANK.find((x)=>x && String(x.id) === qid);
+      const b = q && Array.isArray(q.branches) ? q.branches[bi] : null;
+      if(!q || !b) return;
+      renderInlineSolution(q, b, card, collectSolutionItems(b));
+    });
+  }
+
+  function hydrateInlineSolutionsForBranchContainers(){
+    if(!Array.isArray(window.BANK) || typeof window.ensureBranchRec !== "function") return;
+    const containers = document.querySelectorAll("[data-branch-container]");
+    containers.forEach((container)=>{
+      const key = String(container.getAttribute("data-branch-container") || "");
+      if(!key || key.indexOf("::") < 0) return;
+      const parts = key.split("::");
+      const qid = String(parts[0] || "");
+      const bi = Number(parts[1]);
+      if(!qid || !Number.isFinite(bi)) return;
+      let rec = null;
+      try{ rec = window.ensureBranchRec(qid, bi); }catch(_e){ rec = null; }
+      if(!rec || rec.status !== "locked") return;
+      const q = window.BANK.find((x)=>x && String(x.id) === qid);
+      const b = q && Array.isArray(q.branches) ? q.branches[bi] : null;
+      if(!q || !b) return;
+      renderInlineSolutionForContainer(q, b, container, collectSolutionItems(b));
+    });
+  }
+
+  function wrapSaveForInlineSolution(){
+    if(typeof window.saveBranchAnswer !== "function" || window.saveBranchAnswer.__inlineWrapped) return;
+    const original = window.saveBranchAnswer;
+    window.saveBranchAnswer = function(q,b,bi,branchCard,saveBtn){
+      const result = original.apply(this, arguments);
+      try{
+        const wrong = (typeof window._getOutcome === "function") ? window._getOutcome(q && q.id, bi) === "wrong" : false;
+        if(wrong && q && b && branchCard){
+          renderInlineSolution(q, b, branchCard, collectSolutionItems(b));
+        }
+      }catch(_e){}
+      return result;
+    };
+    window.saveBranchAnswer.__inlineWrapped = true;
+  }
+
+  function wrapHandleSaveForInlineSolution(){
+    if(typeof window.handleSaveBranch !== "function" || window.handleSaveBranch.__inlineWrapped) return;
+    const original = window.handleSaveBranch;
+    window.handleSaveBranch = function(q, branch, bi){
+      const result = original.apply(this, arguments);
+      try{
+        if(typeof window.ensureBranchRec === "function"){
+          const rec = window.ensureBranchRec(q && q.id, bi);
+          if(rec && rec.status === "locked"){
+            state.lastLockedContext = { q:q, branch:branch, bi:bi };
+            const key = String((q && q.id) || "") + "::" + String(bi);
+            const container = document.querySelector('[data-branch-container="' + key + '"]');
+            if(container && q && branch){
+              renderInlineSolutionForContainer(q, branch, container, collectSolutionItems(branch));
+            }
+          }
+        }
+      }catch(_e){}
+      return result;
+    };
+    window.handleSaveBranch.__inlineWrapped = true;
+  }
+
+  function wrapOpenModalForInlineSolution(){
+    if(typeof window.openModal !== "function" || window.openModal.__inlineWrapped) return;
+    const original = window.openModal;
+    window.openModal = function(title, html){
+      try{
+        const t = String(title || "");
+        const isAnswerModal = t.indexOf("الإجابة الصحيحة") >= 0 || t.indexOf("انتهت المحاولات") >= 0;
+        if(isAnswerModal && state.lastLockedContext && state.lastLockedContext.q && state.lastLockedContext.branch){
+          const ctx = state.lastLockedContext;
+          const key = String(ctx.q.id || "") + "::" + String(ctx.bi);
+          const container = document.querySelector('[data-branch-container="' + key + '"]');
+          if(container){
+            renderInlineSolutionForContainer(ctx.q, ctx.branch, container, collectSolutionItems(ctx.branch));
+            return;
+          }
+          const branchCard = document.querySelector(".branch");
+          if(branchCard && typeof renderInlineSolution === "function"){
+            renderInlineSolution(ctx.q, ctx.branch, branchCard, collectSolutionItems(ctx.branch));
+            return;
+          }
+        }
+      }catch(_e){}
+      return original.apply(this, arguments);
+    };
+    window.openModal.__inlineWrapped = true;
+  }
+
+  function wrapRenderForInlineHydration(){
+    if(typeof window.renderAll !== "function" || window.renderAll.__inlineWrapped) return;
+    const original = window.renderAll;
+    window.renderAll = function(){
+      const result = original.apply(this, arguments);
+      try{ hydrateInlineSolutions(); }catch(_e){}
+      try{ hydrateInlineSolutionsForBranchContainers(); }catch(_e){}
+      return result;
+    };
+    window.renderAll.__inlineWrapped = true;
+  }
+
   function appendButtonsInBranches(){
     const wraps = document.querySelectorAll(".branchBtns");
     wraps.forEach((wrap)=>{
@@ -371,9 +729,17 @@
 
   function boot(){
     injectCss();
+    injectInlineSolutionCss();
     ensureSessionId();
     ensureModal();
     hookRendering();
+    suppressSolutionModals();
+    wrapSaveForInlineSolution();
+    wrapHandleSaveForInlineSolution();
+    wrapRenderForInlineHydration();
+    wrapOpenModalForInlineSolution();
+    setTimeout(function(){ hydrateInlineSolutions(); }, 60);
+    setTimeout(function(){ hydrateInlineSolutionsForBranchContainers(); }, 90);
     setTimeout(function(){ retryPendingFeedback(); }, 900);
   }
 
@@ -403,4 +769,5 @@
       return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m];
     });
   }
+  function esc(v){ return escapeHtml(v); }
 })();

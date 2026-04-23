@@ -4,15 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.2 مقاييس الموضع</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../assets/vendor/fonts/local-fonts.css">
+  <script src="../assets/vendor/katex/katex.min.js"></script>
+  <script src="../assets/vendor/katex/auto-render.min.js"></script>
   <style>
     :root{
       --bg:#f8fafc;
@@ -2252,7 +2247,7 @@ window.AI_ENABLED = true;
         </div>
       </div>
       <div class="logoWrap" title="شعار الجامعة">
-        <img alt="King Saud University Logo" src="ksu_logo.png" />
+        <img alt="King Saud University Logo" src="../assets/img/ksu_logo.png" />
       </div>
     </div>
   </header>
@@ -2341,7 +2336,7 @@ function randInt(r, lo, hi){ return Math.floor(r()*(hi-lo+1))+lo; }
 const STATE_KEY = "stat102_3_2_state_v2";
 const TIMER_MINUTES = 30;
 const TIMER_KEY = "stat102_3_2_timerEnd_v2";
-const FEEDBACK_ENDPOINT = "https://script.google.com/macros/s/AKfycbypvAjqIdXTuc5Zzlkz6IvHGoWBvizIeD83apMCZvHUCbtWxZCRIwIxJ6QKGNrT9CsV/exec";
+const FEEDBACK_ENDPOINT = "";
 const FEEDBACK_STORAGE_KEY = "stat102_3_2_feedback_items_v1";
 const FEEDBACK_PENDING_KEY = "stat102_3_2_feedback_pending_ids_v1";
 const FEEDBACK_SESSION_KEY = "stat102_3_2_feedback_session_id_v1";
@@ -2717,7 +2712,17 @@ async function submitFeedback(payload){
     if(data && data.success === false) return { success:false, reason:"remote_rejected", data };
     return { success:true, data };
   }catch(_e){
-    return { success:false, reason:"network_error" };
+    try{
+      await fetch(endpoint, {
+        method:"POST",
+        mode:"no-cors",
+        headers:{ "Content-Type":"text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      return { success:true, opaque:true };
+    }catch(_e2){
+      return { success:false, reason:"network_error" };
+    }
   }
 }
 function exportFeedbackData(){
@@ -6893,7 +6898,7 @@ window.addEventListener("load", ()=>{
 <script>
 (function(){
   if(!window.AdaptiveLearning){
-    var candidates = ["assets/js/adaptive_learning.js","../assets/js/adaptive_learning.js","../../assets/js/adaptive_learning.js"];
+    var candidates = ["../assets/js/adaptive_learning.js","../../assets/js/adaptive_learning.js","assets/js/adaptive_learning.js"];
     (function load(i){
       if(i>=candidates.length) return;
       var s=document.createElement("script");
@@ -7036,8 +7041,24 @@ window.addEventListener("load", ()=>{
   .qmeta .btn{min-width:70px !important; font-size:11.5px !important; padding:6px 8px !important;}
 }
 </style>
+<script>
+(function(){
+  if(window.__feedbackSystemLoader) return;
+  window.__feedbackSystemLoader = true;
+  var candidates = ["../assets/js/feedback_system.js","../../assets/js/feedback_system.js","assets/js/feedback_system.js"];
+  (function load(i){
+    if(i>=candidates.length) return;
+    var s = document.createElement("script");
+    s.src = candidates[i];
+    s.onload = function(){};
+    s.onerror = function(){ load(i+1); };
+    document.head.appendChild(s);
+  })(0);
+})();
+</script>
 </body>
 </html>
+
 
 
 
