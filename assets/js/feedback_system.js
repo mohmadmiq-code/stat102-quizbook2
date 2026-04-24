@@ -3,6 +3,7 @@
   if(typeof window === "undefined" || typeof document === "undefined") return;
   if(window.__feedbackSystemReady) return;
   window.__feedbackSystemReady = true;
+  const USE_CASIO_CALC = true;
 
   const FEEDBACK_ENDPOINT = "";
   const FEEDBACK_TYPES = ["خطأ في السؤال","خطأ في الحل","خطأ لغوي","اقتراح تحسين","صعوبة في الفهم","أخرى"];
@@ -17,7 +18,11 @@
 
   const state = {
     modalMeta: null,
-    lastLockedContext: null
+    lastLockedContext: null,
+    calcTargetInput: null,
+    calcBranch: null,
+    calcAngleMode: "DEG",
+    calcAns: 0
   };
 
   function readArray(key){
@@ -59,6 +64,34 @@
       ".feedback-label{font-size:13px;font-weight:800;color:#334155;}",
       ".feedback-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-start;}",
       ".feedback-note{font-size:12px;color:#64748b;font-weight:700;}"
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function injectCalculatorCss(){
+    if(document.getElementById("calculator-system-style")) return;
+    const style = document.createElement("style");
+    style.id = "calculator-system-style";
+    style.textContent = [
+      ".btn.calc-btn{border-color:#bae6fd;background:#ecfeff;color:#0e7490;font-weight:800;}",
+      ".btn.calc-btn:hover{border-color:#67e8f9;background:#cffafe;}",
+      ".calc-modal{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:4005;padding:16px;}",
+      ".calc-modal.show{display:flex;}",
+      ".calc-shell{direction:ltr;width:min(430px,calc(100vw - 20px));background:#111827;border-radius:18px;border:1px solid #374151;box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden;}",
+      ".calc-head{padding:10px 12px;background:linear-gradient(145deg,#111827,#1f2937);border-bottom:1px solid #374151;display:flex;justify-content:space-between;align-items:center;color:#f3f4f6;}",
+      ".calc-screen-wrap{padding:10px 12px;background:#0b1220;border-bottom:1px solid #334155;display:grid;gap:8px;}",
+      ".calc-screen{direction:ltr;unicode-bidi:plaintext;text-align:right;background:#020617;color:#e2e8f0;border-radius:10px;padding:10px 12px;font-weight:800;min-height:42px;letter-spacing:.3px;border:1px solid #1e293b;}",
+      ".calc-frac{padding:10px 12px;background:#0f172a;border-top:1px solid #334155;border-bottom:1px solid #334155;display:grid;grid-template-columns:1fr 1fr auto;gap:8px;}",
+      ".calc-frac input{direction:ltr;text-align:center;border:1px solid #334155;background:#020617;color:#e2e8f0;border-radius:8px;padding:8px 6px;font-weight:700;min-width:0;}",
+      ".calc-frac .btn{white-space:nowrap;}",
+      ".calc-grid{padding:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:#111827;}",
+      ".calc-grid button{direction:ltr;unicode-bidi:plaintext;border:1px solid #334155;background:#1f2937;color:#e5e7eb;border-radius:10px;padding:10px 0;font-weight:800;cursor:pointer;}",
+      ".calc-grid button:hover{background:#334155;}",
+      ".calc-op{background:#0f172a !important;color:#67e8f9 !important;border-color:#155e75 !important;}",
+      ".calc-eq{background:#0ea5e9 !important;color:#fff !important;border-color:#0284c7 !important;}",
+      ".calc-actions{padding:0 12px 12px;display:flex;gap:8px;}",
+      ".calc-actions .btn{flex:1;justify-content:center}",
+      ".calc-mini{font-size:11px;font-weight:700;opacity:.85;color:#94a3b8;}"
     ].join("");
     document.head.appendChild(style);
   }
@@ -130,6 +163,220 @@
       };
     }
     return root;
+  }
+
+  function ensureCalcModal(){
+    let root = document.getElementById("calcModalRootGlobal");
+    if(root) return root;
+    root = document.createElement("div");
+    root.id = "calcModalRootGlobal";
+    root.className = "calc-modal";
+    root.innerHTML = [
+      '<div class="calc-shell" role="dialog" aria-modal="true">',
+      '  <div class="calc-head"><div><b>Scientific Calculator</b></div><div style="display:flex;gap:6px"><button class="btn small" type="button" id="calcAngleBtn">DEG</button><button class="btn small" type="button" id="calcCloseBtn">Close</button></div></div>',
+      '  <div class="calc-screen-wrap">',
+      '    <div class="calc-screen" id="calcExpr">0</div>',
+      '    <div class="calc-screen" id="calcResult">0</div>',
+      "  </div>",
+      '  <div class="calc-frac">',
+      '    <input type="text" id="calcFracNum" placeholder="Numerator">',
+      '    <input type="text" id="calcFracDen" placeholder="Denominator">',
+      '    <button class="btn small" type="button" id="calcAddFracBtn">Add Fraction</button>',
+      "  </div>",
+      '  <div class="calc-grid" id="calcGrid"></div>',
+      '  <div class="calc-actions">',
+      '    <button class="btn small" id="calcClearBtn" type="button">AC</button>',
+      '    <button class="btn primary small" id="calcUseBtn" type="button">Use Result</button>',
+      "  </div>",
+      "</div>"
+    ].join("");
+    document.body.appendChild(root);
+
+    const keys = [
+      {label:"sin", value:"sin(", op:true},
+      {label:"cos", value:"cos(", op:true},
+      {label:"tan", value:"tan(", op:true},
+      {label:"sqrt", value:"sqrt(", op:true},
+      {label:"log", value:"log(", op:true},
+      {label:"ln", value:"ln(", op:true},
+      {label:"x^y", value:"^", op:true},
+      {label:"x²", value:"SQR", op:true},
+      {label:"1/x", value:"INV", op:true},
+      {label:"n/d", value:"FRAC", op:true},
+      {label:"7", value:"7"},
+      {label:"8", value:"8"},
+      {label:"9", value:"9"},
+      {label:"÷", value:"/", op:true},
+      {label:"(", value:"(", op:true},
+      {label:"4", value:"4"},
+      {label:"5", value:"5"},
+      {label:"6", value:"6"},
+      {label:"×", value:"*", op:true},
+      {label:")", value:")", op:true},
+      {label:"1", value:"1"},
+      {label:"2", value:"2"},
+      {label:"3", value:"3"},
+      {label:"−", value:"-", op:true},
+      {label:"%", value:"%", op:true},
+      {label:"0", value:"0"},
+      {label:".", value:"."},
+      {label:"π", value:"pi", op:true},
+      {label:"e", value:"e", op:true},
+      {label:"+", value:"+", op:true},
+      {label:"+/-", value:"NEG", op:true},
+      {label:"Ans", value:"ANS", op:true},
+      {label:"⌫", value:"⌫", op:true},
+      {label:"=", value:"=", eq:true}
+    ];
+    const grid = root.querySelector("#calcGrid");
+    keys.forEach((k)=>{
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = k.label;
+      if(k.op) b.className = "calc-op";
+      if(k.eq) b.className = "calc-eq";
+      b.onclick = ()=>onCalcKey(k.value);
+      grid.appendChild(b);
+    });
+
+    const closeBtn = root.querySelector("#calcCloseBtn");
+    const angleBtn = root.querySelector("#calcAngleBtn");
+    const clearBtn = root.querySelector("#calcClearBtn");
+    const useBtn = root.querySelector("#calcUseBtn");
+    const addFracBtn = root.querySelector("#calcAddFracBtn");
+    if(closeBtn) closeBtn.onclick = closeCalcModal;
+    if(angleBtn){
+      angleBtn.onclick = function(){
+        state.calcAngleMode = (state.calcAngleMode === "DEG") ? "RAD" : "DEG";
+        angleBtn.textContent = state.calcAngleMode;
+        updateCalcResult();
+      };
+    }
+    if(clearBtn) clearBtn.onclick = ()=>setCalcExpr("0");
+    if(useBtn) useBtn.onclick = useCalcResult;
+    if(addFracBtn) addFracBtn.onclick = addFractionFromFields;
+    root.addEventListener("click",(e)=>{ if(e.target===root) closeCalcModal(); });
+    return root;
+  }
+
+  function setCalcExpr(expr){
+    const root = ensureCalcModal();
+    const ex = root.querySelector("#calcExpr");
+    if(ex) ex.textContent = expr && expr!==" " ? expr : "0";
+    updateCalcResult();
+  }
+  function getCalcExpr(){
+    const root = ensureCalcModal();
+    const ex = root.querySelector("#calcExpr");
+    return ex ? String(ex.textContent || "0") : "0";
+  }
+  function safeEval(expr){
+    let clean = String(expr || "").replace(/\s+/g,"");
+    if(!clean) return null;
+    clean = clean.replace(/pi/g,"Math.PI").replace(/\be\b/g,"Math.E");
+    clean = clean.replace(/sqrt\(/g,"Math.sqrt(").replace(/log\(/g,"Math.log10(").replace(/ln\(/g,"Math.log(");
+    clean = clean.replace(/sin\(/g,"_sin(").replace(/cos\(/g,"_cos(").replace(/tan\(/g,"_tan(");
+    clean = clean.replace(/\^/g,"**");
+    clean = clean.replace(/(\d+(\.\d+)?)%/g,"($1/100)");
+    if(!/^[0-9+\-*/().,A-Za-z_]+$/.test(clean)) return null;
+    try{
+      const mode = state.calcAngleMode || "DEG";
+      const toRad = function(v){ return mode === "DEG" ? (v * Math.PI / 180) : v; };
+      const _sin = function(v){ return Math.sin(toRad(v)); };
+      const _cos = function(v){ return Math.cos(toRad(v)); };
+      const _tan = function(v){ return Math.tan(toRad(v)); };
+      const val = Function("_sin","_cos","_tan", '"use strict"; return (' + clean + ');')(_sin,_cos,_tan);
+      if(typeof val !== "number" || !isFinite(val)) return null;
+      return val;
+    }catch(_e){
+      return null;
+    }
+  }
+  function updateCalcResult(){
+    const root = ensureCalcModal();
+    const out = root.querySelector("#calcResult");
+    const val = safeEval(getCalcExpr());
+    if(out) out.textContent = val==null ? "Error" : String(Math.round(val * 1000000) / 1000000);
+    if(val!=null) state.calcAns = Number(val);
+  }
+  function onCalcKey(k){
+    let ex = getCalcExpr();
+    if(ex==="0" && ![".","⌫","=","C","+","-","*","/","(",")","^","%"].includes(k)) ex = "";
+    if(k==="C"){ setCalcExpr("0"); return; }
+    if(k==="⌫"){ setCalcExpr(ex.length>1 ? ex.slice(0,-1) : "0"); return; }
+    if(k==="="){ updateCalcResult(); return; }
+    if(k==="SQR"){ setCalcExpr("(" + (ex==="0" ? "0" : ex) + ")^2"); return; }
+    if(k==="INV"){ setCalcExpr("1/(" + (ex==="0" ? "1" : ex) + ")"); return; }
+    if(k==="ANS"){ setCalcExpr((ex==="0" ? "" : ex) + String(Math.round((state.calcAns||0)*1000000)/1000000)); return; }
+    if(k==="FRAC"){
+      setCalcExpr((ex==="0" ? "" : ex) + "(1/1)");
+      return;
+    }
+    if(k==="NEG"){
+      if(ex==="0"){ setCalcExpr("-"); return; }
+      if(ex.startsWith("-")) setCalcExpr(ex.slice(1));
+      else setCalcExpr("-" + ex);
+      return;
+    }
+    if(k==="pi") k = "pi";
+    if(k==="e") k = "e";
+    setCalcExpr((ex==="0" ? "" : ex) + k);
+  }
+  function addFractionFromFields(){
+    const root = ensureCalcModal();
+    const n = root.querySelector("#calcFracNum");
+    const d = root.querySelector("#calcFracDen");
+    const num = String((n && n.value) || "").trim();
+    const den = String((d && d.value) || "").trim();
+    if(!num || !den){
+      notify("Calculator","Enter numerator and denominator.");
+      return;
+    }
+    if(Number(den)===0){
+      notify("Calculator","Denominator cannot be zero.");
+      return;
+    }
+    const ex = getCalcExpr();
+    setCalcExpr((ex==="0" ? "" : ex) + "(" + num + "/" + den + ")");
+    if(n) n.value = "";
+    if(d) d.value = "";
+  }
+  function openCalcModal(branchEl){
+    state.calcBranch = branchEl || null;
+    const root = ensureCalcModal();
+    setCalcExpr("0");
+    root.classList.add("show");
+  }
+  function closeCalcModal(){
+    const root = document.getElementById("calcModalRootGlobal");
+    if(root) root.classList.remove("show");
+  }
+  function isNumericInput(el){
+    if(!el || !el.tagName) return false;
+    const tag = el.tagName.toLowerCase();
+    if(tag !== "input") return false;
+    const t = String(el.getAttribute("type") || "").toLowerCase();
+    const im = String(el.getAttribute("inputmode") || "").toLowerCase();
+    return t==="number" || im==="decimal" || im==="numeric";
+  }
+  function useCalcResult(){
+    const root = ensureCalcModal();
+    const out = root.querySelector("#calcResult");
+    const txt = out ? String(out.textContent || "").trim() : "";
+    if(!txt || txt==="خطأ") return;
+    let target = state.calcTargetInput;
+    if(!target || !isNumericInput(target) || target.disabled){
+      const branch = state.calcBranch;
+      target = branch ? branch.querySelector('input[type="number"],input[inputmode="decimal"],input[inputmode="numeric"]') : null;
+    }
+    if(target && !target.disabled){
+      target.value = txt;
+      target.dispatchEvent(new Event("input",{bubbles:true}));
+      target.dispatchEvent(new Event("change",{bubbles:true}));
+      closeCalcModal();
+      return;
+    }
+    notify("تنبيه","حدد خانة رقمية أولاً داخل نفس السؤال.");
   }
 
   function notify(title, msg){
@@ -353,6 +600,23 @@
       notify("تصدير الملاحظات", "تم تصدير " + rows.length + " ملاحظة إلى ملف JSON.");
     };
     side.appendChild(btn);
+  }
+
+  function appendCalcButtonsInBranches(){
+    if(USE_CASIO_CALC) return;
+    const branches = document.querySelectorAll(".branch");
+    branches.forEach((branch)=>{
+      const hasNumeric = !!branch.querySelector('input[type="number"],input[inputmode="decimal"],input[inputmode="numeric"]');
+      if(!hasNumeric) return;
+      const btnWrap = branch.querySelector(".branchBtns");
+      if(!btnWrap || btnWrap.querySelector(".calc-btn")) return;
+      const btn = document.createElement("button");
+      btn.className = "btn small calc-btn";
+      btn.type = "button";
+      btn.textContent = "Calculator";
+      btn.onclick = ()=>openCalcModal(branch);
+      btnWrap.appendChild(btn);
+    });
   }
 
   function collectSolutionItems(branch){
@@ -656,24 +920,92 @@
       try{
         const t = String(title || "");
         const isAnswerModal = t.indexOf("الإجابة الصحيحة") >= 0 || t.indexOf("انتهت المحاولات") >= 0;
-        if(isAnswerModal && state.lastLockedContext && state.lastLockedContext.q && state.lastLockedContext.branch){
-          const ctx = state.lastLockedContext;
-          const key = String(ctx.q.id || "") + "::" + String(ctx.bi);
-          const container = document.querySelector('[data-branch-container="' + key + '"]');
-          if(container){
-            renderInlineSolutionForContainer(ctx.q, ctx.branch, container, collectSolutionItems(ctx.branch));
-            return;
-          }
-          const branchCard = document.querySelector(".branch");
-          if(branchCard && typeof renderInlineSolution === "function"){
-            renderInlineSolution(ctx.q, ctx.branch, branchCard, collectSolutionItems(ctx.branch));
-            return;
-          }
+        if(isAnswerModal){
+          const rendered = tryRenderInlineSolutionFromContext() || tryRenderInlineSolutionFromCurrentQuestion();
+          if(rendered) return;
         }
       }catch(_e){}
       return original.apply(this, arguments);
     };
     window.openModal.__inlineWrapped = true;
+  }
+
+  function renderInlineSolutionForLegacy(q, branch, bi){
+    try{
+      if(!q || !branch) return false;
+      const key = String(q.id || "") + "::" + String(bi);
+      const container = document.querySelector('[data-branch-container="' + key + '"]');
+      if(container){
+        renderInlineSolutionForContainer(q, branch, container, collectSolutionItems(branch));
+        return true;
+      }
+      const branchCardProbe = document.querySelector('.branch [data-qid="' + String(q.id || "") + '"][data-bi="' + String(bi) + '"]');
+      if(branchCardProbe){
+        const card = branchCardProbe.closest(".branch");
+        if(card){
+          renderInlineSolution(q, branch, card, collectSolutionItems(branch));
+          return true;
+        }
+      }
+      const firstBranchCard = document.querySelector(".branch");
+      if(firstBranchCard){
+        renderInlineSolution(q, branch, firstBranchCard, collectSolutionItems(branch));
+        return true;
+      }
+    }catch(_e){}
+    return false;
+  }
+
+  function tryRenderInlineSolutionFromContext(){
+    const ctx = state.lastLockedContext;
+    if(!ctx || !ctx.q || !ctx.branch) return false;
+    const key = String(ctx.q.id || "") + "::" + String(ctx.bi);
+    const container = document.querySelector('[data-branch-container="' + key + '"]');
+    if(container){
+      renderInlineSolutionForContainer(ctx.q, ctx.branch, container, collectSolutionItems(ctx.branch));
+      return true;
+    }
+    const branchCard = document.querySelector(".branch");
+    if(branchCard && typeof renderInlineSolution === "function"){
+      renderInlineSolution(ctx.q, ctx.branch, branchCard, collectSolutionItems(ctx.branch));
+      return true;
+    }
+    return false;
+  }
+
+  function tryRenderInlineSolutionFromCurrentQuestion(){
+    if(!Array.isArray(window.BANK)) return false;
+    const idx = (window.state && Number.isFinite(window.state.currentIndex)) ? window.state.currentIndex : 0;
+    const q = window.BANK[idx];
+    if(!q || !Array.isArray(q.branches)) return false;
+
+    for(let bi=0; bi<q.branches.length; bi++){
+      const b = q.branches[bi];
+      const key = String(q.id || "") + "::" + String(bi);
+      const container = document.querySelector('[data-branch-container="' + key + '"]');
+      if(container && typeof window.ensureBranchRec === "function"){
+        try{
+          const rec = window.ensureBranchRec(q.id, bi);
+          if(rec && rec.status === "locked"){
+            renderInlineSolutionForContainer(q, b, container, collectSolutionItems(b));
+            return true;
+          }
+        }catch(_e){}
+      }
+      const branchCardProbe = document.querySelector('.branch [data-qid="' + String(q.id) + '"][data-bi="' + String(bi) + '"]');
+      if(branchCardProbe && typeof window._getOutcome === "function"){
+        try{
+          if(window._getOutcome(q.id, bi) === "wrong"){
+            const card = branchCardProbe.closest(".branch");
+            if(card && typeof renderInlineSolution === "function"){
+              renderInlineSolution(q, b, card, collectSolutionItems(b));
+              return true;
+            }
+          }
+        }catch(_e){}
+      }
+    }
+    return false;
   }
 
   function wrapRenderForInlineHydration(){
@@ -686,6 +1018,50 @@
       return result;
     };
     window.renderAll.__inlineWrapped = true;
+  }
+
+  function wrapResetAllForCleanRestart(){
+    if(typeof window.resetAll !== "function" || window.resetAll.__cleanWrapped) return;
+    const original = window.resetAll;
+    function clearLessonStorage(){
+      const lessonLc = String(LESSON_ID || "").toLowerCase();
+      if(!lessonLc) return;
+      const shouldRemove = function(key){
+        const k = String(key || "").toLowerCase();
+        if(!k) return false;
+        if(k.indexOf(lessonLc) < 0) return false;
+        if(k.startsWith("stat102_")) return true;
+        if(k.startsWith("feedback_")) return true;
+        return false;
+      };
+      try{
+        const keys = [];
+        for(let i=0;i<localStorage.length;i++){
+          const k = localStorage.key(i);
+          if(shouldRemove(k)) keys.push(k);
+        }
+        keys.forEach((k)=>{ try{ localStorage.removeItem(k); }catch(_e){} });
+      }catch(_e){}
+      try{
+        const skeys = [];
+        for(let i=0;i<sessionStorage.length;i++){
+          const k = sessionStorage.key(i);
+          if(shouldRemove(k)) skeys.push(k);
+        }
+        skeys.forEach((k)=>{ try{ sessionStorage.removeItem(k); }catch(_e){} });
+      }catch(_e){}
+    }
+    window.resetAll = function(){
+      try{
+        if(typeof window.closeModal === "function") window.closeModal();
+        document.querySelectorAll(".modal.show,.feedback-modal.show,.calc-modal.show").forEach((m)=>{
+          m.classList.remove("show");
+        });
+        clearLessonStorage();
+      }catch(_e){}
+      return original.apply(this, arguments);
+    };
+    window.resetAll.__cleanWrapped = true;
   }
 
   function appendButtonsInBranches(){
@@ -717,30 +1093,219 @@
 
   function hookRendering(){
     appendButtonsInBranches();
+    appendCalcButtonsInBranches();
     ensureExportButton();
+    document.addEventListener("focusin",(e)=>{
+      const t = e.target;
+      if(isNumericInput(t)) state.calcTargetInput = t;
+    });
     if(typeof MutationObserver === "undefined") return;
     const root = document.body || document.documentElement;
     const observer = new MutationObserver(function(){
       appendButtonsInBranches();
+      appendCalcButtonsInBranches();
       ensureExportButton();
     });
     observer.observe(root, { childList: true, subtree: true });
   }
 
+  function normalizeKsuLogoSource(){
+    const logos = document.querySelectorAll('.logoWrap img, .cv-ksu img, .nav-ksu img, img[alt*="King Saud University Logo"]');
+    if(!logos.length) return;
+    const candidates = [
+      "../assets/img/ksu_logo.png",
+      "../../assets/img/ksu_logo.png",
+      "assets/img/ksu_logo.png"
+    ];
+    logos.forEach((img)=>{
+      if(!img || img.__ksuNormalized) return;
+      img.__ksuNormalized = true;
+      let i = 0;
+      const useAt = function(idx){
+        if(idx >= candidates.length) return;
+        const next = candidates[idx];
+        img.onerror = function(){ useAt(idx + 1); };
+        img.src = next;
+      };
+      useAt(i);
+    });
+  }
+
+  function initCasioCalculator(){
+    if(window.__statCasioCalcReady) return;
+    window.__statCasioCalcReady = true;
+
+    const style = document.createElement("style");
+    style.id = "stat-casio-calc-style";
+    style.textContent = `
+.statCalcFab{position:fixed;bottom:24px;left:24px;z-index:700;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border:1px solid rgba(56,189,248,.35);box-shadow:0 12px 28px rgba(2,6,23,.45),0 0 0 4px rgba(56,189,248,.08),inset 0 1px 0 rgba(255,255,255,.06);display:none;align-items:center;justify-content:center;cursor:pointer;color:#e2e8f0;transition:all .25s;opacity:0;transform:translateY(12px) scale(.85)}
+.statCalcFab.visible{display:flex;opacity:1;transform:translateY(0) scale(1)}
+.statCalcFab svg{width:28px;height:28px;color:#22d3ee}
+.statCalcPanel{position:fixed;bottom:24px;left:24px;z-index:701;width:360px;background:linear-gradient(180deg,#262a35 0%,#1a1d26 55%,#13161e 100%);border-radius:24px;padding:14px;box-shadow:0 40px 80px rgba(2,6,23,.55);direction:ltr;display:none}
+.statCalcPanel.visible{display:block}
+.calcHead{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 10px}
+.calcBrand .name{color:#e2e8f0;font-weight:900;font-size:13px}
+.calcBrand .model{color:#64748b;font-weight:800;font-size:9.5px}
+.calcCtrls{display:flex;gap:5px}
+.calcCtrls button{width:22px;height:22px;border-radius:7px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#94a3b8;cursor:pointer}
+.calcScreen{background:linear-gradient(180deg,#9fb38c 0%,#b4c4a4 50%,#a9ba99 100%);border-radius:14px;padding:10px 14px;border:1px solid #0a0c12;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;font-family:"Share Tech Mono","Courier New",monospace}
+.calcIndicators{display:flex;gap:10px;font-size:9px;font-weight:800;color:#2d3a22}
+.calcIndicators span{opacity:.35}
+.calcIndicators span.on{opacity:.9}
+.calcHistory{font-size:11px;color:#2d3a22;opacity:.55;text-align:right;min-height:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.calcExpr{font-size:19px;color:#1a1d26;text-align:right;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-height:24px}
+.calcExpr .cursor{display:inline-block;width:2px;height:18px;background:#1a1d26;margin-left:1px;vertical-align:middle;animation:calcBlink 1s step-end infinite}
+@keyframes calcBlink{50%{opacity:0}}
+.calcResult{font-size:24px;color:#1a1d26;text-align:right;font-weight:900;min-height:28px}
+.calcResult.err{color:#991b1b;font-size:18px}
+.calcBody{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+.ck{padding:0;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.06);font-weight:800;font-size:13.5px;cursor:pointer;color:#e2e8f0;display:flex;align-items:center;justify-content:center}
+.ck.num{background:linear-gradient(180deg,#3d4250 0%,#2e333f 100%);font-size:16px}
+.ck.fn{background:linear-gradient(180deg,#2a2f3a 0%,#1f2430 100%);font-size:12.5px}
+.ck.op{background:linear-gradient(180deg,#0891b2 0%,#075985 100%);font-size:16px}
+.ck.mem{background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);color:#38bdf8;font-size:11.5px}
+.ck.eq{background:linear-gradient(180deg,#f59e0b 0%,#b45309 100%);color:#fff;font-size:19px;font-weight:900}
+.ck.ac{background:linear-gradient(180deg,#dc2626 0%,#991b1b 100%)}
+.ck.del{background:linear-gradient(180deg,#475569 0%,#334155 100%)}
+`;
+    document.head.appendChild(style);
+
+    const fab = document.createElement("button");
+    fab.className = "statCalcFab";
+    fab.id = "statCalcFab";
+    fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2.5"/><rect x="6" y="5" width="12" height="4" rx="1" fill="currentColor" opacity=".3"/><circle cx="8" cy="12" r=".9" fill="currentColor"/><circle cx="12" cy="12" r=".9" fill="currentColor"/><circle cx="16" cy="12" r=".9" fill="currentColor"/></svg>';
+    document.body.appendChild(fab);
+
+    const panel = document.createElement("div");
+    panel.className = "statCalcPanel";
+    panel.id = "statCalcPanel";
+    panel.innerHTML = `
+<div class="calcHead">
+  <div class="calcBrand"><div class="name">STAT fx-Pro</div><div class="model">102 · SOLVER</div></div>
+  <div class="calcCtrls"><button id="calcModeBtn">DEG</button><button id="calcCloseCasio">×</button></div>
+</div>
+<div class="calcScreen">
+  <div class="calcIndicators"><span id="indM">M</span><span id="indAns">Ans</span><span id="indShift">2nd</span></div>
+  <div class="calcHistory" id="calcHistory">&nbsp;</div>
+  <div class="calcExpr" id="calcExpr">0<span class="cursor"></span></div>
+  <div class="calcResult" id="calcResult">&nbsp;</div>
+</div>
+<div class="calcBody" id="calcBody"></div>`;
+    document.body.appendChild(panel);
+
+    const S = { expr:"", ans:0, mem:0, shift:false, rad:false, open:false };
+    const hist = panel.querySelector("#calcHistory");
+    const exprEl = panel.querySelector("#calcExpr");
+    const resEl = panel.querySelector("#calcResult");
+    const indM = panel.querySelector("#indM");
+    const indAns = panel.querySelector("#indAns");
+    const indShift = panel.querySelector("#indShift");
+    const modeBtn = panel.querySelector("#calcModeBtn");
+    const closeBtn = panel.querySelector("#calcCloseCasio");
+    const body = panel.querySelector("#calcBody");
+
+    const keys = [
+      ["2nd","SHIFT","fn"],["MODE","MODE","fn"],["⌫","DEL","del"],["AC","AC","ac"],["(","(","fn"],[")",")","fn"],
+      ["sin","sin","fn"],["cos","cos","fn"],["tan","tan","fn"],["π","π","fn"],["e","e","fn"],["√","√","fn"],
+      ["log","log","fn"],["ln","ln","fn"],["x²","x²","fn"],["xʸ","^","fn"],["1/x","1/x","fn"],["n!","!","fn"],
+      ["7","7","num"],["8","8","num"],["9","9","num"],["÷","÷","op"],["Ans","Ans","mem"],["MR","MR","mem"],
+      ["4","4","num"],["5","5","num"],["6","6","num"],["×","×","op"],["M+","M+","mem"],["MC","MC","mem"],
+      ["1","1","num"],["2","2","num"],["3","3","num"],["−","−","op"],["M−","M-","mem"],["=","=","eq"],
+      ["0","0","num"],["00","00","num"],[".",".","num"],["+","+","op"],["%","%","fn"],["=","=","eq"]
+    ];
+    keys.forEach(([label,key,cls])=>{
+      const b = document.createElement("button");
+      b.className = "ck " + cls;
+      b.textContent = label;
+      b.onclick = ()=>press(key);
+      body.appendChild(b);
+    });
+
+    function render(){
+      exprEl.innerHTML = (S.expr ? escapeHtml(S.expr) : "0") + '<span class="cursor"></span>';
+      indM.classList.toggle("on", S.mem !== 0);
+      indAns.classList.toggle("on", S.ans !== 0);
+      indShift.classList.toggle("on", S.shift);
+      modeBtn.textContent = S.rad ? "RAD" : "DEG";
+    }
+    function safeEval(raw){
+      let s = String(raw || "").replace(/\s+/g,"");
+      if(!s) return null;
+      s = s.replace(/Ans/g,"("+S.ans+")").replace(/π/g,"("+Math.PI+")").replace(/(^|[^a-zA-Z_])e(?![a-zA-Z_])/g,"$1("+Math.E+")");
+      s = s.replace(/sin/g,"__sin").replace(/cos/g,"__cos").replace(/tan/g,"__tan").replace(/log/g,"__log10").replace(/ln/g,"__ln").replace(/√/g,"__sqrt");
+      s = s.replace(/²/g,"**2").replace(/\^/g,"**").replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-");
+      s = s.replace(/(\d+(?:\.\d+)?)\s*%/g,"($1/100)");
+      if(/[^0-9+\-*/().\s_a-zA-Z]/.test(s)) return null;
+      const toRad = x => S.rad ? x : x*Math.PI/180;
+      const fn = new Function("__sin","__cos","__tan","__log10","__ln","__sqrt","return ("+s+")");
+      const v = fn(x=>Math.sin(toRad(x)),x=>Math.cos(toRad(x)),x=>Math.tan(toRad(x)),Math.log10,Math.log,Math.sqrt);
+      if(typeof v!=="number" || !isFinite(v)) return null;
+      return Math.round(v*1e12)/1e12;
+    }
+    function press(k){
+      if(k==="SHIFT"){ S.shift = !S.shift; render(); return; }
+      if(k==="MODE"){ S.rad = !S.rad; render(); return; }
+      if(k==="AC"){ S.expr=""; hist.innerHTML="&nbsp;"; resEl.textContent=""; resEl.classList.remove("err"); render(); return; }
+      if(k==="DEL"){ S.expr = S.expr.slice(0,-1); render(); return; }
+      if(k==="="){
+        const v = safeEval(S.expr);
+        if(v==null){ resEl.classList.add("err"); resEl.textContent = "Error"; return; }
+        resEl.classList.remove("err");
+        hist.textContent = (S.expr || "0") + " =";
+        resEl.textContent = "= " + (Number.isInteger(v) ? String(v) : parseFloat(v.toPrecision(12)).toString());
+        S.ans = v; S.expr = String(v); S.shift=false; render(); return;
+      }
+      if(k==="MR"){ S.expr += String(S.mem); render(); return; }
+      if(k==="MC"){ S.mem = 0; render(); return; }
+      if(k==="M+" || k==="M-"){ const v = safeEval(S.expr); if(v!=null){ S.mem += (k==="M+"?v:-v); } render(); return; }
+      if(k==="1/x"){ S.expr = "1/(" + (S.expr || "1") + ")"; render(); return; }
+      if(k==="x²"){ S.expr += "²"; render(); return; }
+      if(k==="sin" || k==="cos" || k==="tan"){ if(S.shift){ k = k + "⁻¹"; S.shift=false; } S.expr += k + "("; render(); return; }
+      if(k==="log" || k==="ln" || k==="√"){ S.expr += k + "("; render(); return; }
+      S.expr += k; S.shift=false; render();
+    }
+    function open(){ panel.classList.add("visible"); S.open=true; render(); }
+    function close(){ panel.classList.remove("visible"); S.open=false; }
+    fab.onclick = ()=>{ S.open ? close() : open(); };
+    closeBtn.onclick = close;
+
+    function needsCalc(){
+      const card = document.querySelector(".branch, [data-branch-container], .card .content, #mainContent");
+      if(!card) return false;
+      if(card.querySelector('input[type="number"],input[inputmode="decimal"],input[inputmode="numeric"]')) return true;
+      const txt = (card.textContent || "");
+      return /[=√Σ]/.test(txt) || /log|ln|sin|cos|tan|%|\d+/.test(txt);
+    }
+    function updateFab(){
+      if(needsCalc()) fab.classList.add("visible");
+      else{ fab.classList.remove("visible"); close(); }
+    }
+    const obs = new MutationObserver(()=>updateFab());
+    obs.observe(document.body,{childList:true,subtree:true});
+    modeBtn.onclick = ()=>press("MODE");
+    render(); setTimeout(updateFab,300); setTimeout(updateFab,1200);
+  }
+
   function boot(){
     injectCss();
     injectInlineSolutionCss();
+    injectCalculatorCss();
     ensureSessionId();
     ensureModal();
+    if(USE_CASIO_CALC) initCasioCalculator();
+    else ensureCalcModal();
     hookRendering();
+    normalizeKsuLogoSource();
     suppressSolutionModals();
     wrapSaveForInlineSolution();
     wrapHandleSaveForInlineSolution();
     wrapRenderForInlineHydration();
     wrapOpenModalForInlineSolution();
+    wrapResetAllForCleanRestart();
     setTimeout(function(){ hydrateInlineSolutions(); }, 60);
     setTimeout(function(){ hydrateInlineSolutionsForBranchContainers(); }, 90);
     setTimeout(function(){ retryPendingFeedback(); }, 900);
+    setTimeout(function(){ normalizeKsuLogoSource(); }, 500);
   }
 
   window.FeedbackSystem = {
@@ -749,7 +1314,8 @@
     saveFeedbackLocally: saveFeedbackLocally,
     submitFeedback: submitFeedback,
     exportFeedbackData: exportFeedbackData,
-    retryPendingFeedback: retryPendingFeedback
+    retryPendingFeedback: retryPendingFeedback,
+    renderInlineSolutionForLegacy: renderInlineSolutionForLegacy
   };
   if(typeof window.openFeedbackModal !== "function") window.openFeedbackModal = openFeedbackModal;
   if(typeof window.collectFeedbackPayload !== "function") window.collectFeedbackPayload = collectFeedbackPayload;

@@ -3671,6 +3671,12 @@ function openHelp(q, branch){
 }
 
 function openCorrectAnswer(q, branch, bi){
+  /* INLINE_ANSWER_OVERRIDE */
+  try{
+    if(window.FeedbackSystem && typeof window.FeedbackSystem.renderInlineSolutionForLegacy==="function"){
+      if(window.FeedbackSystem.renderInlineSolutionForLegacy(q, branch, bi)) return;
+    }
+  }catch(_e){}
   const steps = (branch.solutionSteps && branch.solutionSteps.length)
     ? `<div style="font-weight:900;margin:10px 0 6px">طريقة الحل</div>
        <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
@@ -3709,6 +3715,9 @@ function openCorrectAnswer(q, branch, bi){
 }
 
 function promptOpenCorrectAnswer(q, branch, bi){
+  /* INLINE_ANSWER_OVERRIDE */
+  openCorrectAnswer(q, branch, bi);
+  return;
   openModal("انتهت المحاولات", `
     <div style="font-weight:900;margin-bottom:10px">انتهت محاولات هذا السؤال.</div>
     <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الحل الكامل بالضغط على الزر التالي.</div>
@@ -6185,6 +6194,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
 </script>
 </body>
 </html>
+
 
 
 

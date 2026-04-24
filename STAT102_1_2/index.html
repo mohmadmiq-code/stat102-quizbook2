@@ -3488,6 +3488,12 @@ function openHelp(q, branch){
 }
 
 function openCorrectAnswer(q, branch, bi){
+  /* INLINE_ANSWER_OVERRIDE */
+  try{
+    if(window.FeedbackSystem && typeof window.FeedbackSystem.renderInlineSolutionForLegacy==="function"){
+      if(window.FeedbackSystem.renderInlineSolutionForLegacy(q, branch, bi)) return;
+    }
+  }catch(_e){}
   const steps = (branch.solutionSteps && branch.solutionSteps.length)
     ? `<div style="font-weight:900;margin:10px 0 6px">????? ????</div>
        <ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
@@ -3523,6 +3529,9 @@ function openCorrectAnswer(q, branch, bi){
 }
 
 function promptOpenCorrectAnswer(q, branch, bi){
+  /* INLINE_ANSWER_OVERRIDE */
+  openCorrectAnswer(q, branch, bi);
+  return;
   openModal("????? ?????????", `
     <div style="font-weight:900;margin-bottom:10px">????? ??????? ??? ??????.</div>
     <div style="color:var(--muted);font-weight:700;margin-bottom:14px">????? ???? ??? ???? ?????? ?????? ??? ???? ??????.</div>
@@ -4165,6 +4174,12 @@ function openHelp(q, branch){
 }
 
 function openCorrectAnswer(q, branch, bi){
+  /* INLINE_ANSWER_OVERRIDE */
+  try{
+    if(window.FeedbackSystem && typeof window.FeedbackSystem.renderInlineSolutionForLegacy==="function"){
+      if(window.FeedbackSystem.renderInlineSolutionForLegacy(q, branch, bi)) return;
+    }
+  }catch(_e){}
   const steps = (branch.solutionSteps && branch.solutionSteps.length)
     ? `<div style="font-weight:900;margin:10px 0 6px">خطوات الحل</div><ol style="margin:0;padding-right:18px">${branch.solutionSteps.map(s=>`<li style="margin:8px 0">${escapeHtml(latexFix(s))}</li>`).join("")}</ol>`
     : "";
@@ -4190,6 +4205,9 @@ function openCorrectAnswer(q, branch, bi){
 }
 
 function promptOpenCorrectAnswer(q, branch, bi){
+  /* INLINE_ANSWER_OVERRIDE */
+  openCorrectAnswer(q, branch, bi);
+  return;
   openModal("عرض الإجابة", `
     <div style="font-weight:900;margin-bottom:10px">انتهت المحاولات لهذا الجزء.</div>
     <div style="color:var(--muted);font-weight:700;margin-bottom:14px">يمكنك الآن عرض الإجابة الصحيحة.</div>
@@ -6921,6 +6939,7 @@ if(window.__examRunning) startTimer(); else showIntroModal();
 </script>
 </body>
 </html>
+
 
 
 

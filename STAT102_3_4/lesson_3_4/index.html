@@ -4,15 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>جامعة الملك سعود — السنة الأولى المشتركة — STAT 102 | 3.4 معاملات التشتت والدرجة المعيارية</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="../../assets/vendor/fonts/local-fonts.css">
+  <script src="../../assets/vendor/katex/katex.min.js"></script>
+  <script src="../../assets/vendor/katex/auto-render.min.js"></script>
   <style>
     :root{
       --bg:#f8fafc;
@@ -415,6 +410,34 @@
     .branches{display:grid; gap:16px;}
     .branch{border:1px solid var(--line); border-radius:16px; background:var(--card); overflow:hidden; transition: var(--transition);}
     .branch:hover{border-color:var(--line);box-shadow: var(--shadow-sm)}
+    .branch.with-inline-solution .branchContentLayout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(290px,360px);
+      gap:14px;
+      align-items:start;
+      padding:12px;
+    }
+    .branch.with-inline-solution .branchMainStack{min-width:0;}
+    .branch.with-inline-solution .inlineSolutionPanel{
+      margin:0;
+      border:1px solid rgba(124,58,237,.26);
+      background:linear-gradient(165deg,#f8f7ff 0%,#eef2ff 46%,#f5f3ff 100%);
+      border-radius:16px;
+      box-shadow:0 16px 30px rgba(76,29,149,.13);
+      position:sticky;
+      top:10px;
+      overflow:hidden;
+    }
+    .branch.with-inline-solution .inlineSolutionPanel::before{
+      content:"";
+      display:block;
+      height:5px;
+      background:linear-gradient(90deg,#7c3aed,#4f46e5,#0ea5e9);
+    }
+    @media (max-width: 980px){
+      .branch.with-inline-solution .branchContentLayout{grid-template-columns:1fr;}
+      .branch.with-inline-solution .inlineSolutionPanel{position:relative;top:auto;}
+    }
     .branchHead{
       display:flex; align-items:center; justify-content:flex-end; gap:12px;
       padding:14px 16px;
@@ -3312,12 +3335,36 @@ function _collectSolutionItems(b){
 
 function _renderInlineSolution(q, b, branchCard, solutionItems){
   if(!branchCard) return;
+  branchCard.classList.add("with-inline-solution");
+  let layout = branchCard.querySelector(".branchContentLayout");
+  let mainStack = branchCard.querySelector(".branchMainStack");
+  if(!layout){
+    layout = document.createElement("div");
+    layout.className = "branchContentLayout";
+    mainStack = document.createElement("div");
+    mainStack.className = "branchMainStack";
+    const nodes = Array.from(branchCard.children).filter((node)=>{
+      return !(node.classList && node.classList.contains("branchHead"));
+    });
+    nodes.forEach((node)=>{
+      if(node.classList && node.classList.contains("inlineSolutionPanel")) return;
+      mainStack.appendChild(node);
+    });
+    layout.appendChild(mainStack);
+    branchCard.appendChild(layout);
+  }else if(!mainStack){
+    mainStack = document.createElement("div");
+    mainStack.className = "branchMainStack";
+    layout.prepend(mainStack);
+  }
   let panel = branchCard.querySelector(".inlineSolutionPanel");
   if(!panel){
     panel = document.createElement("div");
     panel.className = "inlineSolutionPanel";
-    panel.style.cssText = "margin-top:12px;padding:12px;border:1px solid #fecaca;background:#fff7ed;border-radius:14px";
-    branchCard.appendChild(panel);
+    panel.style.cssText = "padding:12px";
+    layout.appendChild(panel);
+  }else if(panel.parentElement !== layout){
+    layout.appendChild(panel);
   }
 
   const explainList = Array.isArray(b && b.explain) ? b.explain : [];
@@ -3345,7 +3392,7 @@ function _renderInlineSolution(q, b, branchCard, solutionItems){
     : `<div style="color:#475569;font-weight:700">لا توجد أجزاء ظاهرة لهذا السؤال.</div>`;
 
   panel.innerHTML = `
-    <div style="font-weight:900;color:#9a3412;margin-bottom:6px">الحل ظاهر بجانب السؤال</div>
+    <div style="font-weight:900;color:#4c1d95;margin-bottom:6px">الحل التفصيلي بجانب السؤال</div>
     <div style="font-size:13px;color:#475569;font-weight:800;margin-bottom:10px">${title}${lvl ? ` — (${lvl})` : ""}</div>
     <div style="font-weight:900;margin:10px 0 6px">شرح السؤال</div>
     ${explainHtml}
@@ -6051,6 +6098,7 @@ window.addEventListener("load", ()=>{ window.__examRunning = isExamStarted(); re
 </script>
 </body>
 </html>
+
 
 
 
